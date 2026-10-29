@@ -193,3 +193,41 @@ td select,td input{font-size:15px;padding:8px 10px}
 .loading{display:grid;place-items:center;min-height:40vh;font-weight:800;color:var(--muted)}
 code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.92em;background:var(--surface-2);padding:1px 6px;border-radius:6px}
 @media (max-width:440px){.circles{gap:6px}.circ{width:50px}.circ b{width:50px;height:50px;font-size:18px}.circ span{font-size:10px}}
+
+/* trophies */
+.trophies{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(min(100%,230px),1fr))}
+.troph{background:var(--surface);border:2px solid var(--line);border-radius:22px;padding:20px;display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.troph .medal{display:grid;place-items:center}
+.troph.big .medal{width:76px;height:84px;background:var(--sun);color:var(--on-sun);clip-path:polygon(50% 0,96% 25%,96% 75%,50% 100%,4% 75%,4% 25%)}
+.troph.big .medal svg{width:38px;height:38px}
+.troph.small .medal{width:62px;height:62px;background:var(--brand-soft);color:var(--brand);clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
+.troph.small .medal svg{width:28px;height:28px}
+.troph.locked{opacity:.55}
+.troph.locked .medal{background:var(--line);color:var(--muted)}
+.troph p{font-size:15px;color:var(--muted)}
+.troph .pill svg{vertical-align:middle}
+.winners{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr))}
+.winner{border-radius:18px;padding:14px 16px;background:var(--sun-soft);display:flex;flex-direction:column;gap:4px}
+.winner .t{font-weight:800;color:var(--sun-deep);font-size:14px;display:flex;gap:6px;align-items:center}
+.winner .t svg{width:20px;height:20px}
+.winner .n{font:800 19px var(--display)}
+.winner p{font-size:13px;color:var(--muted)}
+.flag{font-size:13px;font-weight:700;line-height:1.35;padding:6px 10px;border-radius:10px;max-width:300px}
+.flag.amber{background:var(--amber-soft);color:var(--amber)} .flag.red{background:var(--coral-soft);color:var(--coral)}
+
+/* castle */
+.castle{display:flex;align-items:flex-end;justify-content:center;height:170px}
+.tower{width:46px;background:var(--brand);position:relative;border-radius:4px 4px 0 0}
+.tower::before{content:"";position:absolute;top:-14px;left:0;right:0;height:14px;background:repeating-linear-gradient(90deg,var(--brand) 0 11px,transparent 11px 17.5px)}
+.keep{width:110px;height:90px;background:var(--brand-deep);position:relative;border-radius:4px 4px 0 0}
+.keep::before{content:"";position:absolute;top:-14px;left:0;right:0;height:14px;background:repeating-linear-gradient(90deg,var(--brand-deep) 0 14px,transparent 14px 23px)}
+.keep::after{content:"";position:absolute;bottom:0;left:38px;width:34px;height:46px;border-radius:17px 17px 0 0;background:var(--surface-2)}
+.flagpole{position:absolute;top:-58px;left:22px;width:3px;height:44px;background:var(--ink)}
+.flagpole::after{content:"";position:absolute;top:0;left:3px;width:26px;height:16px;background:var(--sun)}
+.ground{height:10px;border-radius:99px;background:var(--grass);max-width:320px;width:100%;margin:0 auto}
+.army{display:flex;flex-wrap:wrap;gap:4px;max-width:420px}
+.soldier{width:12px;height:16px;background:var(--coral);border-radius:6px 6px 2px 2px}
+td.num{white-space:nowrap}
+.lbrow{flex-wrap:wrap}
+.lbrow .nm{flex:1 1 120px}
+@media (max-width:440px){.trophies{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.troph{padding:14px}.troph h3{font-size:17px}.troph p{font-size:13px}}

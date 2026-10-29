@@ -42,7 +42,51 @@
     star: '<svg viewBox="0 0 24 24" fill="#FFC53D" stroke="#D99A0B" stroke-width="1.5" aria-hidden="true"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>',
     clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
     trophy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4v1a3 3 0 0 0 3 3M17 6h3v1a3 3 0 0 1-3 3"/></svg>',
+    fire: '<svg viewBox="0 0 24 24" fill="#FF8A1F" aria-hidden="true"><path d="M12 2c1 4 6 6 6 12a6 6 0 0 1-12 0c0-3 2-5 3-6 0 2 1 3 2 3 0-4-1-6 1-9z"/></svg>',
+    coin: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="#FFC53D" stroke="#D99A0B" stroke-width="2"/><path d="M12 7v10M9.5 9.5h4a1.5 1.5 0 0 1 0 3h-3a1.5 1.5 0 0 0 0 3h4" stroke="#8A5A00" stroke-width="1.6" fill="none"/></svg>',
+    sword: '<svg viewBox="0 0 24 24" fill="none" stroke="#D93A40" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M14 4h6v6L9 21l-6-6z"/><path d="M5 13l6 6"/></svg>',
+    lock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>',
+    castle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" aria-hidden="true"><path d="M3 21V8h3v2h3V8h6v2h3V8h3v13z"/><path d="M10 21v-4a2 2 0 0 1 4 0v4"/></svg>',
+    infinity: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M7 8c-2.5 0-4 1.8-4 4s1.5 4 4 4c4 0 6-8 10-8 2.5 0 4 1.8 4 4s-1.5 4-4 4c-4 0-6-8-10-8z"/></svg>',
+    flag: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></svg>',
   };
+  const SV = (d, fill) => `<svg viewBox="0 0 24 24" fill="${fill ? "currentColor" : "none"}" stroke="${fill ? "none" : "currentColor"}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d}"/></svg>`;
+  Object.assign(I, {
+    target: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/></svg>',
+    hammer: SV("M14 4l6 6-3 3-6-6zM11 7L3 15l3 3 8-8"),
+    loop: SV("M4 12a8 8 0 0 1 14-5l2 2M20 4v5h-5M20 12a8 8 0 0 1-14 5l-2-2M4 20v-5h5"),
+    map: SV("M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"),
+    crown: SV("M3 8l4 4 5-7 5 7 4-4-2 11H5z"),
+    foot: SV("M8 3c2 0 3 2 3 5s-1 5-3 5-3-2-3-5 1-5 3-5zM16 10c2 0 3 2 3 5s-1 5-3 5-3-2-3-5 1-5 3-5z", 1),
+    flame: SV("M12 2c1 4 6 6 6 12a6 6 0 0 1-12 0c0-3 2-5 3-6 0 2 1 3 2 3 0-4-1-6 1-9z", 1),
+    shield: SV("M12 3l8 3v6c0 5-4 8-8 9-4-1-8-4-8-9V6zM8 12l3 3 5-6"),
+    starO: SV("M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z", 1),
+    book: SV("M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 19V5"),
+    sunrise: SV("M3 18h18M6 14a6 6 0 0 1 12 0M12 4v4M5 8l2 2M19 8l-2 2"),
+    bolt: SV("M13 2L4 14h7l-1 8 9-12h-7z", 1),
+    openbook: SV("M2 5h7a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H2zM22 5h-7a3 3 0 0 0-3 3v12a2 2 0 0 1 2-2h8z"),
+  });
+
+  const BIG = [
+    { k: "nishonchi", ic: "target", t: "Eng yaxshi nishonchi", n: "Bu o'quvchi yetarlicha vazifa qildi va eng ko'p aniqlikni qayd etdi." },
+    { k: "mehnat", ic: "hammer", t: "Mehnatkashlik nishoni", n: "Bu o'quvchi hafta davomida eng ko'p savollarga javob berdi." },
+    { k: "takror", ic: "loop", t: "Eng yaxshi takrorlovchi", n: "Bu o'quvchi o'tgan haftalardagi so'z va qoidalarni eng yaxshi takrorladi." },
+    { k: "side", ic: "map", t: "Eng zo'r sidequestchi", n: "Bu o'quvchi cheksiz mashqda eng ko'p qo'shimcha savol ishladi." },
+    { k: "qomondon", ic: "crown", t: "Eng zo'r qomondon", n: "Bu o'quvchi qal'a o'yinida eng ko'p o'lja to'pladi." },
+  ];
+  const SMALL = [
+    { k: "first_quest", ic: "foot", t: "Birinchi qadam", n: "Birinchi vazifani tugatdi" },
+    { k: "streak3", ic: "flame", t: "3 kunlik olov", n: "3 kun ketma-ket mashq qildi" },
+    { k: "flawless", ic: "shield", t: "Xatosiz vazifa", n: "Vazifani bitta ham xatosiz tugatdi" },
+    { k: "correct50", ic: "starO", t: "50 ta to'g'ri", n: "Jami 50 ta savolga to'g'ri javob berdi" },
+    { k: "words30", ic: "book", t: "So'z ovchisi", n: "30 ta so'zni o'rgandi" },
+    { k: "early", ic: "sunrise", t: "Erta qush", n: "Vazifani muddatidan bir kun oldin tugatdi" },
+    { k: "comeback", ic: "bolt", t: "Qaytmas", n: "Xato qilgan savolini qayta ishlab, to'g'ri topdi" },
+    { k: "reader", ic: "openbook", t: "Kitobxon", n: "Birinchi o'qish matnini o'qidi" },
+    { k: "practice20", ic: "loop", t: "Mashqchi", n: "Cheksiz mashqda 20 ta savol ishladi" },
+    { k: "defender", ic: "castle", t: "Mustahkam qal'a", n: "Qal'a mudofaasini 5-darajaga yetkazdi" },
+  ];
+  const bigName = (k) => (BIG.find((b) => b.k === k) || {}).t || k;
 
   /* ---------- server calls ---------- */
   let S = null; // session {token, role, first_name, last_name}
@@ -164,6 +208,9 @@
     try { ST.home = await api("student_home"); } catch (e) { if (e.message !== "AUTH") toast(errText(e)); }
     ST.loading = false; render();
   }
+  async function loadStudentQuiet() {
+    try { ST.home = await api("student_home"); render(); } catch (e) { /* ignore */ }
+  }
   async function loadBoard() {
     try { ST.board = await api("class_board"); } catch (e) { if (e.message !== "AUTH") toast(errText(e)); }
     render();
@@ -185,23 +232,25 @@
   }
 
   function sHeader() {
-    const me = ST.home && ST.home.me;
-    const wk = (ST.home && ST.home.week) || {};
+    const h = ST.home || {};
+    const me = h.me;
+    const tabs = [["home", "Vazifalar", I.home], ["practice", "Mashq", I.infinity], ["troph", "Kuboklar", I.trophy], ["board", "Reyting", I.list], ["castle", "Qal'a", I.castle]];
     return `<div class="top"><div class="logo"><span class="logo-mark">A</span><span>Salom, ${esc(me ? me.first_name : S.first_name)}!</span></div>
       <div class="stats">
-        <span class="stat" title="Bu haftadagi to'g'ri javoblar">${I.star}<span class="num">${wk.correct || 0}</span></span>
-        <span class="stat" title="Bu haftada sarflangan vaqt">${I.clock}<span class="num">${fmtTime(wk.seconds)}</span></span>
+        <span class="stat" title="Ketma-ket kunlar">${I.fire}<span class="num">${h.streak || 0} kun</span></span>
+        <span class="stat" title="Askarlar">${I.sword}<span class="num">${h.soldiers || 0}</span></span>
+        <span class="stat" title="O'lja">${I.coin}<span class="num">${h.loot == null ? 50 : h.loot}</span></span>
         <button class="btn ghost sm" data-act="logout" aria-label="Chiqish">${I.out}</button>
       </div></div>
-      <nav class="tabs" aria-label="Bo'limlar">
-        <button class="tab" data-act="stab" data-v="home" aria-current="${ST.tab === "home"}">${I.home}Vazifalar</button>
-        <button class="tab" data-act="stab" data-v="board" aria-current="${ST.tab === "board"}">${I.list}Reyting</button>
-      </nav>`;
+      <nav class="tabs" aria-label="Bo'limlar">${tabs.map(([k, l, ic]) => `<button class="tab" data-act="stab" data-v="${k}" aria-current="${ST.tab === k}">${ic}${l}</button>`).join("")}</nav>`;
   }
 
   function vStudent() {
     if (!ST.home) return `${sHeaderLite()}<div class="loading">Yuklanmoqda…</div>`;
     if (ST.tab === "board") return sHeader() + vBoard();
+    if (ST.tab === "troph") return sHeader() + vTrophies();
+    if (ST.tab === "castle") return sHeader() + vCastle();
+    if (ST.tab === "practice") return sHeader() + vPracticeIntro();
     const qs = ST.home.quests || [];
     const now = Date.now();
     const cards = qs.map((q) => {
@@ -222,7 +271,93 @@
              <span class="muted">${started ? "Qolgan joyingizdan davom etasiz." : `Doira 1: ${esc((cs[0] || {}).name || "")}`}</span></div>`}
       </section>`;
     }).join("");
-    return `${sHeader()}${cards || `<div class="card empty">Hozircha vazifa yo'q. O'qituvchingiz vazifa berganda shu yerda paydo bo'ladi.</div>`}`;
+    const wk = ST.home.week || {};
+    const weekLine = `<p class="muted">Bu hafta: <b>${wk.correct || 0}</b> ta to'g'ri javob · <b>${fmtTime(wk.seconds)}</b> mashg'ulot</p>`;
+    return `${sHeader()}${weekLine}${cards || `<div class="card empty">Hozircha vazifa yo'q. O'qituvchingiz vazifa berganda shu yerda paydo bo'ladi.</div>`}`;
+  }
+
+  /* ---------- trophies ---------- */
+  async function loadTrophies() {
+    try { ST.troph = await api("my_trophies"); } catch (e) { if (e.message !== "AUTH") toast(errText(e)); }
+    render();
+  }
+  function vTrophies() {
+    if (!ST.troph) return `<div class="loading">Yuklanmoqda…</div>`;
+    const mine = ST.troph.mine || [];
+    const leaders = ST.troph.leaders || [];
+    const meName = ((ST.home.me && ST.home.me.first_name) || "") + " " + ((ST.home.me && ST.home.me.last_name) || "");
+    const big = BIG.map((b) => {
+      const won = mine.filter((m) => m.kind === b.k && m.week);
+      const lead = leaders.find((l) => l.kind === b.k);
+      const leadTxt = lead ? (lead.name.trim() === meName.trim() ? `<span class="pill green">Bu hafta hozircha siz yetakchisiz!</span>` : `<span class="pill gray">Bu hafta yetakchi: ${esc(lead.name)}</span>`) : "";
+      return `<div class="troph big ${won.length ? "" : "locked"}"><span class="medal">${I[b.ic]}</span><h3>${esc(b.t)}</h3><p>${esc(b.n)}</p>
+        ${won.length ? `<span class="pill green">${won.length} marta yutilgan</span>` : `<span class="pill">${I.lock.replace("<svg", '<svg width="14" height="14"')} Hali yutilmagan</span>`}${leadTxt}</div>`;
+    }).join("");
+    const small = SMALL.map((t) => {
+      const has = mine.some((m) => m.kind === t.k);
+      return `<div class="troph small ${has ? "" : "locked"}"><span class="medal">${I[t.ic]}</span><h3>${esc(t.t)}</h3><p>${esc(t.n)}</p>
+        ${has ? `<span class="pill green">Yutildi</span>` : ""}</div>`;
+    }).join("");
+    const total = mine.length;
+    return `<div class="row between"><h2>Kuboklarim</h2><span class="pill">${total} ta yig'ildi</span></div>
+      <h3>Haftaning katta kuboklari</h3><p class="muted">Har dushanba o'tgan hafta g'oliblariga beriladi.</p>
+      <div class="trophies">${big}</div>
+      <h3>Kichik kuboklar</h3><div class="trophies">${small}</div>`;
+  }
+
+  /* ---------- castle game ---------- */
+  async function loadCastle() {
+    try { ST.castle = await api("castle_state"); } catch (e) { if (e.message !== "AUTH") toast(errText(e)); }
+    render();
+  }
+  function castleHTML(def) {
+    const h = 70 + Math.min(def, 20) * 4;
+    return `<div class="castle" aria-hidden="true"><div class="tower" style="height:${h}px"></div><div class="keep"><span class="flagpole"></span></div><div class="tower" style="height:${h}px"></div></div><div class="ground"></div>`;
+  }
+  function vCastle() {
+    const c = ST.castle;
+    if (!c) return `<div class="loading">Yuklanmoqda…</div>`;
+    const me = c.me;
+    const msg = ST.castleMsg;
+    return `<div class="grid g2">
+        <section class="card quest"><h2>Mening qal'am</h2>${castleHTML(me.defense)}
+          <div class="row"><span class="pill">Mudofaa: ${me.defense}-daraja</span><span class="pill green">O'lja: ${me.loot}</span></div>
+          <button class="btn ghost sm" data-act="defend" ${me.soldiers < 5 || me.defense >= 20 ? "disabled" : ""}>Mudofaani kuchaytirish · 5 askar</button></section>
+        <section class="card quest"><h2>Askarlarim: <span class="num">${me.soldiers}</span></h2>
+          <div class="army">${Array.from({ length: Math.min(me.soldiers, 80) }, () => '<span class="soldier"></span>').join("")}</div>
+          <p class="muted">Har bir to'g'ri javob = 1 askar. Hujum 10 askar, mudofaa 5 askar turadi. Vazifani tugatsangiz +20 o'lja.</p></section>
+      </div>
+      ${msg ? `<div class="feedback ${msg.ok ? "good" : "bad"}" role="status"><h3>${msg.ok ? I.check : I.x}${esc(msg.t)}</h3></div>` : ""}
+      <h3>Hujum qilish</h3>
+      ${c.others.length ? `<div class="lb">${c.others.map((o) => `<div class="lbrow"><span class="nm">${esc(o.name)}</span>
+          <span class="muted small">Mudofaa ${o.defense}</span><span class="muted small num">O'lja ${o.loot}</span>
+          <button class="btn sm" data-act="attack" data-v="${o.id}" ${me.soldiers < 10 || o.cooldown ? "disabled" : ""}>${o.cooldown ? "1 soat kuting" : "Hujum"}</button></div>`).join("")}</div>`
+        : `<div class="card empty">Sinfingizda boshqa o'quvchi yo'q.</div>`}
+      ${c.log.length ? `<h3>So'nggi janglar</h3><div class="stack">${c.log.map((l) => `<p>${l.mine
+          ? (l.win ? `${esc(l.other)}ning qal'asiga hujum qildingiz va <b>${l.loot}</b> o'lja oldingiz.` : `${esc(l.other)}ning qal'asi hujumingizga chidadi.`)
+          : (l.win ? `${esc(l.other)} qal'angizdan <b>${l.loot}</b> o'lja oldi.` : `${esc(l.other)} hujum qildi, lekin qal'angiz chidadi.`)}</p>`).join("")}</div>` : ""}`;
+  }
+
+  /* ---------- endless practice ---------- */
+  function vPracticeIntro() {
+    return `<section class="card quest"><span class="pill green">Cheksiz mashq</span><h2>Istagancha mashq qiling</h2>
+      <p class="muted">O'tgan vazifalardagi so'z va savollar aralash chiqadi. Xato qilganlaringiz ko'proq chiqadi. Har to'g'ri javob = 1 askar.</p>
+      <button class="btn grass" data-act="practice">Boshlash</button></section>`;
+  }
+  async function startPractice() {
+    V = { screen: "play" };
+    P = { practice: true, loading: true, right: 0, answered: 0 };
+    render();
+    await nextPractice();
+  }
+  async function nextPractice() {
+    P.loading = true; render();
+    try {
+      const q = await api("practice_next");
+      if (q && q.empty) { P = { practice: true, empty: true }; render(); return; }
+      P.cur = q; P.loading = false; loadStep();
+    } catch (e) { if (e.message === "AUTH") return; P.error = errText(e); }
+    render(); window.scrollTo(0, 0);
   }
   function sHeaderLite() {
     return `<div class="top"><div class="logo"><span class="logo-mark">A</span><span>Salom, ${esc(S.first_name)}!</span></div>
@@ -259,10 +394,11 @@
     }
     render();
   }
-  function curStep() { return P.byId[P.state.order[P.state.i]]; }
+  function curStep() { return P.practice ? P.cur : P.byId[P.state.order[P.state.i]]; }
   function loadStep() {
-    P.sel = null; P.pick = []; P.typed = ""; P.result = null; P.busy = false;
-    const s = P.state.i < P.state.order.length ? curStep() : null;
+    P.sel = null; P.pick = []; P.typed = ""; P.result = null; P.busy = false; P.offline = false;
+    P.reportOpen = false; P.reportSent = false;
+    const s = P.practice ? P.cur : P.state.i < P.state.order.length ? curStep() : null;
     P.opts = s && s.opts ? (s.t === "tf" ? s.opts.slice() : shuffle(s.opts)) : null;
     P.t0 = Date.now();
   }
@@ -270,17 +406,24 @@
 
   function vPlay() {
     if (P.error) return `<div class="player"><div class="card"><p class="err">${esc(P.error)}</p><button class="btn" data-act="quit">Orqaga</button></div></div>`;
-    if (P.loading || !P.quest) return `<div class="loading">Yuklanmoqda…</div>`;
+    if (P.practice && P.empty) return `<div class="player"><div class="card stack"><h2>Hozircha mashq uchun savol yo'q</h2>
+      <p class="muted">Birinchi vazifani boshlang. O'rgangan so'z va savollaringiz shu yerda takrorlanadi.</p>
+      <button class="btn" data-act="quit">Orqaga</button></div></div>`;
+    if (P.loading || (!P.quest && !P.practice) || (P.practice && !P.cur)) return `<div class="loading">Yuklanmoqda…</div>`;
     const q = P.quest;
-    const finalSet = new Set(P.state.final);
-    const circ = (q.circles || []).map((c, i) => {
-      const ids = q.steps.filter((s) => s.c === i && s.g).map((s) => s.id);
-      return { name: c.name, done: ids.length > 0 && ids.every((id) => finalSet.has(id)) };
-    });
+    let circ = [];
+    if (!P.practice) {
+      const finalSet = new Set(P.state.final);
+      circ = (q.circles || []).map((c, i) => {
+        const ids = q.steps.filter((s) => s.c === i && s.g).map((s) => s.id);
+        return { name: c.name, done: ids.length > 0 && ids.every((id) => finalSet.has(id)) };
+      });
+    }
     const top = `<div class="row between"><button class="btn ghost sm" data-act="quit">${I.x} Chiqish</button>
-      ${P.preview ? `<span class="pill amber">Sinov rejimi · natija saqlanmaydi</span>` : `<span class="pill">${esc(q.title)}</span>`}</div>`;
+      ${P.practice ? `<span class="pill green">Cheksiz mashq · ${P.right} / ${P.answered} to'g'ri</span>`
+        : P.preview ? `<span class="pill amber">Sinov rejimi · natija saqlanmaydi</span>` : `<span class="pill">${esc(q.title)}</span>`}</div>`;
 
-    if (P.state.i >= P.state.order.length) {
+    if (!P.practice && P.state.i >= P.state.order.length) {
       const acc = P.answered ? Math.round((P.right / P.answered) * 100) : null;
       return `<div class="player">${top}${circlesHTML(circ.map((c) => ({ ...c, done: true })), -1)}
         <div class="card stack center" style="align-items:center"><span class="logo-mark" style="width:72px;height:72px;background:var(--sun);color:var(--on-sun)">${I.trophy}</span>
@@ -290,13 +433,13 @@
     }
 
     const s = curStep();
-    const strip = circlesHTML(circ, s.c);
+    const strip = P.practice ? "" : circlesHTML(circ, s.c);
     let body = "";
-    const passage = s.p && P.byId[s.p] ? `<details class="passage-box" open><summary>Matn: ${esc(P.byId[s.p].title)}</summary><div class="passage" data-nocopy>${esc(P.byId[s.p].text)}</div></details>` : "";
+    const passage = s.p && P.byId && P.byId[s.p] ? `<details class="passage-box" open><summary>Matn: ${esc(P.byId[s.p].title)}</summary><div class="passage" data-nocopy>${esc(P.byId[s.p].text)}</div></details>` : "";
     const locked = !!P.result || P.busy;
 
     if (s.t === "card") {
-      body = `<div class="concept"><span class="qtype">Yangi qoida</span><div class="qtext">${esc(s.title)}</div><div class="body">${esc(s.body)}</div></div>
+      body = `<div class="concept"><span class="qtype">${s.rv ? "Takrorlash" : "Yangi qoida"}</span><div class="qtext">${esc(s.title)}</div><div class="body">${esc(s.body)}</div></div>
         <button class="btn wide" data-act="next" ${P.busy ? "disabled" : ""}>Tushundim</button>`;
     } else if (s.t === "word") {
       body = `<div class="wordcard"><span class="qtype">Yangi so'z</span><span class="en">${esc(s.en)}</span><span class="uz">${esc(s.uz)}</span>${s.ex ? `<p style="font-size:19px">${esc(s.ex)}</p>` : ""}</div>
@@ -305,7 +448,7 @@
       body = `<div class="stack"><span class="qtype">O'qish</span><div class="qtext">${esc(s.title)}</div><div class="passage" data-nocopy>${esc(s.text)}</div></div>
         <button class="btn wide" data-act="next" ${P.busy ? "disabled" : ""}>O'qidim</button>`;
     } else if (s.t === "choice" || s.t === "tf") {
-      const label = s.t === "tf" ? "To'g'rimi?" : s.p ? "Matn bo'yicha savol" : "Savol";
+      const label = s.rv ? "Takrorlash" : s.t === "tf" ? "To'g'rimi?" : s.p ? "Matn bo'yicha savol" : "Savol";
       body = `${passage}<span class="qtype">${label}</span><div class="qtext noselect">${esc(s.q)}</div>
         <div class="opts ${s.t === "tf" ? "tf" : ""}">${P.opts.map((o, i) => {
           let c = "";
@@ -321,7 +464,7 @@
         <div class="gapline noselect"><span>${esc(s.before)}</span><input id="answerInput" aria-label="Javob" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" ${locked ? "disabled" : ""}><span>${esc(s.after)}</span></div>
         ${s.hint ? `<p class="muted">Yordam: ${esc(s.hint)}</p>` : ""}<p class="muted small">Katta-kichik harf va bo'sh joy xato hisoblanmaydi.</p>`;
     } else if (s.t === "spell") {
-      body = `<span class="qtype">Inglizchasini yozing</span><div class="qtext">${esc(s.uz)}</div>
+      body = `<span class="qtype">${s.rv ? "Takrorlash · " : ""}Inglizchasini yozing</span><div class="qtext">${esc(s.uz)}</div>
         <input id="answerInput" class="bigin" aria-label="Inglizcha so'z" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="${esc(s.hint)}…" ${locked ? "disabled" : ""}>
         <p class="muted small">Birinchi harf: <b>${esc(s.hint)}</b>. Katta-kichik harf xato hisoblanmaydi.</p>`;
     } else if (s.t === "order" || s.t === "letters") {
@@ -341,27 +484,46 @@
           ${!P.result.ok && P.result.again ? `<p class="muted">Bu savol keyinroq yana chiqadi.</p>` : ""}
         </div>
         <button class="btn wide ${P.result.ok ? "grass" : ""}" data-act="cont">Davom etish</button>`;
-    } else if (s.g) {
+    } else if (s.g && s.t !== "card") {
       fb = `<button class="btn wide" data-act="check" ${P.busy ? "disabled" : ""}>${P.busy ? "Tekshirilmoqda…" : "Tekshirish"}</button>`;
     }
-    return `<div class="player">${top}${strip}${body}${fb}</div>`;
+    const offline = P.offline ? `<div class="feedback bad" role="status"><h3>${I.x}Internet yo'q</h3><p>Javobingiz saqlangan. Internet qaytishi bilan avtomatik yuboriladi.</p></div>` : "";
+    let report = "";
+    if (!P.practice && !P.preview && s.g && s.t !== "card") {
+      if (P.reportSent) report = `<p class="ok-text small">Rahmat! Xabaringiz o'qituvchiga yuborildi.</p>`;
+      else if (P.reportOpen) report = `<div class="stack"><label for="repNote">Nima xato? (ixtiyoriy)</label>
+        <textarea id="repNote" style="min-height:80px;font-family:var(--body)" maxlength="500"></textarea>
+        <div class="row"><button class="btn sm" data-act="repSend">Yuborish</button><button class="btn ghost sm" data-act="repToggle">Bekor qilish</button></div></div>`;
+      else report = `<button class="link small" data-act="repToggle">${I.flag.replace("<svg", '<svg width="16" height="16" style="vertical-align:-3px"')} Bu savolda xato bormi?</button>`;
+    }
+    return `<div class="player">${top}${strip}${body}${offline}${fb}${report}</div>`;
+  }
+
+  function retryLater(fn) {
+    const myP = P;
+    P.offline = true; P.busy = true; render();
+    setTimeout(() => { if (P !== myP) return; P.busy = false; fn(); }, 4000);
   }
 
   async function nextCard() {
     if (P.busy) return;
     const s = curStep();
     const st = clone(P.state); st.i += 1;
+    if (s.g && !st.final.includes(s.id)) st.final.push(s.id);
     P.busy = true; render();
     try {
       if (!P.preview) await api("advance", { p_quest: P.quest.id, p_step: s.id, p_answer: "", p_ms: Date.now() - P.t0, p_state: st });
       P.state = st; loadStep();
-    } catch (e) { P.busy = false; if (e.message !== "AUTH") toast(errText(e)); }
+    } catch (e) {
+      if (e.net) { retryLater(nextCard); return; }
+      P.busy = false; if (e.message !== "AUTH") toast(errText(e));
+    }
     render(); window.scrollTo(0, 0);
   }
 
   function currentAnswer(s) {
     if (s.t === "choice" || s.t === "tf") return P.sel == null ? "" : P.opts[P.sel];
-    if (s.t === "gap" || s.t === "spell") { const el = $("#answerInput"); return (el ? el.value : P.typed || "").trim(); }
+    if (s.t === "gap" || s.t === "spell") { const el = $("#answerInput"); return (el ? el.value : P.typed || "").trim() || (P.typed || "").trim(); }
     if (s.t === "order") return P.pick.map((i) => s.words[i]).join(" ");
     if (s.t === "letters") return P.pick.map((i) => s.L[i]).join("");
     return "";
@@ -374,6 +536,18 @@
     if (!ans) { toast(s.t === "choice" || s.t === "tf" ? "Avval javobni tanlang" : s.t === "order" || s.t === "letters" ? "Avval bo'laklarni joylang" : "Avval javobni yozing"); return; }
     if ((s.t === "order" && P.pick.length < s.words.length) || (s.t === "letters" && P.pick.length < s.L.length)) { toast("Hamma bo'laklarni joylang"); return; }
     P.typed = ans;
+
+    if (P.practice) {
+      P.busy = true; render();
+      let res;
+      try { res = await api("practice_answer", { p_answer: ans, p_ms: Date.now() - P.t0 }); }
+      catch (e) { if (e.net) { retryLater(check); return; } P.busy = false; if (e.message !== "AUTH") toast(errText(e)); render(); return; }
+      P.busy = false; P.offline = false;
+      if (res && res.error) { nextPractice(); return; }
+      P.answered += 1; if (res.ok) { P.right += 1; if (ST.home) ST.home.soldiers = (ST.home.soldiers || 0) + 1; }
+      P.result = res; render(); return;
+    }
+
     const tries = (P.state.tries[s.id] || 0) + 1;
     const ifRight = clone(P.state);
     ifRight.tries[s.id] = tries;
@@ -383,8 +557,11 @@
     let res;
     try {
       res = await api("advance", { p_quest: P.quest.id, p_step: s.id, p_answer: ans, p_ms: Date.now() - P.t0, p_state: P.preview ? null : ifRight });
-    } catch (e) { P.busy = false; if (e.message !== "AUTH") toast(errText(e)); render(); return; }
-    P.busy = false;
+    } catch (e) {
+      if (e.net) { retryLater(check); return; }
+      P.busy = false; if (e.message !== "AUTH") toast(errText(e)); render(); return;
+    }
+    P.busy = false; P.offline = false;
     P.answered += 1; if (res.ok) P.right += 1;
     if (res.ok) {
       P.next = ifRight;
@@ -409,8 +586,18 @@
   }
 
   function cont() {
+    if (P.practice) { nextPractice(); return; }
     P.state = P.next; P.next = null; loadStep(); render(); window.scrollTo(0, 0);
     if (P.state.i >= P.state.order.length && !P.preview) ST.home = null;
+  }
+
+  async function sendReport() {
+    const s = curStep(); const el = $("#repNote");
+    try {
+      const r = await api("report_problem", { p_quest: P.quest.id, p_step: s.id, p_note: el ? el.value.trim() : "" });
+      if (r && r.error) { toast("Bugun juda ko'p xabar yuborildi."); return; }
+      P.reportOpen = false; P.reportSent = true; render();
+    } catch (e) { if (e.message !== "AUTH") toast(errText(e)); }
   }
 
   /* ---------- teacher ---------- */
@@ -422,6 +609,7 @@
     try {
       T.data = await api("admin_data");
       if (!T.cls || !T.data.classes.some((c) => c.id === T.cls)) T.cls = T.data.classes.length ? T.data.classes[0].id : null;
+      T.problems = T.data.problems ? await api("admin_problems") : [];
     } catch (e) { if (e.message !== "AUTH") toast(errText(e)); }
     render();
     if (T.tab === "report") loadReport();
@@ -473,6 +661,7 @@
     const avgTime = avg(rows, (r) => r.seconds);
     const totAns = rows.reduce((a, r) => a + r.answered, 0), totCor = rows.reduce((a, r) => a + r.correct, 0);
     const top5 = rows.filter((r) => r.correct > 0).slice(0, 5);
+    const winners = T.report.winners || [];
     return chips + `<article class="report">
       <div class="report-head"><div><span class="pill">Haftalik hisobot</span><h1 style="margin-top:8px">${esc(className(T.cls))} sinf</h1>
         <p class="muted">${esc(weekLabel(T.week))} · ${rows.length} o'quvchi</p></div>
@@ -483,18 +672,43 @@
         <div class="kpi"><b>${totAns ? Math.round((totCor / totAns) * 100) + "%" : "—"}</b><span>O'rtacha aniqlik</span></div>
         <div class="kpi"><b class="num">${totAns}</b><span>Jami javob berilgan savol</span></div>
       </div>
+      <div class="grid g2">
       ${top5.length ? `<div><h3>Eng yaxshi ${top5.length} o'quvchi</h3><ol class="top5" style="margin-top:12px">${top5.map((r, i) => `<li><span class="rank r${i < 3 ? i + 1 : ""}">${i + 1}</span>${esc(r.first_name + " " + r.last_name)}<span class="muted num" style="margin-left:auto">${r.correct} ochko</span></li>`).join("")}</ol></div>` : ""}
-      <div class="tablebox"><table class="wide-table"><thead><tr><th>#</th><th>O'quvchi</th><th>Vazifa</th><th>Tugatgan</th><th>Vaqt</th><th>Aniqlik</th><th>Javoblar</th></tr></thead><tbody>
+      ${winners.length ? `<div><h3>${T.week >= thisWeek ? "Haftaning kuboklari (hozircha)" : "Haftaning kuboklari"}</h3><div class="winners" style="margin-top:12px">${winners.map((w) => {
+          const b = BIG.find((x) => x.k === w.kind) || {};
+          return `<div class="winner"><span class="t">${I[b.ic] || ""}${esc(b.t || w.kind)}</span><span class="n">${esc(w.name)}</span><p>${esc(b.n || "")}</p></div>`;
+        }).join("")}</div></div>` : ""}
+      </div>
+      <div class="tablebox"><table class="wide-table"><thead><tr><th>#</th><th>O'quvchi</th><th>Vazifa</th><th>Tugatgan</th><th>Vaqt</th><th>Aniqlik</th><th>Javoblar</th><th>Izoh</th></tr></thead><tbody>
       ${rows.map((r, i) => `<tr><td><span class="rank ${i < 3 && r.correct > 0 ? "r" + (i + 1) : ""}">${i + 1}</span></td>
         <td><b>${esc(r.first_name + " " + r.last_name)}</b>${r.pool ? `<div class="muted small">${esc(r.pool)}</div>` : ""}</td>
         <td class="num">${r.pct == null ? `<span class="muted">vazifa yo'q</span>` : `<span class="bar ${barCls(r.pct)}"><i style="width:${r.pct}%"></i></span>${r.pct}%`}</td>
         <td class="num">${r.quests ? `${r.finished} / ${r.quests}` : "—"}${r.late ? ` <span class="pill amber">${r.late} kech</span>` : ""}</td>
         <td class="num">${fmtTime(r.seconds)}</td>
         <td class="num">${r.answered ? Math.round((r.correct / r.answered) * 100) + "%" : "—"}</td>
-        <td class="num">${r.answered}</td></tr>`).join("")}
+        <td class="num">${r.answered}${r.practice_n ? `<div class="muted small">+${r.practice_n} mashq</div>` : ""}</td>
+        <td>${r.flag ? `<div class="flag ${r.flag.kind}">${esc(r.flag.text)}</div>` : `<span class="muted">—</span>`}</td></tr>`).join("")}
       </tbody></table></div>
-      <p class="muted small">Vazifa: shu haftaga muddati qo'yilgan vazifalarning bajarilgan qismi. Ochko = to'g'ri javoblar soni.</p>
-    </article>`;
+      <p class="muted small">Vazifa: shu haftaga muddati qo'yilgan vazifalarning bajarilgan qismi (takrorlash ham kiradi). Ochko = to'g'ri javoblar soni. Izohlar faqat bir xil holat bir necha marta takrorlanganda qo'yiladi.</p>
+    </article>
+    ${vMonthly()}`;
+  }
+
+  async function loadMonthly() {
+    try { T.monthly = await api("admin_monthly", { p_class: T.cls }); T.monthlyCls = T.cls; } catch (e) { if (e.message !== "AUTH") toast(errText(e)); }
+    render();
+  }
+  function vMonthly() {
+    if (!T.showMonthly) return `<button class="btn ghost" data-act="monthly">Oylik natijalar</button>`;
+    if (!T.monthly || T.monthlyCls !== T.cls) return `<div class="loading">Yuklanmoqda…</div>`;
+    if (!T.monthly.length) return `<div class="card empty">Oylik natijalar har oy oxirida saqlanadi. Birinchi oy tugagach shu yerda ko'rinadi.</div>`;
+    const MON = ["yanvar", "fevral", "mart", "aprel", "may", "iyun", "iyul", "avgust", "sentabr", "oktabr", "noyabr", "dekabr"];
+    return `<section class="card stack"><h3>Oylik natijalar · ${esc(className(T.cls))}</h3>
+      <div class="tablebox"><table class="wide-table"><thead><tr><th>Oy</th><th>O'quvchi</th><th>Vazifa</th><th>Vaqt</th><th>Aniqlik</th><th>Javoblar</th></tr></thead><tbody>
+      ${T.monthly.map((m) => { const d = dayFromStr(m.month); return `<tr><td>${MON[d.getMonth()]} ${d.getFullYear()}</td><td><b>${esc(m.name)}</b></td>
+        <td class="num">${m.pct == null ? "—" : m.pct + "%"}</td><td class="num">${fmtTime(m.seconds)}</td>
+        <td class="num">${m.answered ? Math.round((m.correct / m.answered) * 100) + "%" : "—"}</td><td class="num">${m.answered}</td></tr>`; }).join("")}
+      </tbody></table></div></section>`;
   }
 
   function nameList(kind) {
@@ -594,7 +808,7 @@
       const indiv = q.students || [];
       return `<section class="card stack">
         <div class="row between"><h3>${esc(q.title)}</h3>
-          <div class="row">${q.hidden ? `<span class="pill gray">Yashirin</span>` : ""}<span class="pill green">${q.finished} ta tugatdi</span></div></div>
+          <div class="row">${q.problems ? `<span class="pill red">${q.problems} ta xabar</span>` : ""}${q.hidden ? `<span class="pill gray">Yashirin</span>` : ""}<span class="pill green">${q.finished} ta tugatdi</span></div></div>
         <div class="grid g2">
           <div><label for="qp-${q.id}">Pul</label><select id="qp-${q.id}" data-chg="qPool" data-v="${q.id}">${opts(d.pools, q.pool_id, "— faqat alohida o'quvchilar —")}</select></div>
           <div><label for="qd-${q.id}">Muddat</label><div class="row" style="flex-wrap:nowrap"><input id="qd-${q.id}" type="datetime-local" value="${esc(toLocalInput(q.deadline))}" data-chg="qDeadline" data-v="${q.id}">
@@ -614,7 +828,12 @@
           <div class="row"><button class="btn sm" data-act="indivSave" data-v="${q.id}">Saqlash</button><button class="btn ghost sm" data-act="indiv" data-v="${q.id}">Yopish</button></div></div>` : ""}
       </section>`;
     }).join("") : `<div class="card empty">Hali vazifa yo'q. Yuqoriga kod joylab qo'shing.</div>`;
-    return paste + `<h2>Vazifalar</h2>` + list;
+    const probs = (T.problems || []).length ? `<section class="card stack"><h3>O'quvchilar xabar bergan savollar · ${T.problems.length}</h3>
+      ${T.problems.map((r) => `<div class="feedback bad"><p><b>${esc(r.quest)}</b> · ${esc(r.student)} · ${esc(fmtDate(r.at))}</p>
+        <p>Savol: <i>${esc(r.text || r.step)}</i></p>${r.note ? `<p>Izoh: ${esc(r.note)}</p>` : ""}
+        <div class="row"><button class="btn ghost sm" data-act="preview" data-v="${r.quest_id}">Vazifani ko'rish</button><button class="btn sm" data-act="probDone" data-v="${r.id}">Ko'rib chiqildi</button></div></div>`).join("")}
+      </section>` : "";
+    return probs + paste + `<h2>Vazifalar</h2>` + list;
   }
 
   function vSettings() {
@@ -657,11 +876,32 @@
       case "back": V = { screen: "pick" }; render(); return;
       case "logout": signOut(); return;
       // student
-      case "stab": ST.tab = v; render(); if (v === "board") loadBoard(); return;
+      case "stab":
+        ST.tab = v; ST.castleMsg = null; render();
+        if (v === "board") loadBoard(); else if (v === "troph") loadTrophies(); else if (v === "castle") loadCastle();
+        return;
+      case "practice": startPractice(); return;
+      case "defend": {
+        b.disabled = true;
+        try { const r = await api("castle_defend"); ST.castleMsg = r.error ? { ok: false, t: r.error === "MAX" ? "Mudofaa eng yuqori darajada." : "5 ta askar kerak." } : { ok: true, t: "Mudofaa kuchaytirildi!" }; }
+        catch (err) { if (err.message !== "AUTH") toast(errText(err)); }
+        loadCastle(); if (ST.home) loadStudentQuiet(); return;
+      }
+      case "attack": {
+        b.disabled = true;
+        try {
+          const r = await api("castle_attack", { p_target: Number(v) });
+          if (r.error) ST.castleMsg = { ok: false, t: r.error === "COOLDOWN" ? "Bu qal'aga 1 soatdan keyin yana hujum qilish mumkin." : r.error === "NO_SOLDIERS" ? "10 ta askar kerak." : "Hujum qilib bo'lmadi." };
+          else ST.castleMsg = r.win ? { ok: true, t: `G'alaba! ${r.name}dan ${r.loot} o'lja oldingiz.` } : { ok: false, t: `${r.name}ning qal'asi chidadi. Keyingi safar omad!` };
+        } catch (err) { if (err.message !== "AUTH") toast(errText(err)); }
+        loadCastle(); if (ST.home) loadStudentQuiet(); return;
+      }
+      case "repToggle": P.reportOpen = !P.reportOpen; render(); { const el = $("#repNote"); if (el) el.focus(); } return;
+      case "repSend": sendReport(); return;
       case "play": startQuest(v, false); return;
       case "quit":
         if (S.role === "teacher") { V = { screen: "teacher" }; render(); }
-        else { V = { screen: "student" }; ST.tab = "home"; loadStudent(); }
+        else { const wasPractice = P.practice; V = { screen: "student" }; ST.tab = wasPractice ? "practice" : "home"; loadStudent(); }
         return;
       case "sel": if (!P.result) { P.sel = Number(v); render(); } return;
       case "pick": if (!P.result && !P.pick.includes(Number(v))) { P.pick.push(Number(v)); render(); } return;
@@ -671,9 +911,11 @@
       case "next": nextCard(); return;
       // teacher
       case "ttab": T.tab = v; T.editName = null; T.pwFor = null; render(); if (v === "report") loadReport(true); return;
-      case "cls": T.cls = Number(v); render(); loadReport(); return;
+      case "cls": T.cls = Number(v); render(); loadReport(); if (T.showMonthly) loadMonthly(); return;
       case "week": { const d = dayFromStr(T.week); d.setDate(d.getDate() + 7 * Number(v)); T.week = strFromDay(d); loadReport(); return; }
       case "reload": loadReport(true); return;
+      case "monthly": T.showMonthly = true; render(); loadMonthly(); return;
+      case "probDone": await adminCall("admin_problem_resolve", { p_id: Number(v) }, "Belgilandi"); return;
       case "filter": T.filter = v; render(); return;
       case "rn": T.editName = v; render(); { const el = document.getElementById("rn-" + v); if (el) el.focus(); } return;
       case "rnCancel": T.editName = null; render(); return;
