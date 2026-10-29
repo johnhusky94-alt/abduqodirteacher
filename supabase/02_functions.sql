@@ -36,7 +36,7 @@ language sql stable security definer set search_path = public as $$
 $$;
 
 create or replace function public._week_start(p_day date default null) returns date
-language sql stable as $$
+language sql stable set search_path = public as $$
   select date_trunc('week', coalesce(p_day, (now() at time zone 'Asia/Tashkent')::date))::date
 $$;
 
@@ -118,7 +118,7 @@ end $$;
 create or replace function public.advance(p_token text, p_quest bigint, p_step text, p_answer text, p_ms int, p_state jsonb)
 returns json language plpgsql security definer set search_path = public as $$
 declare
-  u public.users; q public.quests; s jsonb; ok boolean; why text;
+  u public.users; q public.quests; s jsonb; v_ok boolean; why text;
   v_ms int := least(greatest(coalesce(p_ms, 0), 0), 120000);
   fin int;
 begin
@@ -130,20 +130,20 @@ begin
   if s is null then raise exception 'NO_STEP'; end if;
 
   if s ? 'a' then
-    ok := exists (select 1 from jsonb_array_elements_text(s->'a') a where public._norm(a) = public._norm(p_answer));
-    if not ok and s ? 'whys' then why := s->'whys'->>public._norm(p_answer); end if;
+    v_ok := exists (select 1 from jsonb_array_elements_text(s->'a') a where public._norm(a) = public._norm(p_answer));
+    if not v_ok and s ? 'whys' then why := s->'whys'->>public._norm(p_answer); end if;
     why := coalesce(why, s->>'why');
   end if;
 
   if u.role = 'student' then
-    insert into public.answers(user_id, quest_id, step_id, ok, ms) values (u.id, q.id, p_step, ok, v_ms);
+    insert into public.answers(user_id, quest_id, step_id, ok, ms) values (u.id, q.id, p_step, v_ok, v_ms);
     select count(*) into fin from (
-      select step_id, bool_or(ok) o, count(*) c from public.answers
-       where user_id = u.id and quest_id = q.id and ok is not null group by step_id) t
+      select a.step_id, bool_or(a.ok) o, count(*) c from public.answers a
+       where a.user_id = u.id and a.quest_id = q.id and a.ok is not null group by a.step_id) t
      where o or c >= 2;
     insert into public.progress(user_id, quest_id, state, done, correct, answered, ms, completed_at, updated_at)
     values (u.id, q.id, coalesce(p_state, '{}'::jsonb), fin,
-            case when ok then 1 else 0 end, case when ok is null then 0 else 1 end, v_ms,
+            case when v_ok then 1 else 0 end, case when v_ok is null then 0 else 1 end, v_ms,
             case when fin >= q.gradable then now() end, now())
     on conflict (user_id, quest_id) do update set
       state = coalesce(p_state, public.progress.state),
@@ -155,7 +155,7 @@ begin
       updated_at = now();
   end if;
 
-  return json_build_object('ok', ok, 'right', s->>'show', 'why', why);
+  return json_build_object('ok', v_ok, 'right', s->>'show', 'why', why);
 end $$;
 
 create or replace function public.save_state(p_token text, p_quest bigint, p_state jsonb) returns void
