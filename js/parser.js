@@ -85,6 +85,12 @@
             circle.items.push(body); passage = body; return;
           }
           case "endreading": passage = null; return;
+          case "review": {
+            if (!q) newQuest("Nomsiz vazifa", ln);
+            const n = Math.max(1, Math.min(20, parseInt(rest, 10) || 6));
+            circle = { name: "Takrorlash", items: [{ k: "review", n, line: ln }] };
+            q.circles.push(circle); q.hasReview = true; passage = null; return;
+          }
           case "word": {
             needCircle(ln);
             const [left, ex] = rest.split("|").map((s) => (s || "").trim());
@@ -158,6 +164,12 @@
     });
     closeChoice();
 
+    quests.forEach((qq) => {
+      if (qq.hasReview || !qq.circles.length) return;
+      const rc = { name: "Takrorlash", items: [{ k: "review", n: 6 }] };
+      const ri = qq.circles.findIndex((c) => c.items.some((it) => it.k === "reading"));
+      if (ri >= 0) qq.circles.splice(ri, 0, rc); else qq.circles.push(rc);
+    });
     const built = quests.map((qq) => build(qq, errors));
     return { quests: built, errors };
   }
@@ -178,7 +190,7 @@
         id: id(), c, t: "choice",
         q: dir === "en" ? `"${w.en}" so'zining ma'nosi qaysi?` : `"${w.uz}" inglizcha qanday?`,
         opts: shuffle([right].concat(pool)), a: [right], show: right,
-        why: `${w.en} = ${w.uz}` + (w.ex ? `. Misol: ${w.ex}` : ""),
+        why: `${w.en} = ${w.uz}` + (w.ex ? `. Misol: ${w.ex}` : ""), w: w.en,
       };
     };
     const singleToken = (s) => /^[A-Za-z'-]{2,14}$/.test(s);
@@ -187,7 +199,9 @@
       const seen = [];
       let mixTurn = 0;
       circle.items.forEach((it) => {
-        if (it.k === "rule") {
+        if (it.k === "review") {
+          for (let i = 0; i < it.n; i++) steps.push({ id: id(), c, t: "review", a: [] });
+        } else if (it.k === "rule") {
           steps.push({ id: id(), c, t: "card", title: it.title, body: it.text.join("\n").trim() });
         } else if (it.k === "reading") {
           const sid = id();
@@ -223,7 +237,7 @@
           if (singleToken(w.en)) {
             let L = shuffle(w.en.split(""));
             if (L.join("") === w.en && L.length > 1) L = L.slice(1).concat(L[0]);
-            steps.push({ id: id(), c, t: "letters", uz: w.uz, L, a: [w.en], show: w.en, why: `"${w.uz}" = ${w.en}` });
+            steps.push({ id: id(), c, t: "letters", uz: w.uz, L, a: [w.en], show: w.en, why: `"${w.uz}" = ${w.en}`, w: w.en });
           }
           if (w.ex && singleToken(w.en)) {
             const re = new RegExp("\\b(" + w.en.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\w*)\\b", "i");
@@ -231,13 +245,13 @@
             if (m && m[1].toLowerCase() === w.en.toLowerCase()) {
               const i = m.index;
               steps.push({ id: id(), c, t: "gap", before: w.ex.slice(0, i).trim(), after: w.ex.slice(i + m[1].length).trim(),
-                hint: w.uz, a: [m[1]], show: m[1], why: `${w.en} = ${w.uz}` });
+                hint: w.uz, a: [m[1]], show: m[1], why: `${w.en} = ${w.uz}`, w: w.en });
             }
           }
           if (seen.length) {
             const pw = seen[mixTurn++ % seen.length];
             if (singleToken(pw.en)) {
-              steps.push({ id: id(), c, t: "spell", uz: pw.uz, hint: pw.en[0], a: [pw.en], show: pw.en, why: `"${pw.uz}" = ${pw.en}` });
+              steps.push({ id: id(), c, t: "spell", uz: pw.uz, hint: pw.en[0], a: [pw.en], show: pw.en, why: `"${pw.uz}" = ${pw.en}`, w: pw.en });
             } else {
               const s = wordChoice(c, pw, "uz"); if (s) steps.push(s);
             }
