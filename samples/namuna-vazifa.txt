@@ -1,0 +1,71 @@
+@quest Namuna · Hozirgi davomli zamon
+@pool Sinov
+
+@circle Qoida
+@rule Hozirgi davomli zamon
+Bu zamon hozir, ayni paytda davom etayotgan harakatni bildiradi.
+Masalan: siz hozir shu gapni o'qiyapsiz.
+
+Tuzilishi: ega + am / is / are + fe'l + ing
+I → am · he, she, it → is · you, we, they → are
+
+? Hozirgi davomli zamon qanday harakatlarni ifodalaydi?
+- har doim bo'ladigan harakatlarni ! Har doim bo'ladigan harakatlar uchun boshqa zamon (Present Simple) ishlatiladi.
+* hozir, ayni paytda davom etayotgan harakatlarni
+- kecha bo'lib o'tgan harakatlarni ! O'tgan harakatlar uchun o'tgan zamon ishlatiladi.
+- kelajakda bo'ladigan harakatlarni
+! Bu zamon aynan hozir, gapirayotgan paytda bo'layotgan harakat uchun.
+
+? Hozirgi davomli zamonda egadan (harakatni qilayotgan odam yoki narsadan) keyin nima keladi?
+- fe'l ! Fe'ldan oldin am/is/are kerak.
+* am / is / are + fe'l-ing
+- fe'l-ing ! am/is/are tushib qolgan.
+- am / is / are + fe'l ! Fe'lga -ing qo'shilmagan.
+! Ikkala qism ham kerak: avval am/is/are, keyin fe'l + ing.
+
+? "she" bilan qaysi biri ishlatiladi?
+- am
+* is
+- are
+! he, she, it bilan doim is.
+
+@tf She is reading a book now. = to'g'ri ! she + is + reading: hammasi joyida.
+@tf They is playing football. = noto'g'ri ! they bilan are kerak: They are playing.
+
+@circle Mashq
+@gap She ___ reading a book now. = is ! she bilan is.
+@gap I ___ writing a letter. = am ! I bilan doim am.
+@gap They ___ playing football. = are ! they bilan are.
+@gap We are ___ TV now. (watch) = watching ! watch + ing = watching.
+@tf He are cooking dinner. = noto'g'ri ! he bilan is: He is cooking.
+
+@circle So'z tartibi
+@order She | is | reading | a book | now = U hozir kitob o'qiyapti. ! Ega → is → fe'l-ing → qolgani.
+@order They | are | playing | football = Ular futbol o'ynayapti.
+@order I | am | writing | a letter | now = Men hozir xat yozyapman.
+
+@circle Lug'at
+@word read = o'qimoq | She is reading a book.
+@word write = yozmoq | I am writing a letter.
+@word play = o'ynamoq | They are playing football.
+@word cook = pishirmoq | He is cooking dinner.
+@word even = hatto | She even reads at night.
+
+@circle O'qish
+@reading Tom's evening
+It is seven o'clock. Tom is at home. He is reading a book in his room.
+His mother is cooking dinner. His sister is playing with the cat.
+Tom likes books. He even reads at night!
+
+? What is Tom doing?
+* He is reading a book.
+- He is cooking dinner. ! Ovqatni onasi pishiryapti.
+- He is playing with the cat. ! Mushuk bilan singlisi o'ynayapti.
+! Matnda: He is reading a book in his room.
+
+? Who is cooking dinner?
+- Tom
+* his mother
+- his sister
+@tf Tom's sister is reading a book. = noto'g'ri ! Singlisi mushuk bilan o'ynayapti.
+@gap He ___ reads at night. (hatto) = even ! even = hatto.
