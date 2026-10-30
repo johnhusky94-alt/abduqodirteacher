@@ -1,0 +1,261 @@
+@quest Unit 4 · Oila (Family and friends)
+
+@circle Kimning?
+@rule Egalik so'zlari: kimning?
+Bu so'zlar narsa kimga tegishli ekanini bildiradi.
+
+I → my (mening)
+you → your (sening, sizning)
+he → his (uning: erkak yoki o'g'il bolaning)
+she → her (uning: ayol yoki qiz bolaning)
+we → our (bizning)
+they → their (ularning)
+
+Misol: This is my bag. = Bu mening sumkam.
+Diqqat: his = erkakniki, her = ayolniki!
+
+? "my" so'zi nimani bildiradi?
+* mening
+- sening ! sening = your.
+- uning ! uning = his yoki her.
+- bizning ! bizning = our.
+
+? "bizning" inglizcha qanday?
+- their ! their = ularning.
+* our
+- your ! your = sening, sizning.
+- my ! my = mening.
+
+? Erkak yoki o'g'il bolaga tegishli narsa uchun qaysi so'z ishlatiladi?
+* his
+- her ! her ayol yoki qiz bola uchun.
+- our ! our = bizning.
+- my ! my = mening.
+
+? Ayol yoki qiz bolaga tegishli narsa uchun qaysi so'z ishlatiladi?
+- his ! his erkak yoki o'g'il bola uchun.
+* her
+- their ! their = ularning (bir necha kishi).
+- your ! your = sening, sizning.
+
+? "ularning" inglizcha qanday?
+- they ! they = ular. "ularning" esa their.
+* their
+- our ! our = bizning.
+- his ! his = uning (erkakning).
+
+@gap I am a student. ___ name is Aziz. = my ! I → my.
+@gap Ali is a student. ___ school is in Tashkent. = his ! Ali o'g'il bola, shuning uchun his.
+@gap Madina is a nurse. ___ hospital is big. = her ! Madina ayol, shuning uchun her.
+@gap We are students. ___ teacher is very good. = our ! we → our.
+@gap They are doctors. ___ hospital is in the centre of town. = their ! they → their.
+@gap "What's ___ name?" "My name's Zarina." = your ! Savol senga berilyapti: your name.
+
+@tf This is Jasur. Her school is big. = noto'g'ri ! Jasur o'g'il bola: His school is big.
+@tf Zarina and Omina are sisters. Their house is big. = to'g'ri ! Ikki kishi → their.
+@tf We are in class 7. Their teacher is very good. = noto'g'ri ! we → our: Our teacher.
+
+@circle 's belgisi
+@rule 's belgisi: kimning?
+Ismga 's qo'shsak, "kimning" degan ma'no chiqadi.
+
+Aziz's bag = Azizning sumkasi
+Madina's school = Madinaning maktabi
+
+Diqqat! 's ikki xil bo'ladi:
+1) She's a nurse. Bu yerda 's = is (u hamshira).
+2) Aziz's bag. Bu yerda 's = kimning (Azizning sumkasi).
+Ismdan keyin narsa kelsa, bu "kimning" degani.
+
+? "Aziz's bag" nima degani?
+* Azizning sumkasi
+- Aziz sumka ! 's "kimning" degani: Azizning sumkasi.
+- Sumkaning Azizi ! Avval egasi (Aziz's), keyin narsa (bag).
+
+? "Madinaning kitobi" inglizcha qanday?
+- Madina book ! 's tushib qolgan: Madina's book.
+* Madina's book
+- book's Madina ! Avval egasi, keyin narsa: Madina's book.
+- Madinas book ! Apostrof (') kerak: Madina's.
+
+? "She's a nurse." Bu yerda 's nima?
+* is (u hamshira)
+- kimning ! 's dan keyin narsa emas, kasb kelyapti: She is a nurse.
+
+? "This is Ali's school." Bu yerda 's nima?
+- is ! "Ali is school" ma'nosiz. Bu Alining maktabi.
+* kimning (Alining maktabi)
+
+? "He's married." Bu yerda 's nima?
+* is (u uylangan)
+- kimning ! married = uylangan. He is married.
+
+? Qaysi gap to'g'ri?
+* What's Ali's job?
+- What's Ali job? ! 's tushib qolgan: Ali's job.
+- What's Alis job? ! Apostrof kerak: Ali's.
+- What Ali's job? ! What's = What is. is tushib qolgan.
+
+@tf This is Omina book. = noto'g'ri ! 's kerak: Omina's book.
+@tf Ilyos's house is in the centre of town. = to'g'ri ! Ilyosning uyi shahar markazida.
+@gap This is ___ bag. (Azizning) = Aziz's ! Azizning = Aziz's.
+@gap ___ school is big. (Madinaning) = Madina's ! Madinaning = Madina's.
+@order This | is | Aziz's | bag = Bu Azizning sumkasi. ! Avval egasi (Aziz's), keyin narsa (bag).
+@order Madina's | school | is | big = Madinaning maktabi katta.
+
+@circle Oila so'zlari
+@rule Oila so'zlari
+mother = ona, father = ota
+daughter = qiz (farzand), son = o'g'il
+sister = opa, singil
+brother = aka, uka
+wife = xotin, rafiqa
+husband = er
+parents = ota-ona
+children = bolalar, farzandlar
+
+@word mother = ona | My mother is a nurse.
+@word father = ota | His father is a teacher.
+@word son = o'g'il | Their son is 18.
+@word daughter = qiz (farzand) | Our daughter is at school.
+@word sister = opa, singil | Her sister is at university.
+@word brother = aka, uka | This is my brother.
+@word wife = xotin, rafiqa | His wife is a nurse.
+@word husband = er | Her husband is a doctor.
+@word parents = ota-ona | My parents are happy.
+@word children = bolalar, farzandlar | Their children are at school.
+
+@rule Oila daraxti
+Aziz va Madina er-xotin.
+Ularning farzandlari: Bobur (o'g'il) va Zarina (qiz).
+
+@gap Madina is Aziz's ___. = wife ! Madina Azizning xotini.
+@gap Aziz is Madina's ___. = husband ! Aziz Madinaning eri.
+@gap Bobur is Zarina's ___. = brother ! Bobur Zarinaning akasi.
+@gap Zarina is Bobur's ___. = sister ! Zarina Boburning singlisi.
+@gap Bobur is Aziz and Madina's ___. = son ! Bobur ularning o'g'li.
+@gap Zarina is Madina's ___. = daughter ! Zarina Madinaning qizi.
+@gap Aziz and Madina are Bobur's ___. = parents ! Aziz va Madina Boburning ota-onasi.
+
+? Bobur and Zarina are Aziz and Madina's ...
+* children
+- parents ! parents = ota-ona. Bobur va Zarina farzandlar.
+- sons ! Zarina qiz bola. Ikkalasi birga: children.
+- brothers ! Zarina qiz bola. Ikkalasi birga: children.
+
+@circle has, likes, works
+@rule he, she, it bilan fe'lga -s qo'shiladi
+I, you, we, they bilan fe'l o'zgarmaydi:
+I like football. We work hard. They have a house.
+
+he, she, it bilan fe'lga -s qo'shiladi:
+He likes football. She works in a hospital. It loves the garden.
+
+Diqqat! have → has ("haves" degan so'z yo'q!)
+I have a sister. → She has a sister.
+
+like = yoqtirmoq, love = juda yaxshi ko'rmoq, work = ishlamoq, have = ... bor (ega bo'lmoq)
+
+? he, she, it bilan fe'lga nima qo'shiladi?
+* -s
+- hech narsa qo'shilmaydi ! he, she, it bilan -s kerak: He likes.
+
+? I, you, we, they bilan-chi?
+- -s ! I, you, we, they bilan -s qo'shilmaydi: We like.
+* hech narsa qo'shilmaydi
+
+? "She ... a brother." Qaysi so'z to'g'ri?
+- have ! she → has.
+* has
+- haves ! "haves" degan so'z yo'q: has.
+
+@gap I ___ two sisters. = have ! I → have.
+@gap She ___ a brother. = has ! she → has.
+@gap My father ___ in a hospital. (work) = works ! My father = he → works.
+@gap They ___ football. (love) = love ! they → love (-s yo'q).
+@gap Zarina ___ her school. (like) = likes ! Zarina = she → likes.
+@gap We ___ a big house. = have ! we → have.
+@gap Our dog ___ the garden. (love) = loves ! dog = it → loves.
+@gap My parents ___ in town. (work) = work ! parents = they → work (-s yo'q).
+
+? Qaysi gap to'g'ri?
+* He has two brothers.
+- He have two brothers. ! he → has.
+- He haves two brothers. ! "haves" degan so'z yo'q: has.
+
+? Qaysi gap to'g'ri?
+- Her brother, Jasur, love football. ! Her brother = he → loves.
+* Her brother, Jasur, loves football.
+- Her brother, Jasur, lovs football. ! To'g'ri yozilishi: loves.
+
+? Qaysi gap to'g'ri?
+* We like our English lessons.
+- We likes our English lessons. ! we bilan -s qo'shilmaydi.
+
+? Qaysi gap to'g'ri?
+- Our teacher work hard. ! teacher = he yoki she → works.
+* Our teacher works hard.
+- Our teachers works hard. ! teachers = they → work.
+
+? My little sister ... ten. (Singlim o'n yoshda.)
+* is
+- has ! Yosh "is" bilan aytiladi: She is ten.
+- have ! Yosh "is" bilan aytiladi: She is ten.
+- are ! sister = she → is.
+
+? Our house ... a big garden. (Uyimizning katta bog'i bor.)
+- is ! Uyning bog'i BOR, shuning uchun has.
+* has
+- have ! house = it → has.
+- are ! house = it. Bu yerda "bor" ma'nosi kerak: has.
+
+@tf My sister work in a shop. = noto'g'ri ! My sister = she → works.
+@tf They have a house in the centre of town. = to'g'ri ! they → have.
+@tf Bobur haves a big family. = noto'g'ri ! "haves" yo'q: Bobur has.
+
+@circle So'z tartibi
+@order My | sister | is | a | nurse = Mening opam hamshira.
+@order His | name | is | Bobur = Uning ismi Bobur.
+@order Their | house | is | big = Ularning uyi katta.
+@order Madina's | husband | is | a | doctor = Madinaning eri shifokor.
+@order She | has | two | brothers = Uning ikkita akasi bor.
+@order Our | parents | work | in | town = Ota-onamiz shaharda ishlaydi.
+@order What's | your | brother's | name = Akangning ismi nima?
+@order He | likes | his | school = U o'z maktabini yoqtiradi.
+
+@circle O'qish
+@reading My friend Zarina
+My friend's name is Zarina. She is 14 and she is a student at School 25 in Tashkent. Zarina has a big family.
+
+Her father's name is Aziz. He is a doctor and he works in a hospital in the centre of town. Her mother, Madina, is a teacher. She loves her job.
+
+Zarina has two brothers and a sister. Her brothers, Bobur and Jasur, are 18. They are at university. They both love football. Her little sister, Omina, is only six. She likes her school very much.
+
+Their house is not very big, but it has a nice garden. They are a happy family, and they like family time at home.
+
+? What is Zarina's father's job?
+* He is a doctor.
+- He is a teacher. ! Teacher Zarinaning onasi.
+- He is a student. ! Student Zarinaning o'zi.
+
+? Who loves her job?
+- Zarina ! Zarina o'quvchi. Ishini yaxshi ko'radigan uning onasi.
+* Zarina's mother
+- Omina ! Omina maktabini yoqtiradi.
+
+@tf Zarina has two sisters. = noto'g'ri ! Zarinaning ikkita akasi va bitta singlisi bor.
+@tf Bobur and Jasur are at university. = to'g'ri ! They are at university.
+
+? How old is Omina?
+- 14 ! 14 Zarinaning yoshi.
+* six
+- 18 ! 18 akalarining yoshi.
+
+@gap Omina is Zarina's little ___. = sister ! Omina Zarinaning singlisi.
+@gap They ___ love football. (ikkalasi ham) = both ! both = ikkalasi ham.
+@gap ___ house has a nice garden. (ularning) = their ! ularning = their.
+
+? "She is only six." Bu yerda "only" nima degani?
+* atigi, faqat
+- yolg'iz ! Bu yerda only = atigi: "u atigi olti yoshda".
+- birinchi ! birinchi = first.
