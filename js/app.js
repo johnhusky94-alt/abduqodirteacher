@@ -566,7 +566,7 @@
     rows.forEach((r) => { const k = r.pool || "Pulsiz"; (byPool[k] = byPool[k] || []).push(r); });
     const groups = Object.keys(byPool).sort().map((p) => `<h3>${esc(p)} · ${byPool[p].length} o'quvchi</h3><div class="list">${byPool[p].sort((a, b) => (b.pct || 0) - (a.pct || 0)).map((r) => `
       <div class="li">${ring(r.pct, "var(--hw)", 46)}<span class="grow"><b style="font-weight:600">${esc(r.first_name + " " + r.last_name)}</b><br>
-        <span class="sub small">${r.quests ? `${r.finished}/${r.quests} vazifa` : "Vazifa yo'q"} · ${fmtTime(r.seconds)} · aniqlik ${r.answered ? Math.round((r.correct / r.answered) * 100) + "%" : "—"}</span>
+        <span class="sub small"><b style="color:var(--ink)">${r.correct} ochko</b> · ${r.quests ? `${r.finished}/${r.quests} vazifa` : "Vazifa yo'q"} · ${fmtTime(r.seconds)} · aniqlik ${r.answered ? Math.round((r.correct / r.answered) * 100) + "%" : "—"}</span>
         ${r.late ? ` <span class="pill amber">${r.late} kech</span>` : ""}${r.flag ? `<div class="flag ${r.flag.kind}" style="margin-top:6px">${esc(r.flag.text)}</div>` : ""}</span></div>`).join("")}</div>`).join("");
     return head + probs + classSeg() + weekNav + (rows.length ? groups : `<div class="card empty">Bu sinfda hali o'quvchi yo'q.</div>`) +
       `<p class="sub small">Doira: shu haftaga muddati qo'yilgan vazifalarning bajarilgan qismi. Batafsil grafiklar keyingi bosqichda qo'shiladi.</p>`;
@@ -587,18 +587,22 @@
     const avgTime = Math.round(rows.reduce((a, r) => a + r.seconds, 0) / rows.length);
     const totAns = rows.reduce((a, r) => a + r.answered, 0), totCor = rows.reduce((a, r) => a + r.correct, 0);
     const winners = T.report.winners || [];
+    const top5 = rows.filter((r) => r.correct > 0).slice(0, 5);
     return head + `<section class="card stack">
       <div class="row between"><div><h2>${esc(className(T.cls))} sinf · haftalik natijalar</h2><p class="sub small">${esc(weekLabel(T.week))} · ${rows.length} o'quvchi</p></div><span class="row"><span class="logo">A</span><b>Abduqodir Teacher</b></span></div>
       <div class="kpis"><div class="kpi"><b>${avgPct == null ? "—" : avgPct + "%"}</b><span>O'rtacha vazifa</span></div><div class="kpi"><b>${fmtTime(avgTime)}</b><span>O'rtacha vaqt</span></div>
         <div class="kpi"><b>${totAns ? Math.round((totCor / totAns) * 100) + "%" : "—"}</b><span>O'rtacha aniqlik</span></div><div class="kpi"><b>${totAns}</b><span>Jami javoblar</span></div></div>
+      ${top5.length ? `<div><h3>Eng yaxshi ${top5.length} o'quvchi</h3><div class="list" style="margin-top:8px">${top5.map((r, i) => `<div class="li"><b class="num" style="width:22px;color:${i < 3 ? "var(--tr)" : "var(--sub)"}">${i + 1}</b><span class="grow">${esc(r.first_name + " " + r.last_name)}</span><b class="num">${r.correct} ochko</b></div>`).join("")}</div></div>` : ""}
       ${winners.length ? `<div class="winners">${winners.map((w) => { const b = BIG.find((x) => x.k === w.kind) || {}; return `<div class="winner"><span class="t">${I[b.ic] || ""}${esc(b.t || w.kind)}</span><span class="n">${esc(w.name)}</span><p>${esc(b.n || "")}</p></div>`; }).join("")}</div>` : ""}
-      <div class="tablebox" style="background:var(--card)"><table class="wide-table"><thead><tr><th>#</th><th>O'quvchi</th><th class="c">Uy vazifasi</th><th class="c">Aniqlik</th><th>Tugatgan</th><th>Vaqt</th><th>Izoh</th></tr></thead><tbody>
+      <div class="tablebox" style="background:var(--card)"><table class="wide-table"><thead><tr><th>#</th><th>O'quvchi</th><th class="c">Uy vazifasi</th><th class="c">Aniqlik</th><th>Ochko</th><th>Tugatgan</th><th>Vaqt</th><th>Javoblar</th><th>Izoh</th></tr></thead><tbody>
       ${rows.map((r, i) => `<tr><td class="num sub">${i + 1}</td><td><b style="font-weight:600">${esc(r.first_name + " " + r.last_name)}</b><br><span class="sub small">${esc(r.pool || "")}</span></td>
         <td class="c">${ring(r.pct, "var(--hw)", 46)}</td><td class="c">${ring(r.answered ? Math.round((r.correct / r.answered) * 100) : null, "var(--rv)", 46)}</td>
+        <td class="num"><b>${r.correct}</b></td>
         <td class="num">${r.quests ? `${r.finished} / ${r.quests}` : "—"}${r.late ? ` <span class="pill amber">${r.late} kech</span>` : ""}</td><td class="num">${fmtTime(r.seconds)}</td>
+        <td class="num">${r.answered}${r.practice_n ? `<br><span class="sub small">+${r.practice_n} mashq</span>` : ""}</td>
         <td>${r.flag ? `<div class="flag ${r.flag.kind}">${esc(r.flag.text)}</div>` : `<span class="sub">—</span>`}</td></tr>`).join("")}
       </tbody></table></div>
-      <p class="sub small">Doira to'la bo'lsa, o'quvchi shu haftaning barcha vazifalarini bajargan. Izohlar faqat bir xil holat bir necha marta takrorlanganda qo'yiladi.</p></section>
+      <p class="sub small">Ochko = shu haftadagi to'g'ri javoblar soni. Doira to'la bo'lsa, o'quvchi shu haftaning barcha vazifalarini bajargan (dushanba ertalabgacha muddatli vazifalar o'tgan haftaga kiradi). Izohlar faqat bir xil holat bir necha marta takrorlanganda qo'yiladi.</p></section>
       ${vMonthly()}`;
   }
   async function loadMonthly() { try { T.monthly = await api("admin_monthly", { p_class: T.cls }); T.monthlyCls = T.cls; } catch (e) { quiet(e); } render(); }

@@ -1,0 +1,1 @@
+-- 1 Nov: Monday-morning deadlines count toward the previous week in _week_stats (applied as migration week_stats_monday_deadline).
