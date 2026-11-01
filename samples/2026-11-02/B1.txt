@@ -1,0 +1,694 @@
+# B1 pul (IT 1, IT 2, IT 3) · 2–4-noyabr · Unit 1 takrorlash: Family, Present simple & continuous, Articles
+# Butun faylni Topshiriqlar bo'limiga bir marta joylang. Har sinf o'z jadvali bo'yicha oladi.
+# 1–4-sinf ishlari: har sinfning 1–4-darslari. 5-sinf ishi (takrorlash testi): IT 2 da chorshanba 15:00, IT 1 va IT 3 da keyingi dushanba birinchi darsda.
+# 1-uy vazifasi 2-darsdan keyin, 2-uy vazifasi 4-darsdan keyin ochiladi. Muddat — keyingi kungi dars (2-uy vazifasi uchun keyingi dushanba).
+@week 2026-11-02
+
+# ────────── 1-DARS ──────────
+@quest B1 · 1-dars · Ages and stages of life · The family
+@pool B1
+@classwork 1
+@noreview
+
+@circle Hayot bosqichlari
+@rule Ages and stages of life
+birth — tug'ilish → childhood — bolalik → adolescence — o'smirlik → middle age — o'rta yosh → old age — keksalik → death — o'lim
+baby — chaqaloq (0–2) · child — bola (3–12) · teenager — o'smir (13–19)
+young adult — yosh katta (20–30 atrofida) · middle-aged man / woman — o'rta yoshli (45–60 atrofida)
+senior citizen — keksa fuqaro, nafaqaxo'r (65+)
+Diqqat: adolescence, childhood, old age — davr nomi (ot). teenager, child — odam.
+
+@order birth | childhood | adolescence | middle age | old age | death = Hayot bosqichlarini tartib bilan joylang.
+? Someone who is 15 years old is a ...
+- young adult
+* teenager
+- senior citizen
+? A 70-year-old woman is a ...
+* senior citizen
+- middle-aged woman
+- young adult
+? Which word is a period of life, not a person?
+- teenager
+- baby
+* childhood
+? A 52-year-old man is ...
+- a young adult
+* middle-aged
+- an adolescence
+@tf "Adolescence" — o'smirlik davri. = to'g'ri
+@tf A baby is usually between 13 and 19. = noto'g'ri ! Bu teenager. Baby — 0–2 yosh.
+
+@circle Oila a'zolari
+@rule The family
+Erkak: husband (er), grandfather, grandson (nevara), nephew (jiyan — o'g'il), stepfather (o'gay ota), uncle, brother-in-law (pochcha, qayin aka/uka)
+Ayol: wife (xotin), grandmother, granddaughter, niece (jiyan — qiz), stepmother (o'gay ona), aunt, sister-in-law
+Ikkalasi ham: cousin (amakivachcha, xolavachcha va h.k.), partner (turmush o'rtog'i, sherik)
+-in-law: turmush orqali qarindosh. stepfather: onangizning yangi eri.
+
+? the man that a woman is married to
+* husband
+- uncle
+- stepfather
+? the brother of one of your parents
+- cousin
+* uncle
+- nephew
+? your mother's new husband in a second or later marriage
+- father-in-law
+- grandfather
+* stepfather
+? a daughter of your brother or sister
+- cousin
+* niece
+- granddaughter
+? the son of one of your children
+* grandson
+- nephew
+- son-in-law
+? the brother of your husband or wife
+- stepbrother
+* brother-in-law
+- uncle
+@gap It's the son of your brother or sister. It's your ___. = nephew
+@gap Your aunt's or uncle's child is your ___. = cousin
+@tf "cousin" can be male or female. = to'g'ri
+
+@circle Oila holati
+@rule born, divorced, single, only child, one-parent
+single — turmush qurmagan · divorced — ajrashgan · only child — yolg'iz farzand (aka-uka, opa-singilsiz)
+one-parent family — to'liqsiz oila (bolalar faqat ota yoki faqat ona bilan) · be born — tug'ilmoq
+Approximately 800,000 babies are born every year in the UK.
+
+@gap If you are ___, you aren't married. = single
+@gap If you are married and then you end the marriage, you are ___. = divorced
+@gap Approximately 800,000 babies are ___ every year in the UK. = born
+? An ___ doesn't have brothers or sisters.
+* only child
+- one-parent
+- single child
+? In ___ families only the father or the mother lives with the children.
+- divorced
+* one-parent
+- only
+@tf My parents are divorced, so they aren't married now. = to'g'ri
+
+@circle Yangi so'zlar
+@word divorced = ajrashgan | My aunt and uncle are divorced.
+@word single = turmush qurmagan | My brother is 30 and he's still single.
+@word only child = yolg'iz farzand | I'm an only child.
+@word one-parent family = to'liqsiz oila | She grew up in a one-parent family.
+
+@circle Oila daraxti
+@reading Aziz's family
+Aziz is 16. His parents are divorced and he lives with his mum and his stepfather, Rustam. Aziz is an only child, but he has a lot of cousins. His mum's sister, Dilfuza, has two children: a boy, Jamshid, and a girl, Nilufar. His dad's brother is married to a woman from Andijan, and they have a baby son.
+? Who is Rustam?
+* Aziz's stepfather
+- Aziz's uncle
+- Aziz's brother-in-law
+? Who is Dilfuza to Aziz?
+- his cousin
+* his aunt
+- his niece
+? Jamshid and Nilufar are Aziz's ...
+- nephew and niece
+* cousins
+- brothers and sisters
+@tf Aziz has got a brother. = noto'g'ri ! U yolg'iz farzand (only child).
+@tf To Aziz's mum, Nilufar is her niece. = to'g'ri ! Opasining qizi — niece.
+@endreading
+
+# ────────── 2-DARS ──────────
+@quest B1 · 2-dars · Present simple va Present continuous · Ota-ona bilan bahs
+@pool B1
+@classwork 2
+@noreview
+
+@circle O'qish
+@reading Ask our expert
+Q: Hi. I'm Daniyar, I'm 15 and I live in Tashkent. I'm writing because I'm having a hard time at home. My dad and I argue about everything. He never knocks before he comes into my room. When I'm playing games with my friends online, he often interrupts me and tells me to go to bed. He doesn't understand that games help me relax after school. He says I'm always on my phone, but that isn't true. What can I do?
+
+A: Daniyar, you want your dad to treat you with respect. That's fair. But respect goes both ways. First, find a convenient time to talk to him, not in the middle of an argument. Explain calmly why you need some free time. Then agree on a reasonable time limit for games and keep to it. Maybe your dad doesn't realise that you are growing up. Show him that you can be responsible: do your homework first and help at home. When parents see that, they usually give more freedom.
+
+? Why is Daniyar writing?
+* He's having problems with his dad.
+- He wants a new phone.
+- He's having problems at school.
+? What does Daniyar's dad do when Daniyar is playing online?
+- He plays too.
+* He interrupts him.
+- He never says anything.
+? The expert thinks Daniyar should talk to his dad ...
+- in the middle of an argument
+* at a convenient time
+- only by text message
+? The expert thinks that Daniyar's dad ...
+- is always right
+* maybe doesn't realise that Daniyar is growing up
+- doesn't love Daniyar
+@tf The expert says Daniyar should play games all night. = noto'g'ri ! "agree on a reasonable time limit"
+@gap "Respect goes both ___." = ways
+@endreading
+
+@circle Present simple yoki Present continuous?
+@rule Ikki zamon farqi
+Present simple: odat, muntazam harakat; doimiy holat; umumiy haqiqat.
+My mum and dad never knock before coming into my room. · Birds fly.
+Vaqt so'zlari: always, usually, normally, often, never, on Wednesdays, every day
+Present continuous: hozir bo'layotgan yoki vaqtinchalik harakat.
+I'm writing to you because ... · She's studying for an exam this week.
+Vaqt so'zlari: now, right now, at the moment, today, this week
+Holat fe'llari (state verbs) odatda continuous bo'lmaydi: love, like, hate, know, understand, want, need, believe, think (fikr), mean, prefer.
+I don't know what to do. (I'm not knowing emas)
+
+? Parents and teenagers always ___ about music.
+* argue
+- are arguing
+- argues
+? I ___ to you because of my problems at home.
+- write
+* 'm writing
+- writes
+? I'm sorry, I ___ what you're telling me.
+- 'm not understanding
+* don't understand
+- not understand
+? Where's your cousin? He normally ___ on time.
+* arrives
+- is arriving
+- arrive
+? Stop talking to her because she ___ to you.
+- don't listen
+- listens
+* 's listening
+@gap She ___ (study) English now. = 's / is ! She's studying — hozir.
+@gap He ___ (not study) physics. = doesn't ! He doesn't study physics — umuman.
+@gap ___ he study English? = Does
+@gap My grandfather usually ___ (sleep) in the afternoon. = sleeps
+@tf "at the moment" — Present continuous bilan ishlatiladi. = to'g'ri
+@tf "usually" — Present continuous bilan ishlatiladi. = noto'g'ri ! usually — odat, Present simple.
+
+@circle Savollar
+@order What | do | you | do | on Fridays = Jumada nima qilasiz?
+@order What | is | your mum | doing | now = Onang hozir nima qilyapti?
+@order Where | do | your uncle and aunt | live = Amaking va xolang qayerda yashaydi?
+@order Is | your cousin | studying | at university = Amakivachchang universitetda o'qiyaptimi?
+? "My grandparents go for a walk in the mornings." Savol qaysi?
+* What do your grandparents do in the mornings?
+- What are your grandparents doing in the mornings?
+- What do your grandparents in the mornings?
+
+@circle Yangi so'zlar
+@word interrupt = gapini bo'lmoq | Please don't interrupt me.
+@word realise = anglamoq, tushunib yetmoq | He doesn't realise that I'm busy.
+@word convenient = qulay | Is 6 o'clock a convenient time?
+@word reasonable = me'yoriy, oqilona | Use headphones or a reasonable volume.
+
+@circle Xatoni toping
+@tf I'm not knowing the answer. = noto'g'ri ! know — holat fe'li: I don't know.
+@tf She's loving her new school. = noto'g'ri ! She loves her new school.
+@tf He's studying in the UK this year. = to'g'ri ! Vaqtincha holat.
+@tf Water boils at 100°C. = to'g'ri ! Umumiy haqiqat — Present simple.
+? Qaysi gap to'g'ri?
+- Do you want a sandwich now? Yes, I'm wanting one.
+* Do you want a sandwich now? Yes, please.
+- Are you wanting a sandwich now?
+
+# ────────── 1-UY VAZIFASI (2-darsdan keyin) ──────────
+@quest B1 · 1-uy vazifasi · Oila va hozirgi zamonlar
+@pool B1
+@homework 2
+
+@circle So'zlar
+@word adolescence = o'smirlik davri | Adolescence can be a difficult time.
+@word childhood = bolalik | I had a happy childhood in Samarkand.
+@word middle-aged = o'rta yoshli | My parents are both middle-aged.
+@word senior citizen = keksa fuqaro, nafaqaxo'r | Senior citizens travel free on buses.
+@word stepfather = o'gay ota | My stepfather is very kind to me.
+@word nephew = jiyan (o'g'il) | My nephew is only three.
+@word niece = jiyan (qiz) | Her niece lives in London.
+@word brother-in-law = pochcha, qayin aka/uka | My brother-in-law is a doctor.
+
+@circle Oila so'zlari
+@gap I'm not married yet, I'm still ___. = single
+@gap I'm an ___ child — I haven't got any brothers or sisters. = only
+@gap My dad's mum, my ___, is really special. = grandmother / grandma / granny
+@gap My uncle's daughter is my ___. = cousin
+? My aunt's husband is my ...
+* uncle
+- brother-in-law
+- stepfather
+@tf Your sister's son is your niece. = noto'g'ri ! Opa-singilning o'g'li — nephew.
+
+@circle Present simple / continuous
+? He's ___ a new pair of jeans today.
+* wearing
+- wears
+- carrying
+? When ___ your sister have English lessons?
+- is
+- has
+* does
+? I'm not sure if he ___ French or German right now.
+- studies
+* 's studying
+- study
+? Ah! Now I ___ what you mean.
+* see
+- 'm seeing
+- 'm not understanding
+? Why ___ she doing anything?
+- doesn't
+* isn't
+- don't
+@gap Can I help you, Dad? Do you ___ anything? (need) = need
+@gap My sister ___ (lie) down right now because she doesn't feel well. = 's / is ! She's lying down.
+@gap My cousin always ___ (work) in a restaurant on Saturday afternoons. = works
+@gap Why ___ you shouting? My grandfather can hear you. = are
+@match Vaqt so'zini zamon bilan juftlang
+at the moment = Present continuous
+on Wednesdays = Present simple
+right now = Present continuous
+usually = Present simple
+- Past simple
+@endmatch
+
+@circle -ing va -s shakllari
+@gap have → he ___ = has
+@gap lie → ___ (-ing) = lying
+@gap write → ___ (-ing) = writing
+@gap cry → he ___ = cries
+@gap get → ___ (-ing) = getting
+@gap watch → he ___ = watches
+
+@circle O'qish
+@reading A message from Malika
+Hi Sevara! I'm writing this on the bus because I'm going to my grandparents' house in Chirchiq. We usually visit them on Sundays, but this week my mum is working on Sunday, so we're going today. My grandfather is a senior citizen now, but he still works in his garden every morning. My grandmother cooks the best plov in the family! My little cousin is staying with them at the moment because his parents are travelling. He's only six and he never stops talking. See you on Monday!
+
+? Where is Malika now?
+* on the bus
+- at home
+- in the garden
+? Why are they visiting the grandparents today?
+- It's Sunday.
+* Malika's mum is working on Sunday.
+- The grandfather is ill.
+@tf Malika's grandfather works in his garden every morning. = to'g'ri
+@tf Malika's cousin lives with the grandparents all the time. = noto'g'ri ! "at the moment" — vaqtincha, ota-onasi sayohatda.
+@gap Her cousin never stops ___. = talking
+@endreading
+
+# ────────── 3-DARS ──────────
+@quest B1 · 3-dars · Noun suffixes · Oiladagi huquq va mas'uliyat
+@pool B1
+@classwork 3
+@noreview
+
+@circle -ment, -ion, -ence
+@rule Ot yasovchi qo'shimchalar
+Qo'shimcha so'z turini o'zgartiradi: fe'l yoki sifatdan ot yasaydi.
+-ment: argue → argument · move → movement · improve → improvement · retire → retirement
+-ion: concentrate → concentration · inform → information · describe → description · discuss → discussion
+-ence: different → difference · adolescent → adolescence · independent → independence · confident → confidence
+Diqqat: argue → argument (e tushib qoladi), describe → description.
+
+@match Fe'lni ot bilan juftlang
+improve = improvement
+move = movement
+retire = retirement
+inform = information
+discuss = discussion
+- arguement
+@endmatch
+@gap concentrate → ___ = concentration
+@gap describe → ___ = description
+@gap independent → ___ = independence
+@gap confident → ___ = confidence
+@gap argue → ___ = argument
+? How can you ___ your English this year?
+* improve
+- improvement
+? Do you think you're an ___ learner?
+* independent
+- independence
+? Have you got a lot of ___ when you speak in English?
+- confident
+* confidence
+? Are there many ___ between English and your language?
+- different
+* differences
+@tf "arguement" — to'g'ri yozilishi. = noto'g'ri ! argument — e yo'q.
+
+@circle O'qish: huquq va mas'uliyat
+@rule Kalit so'zlar
+right(s) — huquq · responsibility — mas'uliyat · respect — hurmat qilmoq
+independent — mustaqil · provide — ta'minlamoq · demand — talab qilmoq
+
+@reading Two sides of growing up
+Teenagers often feel angry when people don't respect their rights. They believe they have a right to say what they think, to choose what they do in their free time and to have some privacy.
+These rights are important. They are part of becoming an independent adult. But it's easy to forget that there are two sides to this. We have rights, but we also have responsibilities at home. Can we really demand independence if somebody else does all our shopping, cooks all our meals, cleans the bathroom and gives us pocket money?
+As we get older, we want more rights and we want others to respect them. But to become independent, we need to accept our responsibilities and start doing things for ourselves. After all, parents have rights, too.
+
+? What's the best title for the text?
+* Teenagers have rights and responsibilities
+- Teenagers have all the power
+- Wait until you are an adult
+? According to the text, what is part of becoming an independent adult?
+- having a lot of money
+* having rights and responsibilities
+- never helping at home
+@tf The writer thinks teenagers have no rights. = noto'g'ri ! "These rights are important."
+@tf The writer thinks parents have rights too. = to'g'ri
+@gap To become independent, we need to accept our ___. = responsibilities
+@endreading
+
+@circle Uy ishlari
+@match Fe'lni ish bilan juftlang
+lay = the table
+take = the rubbish out
+make = your bed
+do = the shopping
+wash = the dishes
+- the homework out
+@endmatch
+? Ovqatdan keyin dasturxonni tozalaymiz:
+* clear the table
+- lay the table
+- make the table
+? "How often do you clean the kitchen?" — to'g'ri javob:
+- I'm cleaning it every day.
+* I clean it twice a week.
+- I cleaned it twice a week now.
+@order Who | usually | does | the washing | in your house = Uyingizda kir yuvishni odatda kim qiladi?
+
+@circle Yangi so'zlar
+@word right = huquq | We all have a right to express our opinions.
+@word provide = ta'minlamoq | Who provides the money if you need some?
+@word privacy = shaxsiy hayot, xilvat | Teenagers want privacy.
+@word pocket money = cho'ntak puli | My parents give me pocket money every week.
+
+@circle Huquqmi, mas'uliyatmi?
+@tf "to say what you think" — huquq (right). = to'g'ri
+@tf "to take the rubbish out" — huquq (right). = noto'g'ri ! Bu mas'uliyat (responsibility).
+@tf "to have some privacy" — huquq (right). = to'g'ri
+@tf "to make your bed" — mas'uliyat (responsibility). = to'g'ri
+
+# ────────── 4-DARS ──────────
+@quest B1 · 4-dars · Articles · Shaxsiy ma'lumot so'rash · E-mail
+@pool B1
+@classwork 4
+@noreview
+
+@circle a / an, the, artiklsiz
+@rule Articles
+a / an: birlikdagi sanaladigan ot, birinchi marta tilga olinganda; kasb: I'm a computer technician. · She's an engineer.
+the: aniq narsa yoki oldin aytilgan narsa: The dinner I'm eating today isn't good. · yagona narsa: the sun, the government, the world
+Artiklsiz (—): umuman gapirganda, ko'plik yoki sanalmaydigan ot: I think family dinners are great. · Education is important. · I love oranges.
+Talaffuz: the + undosh = /ðə/ (the problem) · the + unli = /ði/ (the end, the evening)
+
+? I'm a vegetarian. I never eat ___ meat.
+* — (artikl kerak emas)
+- the
+- a
+? My mum is ___ doctor in a big hospital.
+- the
+* a
+- —
+? I had a cat but ___ cat disappeared last month.
+- a
+* the
+- —
+? He's a student at ___ University of Edinburgh.
+* the
+- a
+- —
+? I think ___ communication is essential.
+- the
+* — (artikl kerak emas)
+- a
+? ___ sun is shining.
+* The
+- A
+- —
+@gap She's got a brother and ___ sister. = a
+@gap I haven't got a watch — can you tell me ___ time? = the
+@gap I'm going to ___ fridge to see if there's anything to eat. = the
+@tf "Exercise is good for you" — bu yerda "the" kerak emas. = to'g'ri ! Umuman gapiryapmiz.
+@tf "The" so'zi "the evening" da /ðə/ deb o'qiladi. = noto'g'ri ! Unli oldida /ði/.
+
+@circle Shaxsiy ma'lumot so'rash
+@rule Speaking bank
+Have you got any brothers or sisters?
+What do you do at the weekend / in the evenings / on Wednesdays?
+What about you? · Do you like ...? · What do you think of ...? · How often do you ...?
+Yes/No savollarda ovoz oxirida ko'tariladi (↗), so'roq so'zli savollarda pasayadi (↘).
+
+@match Savolni javob bilan juftlang
+Have you got any brothers or sisters? = Yes, I've got one brother.
+How old is he? = He's 22.
+Does he live with you? = No, he doesn't. He's at university.
+How often do you see him? = About once a month.
+What do you usually do on Saturdays? = I usually go out with my friends.
+- Yes, I am.
+@endmatch
+? Qaysi savolda ovoz oxirida ko'tariladi (↗)?
+* Have you got any brothers or sisters?
+- What do you do at the weekend?
+- How often do you see him?
+
+@circle Norasmiy e-mail
+@rule Writing bank: informal email
+Boshlanishi: Dear Alanna, yoki Hi Alanna!
+Qisqartmalar: I'm, I've, don't · Emotikon ishlatish mumkin
+Mavzuni o'zgartirish: Anyway, ...
+Tugatish: That's all for now. · Bye for now! · Write back soon. · All the best · Best wishes
+Paragraflar: 1) asosiy ma'lumot 2) oila 3) qiziqish/hobbi 4) sevimli fan 5) javob so'rash
+
+? Norasmiy e-mailni qanday boshlaymiz?
+* Hi Anna!
+- Dear Sir or Madam,
+- To whom it may concern,
+? Mavzuni o'zgartirish uchun qaysi so'z?
+- However
+* Anyway
+- Because
+? Norasmiy e-mailni qaysi ibora bilan tugatamiz?
+- Yours faithfully
+* Write back soon. Best wishes
+@match Paragrafni mazmun bilan juftlang
+Paragraph 1 = basic personal information
+Paragraph 2 = family
+Paragraph 3 = main interest or hobby
+Paragraph 4 = favourite subject at school
+Paragraph 5 = asking for a reply
+@endmatch
+
+@circle Yangi so'zlar
+@word communication = muloqot | Good communication is essential.
+@word essential = juda zarur | Breakfast is essential for students.
+@word vegetarian = vegetarian (go'sht yemaydigan) | I'm a vegetarian.
+@word disappear = g'oyib bo'lmoq | My cat disappeared last month.
+
+@circle Dialogni to'ldiring
+@gap A: ___ you got any brothers or sisters? B: Yes, I've got one brother. = Have
+@gap A: How ___ is he? B: He's 22. = old
+@gap A: ___ he live with you? B: No, he doesn't. = Does
+@gap A: How ___ do you see him? B: About once a month. = often
+@gap A: What do you usually ___ on Saturdays? B: I go out with my friends. = do
+
+# ────────── 2-UY VAZIFASI (4-darsdan keyin, muddat — keyingi dushanba) ──────────
+@quest B1 · 2-uy vazifasi · Suffixes, articles va e-mail
+@pool B1
+@homework 4
+
+@circle So'zlar
+@word argument = bahs, janjal | We had an argument about music.
+@word concentration = diqqat jamlash | Music helps my concentration.
+@word confidence = o'ziga ishonch | Good food helps your concentration and confidence.
+@word independence = mustaqillik | Teenagers want more independence.
+@word improvement = yaxshilanish | That's a big improvement.
+@word retirement = nafaqaga chiqish | My grandfather is enjoying his retirement.
+@word responsibility = mas'uliyat | Taking the rubbish out is my responsibility.
+@word respect = hurmat qilmoq | Children need to respect their parents.
+
+@circle Noun suffixes
+@gap She usually gets 50% in her exams but this time she got 90%. That's a big ___. (improve) = improvement
+@gap Can you give me a ___ of your sister? I don't know who she is in this photo. (describe) = description
+@gap Good food helps your ___ at school. (concentrate) = concentration
+@gap There's a lot of ___ about the famous actor's visit to the school. (excite) = excitement
+@gap There are two or three ___ between the present simple and the present continuous. (different) = differences
+@gap She wants to be a teacher because she likes working with ___. (adolescent) = adolescents
+@gap A dictionary gives you ___ about new words. (inform) = information
+@gap He's very ___ — he doesn't need anybody to help him. (independence) = independent
+
+@circle Articles
+? It's ___ beautiful day and ___ sun is shining.
+* a / the
+- the / a
+- a / —
+? My cousin loves ___ books. He's ___ writer.
+- the / a
+* — / a
+- — / the
+? Pete's uncle is ___ doctor. He says ___ exercise is good for you.
+* a / —
+- the / the
+- a / the
+? In my house ___ breakfast isn't an important meal.
+- the
+* — (artikl kerak emas)
+- a
+@gap I don't like ___ food at school. = the
+? Do you think ___ family dinners are important?
+- the
+- a
+* — (artikl kerak emas)
+@tf "The British Government is interested in this report." — "The" to'g'ri. = to'g'ri ! Yagona, aniq tashkilot.
+
+@circle Present simple / continuous takrorlash
+@gap What ___ you doing? Are you at home? = are
+@gap I never ___ (go) out on Wednesdays. = go
+@gap Right now my mum ___ watching her favourite series. = is
+@gap She always ___ (watch) it on Wednesdays. = watches
+? What's that sound? Is somebody ___?
+* crying
+- cry
+- cries
+
+@circle Yozish
+@writing An email to a new e-pal | 100-150
+Yangi e-pal (xorijlik do'st) ga e-mail yozing (100–150 so'z). Isabel xatidagi rejadan foydalaning:
+1-paragraf: o'zingiz haqingizda asosiy ma'lumot (ism, yosh, qayerdan)
+2-paragraf: oilangiz
+3-paragraf: asosiy qiziqishingiz yoki hobbingiz
+4-paragraf: maktabdagi sevimli faningiz
+5-paragraf: javob so'rang
+Hi ... bilan boshlang, Write back soon / Best wishes bilan tugating. Present simple va Present continuous ishlating, kamida bitta "Anyway" yozing.
+
+# ────────── 5-DARS · TAKRORLASH TESTI (IT 2: chorshanba 15:00 · IT 1, IT 3: keyingi dushanba 1-dars) ──────────
+@quest B1 · 5-dars · Unit 1 takrorlash testi
+@pool B1
+@classwork 5
+@noreview
+
+@circle Present simple / continuous
+? My grandfather usually ___ in the afternoon.
+* sleeps
+- is sleeping
+- sleep
+? Look! The baby ___.
+- cries
+* is crying
+- cry
+? I ___ what you mean.
+* know
+- 'm knowing
+- knowing
+? She ___ for an exam this week.
+- studies
+* 's studying
+- study
+? ___ your parents usually argue about music?
+* Do
+- Are
+- Does
+@gap He ___ (not like) loud music. = doesn't
+@gap They ___ (watch) a film at the moment. = 're / are
+@gap How often ___ you clean your room? = do
+
+@circle Articles
+? I've got ___ problem. ___ problem isn't serious.
+* a / The
+- the / A
+- a / A
+? ___ education is important.
+- The
+* — (artikl kerak emas)
+- An
+? She's ___ engineer.
+- a
+* an
+- the
+? ___ government talks a lot about family dinners.
+* The
+- A
+- —
+@gap Today on ___ programme we're talking about family dinners. = the
+
+@circle Lug'at
+? the time of your life when you are a child
+* childhood
+- adolescence
+- old age
+? your sister's daughter
+- cousin
+* niece
+- granddaughter
+? someone who is over 65
+- young adult
+- teenager
+* senior citizen
+@gap If you end your marriage, you are ___. = divorced
+@gap My uncle's son is my ___. = cousin
+@gap He's in ___ now — he doesn't work any more. (retire) = retirement
+@gap We had a long ___ about the film. (discuss) = discussion
+@gap She speaks English with a lot of ___. (confident) = confidence
+@tf "Only child" means a family with one parent. = noto'g'ri ! Only child — aka-uka, opa-singilsiz bola.
+
+@circle Gapni tuzing
+@order My | cousin | isn't | studying | at university = Amakivachcham universitetda o'qimayapti.
+@order We | usually | go | to the cinema | at the weekend = Biz odatda dam olish kunlari kinoga boramiz.
+@order Have | you | got | any | brothers or sisters = Aka-uka yoki opa-singlingiz bormi?
+
+@circle Norasmiy e-mail
+? Qaysi gap norasmiy e-mailga mos?
+* I'm writing to tell you about myself.
+- I am writing to inform you about myself.
+? "That's ___ for now." (e-mail oxiri)
+* all
+- everything
+- finish
+@gap Write ___ soon! = back
+@gap ___, that's all for now. (Mavzuni o'zgartirish) = Anyway
+
+# ────────── LUG'AT GURUHLARI (faqat Lug'at va kunlik takrorlash uchun, vazifa emas) ──────────
+@quest B1 · Ages and stages of life
+@pool B1
+@vocab
+@circle So'zlar
+@word baby = chaqaloq
+@word birth = tug'ilish
+@word child = bola
+@word death = o'lim
+@word middle age = o'rta yosh
+@word old age = keksalik
+@word teenager = o'smir
+@word young adult = yosh katta (20–30 yosh)
+
+@quest B1 · The family
+@pool B1
+@vocab
+@circle So'zlar
+@word aunt = xola, amma
+@word born = tug'ilgan
+@word sister-in-law = kelin opa, qayin singil
+@word father-in-law = qaynota
+@word mother-in-law = qaynona
+@word cousin = amakivachcha, xolavachcha
+@word daughter = qiz farzand
+@word grandson = nevara (o'g'il)
+@word granddaughter = nevara (qiz)
+@word husband = er
+@word wife = xotin, rafiqa
+@word partner = turmush o'rtog'i, sherik
+@word stepmother = o'gay ona
+@word uncle = amaki, tog'a
+
+@quest B1 · Noun suffixes
+@pool B1
+@vocab
+@circle So'zlar
+@word description = tavsif
+@word difference = farq
+@word discussion = muhokama
+@word information = ma'lumot
+@word movement = harakat
