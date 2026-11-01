@@ -719,7 +719,7 @@
     T.reportKey = key; T.report = null; render();
     try {
       const [r, ov] = await Promise.all([api("admin_report", { p_class: T.cls, p_week: T.week }), api("admin_overview", { p_class: T.cls, p_week: T.week })]);
-      if (T.reportKey === key) { T.report = r; T.ov = ov; render(); }
+      if (T.reportKey === key) { T.report = r; T.ov = Array.isArray(ov) ? ov : []; render(); }
     } catch (e) { quiet(e); }
   }
   const className = (id) => { const c = T.data && T.data.classes.find((x) => x.id === id); return c ? c.name : ""; };
