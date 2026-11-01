@@ -1,0 +1,6 @@
+-- Per-class deadlines (migrations due_by_lesson_per_class + due_by_lesson_fix_pool_results):
+-- quests.due_lesson: "@due lesson N" = due at the start of the student's own class's N-th lesson of the quest week
+--   (N past the class's weekly lesson count rolls into next week).
+-- _lesson_start(class, week, n), _qdl(quest, class) = the deadline that class sees (falls back to quests.deadline).
+-- quests.deadline for such quests = the latest class's time in that pool (used for ordering/cleanup).
+-- All student/teacher reads use _qdl; a manual deadline edit by the teacher clears due_lesson.

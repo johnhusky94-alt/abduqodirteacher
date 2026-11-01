@@ -31,7 +31,7 @@
   const dayName = (iso) => WEEKDAYS[new Date(iso).getDay()];
   function defaultWeek() { const d = new Date(), mon = mondayOf(d); if ([0, 5, 6].includes(d.getDay())) mon.setDate(mon.getDate() + 7); return strFromDay(mon); }
   function dueToDate(week, due) {
-    if (!due) return null;
+    if (!due || due.lesson) return null;
     if (due.date) { const [y, m, dd] = due.date.split("-").map(Number); return new Date(y, m - 1, dd, due.h, due.m); }
     const d = dayFromStr(week); d.setDate(d.getDate() + due.dow - 1); d.setHours(due.h, due.m, 0, 0); return d;
   }
@@ -1210,7 +1210,7 @@ ${w.text}`).join("\n") + "\n---\n";
           <div class="list">${pr.quests.map((q, i) => {
             const missing = q.pool && !d.pools.some((p) => p.name.toLowerCase() === q.pool.toLowerCase());
             const dd = q.kind === "hw" ? dueToDate(T.weekPick, q.due) : null;
-            const kindTxt = q.kind === "cw" ? `<span class="pill cw">Sinf ishi · ${q.lesson}-dars</span>` : q.kind === "vl" ? `<span class="pill">Lug'at guruhi</span> <span class="sub small">faqat takrorlash, vazifa emas</span>` : `<span class="pill hw">Uy vazifasi</span> <span class="sub small">${dd ? "muddat: " + esc(fmtDate(dd.toISOString())) : "muddatsiz"}</span>`;
+            const kindTxt = q.kind === "cw" ? `<span class="pill cw">Sinf ishi · ${q.lesson}-dars</span>` : q.kind === "vl" ? `<span class="pill">Lug'at guruhi</span> <span class="sub small">faqat takrorlash, vazifa emas</span>` : `<span class="pill hw">Uy vazifasi</span> <span class="sub small">${q.due && q.due.lesson ? `muddat: har bir sinfning ${q.due.lesson}-darsi boshigacha (o'z jadvali bo'yicha)` : dd ? "muddat: " + esc(fmtDate(dd.toISOString())) : "muddatsiz"}</span>`;
             return `<div class="li" style="flex-wrap:wrap"><span class="grow" style="min-width:180px"><b style="font-weight:600">${esc(q.title)}</b><br>${kindTxt}<br><span class="sub small">${q.circles.length} doira · ${q.gradable} savol</span>${missing ? `<br><span class="err small">"${esc(q.pool)}" nomli pul topilmadi</span>` : ""}</span>
               <select data-chg="poolPick" data-v="${i}" aria-label="Pul" style="max-width:220px">${opts(d.pools, T.poolPick[i] ? Number(T.poolPick[i]) : null, "— pulni tanlang —")}</select></div>`;
           }).join("")}</div>
@@ -1225,7 +1225,7 @@ ${w.text}`).join("\n") + "\n---\n";
       return `<section class="card stack">
         <div class="row between"><h3>${esc(q.title)}</h3><div class="row">${q.problems ? `<span class="pill warn">${q.problems} xabar</span>` : ""}${q.hidden ? `<span class="pill">Yashirin</span>` : ""}<span class="pill rv">${q.finished} tugatdi</span></div></div>
         <div class="grid2"><div><label for="qp-${q.id}">Pul</label><select id="qp-${q.id}" data-chg="qPool" data-v="${q.id}">${opts(d.pools, q.pool_id, "— faqat alohida o'quvchilar —")}</select></div>
-          ${q.kind === "cw" ? `<div><label>Qachon ochiladi</label><p style="margin:6px 0 0">${q.lesson ? `<b>${q.lesson}-dars</b>` : "Darsga bog'lanmagan"}${q.week_start ? ` · ${esc(weekLabel(q.week_start))}` : ""}</p><p class="sub small" style="margin:2px 0 0">Dars jadvaliga ko'ra ochiladi, tugatilmasa 3 kun ochiq turadi.</p></div>` : `<div><label for="qd-${q.id}">Muddat</label><div class="row" style="flex-wrap:nowrap"><input id="qd-${q.id}" type="datetime-local" value="${esc(toLocalInput(q.deadline))}" data-chg="qDeadline" data-v="${q.id}">
+          ${q.kind === "cw" ? `<div><label>Qachon ochiladi</label><p style="margin:6px 0 0">${q.lesson ? `<b>${q.lesson}-dars</b>` : "Darsga bog'lanmagan"}${q.week_start ? ` · ${esc(weekLabel(q.week_start))}` : ""}</p><p class="sub small" style="margin:2px 0 0">Dars jadvaliga ko'ra ochiladi, tugatilmasa 3 kun ochiq turadi.</p></div>` : `<div><label for="qd-${q.id}">Muddat${q.due_lesson ? ` · har sinf: ${q.due_lesson}-dars boshi` : ""}</label><div class="row" style="flex-wrap:nowrap"><input id="qd-${q.id}" type="datetime-local" value="${esc(toLocalInput(q.deadline))}" data-chg="qDeadline" data-v="${q.id}">
             ${q.deadline ? `<button class="btn soft sm" data-act="qNoDeadline" data-v="${q.id}" aria-label="Muddatni olib tashlash">${I.x}</button>` : ""}</div></div>`}</div>
         <div class="row"><label class="row" style="margin:0;gap:8px;color:var(--ink);font-size:15px;font-weight:500"><input type="checkbox" data-chg="qHidden" data-v="${q.id}" ${q.hidden ? "checked" : ""}> O'quvchilardan yashirish</label>
           <span class="sub small">${q.gradable} savol · ${(q.circles || []).length} doira · ${esc(fmtDate(q.created_at))}</span></div>
@@ -1532,7 +1532,7 @@ ${w.text}`).join("\n") + "\n---\n";
         const scripts = scriptsFor(T.paste, pr);
         const payload = pr.quests.map((q, i) => { const dd = q.kind === "hw" ? dueToDate(T.weekPick, q.due) : null;
           return { title: q.title, pool_id: T.poolPick[i] || "", script: scripts[i], steps: q.steps, circles: q.circles,
-            kind: q.kind, lesson: q.lesson || "", week_start: T.weekPick, deadline: dd ? dd.toISOString() : "" }; });
+            kind: q.kind, lesson: q.lesson || "", week_start: T.weekPick, deadline: dd ? dd.toISOString() : "", due_lesson: q.kind === "hw" && q.due && q.due.lesson ? q.due.lesson : "" }; });
         T.saving = true; render();
         const r = await adminCall("admin_quests_create", { p_quests: payload }, null);
         T.saving = false;

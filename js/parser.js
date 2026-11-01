@@ -104,8 +104,10 @@
           case "noreview": if (!q) newQuest("Nomsiz vazifa", ln); q.noReview = true; return;
           case "due": case "muddat": case "deadline": {
             if (!q) newQuest("Nomsiz vazifa", ln);
+            const ml = rest.toLowerCase().match(/^(?:lesson|dars)\s*(\d{1,2})$|^(\d{1,2})\s*-?\s*dars$/);
+            if (ml) { const n = Number(ml[1] || ml[2]); if (!(n >= 1 && n <= 30)) return err(ln, "Dars raqami 1 dan 30 gacha bo'lsin"); q.due = { lesson: n }; return; }
             const m2 = rest.toLowerCase().match(/^(\S+)(?:\s+(\d{1,2}):(\d{2}))?$/);
-            if (!m2) return err(ln, "Muddat shunday yozilsin: @due tue 08:00");
+            if (!m2) return err(ln, "Muddat shunday yozilsin: @due tue 08:00 yoki @due lesson 2");
             const hh = m2[2] ? Number(m2[2]) : 8, mm = m2[3] ? Number(m2[3]) : 0;
             if (hh > 23 || mm > 59) return err(ln, "Vaqt noto'g'ri: " + rest);
             if (/^\d{4}-\d{2}-\d{2}$/.test(m2[1])) { q.due = { date: m2[1], h: hh, m: mm }; return; }
