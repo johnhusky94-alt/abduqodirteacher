@@ -386,6 +386,7 @@
     P.sel = null; P.pick = []; P.typed = ""; P.result = null; P.busy = false; P.offline = false; P.reportOpen = false; P.reportSent = false;
     const s = P.practice ? P.cur : P.state.i < P.state.order.length ? curStep() : null;
     P.opts = s && s.opts ? (s.t === "tf" ? s.opts.slice() : shuffle(s.opts)) : null;
+    if (s && s.t === "match") { P.mopts = shuffle(s.opts); P.msel = s.left.map(() => ""); }
     if (s && s.t === "write") {
       const key = `w:${P.quest.id}:${s.id}`;
       P.wkey = key; P.wtext = store.get(key) || ""; P.wkeys = 0; P.wprev = null;
@@ -416,8 +417,11 @@
       let inp = "";
       if (x.type === "tfng") inp = `<div class="tfng" role="group">${[["true", "TRUE"], ["false", "FALSE"], ["not given", "NOT GIVEN"]].map(([v, l]) => `<button class="chip" aria-pressed="${P.ia[i] === v}" data-act="ians" data-v="${i}|${v}" ${locked ? "disabled" : ""}>${l}</button>`).join("")}</div>`;
       else if (x.type === "mcq") inp = `<div class="stack" style="gap:6px">${x.opts.map((o) => `<button class="opt" style="min-height:44px;font-size:15px" aria-pressed="${P.ia[i] === o}" data-act="ians" data-v="${i}|${esc(o)}" ${locked ? "disabled" : ""}>${esc(o)}</button>`).join("")}</div>`;
+      else if (x.type === "sel") inp = `<select data-chg="isel" data-v="${i}" aria-label="${i + 1}-savol javobi" ${locked ? "disabled" : ""}><option value="">— tanlang —</option>${x.opts.map((o) => `<option ${P.ia[i] === o ? "selected" : ""}>${esc(o)}</option>`).join("")}</select>`;
       else inp = `<input class="ishort" data-i="${i}" value="${esc(P.ia[i])}" aria-label="${i + 1}-savol javobi" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Javob (1–3 so'z yoki raqam)" ${locked ? "disabled" : ""}>`;
-      return `<div class="iq ${bad ? "bad" : good ? "good" : ""} ${P.irev && P.irev.order[P.irev.k] === i ? "focus" : ""}" id="iq${i}">
+      const prev = s.qs[i - 1];
+      const head = x.type === "sel" && x.title && !(prev && prev.type === "sel" && prev.title === x.title) ? `<p class="sub small" style="margin:4px 0 -2px;font-weight:600">${esc(x.title)}</p>` : "";
+      return head + `<div class="iq ${bad ? "bad" : good ? "good" : ""} ${P.irev && P.irev.order[P.irev.k] === i ? "focus" : ""}" id="iq${i}">
         <div class="row" style="flex-wrap:nowrap;align-items:flex-start"><b class="num">${i + 1}.</b><span class="grow">${esc(x.q)}</span>${bad ? `<span class="pill warn">xato</span>` : good ? `<span class="pill rv">to'g'ri</span>` : ""}</div>${inp}
         ${d ? `<div class="idet"><b>Javob: ${esc(x.type === "tfng" ? String(d.answer).toUpperCase() : d.answer)}</b>${d.why ? `<span>${esc(d.why)}</span>` : ""}${d.ev ? `<button class="link small" data-act="ihl" data-v="${i}">Matnda ko'rsatish</button>` : ""}</div>` : ""}</div>`;
     };
@@ -550,6 +554,10 @@
           if (P.result) { if (P.result.ok && i === P.sel) c = "right"; else if (!P.result.ok && i === P.sel) c = "wrong"; else if (!P.result.ok && P.result.right && o === P.result.right) c = "right"; }
           return `<button class="opt ${c}" aria-pressed="${P.sel === i}" data-act="sel" data-v="${i}" ${locked ? "disabled" : ""}>${esc(o)}</button>`;
         }).join("")}</div>`;
+    } else if (s.t === "match") {
+      body = `<span class="p-kind">${s.rv ? "Takrorlash · " : ""}Mosini toping</span><p class="p-q">${esc(s.q)}</p>
+        <div class="list">${s.left.map((l, i) => `<div class="li" style="cursor:default;flex-wrap:wrap"><b class="grow" style="font-weight:600;min-width:120px">${esc(l)}</b>
+          <select data-chg="msel" data-v="${i}" aria-label="${esc(l)} uchun javob" style="max-width:60%;min-width:140px" ${locked ? "disabled" : ""}><option value="">— tanlang —</option>${P.mopts.map((o) => `<option ${P.msel[i] === o ? "selected" : ""}>${esc(o)}</option>`).join("")}</select></div>`).join("")}</div>`;
     } else if (s.t === "gap") {
       body = `${passage}<span class="p-kind">Bo'sh joyni to'ldiring</span>
         <div class="gapline noselect"><span>${esc(s.before)}</span><input id="answerInput" aria-label="Javob" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" ${locked ? "disabled" : ""}><span>${esc(s.after)}</span></div>
@@ -604,6 +612,7 @@
   }
   function currentAnswer(s) {
     if (s.t === "choice" || s.t === "tf") return P.sel == null ? "" : P.opts[P.sel];
+    if (s.t === "match") return P.msel.some((x) => !x) ? "" : P.msel.join(" | ");
     if (s.t === "gap" || s.t === "spell") { const el = $("#answerInput"); return ((el ? el.value : "") || P.typed || "").trim(); }
     if (s.t === "order") return P.pick.map((i) => s.words[i]).join(" ");
     if (s.t === "letters") return P.pick.map((i) => s.L[i]).join("");
@@ -613,7 +622,7 @@
     if (!P || P.busy || P.result) return;
     const s = curStep();
     const ans = currentAnswer(s);
-    if (!ans) { toast(s.t === "choice" || s.t === "tf" ? "Avval javobni tanlang" : s.t === "order" || s.t === "letters" ? "Avval bo'laklarni joylang" : "Avval javobni yozing"); return; }
+    if (!ans) { toast(s.t === "choice" || s.t === "tf" || s.t === "match" ? "Avval hamma javobni tanlang" : s.t === "order" || s.t === "letters" ? "Avval bo'laklarni joylang" : "Avval javobni yozing"); return; }
     if ((s.t === "order" && P.pick.length < s.words.length) || (s.t === "letters" && P.pick.length < s.L.length)) { toast("Hamma bo'laklarni joylang"); return; }
     P.typed = ans;
     if (P.practice) {
@@ -1285,6 +1294,8 @@ ${w.text}`).join("\n") + "\n---\n";
       case "weekPick": if (el.value) { T.weekPick = strFromDay(mondayOf(dayFromStr(el.value))); render(); } break;
       case "qPool": updateQuest(id, { pool_id: val }); break;
       case "qHidden": updateQuest(id, { hidden: el.checked }, el.checked ? "Yashirildi" : "Ko'rinadigan qilindi"); break;
+      case "msel": if (P && !P.result) P.msel[Number(el.dataset.v)] = el.value; break;
+      case "isel": if (P) P.ia[Number(el.dataset.v)] = el.value; break;
       case "qDeadline": if (el.value) updateQuest(id, { deadline: new Date(el.value).toISOString() }, "Muddat saqlandi"); break;
     }
   });

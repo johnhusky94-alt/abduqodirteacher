@@ -43,7 +43,7 @@
     const lines = String(text || "").replace(/\r/g, "").split("\n");
     const quests = [];
     const errors = [];
-    let q = null, circle = null, choice = null, body = null, passage = null, week = "", ielts = null;
+    let q = null, circle = null, choice = null, body = null, passage = null, week = "", ielts = null, match = null;
     const DAYS = { mon: 1, monday: 1, du: 1, dushanba: 1, tue: 2, tuesday: 2, se: 2, seshanba: 2, wed: 3, wednesday: 3, chorshanba: 3,
       thu: 4, thursday: 4, pa: 4, payshanba: 4, fri: 5, friday: 5, juma: 5, sat: 6, saturday: 6, sh: 6, shanba: 6, sun: 7, sunday: 7, yakshanba: 7 };
 
@@ -65,6 +65,15 @@
       choice = null;
     };
 
+    // finish a @match block: inside @ielts it becomes one sub-question per pair, elsewhere one step
+    function closeMatch() {
+      const m = match; match = null; if (!m) return;
+      if (m.pairs.length < 2) { err(m.line, "@match da kamida 2 juftlik bo'lsin: chap = o'ng"); return; }
+      const rights = m.pairs.map((x) => x.r);
+      const opts = Array.from(new Set(rights.concat(m.extras)));
+      if (m.ielts) m.ielts.qs.push(...m.pairs.map((x) => ({ type: "sel", q: x.l, opts, ans: [x.r], why: x.why, ev: x.ev, line: x.line, title: m.title })));
+      else m.circle.items.push({ k: "match", title: m.title, pairs: m.pairs, opts, why: m.why || "", line: m.line });
+    }
     lines.forEach((raw, idx) => {
       const ln = idx + 1;
       const line = raw.trim();
@@ -77,7 +86,8 @@
         const m = line.match(/^@(\w+)\s*(.*)$/);
         if (!m) return err(ln, "Noto'g'ri buyruq");
         const cmd = m[1].toLowerCase(), rest = m[2].trim();
-        if (ielts && !["tfng", "short", "endielts"].includes(cmd)) ielts = null;
+        if (match && cmd !== "endmatch") closeMatch();
+        if (ielts && !["tfng", "short", "endielts", "match", "endmatch"].includes(cmd)) ielts = null;
         switch (cmd) {
           case "settings": return; // accepted, unused here
           case "week": case "hafta":
@@ -122,6 +132,12 @@
             circle.items.push(ielts); body = ielts; return;
           }
           case "endielts": ielts = null; return;
+          case "match": {
+            if (!ielts) needCircle(ln);
+            match = { title: rest || "Mosini toping", pairs: [], extras: [], line: ln, ielts, circle };
+            return;
+          }
+          case "endmatch": closeMatch(); return;
           case "writing": case "yozish": {
             needCircle(ln);
             const [title, lim] = rest.split("|").map((x) => (x || "").trim());
@@ -208,6 +224,19 @@
         }
       }
 
+      if (match) {
+        if (line.startsWith("-")) { const t = line.slice(1).trim(); if (t) match.extras.push(t); return; }
+        if (line.startsWith("!")) { const t = line.slice(1).trim(); if (match.pairs.length) match.pairs[match.pairs.length - 1].why = t; else match.why = t; return; }
+        const [m0, ev] = splitEv(line);
+        const [main, why] = splitWhy(m0);
+        const eq = main.indexOf("=");
+        if (eq < 0) return err(ln, "@match qatori: chap tomon = o'ng tomon");
+        const l = main.slice(0, eq).trim(), r = main.slice(eq + 1).trim();
+        if (!l || !r) return err(ln, "@match qatorida ikki tomon ham bo'lsin");
+        if (r.includes("|")) return err(ln, "@match javobida | belgisi bo'lmasin");
+        match.pairs.push({ l, r, why, ev, line: ln });
+        return;
+      }
       if (line.startsWith("?") && ielts) {
         closeChoice(); body = null;
         choice = { k: "choice", type: "mcq", q: line.slice(1).trim(), opts: [], why: "", ev: "", line: ln };
@@ -247,6 +276,7 @@
       err(ln, "Tushunarsiz qator");
     });
     closeChoice();
+    closeMatch();
 
     quests.forEach((qq) => {
       if (qq.hasReview || !qq.circles.length) return;
@@ -291,6 +321,11 @@
           const sid = id();
           passageIds.set(it, sid);
           steps.push({ id: sid, c, t: "read", title: it.title, text: it.text.join("\n").trim() });
+        } else if (it.k === "match") {
+          const rights = it.pairs.map((x) => x.r);
+          const why = it.pairs.filter((x) => x.why).map((x) => `${x.l} → ${x.r}: ${x.why}`).join(" ") || it.why;
+          steps.push({ id: id(), c, t: "match", q: it.title, left: it.pairs.map((x) => x.l), opts: shuffle(it.opts),
+            a: [rights.join(" | ")], show: it.pairs.map((x) => `${x.l} → ${x.r}`).join("; "), why });
         } else if (it.k === "write") {
           const prompt = it.text.join("\n").trim();
           if (!prompt) errors.push({ line: it.line, msg: "@writing topshirig'i (matni) bo'sh" });
@@ -304,7 +339,8 @@
             if (x.ev && !low.includes(x.ev.toLowerCase())) errors.push({ line: x.line, msg: `Dalil matnda topilmadi: "${x.ev}"` });
           });
           steps.push({ id: id(), c, t: "ielts", title: it.title, text,
-            qs: it.qs.map((x) => x.type === "mcq" ? { type: "mcq", q: x.q, opts: x.opts.map((o) => o.t) } : { type: x.type, q: x.q }),
+            qs: it.qs.map((x) => x.type === "mcq" ? { type: "mcq", q: x.q, opts: x.opts.map((o) => o.t) }
+              : x.type === "sel" ? { type: "sel", q: x.q, opts: x.opts, title: x.title } : { type: x.type, q: x.q }),
             a: it.qs.map((x) => ({ ans: x.type === "mcq" ? x.opts.filter((o) => o.ok).map((o) => o.t) : x.ans, why: x.why || "", ev: x.ev || "" })) });
         } else if (it.k === "choice") {
           const right = it.opts.filter((o) => o.ok).map((o) => o.t);

@@ -1,0 +1,19 @@
+# Matching namunasi. @match Ko'rsatma, keyin har qatorda: chap = o'ng. "- variant" = ortiqcha (chalg'ituvchi) javob.
+# @ielts ichida @match = sarlavhalarni paragraflarga moslash; har juftlik alohida savol bo'ladi. ~ = matndagi dalil.
+@quest Match test
+@circle Lug'at
+@match So'zlarni ma'nosi bilan juftlang
+mother = ona
+father = ota
+brother = aka, uka
+- singil
+@circle Reading
+@ielts Two products
+Paragraph A. People in China drank tea for thousands of years before it reached Europe.
+
+Paragraph B. Silk was so valuable that it was sometimes used instead of money.
+@match Choose the correct heading for each paragraph
+Paragraph A = The long history of a drink ~ drank tea for thousands of years
+Paragraph B = A cloth worth money ~ used instead of money
+- A famous trading city
+@tfng Tea reached Europe first. = false ~ before it reached Europe
