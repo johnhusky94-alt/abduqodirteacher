@@ -1,0 +1,21 @@
+# IELTS reading namunasi. @tfng = TRUE/FALSE/NOT GIVEN, @short = 1-3 so'zli javob, ? = variantli savol.
+# ! = izoh (javob ochilganda ko'rinadi), ~ = dalil: matndagi aniq ibora, javob ko'rsatilganda sariq bilan belgilanadi.
+@quest Reading
+@circle Reading
+
+@ielts The Silk Road
+The Silk Road was not one road. It was a network of trade routes that connected China with Europe for more than 1,500 years.
+
+Merchants carried silk, spices, paper and glass. They often travelled in large groups called caravans, because the roads were dangerous.
+
+Samarkand was one of the most important cities on the road. Traders from many countries met there to buy and sell goods.
+@tfng The Silk Road was a single long road. = false ! Matnda "not one road" deyilgan. ~ was not one road
+@tfng Merchants were paid in gold. = not given ! Matnda to'lov haqida hech narsa yo'q.
+@short The routes connected China with ___. = Europe ~ connected China with Europe
+@short Merchants travelled in groups called ___. = caravans ~ called caravans
+? Why did merchants travel in groups?
+* The roads were dangerous.
+- It was cheaper.
+- The king ordered it.
+! Matnda "because the roads were dangerous" deyilgan.
+~ because the roads were dangerous

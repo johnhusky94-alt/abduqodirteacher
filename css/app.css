@@ -232,3 +232,22 @@ input[type=checkbox]{width:20px;height:20px;accent-color:var(--hw)}
   .pooltbl .pill{font-size:10px;padding:1px 5px}
   .pooltbl td b.num{font-size:12px!important}
 }
+
+/* IELTS reading */
+.ihelp{background:var(--cw-s);color:var(--ink);border-radius:14px;padding:10px 12px;line-height:1.5}
+.ielts{display:flex;flex-direction:column;gap:12px}
+.ipass{max-height:42vh;overflow:auto;background:var(--card);border-radius:16px;padding:4px 14px}
+.ipass p{margin:10px 0}
+.ipass mark{background:#FFE58F;color:#1c1c1e;border-radius:4px;padding:0 2px}
+.iqs{display:flex;flex-direction:column;gap:10px}
+.iq{background:var(--card);border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:10px;border:2px solid transparent}
+.iq.bad{border-color:var(--warn)} .iq.good{border-color:var(--rv)} .iq.focus{box-shadow:0 0 0 3px var(--hw)}
+.tfng{display:flex;gap:6px;flex-wrap:wrap}
+.tfng .chip[aria-pressed=true],.iq .opt[aria-pressed=true]{background:var(--hw);color:#fff;border-color:var(--hw)}
+.ishort{width:100%}
+.idet{display:flex;flex-direction:column;gap:4px;background:var(--rv-s);border-radius:12px;padding:8px 10px;font-size:14px}
+.p-body.wide,.p-foot.wide{max-width:1100px}
+@media (min-width:900px){
+  .ielts{display:grid;grid-template-columns:1fr 1fr;align-items:start}
+  .ipass{position:sticky;top:0;max-height:calc(100vh - 220px)}
+}

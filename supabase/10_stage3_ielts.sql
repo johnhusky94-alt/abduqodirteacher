@@ -1,0 +1,6 @@
+-- 1 Nov, V2 stage 3 (migrations v2_stage3_ielts, answers_kind_ielts):
+-- ielts_state(user, quest, step, tries, first_score, best, done, revealed, last_wrong)
+-- _quest_fin(uid, quest): finished gradable steps (ielts steps count when done); advance now uses it.
+-- _progress_bump, _ielts_details; ielts_check (grades on the server, never returns answers unless all correct),
+-- ielts_reveal (only after 5 tries), ielts_status. answers.kind allows 'ielts'.
+-- Points (ochko) for a reading = correct answers on the first try.

@@ -28,6 +28,14 @@
     return m ? [m[1].trim(), m[2].trim()] : [s.trim(), ""];
   }
 
+  // "text ~ evidence" -> [text, evidence]
+  function splitEv(s) {
+    const m = s.match(/^(.*?)\s+~\s+(.*)$/);
+    return m ? [m[1].trim(), m[2].trim()] : [s.trim(), ""];
+  }
+  const TFNG = { "true": "true", "t": "true", "to'g'ri": "true", "false": "false", "f": "false", "noto'g'ri": "false",
+    "not given": "not given", "ng": "not given", "notgiven": "not given", "berilmagan": "not given" };
+
   const TRUE_WORDS = ["to'g'ri", "togri", "true", "ha", "yes", "+"];
   const FALSE_WORDS = ["noto'g'ri", "notogri", "false", "yo'q", "yoq", "no", "-"];
 
@@ -35,7 +43,7 @@
     const lines = String(text || "").replace(/\r/g, "").split("\n");
     const quests = [];
     const errors = [];
-    let q = null, circle = null, choice = null, body = null, passage = null, week = "";
+    let q = null, circle = null, choice = null, body = null, passage = null, week = "", ielts = null;
     const DAYS = { mon: 1, monday: 1, du: 1, dushanba: 1, tue: 2, tuesday: 2, se: 2, seshanba: 2, wed: 3, wednesday: 3, chorshanba: 3,
       thu: 4, thursday: 4, pa: 4, payshanba: 4, fri: 5, friday: 5, juma: 5, sat: 6, saturday: 6, sh: 6, shanba: 6, sun: 7, sunday: 7, yakshanba: 7 };
 
@@ -69,6 +77,7 @@
         const m = line.match(/^@(\w+)\s*(.*)$/);
         if (!m) return err(ln, "Noto'g'ri buyruq");
         const cmd = m[1].toLowerCase(), rest = m[2].trim();
+        if (ielts && !["tfng", "short", "endielts"].includes(cmd)) ielts = null;
         switch (cmd) {
           case "settings": return; // accepted, unused here
           case "week": case "hafta":
@@ -107,6 +116,32 @@
             circle.items.push(body); passage = body; return;
           }
           case "endreading": passage = null; return;
+          case "ielts": {
+            needCircle(ln);
+            ielts = { k: "ielts", title: rest || "Reading", text: [], qs: [], line: ln };
+            circle.items.push(ielts); body = ielts; return;
+          }
+          case "endielts": ielts = null; return;
+          case "tfng": case "short": {
+            if (!ielts) return err(ln, "@" + cmd + " faqat @ielts matnidan keyin yoziladi");
+            const [m0, ev] = splitEv(rest);
+            const [main, why] = splitWhy(m0);
+            const eq = main.lastIndexOf("=");
+            if (eq < 0) return err(ln, cmd === "tfng" ? "@tfng gap = true / false / not given" : "@short savol = javob");
+            const qtext = main.slice(0, eq).trim(), raw = main.slice(eq + 1).trim();
+            if (!qtext) return err(ln, "Savol matni bo'sh");
+            if (cmd === "tfng") {
+              const v = TFNG[norm(raw)];
+              if (!v) return err(ln, "@tfng javobi: true, false yoki not given");
+              ielts.qs.push({ type: "tfng", q: qtext, ans: [v], why, ev, line: ln });
+            } else {
+              const a = raw.split("/").map((x) => x.trim()).filter(Boolean);
+              if (!a.length) return err(ln, "@short javobi bo'sh");
+              if (a.some((x) => x.split(/\s+/).length > 3)) return err(ln, "@short javobi 3 so'zdan oshmasin");
+              ielts.qs.push({ type: "short", q: qtext, ans: a, why, ev, line: ln });
+            }
+            return;
+          }
           case "review": {
             if (!q) newQuest("Nomsiz vazifa", ln);
             const n = Math.max(1, Math.min(20, parseInt(rest, 10) || 6));
@@ -160,6 +195,18 @@
         }
       }
 
+      if (line.startsWith("?") && ielts) {
+        closeChoice(); body = null;
+        choice = { k: "choice", type: "mcq", q: line.slice(1).trim(), opts: [], why: "", ev: "", line: ln };
+        ielts.qs.push(choice);
+        return;
+      }
+      if (line.startsWith("~")) {
+        const t = line.slice(1).trim();
+        if (choice) { choice.ev = t; return; }
+        if (ielts && ielts.qs.length) { ielts.qs[ielts.qs.length - 1].ev = t; return; }
+        return err(ln, "Dalil (~) savoldan keyin kelishi kerak");
+      }
       if (line.startsWith("?")) {
         closeChoice(); body = null;
         needCircle(ln);
@@ -179,6 +226,7 @@
         if (choice) { choice.why = t; return; }
         const last = circle && circle.items[circle.items.length - 1];
         if (last && ["tf", "gap", "order"].includes(last.k)) { last.why = t; return; }
+        if (ielts && ielts.qs.length) { ielts.qs[ielts.qs.length - 1].why = t; return; }
         return err(ln, "Izoh (!) savoldan keyin kelishi kerak");
       }
       if (body) { body.text.push(line); return; }
@@ -189,7 +237,7 @@
     quests.forEach((qq) => {
       if (qq.hasReview || !qq.circles.length) return;
       const rc = { name: "Takrorlash", items: [{ k: "review", n: 6 }] };
-      const ri = qq.circles.findIndex((c) => c.items.some((it) => it.k === "reading"));
+      const ri = qq.circles.findIndex((c) => c.items.some((it) => it.k === "reading" || it.k === "ielts"));
       if (ri >= 0) qq.circles.splice(ri, 0, rc); else qq.circles.push(rc);
     });
     const built = quests.map((qq) => build(qq, errors));
@@ -229,6 +277,17 @@
           const sid = id();
           passageIds.set(it, sid);
           steps.push({ id: sid, c, t: "read", title: it.title, text: it.text.join("\n").trim() });
+        } else if (it.k === "ielts") {
+          const text = it.text.join("\n").trim(), low = text.toLowerCase();
+          if (!text) errors.push({ line: it.line, msg: "@ielts matni bo'sh" });
+          if (!it.qs.length) errors.push({ line: it.line, msg: "@ielts matnidan keyin savollar yo'q" });
+          it.qs.forEach((x) => {
+            if (x.type === "mcq" && !x.opts.some((o) => o.ok)) errors.push({ line: x.line, msg: "Savolda to'g'ri javob (*) yo'q" });
+            if (x.ev && !low.includes(x.ev.toLowerCase())) errors.push({ line: x.line, msg: `Dalil matnda topilmadi: "${x.ev}"` });
+          });
+          steps.push({ id: id(), c, t: "ielts", title: it.title, text,
+            qs: it.qs.map((x) => x.type === "mcq" ? { type: "mcq", q: x.q, opts: x.opts.map((o) => o.t) } : { type: x.type, q: x.q }),
+            a: it.qs.map((x) => ({ ans: x.type === "mcq" ? x.opts.filter((o) => o.ok).map((o) => o.t) : x.ans, why: x.why || "", ev: x.ev || "" })) });
         } else if (it.k === "choice") {
           const right = it.opts.filter((o) => o.ok).map((o) => o.t);
           const whys = {};

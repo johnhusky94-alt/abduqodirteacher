@@ -188,6 +188,7 @@
     }
     const ta = $("#pasteBox");
     if (ta) ta.oninput = () => { T.paste = ta.value; if (T.parsed) { T.parsed = null; const s = $("#pasteSummary"); if (s) s.innerHTML = ""; } };
+    document.querySelectorAll(".ishort").forEach((el) => { el.oninput = () => { if (P) P.ia[Number(el.dataset.i)] = el.value; }; });
     const bulk = $("#bulkBox");
     if (bulk) bulk.oninput = () => (T.bulk = bulk.value);
     document.body.style.overflow = P || SHEET ? "hidden" : "";
@@ -350,7 +351,8 @@
       const ok = st && Array.isArray(st.order) && st.order.every((x) => byId[x]) && typeof st.i === "number";
       if (!ok || preview) st = { order: q.steps.map((s) => s.id), i: 0, final: [], tries: {} };
       st.final = st.final || []; st.tries = st.tries || {};
-      P = { quest: q, byId, state: st, preview: !!preview, right: 0, answered: 0, accent: "--hw" };
+      P = { quest: q, byId, state: st, preview: !!preview, right: 0, answered: 0, accent: "--hw", istat: {} };
+      if (!preview && q.steps.some((x) => x.t === "ielts")) { try { P.istat = (await api("ielts_status", { p_quest: q.id })) || {}; } catch (e) { P.istat = {}; } }
       loadStep();
     } catch (e) { if (e.message === "AUTH") return; P = { error: errText(e), accent: "--hw" }; }
     render();
@@ -373,13 +375,92 @@
     P.sel = null; P.pick = []; P.typed = ""; P.result = null; P.busy = false; P.offline = false; P.reportOpen = false; P.reportSent = false;
     const s = P.practice ? P.cur : P.state.i < P.state.order.length ? curStep() : null;
     P.opts = s && s.opts ? (s.t === "tf" ? s.opts.slice() : shuffle(s.opts)) : null;
+    if (s && s.t === "ielts") {
+      const stt = (P.istat && P.istat[s.id]) || {};
+      P.ia = s.qs.map(() => ""); P.ires = stt.tries ? { tries: stt.tries, wrong: stt.wrong || [], can_reveal: stt.tries >= 5 && !stt.done, score: null } : null;
+      P.idet = null; P.irev = null; P.ihl = null;
+    }
     P.t0 = Date.now();
   }
   function circleName(c) { const cs = P.quest && P.quest.circles; return cs && cs[c] ? cs[c].name : ""; }
 
+  /* ---------- IELTS reading ---------- */
+  function passageHtml(text, hl) {
+    return text.split(/\n\s*\n/).map((para) => {
+      const low = para.toLowerCase(), k = hl ? low.indexOf(hl.toLowerCase()) : -1;
+      const inner = k < 0 ? esc(para) : esc(para.slice(0, k)) + `<mark id="hlMark">${esc(para.slice(k, k + hl.length))}</mark>` + esc(para.slice(k + hl.length));
+      return `<p>${inner.replace(/\n/g, "<br>")}</p>`;
+    }).join("");
+  }
+  function ieltsBody(s) {
+    const det = P.idet, wrong = (P.ires && P.ires.wrong) || [], checked = P.ires && P.ires.score != null, locked = !!det || P.busy;
+    const qh = (x, i) => {
+      const bad = checked && wrong.includes(i), good = checked && !bad;
+      const d = det && det.find((y) => y.i === i);
+      let inp = "";
+      if (x.type === "tfng") inp = `<div class="tfng" role="group">${[["true", "TRUE"], ["false", "FALSE"], ["not given", "NOT GIVEN"]].map(([v, l]) => `<button class="chip" aria-pressed="${P.ia[i] === v}" data-act="ians" data-v="${i}|${v}" ${locked ? "disabled" : ""}>${l}</button>`).join("")}</div>`;
+      else if (x.type === "mcq") inp = `<div class="stack" style="gap:6px">${x.opts.map((o) => `<button class="opt" style="min-height:44px;font-size:15px" aria-pressed="${P.ia[i] === o}" data-act="ians" data-v="${i}|${esc(o)}" ${locked ? "disabled" : ""}>${esc(o)}</button>`).join("")}</div>`;
+      else inp = `<input class="ishort" data-i="${i}" value="${esc(P.ia[i])}" aria-label="${i + 1}-savol javobi" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Javob (1–3 so'z yoki raqam)" ${locked ? "disabled" : ""}>`;
+      return `<div class="iq ${bad ? "bad" : good ? "good" : ""} ${P.irev && P.irev.order[P.irev.k] === i ? "focus" : ""}" id="iq${i}">
+        <div class="row" style="flex-wrap:nowrap;align-items:flex-start"><b class="num">${i + 1}.</b><span class="grow">${esc(x.q)}</span>${bad ? `<span class="pill warn">xato</span>` : good ? `<span class="pill rv">to'g'ri</span>` : ""}</div>${inp}
+        ${d ? `<div class="idet"><b>Javob: ${esc(x.type === "tfng" ? String(d.answer).toUpperCase() : d.answer)}</b>${d.why ? `<span>${esc(d.why)}</span>` : ""}${d.ev ? `<button class="link small" data-act="ihl" data-v="${i}">Matnda ko'rsatish</button>` : ""}</div>` : ""}</div>`;
+    };
+    return `<span class="p-kind">IELTS Reading</span><p class="p-q">${esc(s.title)}</p>
+      ${P.ires || det ? "" : `<div class="ihelp small"><b>TRUE</b> – matnda aynan shunday deyilgan. <b>FALSE</b> – matnda buning teskarisi yozilgan. <b>NOT GIVEN</b> – matnda bu haqda ma'lumot yo'q.<br>Vaqt cheklanmagan, urinishlar cheksiz. Tekshirgandan keyin faqat qaysi javob xato ekani ko'rinadi.</div>`}
+      <div class="ielts"><div class="ipass passage" data-nocopy>${passageHtml(s.text, P.ihl)}</div><div class="iqs">${s.qs.map(qh).join("")}</div></div>`;
+  }
+  function ieltsFoot(s) {
+    const r = P.ires, n = s.qs.length;
+    if (P.irev) {
+      const k = P.irev.k, i = P.irev.order[k], d = P.idet.find((y) => y.i === i) || {}, last = k >= P.irev.order.length - 1;
+      return `<div class="fb ${P.irev.wrong.includes(i) ? "bad" : "good"}"><b>${i + 1}-savol · javob: ${esc(s.qs[i].type === "tfng" ? String(d.answer || "").toUpperCase() : d.answer || "")}</b>${d.why ? esc(d.why) : ""}</div>
+        <div class="row" style="flex-wrap:nowrap">${last ? "" : `<button class="btn soft grow" style="background:var(--card)" data-act="irevNext">Keyingisi (${k + 1}/${P.irev.order.length})</button>`}<button class="btn ${last ? "wide" : ""}" data-act="inext">Davom etish</button></div>`;
+    }
+    if (P.idet) return `<div class="fb good" role="status"><b>Barakalla! Hammasi to'g'ri${r && r.tries ? ` · ${r.tries}-urinishda` : ""}.</b>Izohlarni o'qing: har bir javob matnning qayerida ekanini ko'rish mumkin.</div><button class="btn wide" style="--accent:var(--rv)" data-act="inext">Davom etish</button>`;
+    const status = r && r.score != null ? `<div class="fb bad" role="status"><b>${r.score} / ${n} to'g'ri${r.tries ? ` · ${r.tries}-urinish` : ""}</b>Qizil belgilangan javoblarni matndan qayta qidiring.</div>` : r && r.tries ? `<p class="sub small" style="text-align:center;margin:0">${r.tries} marta tekshirilgan</p>` : "";
+    return `${status}<div class="row" style="flex-wrap:nowrap">${r && r.can_reveal ? `<button class="btn soft grow" style="background:var(--card)" data-act="ireveal">Javoblarni ko'rish</button>` : ""}<button class="btn grow" data-act="icheck" ${P.busy ? "disabled" : ""}>${P.busy ? "Tekshirilmoqda…" : "Tekshirish"}</button></div>
+      ${r && r.tries && !r.can_reveal ? `<p class="sub small" style="text-align:center;margin:0">"Javoblarni ko'rish" 5-urinishdan keyin ochiladi</p>` : ""}`;
+  }
+  async function ieltsCheck() {
+    const s = curStep();
+    document.querySelectorAll(".ishort").forEach((el) => (P.ia[Number(el.dataset.i)] = el.value.trim()));
+    if (P.ia.some((x) => !x)) { toast("Hamma savolga javob bering"); return; }
+    P.busy = true; render();
+    try {
+      const r = await api("ielts_check", { p_quest: P.quest.id, p_step: s.id, p_answers: P.ia, p_ms: Date.now() - P.t0, p_state: P.preview ? null : P.state });
+      P.t0 = Date.now(); P.busy = false; P.ires = r;
+      if (r.details) P.idet = r.details;
+    } catch (e) { P.busy = false; quiet(e); }
+    render();
+  }
+  async function ieltsReveal() {
+    const s = curStep();
+    try {
+      const r = await api("ielts_reveal", { p_quest: P.quest.id, p_step: s.id, p_state: P.preview ? null : P.state });
+      P.idet = r.details;
+      const wrong = (r.wrong && r.wrong.length ? r.wrong : (P.ires && P.ires.wrong) || []);
+      const order = wrong.concat(s.qs.map((_, i) => i).filter((i) => !wrong.includes(i)));
+      P.irev = { order, k: 0, wrong }; ieltsFocus();
+    } catch (e) { quiet(e); }
+  }
+  function ieltsFocus() {
+    const i = P.irev.order[P.irev.k], d = P.idet.find((y) => y.i === i);
+    P.ihl = d && d.ev ? d.ev : null; render();
+    const m = $("#hlMark"); if (m) m.scrollIntoView({ block: "center", behavior: "smooth" });
+    const q = $("#iq" + i); if (q) q.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  }
+  function ieltsNext() {
+    const s = curStep(), st = clone(P.state); st.i += 1;
+    if (!st.final.includes(s.id)) st.final.push(s.id);
+    P.state = st;
+    if (!P.preview) api("save_state", { p_quest: P.quest.id, p_state: st }).catch(() => {});
+    loadStep(); render(); const b = $(".p-body"); if (b) b.scrollTop = 0;
+  }
+
   function vPlay() {
+    if (P) P.wide = false;
     const top = (pct, label) => `<div class="p-top"><button class="x" data-act="quit" aria-label="Chiqish">${I.x}</button><div class="p-prog"><i style="width:${pct}%"></i></div>${label ? `<span class="pill" style="max-width:40%;overflow:hidden;text-overflow:ellipsis">${esc(label)}</span>` : ""}</div>`;
-    const shell = (inner, foot, pct, label) => `<div class="player" style="--accent:var(${P.accent || "--hw"})" role="dialog" aria-label="Vazifa">${top(pct || 0, label)}<div class="p-body">${inner}</div><div class="p-foot">${foot || ""}</div></div>`;
+    const shell = (inner, foot, pct, label) => `<div class="player" style="--accent:var(${P.accent || "--hw"})" role="dialog" aria-label="Vazifa">${top(pct || 0, label)}<div class="p-body ${P.wide ? "wide" : ""}">${inner}</div><div class="p-foot ${P.wide ? "wide" : ""}">${foot || ""}</div></div>`;
     if (P.error) return shell(`<div class="card"><p class="err">${esc(P.error)}</p></div>`, `<button class="btn wide" data-act="quit">Orqaga</button>`);
     if (P.practice && P.empty) return shell(`<h2>Hozircha mashq uchun savol yo'q</h2><p class="sub">Birinchi vazifani boshlang. O'rgangan so'z va savollaringiz shu yerda takrorlanadi.</p>`, `<button class="btn wide" data-act="quit">Orqaga</button>`);
     if (P.loading || (!P.quest && !P.practice) || (P.practice && !P.cur)) return shell(`<div class="loading">Yuklanmoqda…</div>`);
@@ -399,6 +480,8 @@
     }
     const s = curStep();
     if (!P.practice) label = label || circleName(s.c);
+    P.wide = s.t === "ielts";
+    if (s.t === "ielts") return shell(ieltsBody(s), ieltsFoot(s), pct, label);
     const locked = !!P.result || P.busy;
     const passage = s.p && P.byId && P.byId[s.p] ? `<details class="pbox"><summary>Matnni ko'rish: ${esc(P.byId[s.p].title)}</summary><div class="passage" data-nocopy>${esc(P.byId[s.p].text)}</div></details>` : "";
     let body = "";
@@ -890,6 +973,12 @@
       case "check": check(); return;
       case "cont": cont(); return;
       case "next": nextCard(); return;
+      case "ians": { const k = v.indexOf("|"); P.ia[Number(v.slice(0, k))] = v.slice(k + 1); document.querySelectorAll(".ishort").forEach((el) => (P.ia[Number(el.dataset.i)] = el.value)); render(); return; }
+      case "icheck": ieltsCheck(); return;
+      case "ireveal": ieltsReveal(); return;
+      case "irevNext": P.irev.k += 1; ieltsFocus(); return;
+      case "inext": ieltsNext(); return;
+      case "ihl": { const d = P.idet.find((y) => y.i === Number(v)); P.ihl = d ? d.ev : null; render(); const m = $("#hlMark"); if (m) m.scrollIntoView({ block: "center", behavior: "smooth" }); return; }
       case "repToggle": P.reportOpen = !P.reportOpen; render(); { const el = $("#repNote"); if (el) el.focus(); } return;
       case "repSend": sendReport(); return;
       case "defend": {
