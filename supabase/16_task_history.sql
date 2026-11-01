@@ -1,0 +1,4 @@
+-- 1 Nov (migrations task_history_forever, writing_history_in_student_page): before a quest is deleted (2-month cleanup or
+-- teacher delete), each assigned student's result is kept in task_history (title, kind, date, %, ochko, completed, late)
+-- and their writings in writing_history, but only for quests whose deadline has passed. admin_student reads live + kept rows,
+-- so the student graph keeps its history forever (a few bytes per student per task).
