@@ -1,0 +1,6 @@
+-- Migrations homework_after_lesson, homework_due_next_day_lesson, manual_deadline_overrides_lesson_rules, days_off, classwork_slot_skips_days_off:
+-- quests.after_lesson: "@homework N" = opens when the student's own lesson N ends (lock code hw_soon),
+--   due at the class's first lesson on a later day (_next_day_lesson) unless @due is given.
+-- due_lesson = 0 means the teacher fixed the deadline by hand.
+-- days_off(teacher_id, day): lessons on these days don't exist (_slot, _nth_slot, _lesson_window, _lesson_now, _next_day_lesson skip them);
+--   lesson numbers past a week's real lessons roll into next week. RPCs admin_days_off, admin_day_off_set.

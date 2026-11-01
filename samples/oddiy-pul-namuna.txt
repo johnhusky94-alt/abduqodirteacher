@@ -1,0 +1,18 @@
+# Oddiy pul namunasi: bitta kod butun pulga (hamma sinflarga). Har sinf o'z jadvali bo'yicha oladi.
+# @classwork N  = sinf ishi, o'quvchining o'z sinfidagi N-darsda ochiladi.
+# @homework N   = N-darsning uy vazifasi: o'sha dars tugagach ochiladi, muddati — keyingi kundagi dars boshigacha.
+#                 (Bir kunda 2 ta dars bo'lsa, ikkala vazifa ham keyingi kungi darsga topshiriladi.)
+# Dam olish kunlari: Sozlamalar → Dars jadvali → Dam olish kunlari.
+@week 2026-11-09
+
+@quest 1-dars · Mavzu
+@pool B1
+@classwork 1
+@circle Qoida
+? ...
+
+@quest 1-dars · Uy vazifasi
+@pool B1
+@homework 1
+@circle Mashq
+? ...

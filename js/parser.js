@@ -99,7 +99,12 @@
             if (!(n >= 1 && n <= 30)) return err(ln, "@classwork dan keyin dars raqami yozilsin: @classwork 3");
             q.kind = "cw"; q.lesson = n; return;
           }
-          case "homework": case "uy": if (!q) newQuest("Nomsiz vazifa", ln); q.kind = "hw"; return;
+          case "homework": case "uy": {
+            if (!q) newQuest("Nomsiz vazifa", ln);
+            q.kind = "hw";
+            if (rest) { const n = parseInt(rest, 10); if (!(n >= 1 && n <= 30)) return err(ln, "@homework dan keyin dars raqami yozilsin: @homework 2"); q.after = n; }
+            return;
+          }
           case "vocab": case "lugat": if (!q) newQuest("Lug'at", ln); q.kind = "vl"; q.noReview = true; return;
           case "noreview": if (!q) newQuest("Nomsiz vazifa", ln); q.noReview = true; return;
           case "due": case "muddat": case "deadline": {
@@ -403,7 +408,7 @@
     const gradable = steps.filter((s) => s.a).length;
     if (!gradable) errors.push({ line: q.line, msg: `"${q.title}" vazifasida birorta savol yo'q` });
     return {
-      title: q.title, pool: q.pool, line: q.line, kind: q.kind, lesson: q.lesson, due: q.kind === "hw" ? q.due : null,
+      title: q.title, pool: q.pool, line: q.line, kind: q.kind, lesson: q.lesson, due: q.kind === "hw" ? q.due : null, after: q.kind === "hw" ? q.after || null : null,
       circles: q.circles.map((c, i) => ({ name: c.name, n: steps.filter((s) => s.c === i && s.a).length })),
       steps, gradable,
     };
