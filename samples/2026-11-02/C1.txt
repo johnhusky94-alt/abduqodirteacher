@@ -1,0 +1,398 @@
+# C1 pul (IT 1) · 2–4-noyabr · IELTS Reading lug'ati: Green roofs (Passage 1) · The growth mindset (Passage 2)
+# Butun faylni Topshiriqlar bo'limiga bir marta joylang.
+# Dushanba: 1–2-sinf ishi (Passage 1) · Chorshanba: 3–4-sinf ishi (Passage 2).
+# 1-uy vazifasi dushanba darslaridan keyin (muddat — chorshanba darsi), 2-uy vazifasi chorshanba darslaridan keyin (muddat — keyingi dushanba).
+# Kitobdagi passage'lar darsda kitobdan ishlanadi; saytdagi matnlar shu mavzularda yangi yozilgan.
+@week 2026-11-02
+
+# ────────── 1-DARS ──────────
+@quest C1 · 1-dars · Green roofs (1)
+@pool C1
+@classwork 1
+@noreview
+
+@circle Lug'at (1–6)
+@rule Passage 1: shahar va tabiat lug'ati
+lush (adj) — (o'simlik) qalin, yam-yashil
+foliage (n) — barglar, ko'katlar (umumiy)
+mitigate (v) — (zarar, xavfni) kamaytirmoq, yumshatmoq — mitigate the risk of floods
+tackle (v) — (muammoni) hal qilishga kirishmoq — tackle air pollution
+radical (adj) — tubdan yangi, keskin — radical urban designs
+monumental (adj) — juda ulkan — monumental problems
+Diqqat: mitigate + the risk / effects · tackle + a problem / an issue
+
+@word lush = qalin, yam-yashil | The garden was lush after the spring rain.
+@word foliage = barglar, ko'katlar | The roof was hidden under thick foliage.
+@word mitigate = kamaytirmoq, yumshatmoq | Trees can mitigate the effects of heat in cities.
+@word tackle = hal qilishga kirishmoq | The city must tackle its traffic problem.
+@word radical = tubdan yangi, keskin | The architect proposed a radical new design.
+@word monumental = juda ulkan | Moving the capital was a monumental task.
+
+@circle Kontekstda
+? Green roofs can ___ the risk of flooding by absorbing rainwater.
+* mitigate
+- tackle
+- acquire
+? The council has promised to ___ air pollution in the city centre.
+- mitigate
+* tackle
+- foliage
+? Cities face ___ challenges, such as a lack of green space.
+* monumental
+- lush
+- radical
+? The building was covered in ___ green plants.
+- monumental
+* lush
+- radical
+@gap Some designs are so ___ that they change the whole idea of a city. = radical
+@gap In autumn the ___ turns red and yellow. = foliage
+@tf "Mitigate" means "to make something worse". = noto'g'ri ! mitigate — kamaytirmoq, yengillashtirmoq.
+
+@circle IELTS Reading
+@ielts Gardens in the sky
+Paragraph A. Twenty years ago, a rooftop covered in lush vegetation would have seemed eccentric. Today, in cities from Singapore to Copenhagen, green roofs are increasingly seen as a practical response to monumental urban problems. They cool buildings in summer, reduce energy bills and help to mitigate the impact of sudden storms by holding rainwater.
+Paragraph B. Yet the spread of green roofs has not been even. In Copenhagen, a law passed in 2010 made green roofs compulsory on most new buildings with flat roofs. In many other cities, however, owners are simply encouraged, and progress has been much slower.
+Paragraph C. The benefits are not only environmental. A study of office workers found that those who could see foliage from their desks reported lower stress levels. Some hospitals have created rooftop gardens where patients can spend time outdoors, and doctors say this can tackle feelings of isolation.
+Paragraph D. Critics point out that green roofs are expensive to build and maintain, and that older buildings may not be strong enough to support the weight of soil and water. For this reason, supporters argue that the most radical changes should begin with new construction.
+@match Which paragraph contains the following information?
+a legal requirement in one city = Paragraph B ~ made green roofs compulsory on most new buildings
+benefits for people's mental health = Paragraph C ~ reported lower stress levels
+practical difficulties with older buildings = Paragraph D ~ older buildings may not be strong enough
+a list of environmental advantages = Paragraph A ~ They cool buildings in summer
+- Paragraph E
+@endmatch
+@short Green roofs help to reduce the impact of storms by holding ___. = rainwater ~ by holding rainwater
+@short Office workers who could see plants reported lower ___ levels. = stress ~ reported lower stress levels
+@tfng Copenhagen's law applies to all buildings in the city. = false ~ on most new buildings with flat roofs
+@tfng Green roofs are cheaper to maintain than ordinary roofs. = not given
+@endielts
+
+# ────────── 2-DARS ──────────
+@quest C1 · 2-dars · Green roofs (2)
+@pool C1
+@classwork 2
+@noreview
+
+@circle Lug'at (7–12)
+@rule Passage 1: siyosat va rivojlanish
+crucial (adj) — hal qiluvchi, juda muhim
+forward-thinking (adj) — kelajakni o'ylaydigan, ilg'or
+pave the way (for) — (biror narsa uchun) yo'l ochmoq
+integrate (with) — birlashtirmoq, uyg'unlashtirmoq
+sustainable (adj) — barqaror, tabiatga zarar yetkazmaydigan
+prescribe (v) — (shifokor) buyurmoq, tayinlamoq
+
+@word crucial = hal qiluvchi, juda muhim | Water is crucial for any rooftop garden.
+@word forward-thinking = ilg'or, kelajakni o'ylaydigan | It was a forward-thinking policy for its time.
+@word pave the way = yo'l ochmoq | The new law paved the way for more parks.
+@word integrate = uyg'unlashtirmoq | The design integrates solar panels with plants.
+@word sustainable = barqaror | We need a more sustainable way of building cities.
+@word prescribe = (dori, mashg'ulot) buyurmoq | Doctors now prescribe gardening for stress.
+
+@circle Kontekstda
+? The support of city authorities is ___ to the success of green roofs.
+* crucial
+- sustainable
+- forward-thinking
+? The London Plan has ___ for a large increase in green roofs.
+- integrated the way
+* paved the way
+- prescribed the way
+? Doctors increasingly ___ time spent gardening for patients with anxiety.
+- integrate
+- tackle
+* prescribe
+@gap Green roofs can be ___ with drainage systems on the ground. = integrated
+@gap A ___ city uses its resources without damaging the future. = sustainable
+@gap The mayor was praised for her ___-thinking policies. = forward
+@tf "Crucial" means "not very important". = noto'g'ri ! crucial — juda muhim.
+@tf If something "paves the way", it makes something else possible. = to'g'ri
+
+@circle So'z shakllari
+@gap integrate → ___ (ot) = integration
+@gap sustainable → ___ (ot) = sustainability
+@gap prescribe → ___ (ot) = prescription
+@gap mitigate → ___ (ot) = mitigation
+@gap radical → ___ (ravish) = radically
+
+@circle IELTS strategiyasi
+@rule "Which paragraph contains ...?" savollari
+1) Savoldagi kalit so'zlarni belgilang: "a city where green roofs have been promoted for many years".
+2) Matnda aynan shu so'zni emas, sinonimini qidiring: promoted for many years ≈ policies dating from the 1990s.
+3) Bir harf bir necha marta ishlatilishi mumkin (NB).
+4) Paragrafning umumiy mavzusi emas, aniq ma'lumot kerak.
+
+? "challenges to be overcome" — matnda qaysi ibora bunga mos bo'lishi mumkin?
+* there are still barriers to overcome
+- the benefits are wide-ranging
+- doctors are increasingly prescribing
+? "a persuasive argument for the financial benefits" ≈ ?
+- improvements in science
+* to convince investors, economic arguments are the most important
+- research investigating rooftop spaces
+? "used as a model for new ones" ≈ ?
+* success stories need to be studied and replicated
+- official standards have been developed
+- the UK is relatively new to green roofs
+
+# ────────── 1-UY VAZIFASI (dushanba darslaridan keyin) ──────────
+@quest C1 · 1-uy vazifasi · Green roofs lug'ati
+@pool C1
+@homework 2
+
+@circle Lug'at (13–20)
+@word mainstream = keng tarqalgan, odatiy | Electric cars are becoming mainstream.
+@word retro-fit = (eski binoga) keyin o'rnatmoq | It is costly to retro-fit old buildings with solar panels.
+@word acquire = egallamoq, o'rganib olmoq | Staff may need to acquire new skills.
+@word disruption = uzilish, tartibning buzilishi | The works caused disruption to local traffic.
+@word worthwhile = arziydigan, foydali | Is the investment worthwhile?
+@word underpin = asos bo'lmoq | Science underpins the whole project.
+@word biodiversity = biologik xilma-xillik | Wild roofs maximise biodiversity.
+@word replicate = takrorlamoq, nusxalamoq | The success should be replicated in other cities.
+
+@circle Sinonimlar
+@match So'zni sinonimi bilan juftlang
+crucial = vital
+mitigate = reduce
+mainstream = widespread
+replicate = copy
+worthwhile = beneficial
+acquire = gain
+- destroy
+@endmatch
+@match Yana juftlang
+tackle = deal with
+monumental = enormous
+underpin = support
+radical = revolutionary
+disruption = disturbance
+- decoration
+@endmatch
+
+@circle Gaplarni to'ldiring
+@gap Building work always causes some ___ to people living nearby. = disruption
+@gap It's much easier to install a green roof on a new building than to ___ an old one. = retro-fit / retrofit
+@gap Brown roofs are wilder and help to increase ___. = biodiversity
+@gap Investors need proof that green roofs are financially ___. = worthwhile
+@gap Gardeners may need to ___ new skills, such as landscaping. = acquire
+@gap Solid research ___ every good policy. = underpins
+@gap Green roofs have become ___ in North America. = mainstream
+@gap The project was so successful that other cities want to ___ it. = replicate
+
+@circle IELTS Reading
+@ielts The blue roof experiment
+Paragraph A. When a district in Rotterdam suffered three serious floods in five years, local engineers decided to try something radical. Instead of draining rainwater away as quickly as possible, they would keep it on the rooftops. The idea, known as the "blue roof", is to store water for hours or even days and release it slowly.
+Paragraph B. The first blue roofs were installed on new buildings, which can carry greater weight. Retro-fitting older blocks proved more difficult and expensive, and in some cases caused weeks of disruption for residents.
+Paragraph C. After three years, the results were encouraging. Flooding in the district fell sharply, and stored water was used to irrigate nearby parks during dry summers. Officials now hope the scheme will become mainstream across the country.
+@tfng The engineers' idea was to remove rainwater from roofs faster. = false ~ Instead of draining rainwater away as quickly as possible
+@tfng Older buildings were easier to adapt than new ones. = false ~ Retro-fitting older blocks proved more difficult and expensive
+@tfng Some residents complained about the noise of the works. = not given
+@short What was the stored water used for in dry summers? = irrigate parks / irrigating parks / to irrigate parks ~ used to irrigate nearby parks during dry summers
+? What do officials hope?
+* that the scheme will be used all over the country
+- that the district will never flood again
+- that residents will pay for the roofs
+~ Officials now hope the scheme will become mainstream across the country
+@endielts
+
+# ────────── 3-DARS ──────────
+@quest C1 · 3-dars · The growth mindset (1)
+@pool C1
+@classwork 3
+@noreview
+
+@circle Lug'at (21–26)
+@rule Passage 2: aql va qobiliyat lug'ati
+take root (phr) — ildiz otmoq, mustahkamlanmoq
+supplant (v) — o'rnini egallamoq, siqib chiqarmoq
+innate (adj) — tug'ma · inherent (adj) — ichki, ajralmas (tabiatidagi)
+quantify (v) — miqdor bilan o'lchamoq
+cognitive (adj) — bilish, aqliy (fikrlash bilan bog'liq)
+Diqqat: innate ability ≈ inherent ability — ikkalasi ham "tug'ilgandan bor".
+
+@word take root = ildiz otmoq | The idea has taken root in many schools.
+@word supplant = o'rnini egallamoq | Smartphones have supplanted cameras for most people.
+@word innate = tug'ma | She has an innate talent for music.
+@word inherent = ichki, ajralmas | There are risks inherent in any new method.
+@word quantify = miqdor bilan o'lchamoq | It's hard to quantify the benefits of reading.
+@word cognitive = aqliy, bilish | Sleep improves cognitive performance.
+
+@circle Kontekstda
+? The old view of intelligence as fixed has been ___ by the idea that it can grow.
+* supplanted
+- quantified
+- rooted
+? Binet tried to ___ cognitive ability with the first intelligence tests.
+- supplant
+* quantify
+- coax
+? A talent you are born with is ___.
+* innate
+- cognitive
+- harsh
+@gap The concept has ___ root in the educational landscape. = taken
+@gap Memory and attention are ___ abilities. = cognitive
+@gap Some thinkers believed that ___ ability is destiny. = inherent / innate
+@tf "Innate" means "learned at school". = noto'g'ri ! innate — tug'ma.
+
+@circle IELTS Reading
+@ielts Praise and performance
+Paragraph A. For most of the twentieth century, teachers assumed that intelligence was largely innate: some children were simply clever, and others were not. That assumption began to lose ground in the 1970s, as researchers showed that cognitive skills could be improved through practice.
+Paragraph B. In a recent study, a group of 200 teenagers completed a difficult maths task. Half were told afterwards that they must be "naturally gifted"; the other half were praised for their effort and strategies. When offered a second, harder task, most of the first group chose an easier option, while most of the second group accepted the challenge.
+Paragraph C. The researcher, Dr Lena Ortiz, believes the results show that praising talent can make students afraid of failure. However, Professor Mark Hale, who reviewed the study, warns that it was carried out in a single school and that the effect may not last more than a few weeks.
+@tfng The belief that intelligence is innate was common for most of the twentieth century. = true ~ teachers assumed that intelligence was largely innate
+@tfng In the study, all students were praised in the same way. = false ~ Half were told afterwards that they must be "naturally gifted"
+@tfng Most students praised for effort accepted the harder task. = true ~ most of the second group accepted the challenge
+@tfng The students' parents were also interviewed. = not given
+@match Match each statement with the correct person.
+Praising talent may make students fear failure. = Dr Lena Ortiz ~ praising talent can make students afraid of failure
+The study may not have long-term results. = Professor Mark Hale ~ the effect may not last more than a few weeks
+- Alfred Binet
+@endmatch
+@endielts
+
+@circle IELTS strategiyasi
+@rule YES / NO / NOT GIVEN
+YES — gap muallifning fikriga mos keladi.
+NO — gap muallifning fikriga zid.
+NOT GIVEN — muallif bu haqda fikr bildirmagan.
+Diqqat: bu fakt emas, MUALLIF FIKRI haqida. Muallifning baho beruvchi so'zlarini qidiring: "deserves great credit", "probably a far better way", "often a waste of time".
+? "Dweck deserves great credit for responding to criticism." Bu gap "Dweck has handled criticism in an admirable way" ga nisbatan:
+* YES
+- NO
+- NOT GIVEN
+? Muallif "Motivational posters are often a waste of time" deydi. "Posters are an effective way to motivate students" — ?
+- YES
+* NO
+- NOT GIVEN
+? Muallif ommaviy axborot vositalari haqida hech narsa demaydi. "The media have reported the research unfairly" — ?
+- YES
+- NO
+* NOT GIVEN
+
+# ────────── 4-DARS ──────────
+@quest C1 · 4-dars · The growth mindset (2)
+@pool C1
+@classwork 4
+@noreview
+
+@circle Lug'at (27–32)
+@rule Passage 2: ta'lim va tanqid
+coax (v) — yumshoqlik bilan ko'ndirmoq
+instil (v) — (g'oya, his-tuyg'uni) asta-sekin singdirmoq
+infer (v) — xulosa chiqarmoq
+impediment (n) — to'siq, monelik
+dissonance (n) — nomuvofiqlik, ziddiyat (cognitive dissonance)
+harsh (adj) — qattiq, shafqatsiz (harsh criticism)
+
+@word coax = yumshoqlik bilan ko'ndirmoq | She coaxed the shy boy into answering.
+@word instil = singdirmoq | Good teachers instil confidence in their students.
+@word infer = xulosa chiqarmoq | From his silence, I inferred that he was upset.
+@word impediment = to'siq | Lack of money is the main impediment to progress.
+@word dissonance = nomuvofiqlik, ziddiyat | There's a dissonance between what they say and what they do.
+@word harsh = qattiq, shafqatsiz | The film received harsh criticism.
+
+@circle Kontekstda
+? Schools try to ___ students away from seeing failure as a sign of their ability.
+* coax
+- infer
+- quantify
+? The students had been ___ with a growth mindset.
+- inferred
+* instilled
+- supplanted
+? The group had ___ that success is due to innate ability.
+* inferred
+- coaxed
+- instilled
+? One of the greatest ___ to the growth mindset is the education system itself.
+- dissonances
+* impediments
+- aspirations
+@gap Praising effort but giving fixed target grades creates cognitive ___. = dissonance
+@gap The research has received ___ criticism from statisticians. = harsh
+@tf "Infer" means to say something directly. = noto'g'ri ! infer — bilvosita xulosa chiqarmoq.
+
+@circle Kim nima dedi?
+@rule Matching people (17–22 turidagi savollar)
+Har bir odamning ismini matnda belgilang va uning fikrini o'z so'zlaringiz bilan qisqa yozing.
+Savoldagi gap — parafraz: "The methodology was not strict enough" ≈ "their research designs have enough degrees of freedom ...".
+Bir odam bir necha marta javob bo'lishi mumkin (NB).
+@match Fikrni turi bilan juftlang (o'z so'zlaringiz)
+"Their research designs have enough degrees of freedom" = the method was not strict enough
+"Kids with the growth mindset aren't getting better grades" = no effect on results
+"It's not just a vehicle for making children feel good" = more than boosting morale
+"Interventions should be delivered in a subtle way" = students shouldn't notice it
+- intelligence cannot change
+@endmatch
+
+@circle So'z shakllari
+@gap infer → ___ (ot) = inference
+@gap impede → ___ (ot) = impediment
+@gap cognition → ___ (sifat) = cognitive
+@gap harsh → ___ (ravish) = harshly
+@gap quantify → ___ (sifat: o'lchab bo'ladigan) = quantifiable
+
+# ────────── 2-UY VAZIFASI (chorshanba darslaridan keyin, muddat — keyingi dushanba) ──────────
+@quest C1 · 2-uy vazifasi · Growth mindset lug'ati va esse
+@pool C1
+@homework 4
+
+@circle Lug'at (33–40)
+@word null = natijasiz, nolga teng | The results of the study were null.
+@word misapply = noto'g'ri qo'llamoq | The theory has been misapplied in many schools.
+@word conflate = aralashtirib yubormoq (ikki narsani bir deb bilmoq) | People often conflate confidence with ability.
+@word subtle = sezilmas, nozik | The changes were subtle but important.
+@word elixir = mo''jizaviy dori, sehrli yechim | Technology is not an elixir for bad teaching.
+@word proponent = tarafdor | Proponents of the theory claim it works in every school.
+@word deluded = adashgan, xomxayol | He is deluded if he thinks he can pass without studying.
+@word aspiration = intilish, orzu | Her aspiration is to become a surgeon.
+
+@circle Sinonimlar
+@match So'zni sinonimi bilan juftlang
+proponent = supporter
+impediment = obstacle
+innate = inborn
+subtle = indirect
+conflate = confuse
+aspiration = ambition
+- opponent
+@endmatch
+@match Yana juftlang
+harsh = severe
+supplant = replace
+infer = deduce
+instil = gradually establish
+deluded = mistaken
+- encourage
+@endmatch
+
+@circle Gaplarni to'ldiring
+@gap Bates found that the results were repeatedly ___. = null
+@gap Dweck worries that her theories are being ___ with the self-esteem movement. = conflated
+@gap Supporters say interventions should be delivered in a ___ way. = subtle
+@gap Growth mindset is not the ___ of learning that its supporters claim. = elixir
+@gap ___ of the theory say it can transform any classroom. = Proponents
+@gap Posters may give students a ___ idea of what success means. = deluded
+@gap Her work has been misunderstood and ___ in a range of ways. = misapplied
+@gap Having faith in your ability to change is a good ___. = aspiration
+
+@circle IELTS Reading
+@ielts Can confidence be taught?
+Paragraph A. Few ideas in education have spread as fast as the claim that confidence can be taught. Its proponents argue that if students believe they can improve, they will work harder and achieve more. Critics, however, warn against treating any single idea as an elixir.
+Paragraph B. A two-year project in 40 secondary schools tested a programme of weekly confidence lessons. Students' self-reported confidence rose, but their exam results showed no significant change. The researchers concluded that the lessons may have been too direct: many students saw them as a sign that teachers doubted their ability.
+Paragraph C. The schools that did see an improvement had taken a more subtle approach. Instead of lessons about confidence, teachers focused on specific skills and gave detailed feedback on effort. In the writer's view, this is a far more promising route, although it is harder to quantify.
+@tfng In the project, students felt more confident after the lessons. = true ~ Students' self-reported confidence rose
+@tfng The confidence lessons led to much better exam results. = false ~ their exam results showed no significant change
+@tfng The writer believes skill-based teaching is more promising. = true ~ this is a far more promising route
+@tfng Most teachers in the project wanted to continue the lessons. = not given
+@short What did teachers in the successful schools give feedback on? = effort ~ gave detailed feedback on effort
+@endielts
+
+@circle Yozish
+@writing Praise effort or talent? | 250-300
+IELTS Writing Task 2 uslubida esse yozing (250–300 so'z):
+"Some people believe that schools should praise students' effort rather than their natural ability. To what extent do you agree or disagree?"
+Kamida 8 ta yangi so'z ishlating (masalan: innate, cognitive, instil, impediment, subtle, proponent, aspiration, crucial, mitigate, tackle, sustainable, worthwhile).
+Reja: Kirish (aniq pozitsiya) → 2 ta asosiy paragraf (misol va dalil bilan) → Xulosa.
