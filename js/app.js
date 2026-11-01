@@ -329,7 +329,7 @@
     { k: "banner", n: "Oltin bayroq", p: 3, d: "Qal'angizda oltin bayroq hilpiraydi", ic: "flag" },
   ];
   function vTrophies() {
-    if (!ST.troph || !ST.g) return `<h1>Kuboklar</h1><div class="loading">Yuklanmoqda…</div>`;
+    if (!ST.troph || !ST.g || !ST.g.me) return `<h1>Kuboklar</h1><div class="loading">Yuklanmoqda…</div>`;
     const leaders = ST.troph.leaders || [], cnt = ST.g.trophies || {}, me = (ST.home.me.first_name + " " + ST.home.me.last_name).trim();
     const have = (k) => (cnt[k] ? cnt[k].have : 0), won = (k) => (cnt[k] ? cnt[k].won : 0);
     const total = Object.values(cnt).reduce((a, x) => a + x.have, 0), g = ST.g.me;
@@ -384,7 +384,7 @@
   }
   const gTime = (iso) => new Date(iso).getTime() + (ST.gOff || 0);
   function vCastle() {
-    if (!ST.g) return `<h1>Qal'a</h1><div class="loading">Yuklanmoqda…</div>`;
+    if (!ST.g || !ST.g.me) return `<h1>Qal'a</h1><div class="loading">Yuklanmoqda…</div>`;
     gSet();
     const me = ST.g.me, b = me.b, sub = ST.gsub || "base";
     const used = housing(me.army), capA = gArmy(b.barracks);
@@ -466,7 +466,7 @@
         <button class="btn" data-act="gbattleEnd">Davom etish</button>` : `<p class="small sub" style="margin:0">Devor → minora → qal'a tartibida hujum qilinadi.</p>`}</div>`;
   }
   function gTick() {
-    if (!ST.g || ST.tab !== "castle" || !S || S.role !== "student") return;
+    if (!ST.g || !ST.g.me || ST.tab !== "castle" || !S || S.role !== "student") return;
     const me = ST.g.me; let reload = false;
     me.queue.forEach((q) => {
       const end = gTime(q.end), st = gTime(q.start), left = end - Date.now();
