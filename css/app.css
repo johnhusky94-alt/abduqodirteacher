@@ -255,3 +255,15 @@ input[type=checkbox]{width:20px;height:20px;accent-color:var(--hw)}
 /* writing */
 .wbox{width:100%;min-height:220px;font:inherit;font-size:16px;line-height:1.55;padding:12px 14px;border-radius:14px;border:2px solid var(--line);background:var(--card);color:var(--ink);resize:vertical}
 .wbox:focus{outline:none;border-color:var(--hw)}
+
+/* stage 5: metric tiles, chart */
+.mtiles{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media (min-width:700px){.mtiles{grid-template-columns:repeat(4,1fr)}}
+.mtile{all:unset;box-sizing:border-box;cursor:pointer;background:var(--card);border-radius:16px;padding:12px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;border:2px solid transparent}
+.mtile[aria-pressed=true]{border-color:var(--t)}
+.mtiles.static .mtile{cursor:default;background:var(--bg)}
+.mtile:focus-visible{outline:3px solid var(--hw)}
+.chartbox{overflow-x:auto}
+.chart{width:100%;height:auto;display:block}
+.chart .ct{font-size:12px;fill:var(--sub);font-family:inherit}
+i.lg{display:inline-block;width:12px;height:12px;border-radius:50%}

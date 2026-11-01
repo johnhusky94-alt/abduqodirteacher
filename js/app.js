@@ -287,6 +287,9 @@
         <button class="btn soft sm" data-act="logout" aria-label="Chiqish" style="background:var(--card)">${I.out}</button></div></div>
       <p class="sub small">Bu hafta: <b>${wk.correct || 0}</b> ta to'g'ri javob · <b>${fmtTime(wk.seconds)}</b></p>
       ${h.lesson_until ? `<div class="banner" style="background:var(--cw-s);color:var(--cw)">Hozir dars ketmoqda. Uy vazifalari ${clock(h.lesson_until)} da ochiladi.</div>` : ""}
+      ${(() => { const dl = h.daily || { n: 0, goal: 10 }, dd = dl.n >= dl.goal;
+        return `<button class="li card" style="flex-direction:row;--accent:var(--rv)" data-act="${dd ? "noop" : "daily"}">${ring(Math.round((Math.min(dl.n, dl.goal) / dl.goal) * 100), "var(--rv)", 46)}
+          <span class="grow"><b style="font-weight:600">Kunlik takrorlash</b> <span class="pill ${dd ? "rv" : "warn"}">${dd ? "Bajarildi" : "Majburiy"}</span><br><span class="small sub">${dd ? "Bugungi 10 ta so'z takrorlandi. Ertaga yana!" : `${dl.n}/${dl.goal} so'z · taxminan 5 daqiqa`}</span></span>${dd ? I.check : `<span class="chev">${I.chev}</span>`}</button>`; })()}
       ${openCw.length ? `<h2>Sinf ishi</h2><div class="list">${openCw.map(item).join("")}</div>` : ""}
       <h2>Uy vazifasi</h2>
       ${openHw.length ? `<div class="list">${openHw.map(item).join("")}</div>` : `<div class="card empty">Hozircha uy vazifasi yo'q. O'qituvchingiz bergan vazifalar shu yerda chiqadi.</div>`}
@@ -368,6 +371,10 @@
     } catch (e) { if (e.message === "AUTH") return; P = { error: errText(e), accent: "--hw" }; }
     render();
   }
+  async function startDaily() {
+    P = { practice: true, daily: true, loading: true, right: 0, answered: 0, n: 0, goal: 10, accent: "--rv" }; render();
+    await nextPractice();
+  }
   async function startPractice() {
     P = { practice: true, loading: true, right: 0, answered: 0, accent: "--rv" }; render();
     await nextPractice();
@@ -375,8 +382,9 @@
   async function nextPractice() {
     P.loading = true; render();
     try {
-      const q = await api("practice_next");
+      const q = await api(P.daily ? "daily_next" : "practice_next");
       if (q && q.empty) { P.empty = true; P.loading = false; render(); return; }
+      if (P.daily) { P.n = q.n || 0; if (q.done) { P.dailyDone = true; P.loading = false; render(); return; } }
       P.cur = q; P.loading = false; loadStep();
     } catch (e) { if (e.message === "AUTH") return; P.error = errText(e); P.loading = false; }
     render();
@@ -516,11 +524,14 @@
     const top = (pct, label) => `<div class="p-top"><button class="x" data-act="quit" aria-label="Chiqish">${I.x}</button><div class="p-prog"><i style="width:${pct}%"></i></div>${label ? `<span class="pill" style="max-width:40%;overflow:hidden;text-overflow:ellipsis">${esc(label)}</span>` : ""}</div>`;
     const shell = (inner, foot, pct, label) => `<div class="player" style="--accent:var(${P.accent || "--hw"})" role="dialog" aria-label="Vazifa">${top(pct || 0, label)}<div class="p-body ${P.wide ? "wide" : ""}">${inner}</div><div class="p-foot ${P.wide ? "wide" : ""}">${foot || ""}</div></div>`;
     if (P.error) return shell(`<div class="card"><p class="err">${esc(P.error)}</p></div>`, `<button class="btn wide" data-act="quit">Orqaga</button>`);
+    if (P.daily && P.dailyDone) return shell(`<div class="stack" style="align-items:center;text-align:center;margin-top:8vh">${ring(100, "var(--rv)", 96)}<h1>Bugungi takrorlash bajarildi!</h1><p class="sub">${P.answered ? `${P.right} / ${P.answered} to'g'ri. ` : ""}Xato qilgan so'zlaringiz ertaga yana chiqadi.</p></div>`, `<button class="btn wide" data-act="quit">Bosh sahifaga qaytish</button>`, 100, "");
+    if (P.daily && P.empty) return shell(`<h2>Takrorlash uchun so'z hali yo'q</h2><p class="sub">Vazifalarni bajaring: o'rgangan so'zlaringiz shu yerda takrorlanadi.</p>`, `<button class="btn wide" data-act="quit">Orqaga</button>`);
     if (P.practice && P.empty) return shell(`<h2>Hozircha mashq uchun savol yo'q</h2><p class="sub">Birinchi vazifani boshlang. O'rgangan so'z va savollaringiz shu yerda takrorlanadi.</p>`, `<button class="btn wide" data-act="quit">Orqaga</button>`);
     if (P.loading || (!P.quest && !P.practice) || (P.practice && !P.cur)) return shell(`<div class="loading">Yuklanmoqda…</div>`);
 
     let pct = 0, label = "";
-    if (P.practice) { label = `${P.right} / ${P.answered} to'g'ri`; pct = 100; }
+    if (P.daily) { label = `${P.n} / ${P.goal}`; pct = Math.round((P.n / P.goal) * 100); }
+    else if (P.practice) { label = `${P.right} / ${P.answered} to'g'ri`; pct = 100; }
     else {
       const g = P.quest.steps.filter((s) => s.g).length;
       pct = g ? Math.round((P.state.final.length / g) * 100) : 0;
@@ -628,11 +639,12 @@
     if (P.practice) {
       P.busy = true; render();
       let res;
-      try { res = await api("practice_answer", { p_answer: ans, p_ms: Date.now() - P.t0 }); }
+      try { res = await api(P.daily ? "daily_answer" : "practice_answer", { p_answer: ans, p_ms: Date.now() - P.t0 }); }
       catch (e) { if (e.net) { retryLater(check); return; } P.busy = false; quiet(e); render(); return; }
       P.busy = false; P.offline = false;
       if (res && res.error) { nextPractice(); return; }
       P.answered += 1; if (res.ok) { P.right += 1; if (ST.home) ST.home.soldiers = (ST.home.soldiers || 0) + 1; }
+      if (P.daily) { P.n = res.n; if (res.done) P.finishAfter = true; }
       P.result = res; render(); return;
     }
     const tries = (P.state.tries[s.id] || 0) + 1;
@@ -664,6 +676,7 @@
     P.result = res; render();
   }
   function cont() {
+    if (P.practice && P.finishAfter) { P.dailyDone = true; P.result = null; render(); return; }
     if (P.practice) { nextPractice(); return; }
     P.state = P.next; P.next = null; loadStep(); render();
     const b = $(".p-body"); if (b) b.scrollTop = 0;
@@ -704,8 +717,10 @@
     const key = T.cls + "|" + T.week;
     if (!force && T.reportKey === key && T.report) return;
     T.reportKey = key; T.report = null; render();
-    try { const r = await api("admin_report", { p_class: T.cls, p_week: T.week }); if (T.reportKey === key) { T.report = r; render(); } }
-    catch (e) { quiet(e); }
+    try {
+      const [r, ov] = await Promise.all([api("admin_report", { p_class: T.cls, p_week: T.week }), api("admin_overview", { p_class: T.cls, p_week: T.week })]);
+      if (T.reportKey === key) { T.report = r; T.ov = ov; render(); }
+    } catch (e) { quiet(e); }
   }
   const className = (id) => { const c = T.data && T.data.classes.find((x) => x.id === id); return c ? c.name : ""; };
   const opts = (list, sel, none) => (none !== undefined ? `<option value="">${esc(none)}</option>` : "") + list.map((x) => `<option value="${x.id}" ${x.id === sel ? "selected" : ""}>${esc(x.name)}</option>`).join("");
@@ -750,9 +765,23 @@
       </tbody></table></div>
       <p class="sub small">Doira: vazifaning bajarilgan qismi. Ochko: shu vazifadagi to'g'ri javoblar soni. "Kech" = muddatdan keyin tugatilgan.</p></section>`;
   }
+  const METRICS = [
+    { k: "hw", t: "Uy vazifasi", c: "--hw" }, { k: "cw", t: "Sinf ishi", c: "--cw" },
+    { k: "wr", t: "Yozma ish", c: "--wr" }, { k: "rv", t: "Takrorlash", c: "--rv" },
+  ];
+  function metricPct(o, k) { const m = o && o[k]; return m ? m.pct : null; }
+  function metricSub(o, k) {
+    const m = o[k] || {};
+    if (k === "hw") return m.n ? `${m.done}/${m.n} vazifa · ${m.ochko || 0} ochko${m.late ? ` · ${m.late} kech` : ""}` : "Bu hafta uy vazifasi yo'q";
+    if (k === "cw") return m.n ? `${m.done}/${m.n} dars · ${m.ochko || 0} ochko` : "Bu hafta sinf ishi yo'q";
+    if (k === "wr") return m.n ? `${m.n} ta ish · ${m.marked ? `o'rtacha ${m.avg}/10` : "baholanmagan"}` : "Yozma ish yo'q";
+    return `${m.days || 0}/${m.of || 7} kun bajarilgan · ${m.ok || 0}/${m.n || 0} to'g'ri`;
+  }
+  const avgOf = (rows, k) => { const v = rows.map((o) => metricPct(o, k)).filter((x) => x != null); return v.length ? Math.round(v.reduce((a, b) => a + b, 0) / v.length) : null; };
   function vResults() {
     const d = T.data;
     if (T.poolView) return vPoolResults();
+    if (T.stuView) return vStudentPage();
     const head = `<div class="row between"><h1>Natijalar</h1><button class="btn soft sm" data-act="logout" style="background:var(--card)">${I.out} Chiqish</button></div>`;
     if (!d.classes.length) return head + `<div class="card empty">Avval Sozlamalar → Sinflar, pullar, o'quvchilar bo'limida sinf yarating.</div>`;
     const thisWeek = strFromDay(mondayOf(new Date()));
@@ -761,16 +790,72 @@
     const probs = T.problems.length ? `<button class="banner" style="border:0;cursor:pointer;background:var(--warn-s);color:var(--warn);font:inherit;font-weight:600;font-size:14px;text-align:left" data-act="tab" data-v="assign">${T.problems.length} ta savol bo'yicha o'quvchilar xato haqida xabar berdi ›</button>` : "";
     const pls = poolsInClass();
     const poolBtns = pls.length ? `<div class="row"><span class="sub small">Pul natijalari (oxirgi 3 vazifa):</span>${pls.map((p) => `<button class="btn sm" style="--accent:var(--cw)" data-act="poolView" data-v="${p.id}">${esc(p.name)}</button>`).join("")}</div>` : "";
-    if (!T.report) return head + probs + classSeg() + poolBtns + weekNav + `<div class="loading">Yuklanmoqda…</div>`;
-    const rows = T.report.rows || [];
+    const mk = T.metric || "hw", M = METRICS.find((x) => x.k === mk);
+    if (!T.ov) return head + probs + classSeg() + weekNav + `<div class="loading">Yuklanmoqda…</div>`;
+    const rows = T.ov;
+    const tiles = `<div class="mtiles">${METRICS.map((m) => { const v = avgOf(rows, m.k);
+      return `<button class="mtile" aria-pressed="${mk === m.k}" style="--t:var(${m.c})" data-act="metric" data-v="${m.k}">${ring(v, `var(${m.c})`, 52)}<b>${m.t}</b><span class="small sub">sinf o'rtachasi</span></button>`; }).join("")}</div>`;
+    const flags = {}; ((T.report && T.report.rows) || []).forEach((r) => { if (r.flag) flags[r.id] = r.flag; });
     const byPool = {};
     rows.forEach((r) => { const k = r.pool || "Pulsiz"; (byPool[k] = byPool[k] || []).push(r); });
-    const groups = Object.keys(byPool).sort().map((p) => `<h3>${esc(p)} · ${byPool[p].length} o'quvchi</h3><div class="list">${byPool[p].sort((a, b) => (b.pct || 0) - (a.pct || 0)).map((r) => `
-      <div class="li">${ring(r.pct, "var(--hw)", 46)}<span class="grow"><b style="font-weight:600">${esc(r.first_name + " " + r.last_name)}</b><br>
-        <span class="sub small"><b style="color:var(--ink)">bu hafta ${r.correct} ochko</b> · ${r.quests ? `${r.finished}/${r.quests} vazifa` : "Vazifa yo'q"} · ${fmtTime(r.seconds)} · aniqlik ${r.answered ? Math.round((r.correct / r.answered) * 100) + "%" : "—"}</span>
-        ${r.late ? ` <span class="pill amber">${r.late} kech</span>` : ""}${r.flag ? `<div class="flag ${r.flag.kind}" style="margin-top:6px">${esc(r.flag.text)}</div>` : ""}</span></div>`).join("")}</div>`).join("");
-    return head + probs + classSeg() + poolBtns + weekNav + (rows.length ? groups : `<div class="card empty">Bu sinfda hali o'quvchi yo'q.</div>`) +
-      `<p class="sub small">Doira: shu haftaga muddati qo'yilgan vazifalarning bajarilgan qismi. Batafsil grafiklar keyingi bosqichda qo'shiladi.</p>`;
+    const groups = Object.keys(byPool).sort().map((p) => `<h3>${esc(p)} · ${byPool[p].length} o'quvchi · o'rtacha ${avgOf(byPool[p], mk) == null ? "—" : avgOf(byPool[p], mk) + "%"}</h3><div class="list">${byPool[p].slice().sort((a, b) => (metricPct(b, mk) ?? -1) - (metricPct(a, mk) ?? -1)).map((r) => `
+      <button class="li" data-act="stu" data-v="${r.id}">${ring(metricPct(r, mk), `var(${M.c})`, 46)}<span class="grow"><b style="font-weight:600">${esc(r.name)}</b><br>
+        <span class="sub small">${esc(metricSub(r, mk))}</span>${flags[r.id] ? `<div class="flag ${flags[r.id].kind}" style="margin-top:6px">${esc(flags[r.id].text)}</div>` : ""}</span><span class="chev">${I.chev}</span></button>`).join("")}</div>`).join("");
+    return head + probs + classSeg() + weekNav + tiles + poolBtns + `<h2>${M.t}</h2>` + (rows.length ? groups : `<div class="card empty">Bu sinfda hali o'quvchi yo'q.</div>`) +
+      `<p class="sub small">O'quvchini bosing: oxirgi 18 ta vazifa grafigi va vaqt taqsimoti. Takrorlash = kunlik 10 so'zlik majburiy takrorlash bajarilgan kunlar.</p>`;
+  }
+
+  /* one student: graph of last 18 tasks + time split */
+  async function loadStudentPage(id) {
+    T.stu = null; render();
+    try { const r = await api("admin_student", { p_student: id }); if (T.stuView === id) { T.stu = r; render(); } } catch (e) { quiet(e); }
+  }
+  function lineChart(points, color) {
+    if (!points.length) return `<div class="card empty">Hali ma'lumot yo'q.</div>`;
+    const narrow = window.innerWidth < 600, W = narrow ? 360 : 680, H = narrow ? 230 : 260, L = 30, Rr = 14, Tp = 26, B = 40, n = points.length;
+    const x = (i) => n === 1 ? (L + W - Rr) / 2 : L + (i * (W - L - Rr)) / (n - 1);
+    const y = (v) => Tp + ((100 - v) * (H - Tp - B)) / 100;
+    const avg = Math.round(points.reduce((a, p) => a + p.v, 0) / n);
+    let g = `<svg viewBox="0 0 ${W} ${H}" class="chart" role="img" aria-label="Oxirgi ${n} ta natija, o'rtacha ${avg}%">`;
+    [0, 50, 100].forEach((v) => { g += `<line x1="${L}" x2="${W - Rr}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" stroke-width="1"/><text x="${L - 6}" y="${y(v) + 4}" text-anchor="end" class="ct">${v}</text>`; });
+    g += `<path d="${points.map((p, i) => `${i ? "L" : "M"}${x(i)},${y(p.v)}`).join(" ")} L${x(n - 1)},${y(0)} L${x(0)},${y(0)}Z" fill="${color}" opacity=".08"/>`;
+    g += `<polyline points="${points.map((p, i) => `${x(i)},${y(p.v)}`).join(" ")}" fill="none" stroke="${color}" stroke-width="2.5" stroke-linejoin="round"/>`;
+    g += `<line x1="${L}" x2="${W - Rr}" y1="${y(avg)}" y2="${y(avg)}" stroke="var(--ink)" stroke-width="1.5" stroke-dasharray="6 5" opacity=".55"/><text x="${W - Rr}" y="${y(avg) - 6}" text-anchor="end" class="ct" style="font-weight:700;fill:var(--ink)">o'rtacha ${avg}%</text>`;
+    points.forEach((p, i) => {
+      const st = p.state, fill = st === "ok" ? "var(--rv)" : st === "late" ? "var(--amber)" : st === "miss" ? "var(--card)" : color, stroke = st === "miss" ? "var(--warn)" : "var(--card)";
+      g += `<circle cx="${x(i)}" cy="${y(p.v)}" r="6" fill="${fill}" stroke="${stroke}" stroke-width="2.5"><title>${esc(p.t)}: ${p.v}%</title></circle>`;
+      if (!narrow || n <= 9 || i % 2 === 0 || i === n - 1) g += `<text x="${x(i)}" y="${y(p.v) - 11}" text-anchor="middle" class="ct" style="font-weight:700;fill:var(--ink)">${p.v}</text>`;
+      if ((narrow ? n <= 6 : n <= 9) || i % (narrow ? 3 : 2) === 0) g += `<text x="${x(i)}" y="${H - 14}" text-anchor="middle" class="ct">${esc(p.d)}</text>`;
+    });
+    return g + `</svg>`;
+  }
+  function vStudentPage() {
+    const back = `<div><button class="btn soft sm" style="background:var(--card)" data-act="stu" data-v="">${I.back} Natijalar</button></div>`;
+    const st = T.stu;
+    if (!st) return back + `<div class="loading">Yuklanmoqda…</div>`;
+    const kind = T.stuKind || "hw";
+    const shortDate = (iso) => { const d = new Date(iso); return `${d.getDate()}.${pad(d.getMonth() + 1)}`; };
+    let pts = [];
+    if (kind === "wr") pts = st.writings.filter((w) => w.mark != null).map((w) => ({ v: w.mark * 10, t: w.title || "Yozma ish", d: shortDate(w.submitted_at), state: "ok" }));
+    else pts = st.tasks.filter((t) => t.kind === kind && new Date(t.at) <= new Date()).map((t) => ({ v: t.pct, t: t.title, d: shortDate(t.at),
+      state: t.completed_at ? (t.late ? "late" : "ok") : t.deadline && new Date(t.deadline) < new Date() ? "miss" : "open", ochko: t.ochko }));
+    const color = kind === "hw" ? "var(--hw)" : kind === "cw" ? "var(--cw)" : "var(--wr)";
+    const tw = st.time.week, ta = st.time.all, sum = (o) => o.hw + o.cw + o.rv + o.wr;
+    const timeCard = (title, o) => `<div class="card stack" style="gap:6px"><h3>${title}: ${fmtTime(sum(o))}</h3>
+      ${[["Uy vazifasi", o.hw, "--hw"], ["Sinf ishi", o.cw, "--cw"], ["Takrorlash", o.rv, "--rv"], ["Yozma ish", o.wr, "--wr"]].map(([l, v, c]) => `<div class="row" style="flex-wrap:nowrap"><span style="width:96px" class="small">${l}</span><div class="bar grow" style="margin:0"><i style="width:${sum(o) ? (v / sum(o)) * 100 : 0}%;background:var(${c})"></i></div><span class="small num" style="width:92px;text-align:right;white-space:nowrap">${fmtTime(v)}</span></div>`).join("")}</div>`;
+    const list = kind === "wr" ? st.writings.slice().reverse().map((w) => `<div class="li"><span class="grow">${esc(w.title || "Yozma ish")}<br><span class="sub small">${esc(fmtDate(w.submitted_at))} · ${w.words} so'z</span></span>${w.mark != null ? `<b>${w.mark}/10</b>` : `<span class="pill">baholanmagan</span>`}</div>`).join("")
+      : st.tasks.filter((t) => t.kind === kind).slice().reverse().map((t) => `<div class="li"><span class="grow">${esc(t.title)}<br><span class="sub small">${t.deadline ? esc(fmtDate(t.deadline)) : esc(shortDate(t.at))} · ${t.ochko} ochko</span></span>
+        ${t.completed_at ? (t.late ? `<span class="pill amber">kech</span>` : `<span class="pill rv">vaqtida</span>`) : t.deadline && new Date(t.deadline) < new Date() ? `<span class="pill warn">bajarilmadi</span>` : ""}<b class="num" style="width:44px;text-align:right">${t.pct}%</b></div>`).join("");
+    return back + `<section class="card stack">
+      <div class="row between"><div><h2>${esc(st.name)}</h2><p class="sub small" style="margin:0">${esc(st.class || "")}${st.pool ? " · " + esc(st.pool) : ""}</p></div><span class="row"><span class="logo">A</span><b>Abduqodir Teacher</b></span></div>
+      <div class="seg" role="group" aria-label="Turi">${[["hw", "Uy vazifasi"], ["cw", "Sinf ishi"], ["wr", "Yozma ish"]].map(([k, l]) => `<button aria-pressed="${kind === k}" data-act="stuKind" data-v="${k}">${l}</button>`).join("")}</div>
+      <h3>Oxirgi ${pts.length} ta ${kind === "wr" ? "yozma ish (baho × 10)" : "vazifa"}</h3>
+      <div class="chartbox">${lineChart(pts, color)}</div>
+      <div class="row small sub"><span class="row" style="gap:5px"><i class="lg" style="background:var(--rv)"></i>vaqtida</span><span class="row" style="gap:5px"><i class="lg" style="background:var(--amber)"></i>kech</span><span class="row" style="gap:5px"><i class="lg" style="background:var(--card);border:2px solid var(--warn)"></i>bajarilmadi</span><span class="row" style="gap:5px"><i class="lg" style="background:${color}"></i>jarayonda</span><span>- - - o'rtacha</span></div>
+      </section>
+      <div class="grid2">${timeCard("Bu hafta", tw)}${timeCard("Jami", ta)}</div>
+      <div class="card stack" style="gap:6px"><h3>Takrorlash</h3><p class="small" style="margin:0">Oxirgi 7 kunda kunlik takrorlash: <b>${st.review.days7}/7 kun</b> · o'rganilgan so'zlar: <b>${st.review.words}</b> · yaxshi eslab qolingan: <b>${st.review.strong}</b></p></div>
+      ${list ? `<div class="list">${list}</div>` : ""}`;
   }
 
   /* report */
@@ -789,21 +874,24 @@
     const totAns = rows.reduce((a, r) => a + r.answered, 0), totCor = rows.reduce((a, r) => a + r.correct, 0);
     const winners = T.report.winners || [];
     const top5 = rows.filter((r) => r.correct > 0).slice(0, 5);
+    const ovOf = (id, k) => { const o = (T.ov || []).find((x) => x.id === id); return o && o[k] ? o[k].pct : null; };
+    const ovRows = T.ov || [];
     return head + `<section class="card stack">
       <div class="row between"><div><h2>${esc(className(T.cls))} sinf · haftalik natijalar</h2><p class="sub small">${esc(weekLabel(T.week))} · ${rows.length} o'quvchi</p></div><span class="row"><span class="logo">A</span><b>Abduqodir Teacher</b></span></div>
-      <div class="kpis"><div class="kpi"><b>${avgPct == null ? "—" : avgPct + "%"}</b><span>O'rtacha vazifa</span></div><div class="kpi"><b>${fmtTime(avgTime)}</b><span>O'rtacha vaqt</span></div>
-        <div class="kpi"><b>${totAns ? Math.round((totCor / totAns) * 100) + "%" : "—"}</b><span>O'rtacha aniqlik</span></div><div class="kpi"><b>${totAns}</b><span>Jami javoblar</span></div></div>
+      <div class="mtiles static">${[["Uy vazifasi", avgPct, "--hw"], ["Takrorlash", avgOf(ovRows, "rv"), "--rv"], ["Lug'at", avgOf(ovRows, "vocab"), "--cw"], ["Yozma ish", avgOf(ovRows, "wr"), "--wr"]].map(([l, v, c]) => `<div class="mtile">${ring(v, `var(${c})`, 56)}<b>${l}</b><span class="small sub">sinf o'rtachasi</span></div>`).join("")}</div>
+      <div class="kpis"><div class="kpi"><b>${fmtTime(avgTime)}</b><span>O'rtacha vaqt</span></div>
+        <div class="kpi"><b>${totAns ? Math.round((totCor / totAns) * 100) + "%" : "—"}</b><span>O'rtacha aniqlik</span></div><div class="kpi"><b>${totAns}</b><span>Jami javoblar</span></div><div class="kpi"><b>${totCor}</b><span>Jami ochko</span></div></div>
       ${top5.length ? `<div><h3>Eng yaxshi ${top5.length} o'quvchi</h3><div class="list" style="margin-top:8px">${top5.map((r, i) => `<div class="li"><b class="num" style="width:22px;color:${i < 3 ? "var(--tr)" : "var(--sub)"}">${i + 1}</b><span class="grow">${esc(r.first_name + " " + r.last_name)}</span><b class="num">${r.correct} ochko</b></div>`).join("")}</div></div>` : ""}
       ${winners.length ? `<div class="winners">${winners.map((w) => { const b = BIG.find((x) => x.k === w.kind) || {}; return `<div class="winner"><span class="t">${I[b.ic] || ""}${esc(b.t || w.kind)}</span><span class="n">${esc(w.name)}</span><p>${esc(b.n || "")}</p></div>`; }).join("")}</div>` : ""}
-      <div class="tablebox" style="background:var(--card)"><table class="wide-table"><thead><tr><th>#</th><th>O'quvchi</th><th class="c">Uy vazifasi</th><th class="c">Aniqlik</th><th>Ochko</th><th>Tugatgan</th><th>Vaqt</th><th>Javoblar</th><th>Izoh</th></tr></thead><tbody>
-      ${rows.map((r, i) => `<tr><td class="num sub">${i + 1}</td><td><b style="font-weight:600">${esc(r.first_name + " " + r.last_name)}</b><br><span class="sub small">${esc(r.pool || "")}</span></td>
-        <td class="c">${ring(r.pct, "var(--hw)", 46)}</td><td class="c">${ring(r.answered ? Math.round((r.correct / r.answered) * 100) : null, "var(--rv)", 46)}</td>
+      <div class="tablebox" style="background:var(--card)"><table class="wide-table"><thead><tr><th>#</th><th>O'quvchi</th><th class="c">Uy vazifasi</th><th class="c">Takrorlash</th><th class="c">Lug'at</th><th class="c">Yozma ish</th><th>Ochko</th><th>Tugatgan</th><th>Vaqt</th><th>Javoblar</th><th>Izoh</th></tr></thead><tbody>
+      ${rows.map((r, i) => `<tr><td class="num sub">${i + 1}</td><td><button class="link" style="font-weight:600;color:var(--ink);text-align:left" data-act="stuR" data-v="${r.id}">${esc(r.first_name + " " + r.last_name)}</button><br><span class="sub small">${esc(r.pool || "")}</span></td>
+        <td class="c">${ring(r.pct, "var(--hw)", 46)}</td><td class="c">${ring(ovOf(r.id, "rv"), "var(--rv)", 46)}</td><td class="c">${ring(ovOf(r.id, "vocab"), "var(--cw)", 46)}</td><td class="c">${ring(ovOf(r.id, "wr"), "var(--wr)", 46)}</td>
         <td class="num"><b>${r.correct}</b></td>
         <td class="num">${r.quests ? `${r.finished} / ${r.quests}` : "—"}${r.late ? ` <span class="pill amber">${r.late} kech</span>` : ""}</td><td class="num">${fmtTime(r.seconds)}</td>
         <td class="num">${r.answered}${r.practice_n ? `<br><span class="sub small">+${r.practice_n} mashq</span>` : ""}</td>
         <td>${r.flag ? `<div class="flag ${r.flag.kind}">${esc(r.flag.text)}</div>` : `<span class="sub">—</span>`}</td></tr>`).join("")}
       </tbody></table></div>
-      <p class="sub small">Ochko = shu haftadagi to'g'ri javoblar soni. Doira to'la bo'lsa, o'quvchi shu haftaning barcha vazifalarini bajargan (dushanba ertalabgacha muddatli vazifalar o'tgan haftaga kiradi). Izohlar faqat bir xil holat bir necha marta takrorlanganda qo'yiladi.</p></section>
+      <p class="sub small">Takrorlash = kunlik 10 so'zlik takrorlash bajarilgan kunlar. Lug'at = shu haftaning so'zlaridan o'rganilganlari. Yozma ish = o'rtacha baho × 10. Ochko = shu haftadagi to'g'ri javoblar soni. Ismni bosing: o'quvchi sahifasi. Doira to'la bo'lsa, o'quvchi shu haftaning barcha vazifalarini bajargan (dushanba ertalabgacha muddatli vazifalar o'tgan haftaga kiradi). Izohlar faqat bir xil holat bir necha marta takrorlanganda qo'yiladi.</p></section>
       ${vMonthly()}`;
   }
   async function loadMonthly() { try { T.monthly = await api("admin_monthly", { p_class: T.cls }); T.monthlyCls = T.cls; } catch (e) { quiet(e); } render(); }
@@ -1077,7 +1165,7 @@ ${w.text}`).join("\n") + "\n---\n";
       case "logout": signOut(); return;
       case "tab":
         if (S.role === "teacher") {
-          if (T.tab === v) { T.sub = null; T.poolView = null; T.wview = false; }
+          if (T.tab === v) { T.sub = null; T.poolView = null; T.wview = false; T.stuView = null; }
           T.tab = v; T.editName = null; T.pwFor = null; render(); window.scrollTo(0, 0);
           if (v === "results" || v === "report") loadReport();
         } else {
@@ -1088,6 +1176,7 @@ ${w.text}`).join("\n") + "\n---\n";
       // student
       case "play": startQuest(v, false); return;
       case "practice": startPractice(); return;
+      case "daily": startDaily(); return;
       case "quit": quitPlayer(); return;
       case "sel": if (P && !P.result) { P.sel = Number(v); render(); } return;
       case "pick": if (P && !P.result && !P.pick.includes(Number(v))) { P.pick.push(Number(v)); render(); } return;
@@ -1120,10 +1209,14 @@ ${w.text}`).join("\n") + "\n---\n";
         loadCastle(); return;
       }
       // teacher
-      case "cls": T.cls = Number(v); T.poolView = null; render(); loadReport(); if (T.showMonthly) loadMonthly(); return;
+      case "cls": T.cls = Number(v); T.poolView = null; T.stuView = null; T.ov = null; render(); loadReport(); if (T.showMonthly) loadMonthly(); return;
       case "week": { const d = dayFromStr(T.week); d.setDate(d.getDate() + 7 * Number(v)); T.week = strFromDay(d); loadReport(); return; }
       case "setweek": T.week = v; loadReport(); return;
       case "monthly": T.showMonthly = true; render(); loadMonthly(); return;
+      case "metric": T.metric = v; render(); return;
+      case "stu": T.stuView = v ? Number(v) : null; T.stuKind = "hw"; window.scrollTo(0, 0); if (T.stuView) loadStudentPage(T.stuView); else render(); return;
+      case "stuR": T.tab = "results"; T.stuView = Number(v); T.stuKind = "hw"; window.scrollTo(0, 0); loadStudentPage(T.stuView); return;
+      case "stuKind": T.stuKind = v; render(); return;
       case "poolView": T.poolView = v ? Number(v) : null; window.scrollTo(0, 0); if (T.poolView) loadPoolRes(); else render(); return;
       case "sub": T.sub = v || null; T.editName = null; T.pwFor = null; T.pwMsg = null; render(); window.scrollTo(0, 0); if (v === "teachers") loadTeachers(); if (v === "tt") loadTT(); return;
       case "ttCls": if (T.ttDirty) { toast("Avval jadvalni saqlang"); return; } T.cls = Number(v); loadTT(); return;

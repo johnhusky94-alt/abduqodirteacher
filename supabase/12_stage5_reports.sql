@@ -1,0 +1,5 @@
+-- 1 Nov, V2 stage 5 (migration v2_stage5_daily_review_reports):
+-- daily_review(user, day, n, ok, ms), daily_q; daily_next / daily_answer: required 10-word review per day, due words first
+-- (Leitner boxes from _review_word: 2, 7, 21, 60, 120 days; a mistake resets to 1 day). student_home.daily.
+-- admin_overview(class, week): per student hw / cw / review days / vocabulary learned / writing average / time split.
+-- admin_student(student): last 18 homework and classwork, writings, time split (week and all), review stats.
