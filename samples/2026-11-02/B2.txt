@@ -1,0 +1,428 @@
+# B2 pul (IT 1, IT 2, IT 3) · 2–4-noyabr · Lug'at: Women at work · The gap year
+# Butun faylni Topshiriqlar bo'limiga bir marta joylang. Har sinf o'z jadvali bo'yicha oladi.
+# 5-sinf ishi (lug'at testi): IT 2 da chorshanba 15:00, IT 1 va IT 3 da keyingi dushanba birinchi darsda.
+@week 2026-11-02
+
+# ────────── 1-DARS ──────────
+@quest B2 · 1-dars · Women at work (1): discrimination
+@pool B2
+@classwork 1
+@noreview
+
+@circle Yangi so'zlar
+@rule Ish joyida kamsitish: asosiy so'zlar
+sue (sb) — sudga bermoq · A bank is being sued by the authorities.
+discriminate against — kamsitmoq · discriminating against its female employees
+allege — isbotsiz ayblamoq, da'vo qilmoq · It has been alleged that ...
+prospects — istiqbol, o'sish imkoniyatlari · promotion prospects
+on a par with — bilan teng darajada · salaries are not on a par with ...
+counterpart — boshqa tomondagi tengdoshi, hamkasbi · their male counterparts
+Diqqat: discriminate AGAINST sb · on a par WITH sth
+
+@word sue = sudga bermoq | The company was sued by three former employees.
+@word discriminate against = kamsitmoq | It's illegal to discriminate against women.
+@word allege = isbotsiz ayblamoq | It is alleged that the manager lied.
+@word prospects = o'sish imkoniyatlari | Women here have poor promotion prospects.
+@word on a par with = bilan teng darajada | Her salary is not on a par with his.
+@word counterpart = boshqa tomondagi tengdoshi | She earns less than her male counterparts.
+
+@circle Mashq
+? A bank ___ by the US authorities for allegedly discriminating against women.
+* is being sued
+- is suing
+- is being sueing
+? It has been ___ that women do not have the same promotion prospects.
+- discriminated
+* alleged
+- sued
+? Their salaries are not on a ___ with those of men.
+- level
+* par
+- same
+@gap The company was accused of discriminating ___ older workers. = against
+@gap Female doctors earn less than their male ___. = counterparts
+@gap He left the firm because his career ___ were poor. = prospects
+@tf "allegedly" means "it has been proved". = noto'g'ri ! allegedly — isbotlanmagan, faqat da'vo qilingan.
+@tf If two salaries are on a par, they are equal. = to'g'ri
+
+@circle IELTS Reading
+@ielts Equal pay: a long road
+Paragraph A. In many countries it has been illegal for decades to pay women less than men for the same work. Yet studies still show a gap. In some industries, women earn around fifteen per cent less than their male counterparts, even when their qualifications are identical.
+Paragraph B. Last year a large insurance company was sued by a group of its female managers. They alleged that men with similar experience were promoted faster and received higher bonuses. The company denied discriminating against anyone, but agreed to review its pay system.
+Paragraph C. Experts say that the problem is not only about money. Many women report that their promotion prospects are limited because important decisions are made in informal meetings to which they are rarely invited.
+@tfng In some industries women earn about fifteen per cent less than men. = true ~ women earn around fifteen per cent less than their male counterparts
+@tfng The insurance company admitted that it had discriminated against women. = false ~ The company denied discriminating against anyone
+@tfng The female managers won a large amount of money in court. = not given
+@tfng According to experts, the problem is only about salaries. = false ~ the problem is not only about money
+@short What did the company agree to review? = its pay system / pay system ~ agreed to review its pay system
+@endielts
+
+# ────────── 2-DARS ──────────
+@quest B2 · 2-dars · Women at work (2): glass ceiling va tenglik
+@pool B2
+@classwork 2
+@noreview
+
+@circle Yangi so'zlar
+@rule To'siqlar va tenglik
+glass ceiling — "shisha ship": ayollarni eng yuqori lavozimlarga yo'l qo'ymaydigan ko'rinmas to'siq
+old-boy network — erkaklar o'rtasidagi tanish-bilishchilik (bir maktab, klubdan)
+chauvinist — erkaklar ustun deb hisoblaydigan odam · insecurity — o'ziga ishonchsizlik
+menial (job) — past malakali, zerikarli ish · parity — tenglik (maosh, huquqda)
+feminism — ayollar tengligi uchun g'oya va harakat
+
+@word glass ceiling = ko'rinmas to'siq (yuqori lavozimga) | She hit the glass ceiling at 40.
+@word old-boy network = erkaklar tanish-bilishchiligi | He got the job through the old-boy network.
+@word chauvinist = erkak shovinist | Her boss is a real chauvinist.
+@word insecurity = o'ziga ishonchsizlik | His anger comes from insecurity.
+@word menial = past malakali, zerikarli (ish) | She had a menial job in a factory.
+@word parity = tenglik | Women want pay parity with men.
+
+@circle Mashq
+? Women are promoted quickly through junior jobs, but then they hit the ___.
+* glass ceiling
+- old-boy network
+- rat race
+? Some men may refuse to promote women because of feelings of ___.
+- parity
+* insecurity
+- sexism
+? Before the women's movement, women often did part-time, rather ___ jobs.
+- senior
+* menial
+- equal
+@gap Many women blame the ___ network for this situation. = old-boy
+@gap There is still no ___ between men's and women's salaries. = parity
+@gap He thinks women shouldn't be managers — he's a ___. = chauvinist
+@tf A "senior post" is a junior job. = noto'g'ri ! senior post — yuqori lavozim.
+@tf Middle management is below top management. = to'g'ri
+
+@circle So'z yasash
+@rule So'z oilalari
+discriminate (fe'l) → discrimination (ot)
+feminist (odam) → feminism (g'oya)
+sexist (sifat/odam) → sexism (ot)
+secure (sifat) → insecure → insecurity
+equal → equality · promote → promotion
+@gap Gender ___ in the workplace is against the law. (discriminate) = discrimination
+@gap She applied for ___ to manager last year. (promote) = promotion
+@gap Many people still don't have a high regard for ___. (feminist) = feminism
+@gap Feminists saw this as ___ and a waste of women's talents. (sexist) = sexism
+@gap Women want ___ with men in the workplace. (equal) = equality / parity
+
+@circle Fikr bildirish
+? "The writer thinks that women owe many improvements to feminists." Qaysi gap shuni bildiradi?
+* Without feminists, there would be no job-sharing and no parity.
+- Some people don't have a high regard for feminism.
+- Women were expected to get married.
+? Which is the best summary of the text?
+- Women now have no problems at work.
+* Women have more rights now, but there are still obstacles to top jobs.
+- Men and women have always been equal.
+
+# ────────── 1-UY VAZIFASI (2-darsdan keyin) ──────────
+@quest B2 · 1-uy vazifasi · Women at work
+@pool B2
+@homework 2
+
+@circle So'zlar
+@word gender discrimination = jinsga ko'ra kamsitish | Gender discrimination is against the law.
+@word workplace = ish joyi | There should be equality in the workplace.
+@word obstacle = to'siq | There are still obstacles to women's promotion.
+@word women's movement = ayollar huquqlari harakati | The women's movement changed many laws.
+@word feminist = feminist | Feminists fought for equal rights.
+@word sexism = jinsiy kamsitish (seksizm) | That joke is pure sexism.
+@word positive discrimination = ijobiy kamsitish (imtiyoz berish) | Some firms use positive discrimination to hire more women.
+@word job-sharing = bir ishni ikki kishi bo'lishishi | Job-sharing helps parents with small children.
+
+@circle Ta'rifni toping
+@match So'zni ta'rif bilan juftlang
+glass ceiling = an invisible barrier that stops women reaching top jobs
+job-sharing = two people doing one full-time job between them
+positive discrimination = giving an advantage to a group that is usually treated unfairly
+menial = boring work that needs little skill
+counterpart = a person with the same job in another group
+- a law that protects all workers
+@endmatch
+@gap Women still face many ___ when they try to reach the top. = obstacles
+@gap The women's ___ fought for women's right to vote. = movement
+@gap Equal pay is a right in the ___. (ish joyi) = workplace
+@gap The workers decided to ___ the company for unfair treatment. = sue
+@tf "Positive discrimination" means treating women badly. = noto'g'ri ! Kamsitilgan guruhga imtiyoz berish.
+
+@circle Predloglar
+@gap She was discriminated ___ because of her age. = against
+@gap Their salaries are not on a par ___ ours. = with
+@gap Women owe ___ feminists many of these improvements. = to
+@gap Women were responsible ___ childcare and household tasks. = for
+
+@circle IELTS Reading
+@ielts Sharing the top job
+Paragraph A. When two senior managers at a London bank announced that they would share one director's job, many of their colleagues laughed. Job-sharing, they said, was fine for assistants, but not for the boardroom. Five years later, nobody is laughing: their department is one of the most successful in the company.
+Paragraph B. Both women have young children and work three days a week each, with one overlapping day for meetings. "We were worried that we would hit the glass ceiling as soon as we asked for flexible hours," says one of them. "Instead, sharing made it possible for both of us to stay."
+Paragraph C. Not everyone is convinced. Some critics argue that clients prefer to deal with a single person, and that job-sharing creates extra work for other staff. Supporters reply that the same arguments were used against women in management fifty years ago.
+@tfng At first, some colleagues did not take the job-share seriously. = true ~ many of their colleagues laughed
+@tfng The two managers each work five days a week. = false ~ work three days a week each
+@tfng Their department has become very successful. = true ~ one of the most successful in the company
+@tfng The bank plans to introduce job-sharing for all directors. = not given
+? According to critics, what is one problem with job-sharing?
+* It creates extra work for other staff.
+- It is too expensive.
+- Managers earn less money.
+~ job-sharing creates extra work for other staff
+@endielts
+
+# ────────── 3-DARS ──────────
+@quest B2 · 3-dars · The gap year (1)
+@pool B2
+@classwork 3
+@noreview
+
+@circle Yangi so'zlar
+@rule Gap year: asosiy so'zlar
+gap year — maktab va universitet (yoki universitet va ish) orasidagi bir yillik tanaffus
+breathing space — nafas rostlash uchun vaqt · time out — dam, tanaffus
+graduate (from) — o'qishni tamomlamoq · embark on — (katta ishni) boshlamoq
+rat race — tinimsiz raqobatli ish hayoti
+backpacking — ryukzak bilan arzon sayohat · hostel — arzon yotoqxona-mehmonxona
+budget accommodation — arzon turar joy · hitchhike — avtostop bilan sayohat qilmoq · solo — yolg'iz
+
+@word gap year = tanaffus yili | She's taking a gap year before university.
+@word breathing space = nafas rostlash vaqti | Students want a breathing space between periods of study.
+@word embark on = boshlamoq (yangi ish, karyera) | He embarked on a career in law.
+@word time out = tanaffus, dam | I need some time out before I start work.
+@word rat race = tinimsiz raqobat (ish hayoti) | She left the rat race and moved to a village.
+@word solo = yolg'iz (o'zi) | It's dangerous to hitchhike solo.
+
+@circle Mashq
+? Students may take a gap year between ___ from university and embarking on a career.
+* graduating
+- graduated
+- graduation
+? Before joining the ___, many graduates want some time out.
+- old-boy network
+* rat race
+- glass ceiling
+? Staying in ___ is cheaper than staying in hotels.
+* hostels
+- counterparts
+- obstacles
+@gap He wants to embark ___ a career in medicine. = on
+@gap Many students travel cheaply, staying in hostels or other ___ accommodation. = budget
+@gap Hitchhiking can be dangerous, especially if you travel ___. = solo
+@tf "Backpacking" means travelling cheaply with a rucksack. = to'g'ri
+@tf A "breathing space" is a job in a big company. = noto'g'ri ! breathing space — dam olish, o'ylab olish uchun vaqt.
+
+@circle IELTS Reading
+@ielts A year off
+Paragraph A. Every September, thousands of school leavers do not go straight to university. Instead they take a gap year, which many of them describe as a breathing space after twelve years of exams. Universities generally support the idea, although a few subjects, such as medicine, prefer students to start immediately.
+Paragraph B. For most, the year is a chance to travel. Backpacking across South-East Asia or South America remains the most popular choice. Students sleep in hostels, travel by bus and try to see as many countries as their money allows. A small number hitchhike, though parents usually worry about this, especially when their children travel solo.
+Paragraph C. Others stay closer to home and use the time to get a part-time job. They argue that a few months of earning money teaches them more about the rat race than any lecture.
+@tfng Universities are generally against gap years. = false ~ Universities generally support the idea
+@tfng Some subjects prefer students not to take a gap year. = true ~ a few subjects, such as medicine, prefer students to start immediately
+@tfng Most gap-year travellers go to Europe. = not given
+@tfng Parents are usually relaxed about hitchhiking. = false ~ parents usually worry about this
+@short Which form of travel is the most popular? = backpacking ~ Backpacking across South-East Asia or South America remains the most popular choice
+@endielts
+
+# ────────── 4-DARS ──────────
+@quest B2 · 4-dars · The gap year (2): money and work
+@pool B2
+@classwork 4
+@noreview
+
+@circle Yangi so'zlar
+@rule Pul va ish
+subsidize — xarajatni (qisman) to'lab bermoq · save up — pul yig'moq
+on a shoestring — juda kam pul bilan · make ends meet — kun ko'rishga yetarli pul topmoq
+work experience — ish tajribasi (amaliyot) · voluntary work — ko'ngilli (tekin) ish
+hands-on — amaliy, qo'l bilan bajariladigan · stand on your own two feet — mustaqil bo'lmoq
+
+@word subsidize = xarajatni to'lab bermoq | Her parents subsidized her trip.
+@word save up = pul yig'moq | I'm saving up for a new laptop.
+@word on a shoestring = juda kam pul bilan | They travelled round Europe on a shoestring.
+@word make ends meet = kun ko'rmoq | He worked in a café to make ends meet.
+@word hands-on = amaliy | The course gives hands-on experience.
+@word stand on your own two feet = mustaqil bo'lmoq | At 18 you have to stand on your own two feet.
+
+@circle Mashq
+? Students without rich parents have to ___ before they go.
+* save up
+- subsidize
+- graduate
+? They are travelling on a ___ and often need to find work.
+- budget
+* shoestring
+- par
+? They work on farms or in hotels in order to make ends ___.
+- join
+- reach
+* meet
+@gap Wealthy parents can easily ___ their children's travel. = subsidize / subsidise
+@gap The projects provide ___-on experience, from teaching to building roads. = hands
+@gap Gap-year students have to learn to stand on their own two ___. = feet
+@tf "Voluntary work" is work you are paid a lot for. = noto'g'ri ! voluntary — ko'ngilli, odatda tekin.
+@tf "Work experience" can help you choose a career. = to'g'ri
+
+@circle Muhokamaga tayyorgarlik
+@rule Fikr bildirish iboralari (Speaking / Writing)
+In my view, ... · I'd argue that ... · On the one hand, ... On the other hand, ...
+One clear benefit is that ... · A major drawback is that ...
+It could be argued that ... · Overall, I believe that ...
+
+? Qaysi ibora qarama-qarshi fikrni boshlaydi?
+- One clear benefit is that ...
+* On the other hand, ...
+- Overall, ...
+? Qaysi ibora xulosani boshlaydi?
+* Overall, I believe that ...
+- It could be argued that ...
+- A major drawback is that ...
+@match Fikrni dalil bilan juftlang
+A gap year helps you become independent. = You have to stand on your own two feet.
+A gap year can be expensive. = Not every family can subsidize a trip abroad.
+A gap year can help your career. = You can get useful work experience.
+- Universities don't accept gap-year students.
+@endmatch
+
+@circle Parafraz
+? "Her parents paid part of the cost of her trip." = Her parents ___ her trip.
+* subsidized
+- saved up
+- embarked on
+? "He had just enough money to live." = He managed to ___.
+- stand on his own two feet
+* make ends meet
+- take time out
+? "They travelled with very little money." = They travelled ___.
+* on a shoestring
+- solo
+- on a par
+? "She learned to look after herself without help." = She learned to ___.
+- make ends meet
+* stand on her own two feet
+- save up
+@gap She left the ___ race and moved to the mountains. = rat
+@gap I'm saving ___ for a trip to Japan. = up
+
+# ────────── 2-UY VAZIFASI (4-darsdan keyin, muddat — keyingi dushanba) ──────────
+@quest B2 · 2-uy vazifasi · The gap year · Essay
+@pool B2
+@homework 4
+
+@circle So'zlar
+@word graduate = o'qishni tamomlamoq | She graduated from university last year.
+@word backpacking = ryukzak bilan sayohat | Backpacking is still popular with students.
+@word hostel = arzon yotoqxona-mehmonxona | We stayed in youth hostels.
+@word budget = arzon, tejamkor | They booked budget accommodation.
+@word hitchhike = avtostop bilan yurmoq | He hitchhiked from Paris to Rome.
+@word work experience = ish tajribasi | She got work experience in a hospital.
+@word voluntary = ko'ngilli | He did voluntary work in Kenya.
+@word charity = xayriya tashkiloti | The charity organises projects all over the world.
+
+@circle Ta'rifni toping
+@match So'zni ta'rif bilan juftlang
+rat race = a competitive and tiring way of life at work
+on a shoestring = with very little money
+make ends meet = have just enough money to live
+breathing space = a short rest before you continue
+subsidize = pay part of the cost of something
+- a cheap hotel for students
+@endmatch
+@gap She worked in a shop to ___ up for her trip. = save
+@gap They stayed in ___ hostels to spend less. (arzon) = budget
+@gap He ___ from the University of Tashkent in 2024. = graduated
+@gap Some students work for a ___ that arranges voluntary work abroad. = charity
+@tf "To embark on a career" means "to end a career". = noto'g'ri ! embark on — boshlamoq.
+
+@circle Ikki mavzu aralash
+? Women face obstacles, such as the glass ceiling, when they try to reach ___ posts.
+* senior
+- junior
+- menial
+? After years in the ___, he took a year off to travel.
+- gap year
+* rat race
+- hostel
+@gap Gender discrimination in the ___ is illegal. = workplace
+@gap A year of travelling teaches you to stand on your own ___ feet. = two
+
+@circle Yozish
+@writing Is a gap year a good idea? | 200-280
+IELTS Task 2 uslubida esse yozing (200–280 so'z):
+"More and more young people take a gap year between school and university. Do the advantages of this outweigh the disadvantages?"
+Reja: 1) Kirish — mavzu va fikringiz. 2) Afzalliklar (misol bilan). 3) Kamchiliklar (misol bilan). 4) Xulosa.
+Kamida 6 ta yangi so'z ishlating: gap year, breathing space, on a shoestring, make ends meet, work experience, voluntary, stand on your own two feet, rat race, subsidize ...
+Iboralar: On the one hand ... On the other hand ... · One clear benefit is that ... · Overall, I believe that ...
+
+# ────────── 5-DARS · LUG'AT TESTI (IT 2: chorshanba 15:00 · IT 1, IT 3: keyingi dushanba 1-dars) ──────────
+@quest B2 · 5-dars · Lug'at testi: Women at work · Gap year
+@pool B2
+@classwork 5
+@noreview
+
+@circle Women at work
+? The bank is accused of ___ against its female staff.
+* discriminating
+- suing
+- alleging
+? Women's salaries are not on a par ___ men's.
+- to
+* with
+- of
+? She reached middle management but then hit the ___.
+- rat race
+- old-boy network
+* glass ceiling
+? Two people sharing one full-time job is called ___.
+* job-sharing
+- parity
+- positive discrimination
+@gap Many women blame the old-___ network. = boy
+@gap His sexist comments show he is a real ___. = chauvinist
+@gap Cleaning floors all day is a rather ___ job. = menial
+@gap Women want ___ with men: the same pay and the same rights. = parity
+@gap She earns less than her male ___. = counterparts
+@gap There are still many ___ that prevent women from being promoted. = obstacles
+@tf "Sexism" is unfair treatment because of a person's gender. = to'g'ri
+
+@circle Gap year
+? Many graduates want some time out before joining the ___.
+* rat race
+- glass ceiling
+- workplace
+? Students travelling on a shoestring often work to ___.
+- save up
+* make ends meet
+- embark on
+? A lot of students stay in hostels or other ___ accommodation.
+- menial
+* budget
+- solo
+@gap Rich parents can easily ___ their children's travel. = subsidize / subsidise
+@gap After graduating, she embarked ___ a career in medicine. = on
+@gap Hitchhiking is dangerous, especially if you are travelling ___. = solo
+@gap Voluntary projects give ___-on experience. = hands
+@gap Gap-year students learn to stand on their own two ___. = feet
+@tf "To save up" means to spend all your money. = noto'g'ri ! save up — pul yig'moq.
+
+@circle So'z yasash
+@gap Gender ___ is against the law. (discriminate) = discrimination
+@gap Some men feel ___ when women become powerful. (secure) = insecure
+@gap After ___, he travelled for a year. (graduate) = graduating / graduation
+@gap She is a strong supporter of ___. (feminist) = feminism
+
+@circle Parafraz
+? "There is an invisible barrier that stops her getting a top job." = She has hit the ___.
+* glass ceiling
+- rat race
+- old-boy network
+? "Women don't get the same chances to be promoted." = Women's promotion ___ are worse.
+- counterparts
+* prospects
+- obstacles
+? "He wanted a short rest before starting work." = He wanted a ___.
+- gap year
+* breathing space
+- rat race
+@gap It has been ___ that the manager discriminated against women. (allege) = alleged
