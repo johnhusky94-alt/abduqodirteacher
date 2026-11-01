@@ -516,7 +516,7 @@
   const T = { tab: "results", me: null, data: null, cls: null, week: strFromDay(mondayOf(new Date())), report: null, reportKey: "",
     filter: "all", paste: "", parsed: null, poolPick: {}, bulk: "", bulkCls: "", bulkPool: "", bulkResult: null,
     confirm: "", editName: null, pwFor: null, openStudents: null, saving: false, pwMsg: null, sub: null, teachers: null,
-    showMonthly: false, monthly: null, monthlyCls: null, problems: [] };
+    showMonthly: false, monthly: null, monthlyCls: null, problems: [], poolView: null, poolRes: null };
 
   async function loadAdmin() {
     try {
@@ -552,23 +552,53 @@
   }
 
   /* results */
+  function poolsInClass() {
+    const ids = [...new Set(T.data.students.filter((s) => s.class_id === T.cls && s.pool_id).map((s) => s.pool_id))];
+    return T.data.pools.filter((p) => ids.includes(p.id));
+  }
+  async function loadPoolRes() {
+    const key = T.cls + "|" + T.poolView; T.poolRes = null; T.poolKey = key; render();
+    try { const r = await api("admin_pool_results", { p_class: T.cls, p_pool: T.poolView, p_n: 3 }); if (T.poolKey === key) { T.poolRes = r; render(); } }
+    catch (e) { quiet(e); }
+  }
+  function vPoolResults() {
+    const pool = T.data.pools.find((p) => p.id === T.poolView);
+    const back = `<div><button class="btn soft sm" style="background:var(--card)" data-act="poolView" data-v="">${I.back} Natijalar</button></div>`;
+    if (!T.poolRes) return back + `<div class="loading">Yuklanmoqda…</div>`;
+    const qs = T.poolRes.quests, rows = T.poolRes.rows;
+    if (!qs.length) return back + `<div class="card empty">Bu pulga hali vazifa berilmagan.</div>`;
+    const cell = (c) => {
+      const st = c.done ? (c.late ? `<span class="pill amber">kech</span>` : `<span class="pill rv">vaqtida</span>`) : c.overdue ? `<span class="pill warn">bajarilmadi</span>` : c.pct ? `<span class="pill">jarayonda</span>` : "";
+      return `<td class="c"><div style="display:flex;flex-direction:column;align-items:center;gap:4px">${ring(c.pct, c.done && !c.late ? "var(--rv)" : "var(--hw)", 46)}<b class="num small">${c.ochko} ochko</b>${st}</div></td>`;
+    };
+    return back + `<section class="card stack">
+      <div class="row between"><div><h2>${esc(className(T.cls))} sinf · ${esc(pool ? pool.name : "")}</h2><p class="sub small">Oxirgi ${qs.length} ta vazifa · ${rows.length} o'quvchi</p></div><span class="row"><span class="logo">A</span><b>Abduqodir Teacher</b></span></div>
+      <div class="tablebox" style="background:var(--card)"><table class="wide-table pooltbl"><thead><tr><th>#</th><th>O'quvchi</th>
+        ${qs.map((q) => `<th class="c" style="white-space:normal">${esc(q.title)}${q.deadline ? `<br><span class="sub small" style="font-weight:400">${esc(fmtDate(q.deadline))}</span>` : ""}</th>`).join("")}<th class="c">Jami ochko</th></tr></thead><tbody>
+        ${rows.map((r, i) => `<tr><td class="num sub">${i + 1}</td><td><b style="font-weight:600">${esc(r.name)}</b></td>${r.cells.map(cell).join("")}<td class="c"><b class="num" style="font-size:18px">${r.total}</b></td></tr>`).join("")}
+      </tbody></table></div>
+      <p class="sub small">Doira: vazifaning bajarilgan qismi. Ochko: shu vazifadagi to'g'ri javoblar soni. "Kech" = muddatdan keyin tugatilgan.</p></section>`;
+  }
   function vResults() {
     const d = T.data;
+    if (T.poolView) return vPoolResults();
     const head = `<div class="row between"><h1>Natijalar</h1><button class="btn soft sm" data-act="logout" style="background:var(--card)">${I.out} Chiqish</button></div>`;
     if (!d.classes.length) return head + `<div class="card empty">Avval Sozlamalar → Sinflar, pullar, o'quvchilar bo'limida sinf yarating.</div>`;
     const thisWeek = strFromDay(mondayOf(new Date()));
     const weekNav = `<div class="row"><button class="btn soft sm" style="background:var(--card)" data-act="week" data-v="-1" aria-label="Oldingi hafta">${I.back}</button><b class="small">${esc(weekLabel(T.week))}</b>
       <button class="btn soft sm" style="background:var(--card)" data-act="week" data-v="1" aria-label="Keyingi hafta" ${T.week >= thisWeek ? "disabled" : ""}>${I.chev}</button></div>`;
     const probs = T.problems.length ? `<button class="banner" style="border:0;cursor:pointer;background:var(--warn-s);color:var(--warn);font:inherit;font-weight:600;font-size:14px;text-align:left" data-act="tab" data-v="assign">${T.problems.length} ta savol bo'yicha o'quvchilar xato haqida xabar berdi ›</button>` : "";
-    if (!T.report) return head + probs + classSeg() + weekNav + `<div class="loading">Yuklanmoqda…</div>`;
+    const pls = poolsInClass();
+    const poolBtns = pls.length ? `<div class="row"><span class="sub small">Pul natijalari (oxirgi 3 vazifa):</span>${pls.map((p) => `<button class="btn sm" style="--accent:var(--cw)" data-act="poolView" data-v="${p.id}">${esc(p.name)}</button>`).join("")}</div>` : "";
+    if (!T.report) return head + probs + classSeg() + poolBtns + weekNav + `<div class="loading">Yuklanmoqda…</div>`;
     const rows = T.report.rows || [];
     const byPool = {};
     rows.forEach((r) => { const k = r.pool || "Pulsiz"; (byPool[k] = byPool[k] || []).push(r); });
     const groups = Object.keys(byPool).sort().map((p) => `<h3>${esc(p)} · ${byPool[p].length} o'quvchi</h3><div class="list">${byPool[p].sort((a, b) => (b.pct || 0) - (a.pct || 0)).map((r) => `
       <div class="li">${ring(r.pct, "var(--hw)", 46)}<span class="grow"><b style="font-weight:600">${esc(r.first_name + " " + r.last_name)}</b><br>
-        <span class="sub small"><b style="color:var(--ink)">${r.correct} ochko</b> · ${r.quests ? `${r.finished}/${r.quests} vazifa` : "Vazifa yo'q"} · ${fmtTime(r.seconds)} · aniqlik ${r.answered ? Math.round((r.correct / r.answered) * 100) + "%" : "—"}</span>
+        <span class="sub small"><b style="color:var(--ink)">bu hafta ${r.correct} ochko</b> · ${r.quests ? `${r.finished}/${r.quests} vazifa` : "Vazifa yo'q"} · ${fmtTime(r.seconds)} · aniqlik ${r.answered ? Math.round((r.correct / r.answered) * 100) + "%" : "—"}</span>
         ${r.late ? ` <span class="pill amber">${r.late} kech</span>` : ""}${r.flag ? `<div class="flag ${r.flag.kind}" style="margin-top:6px">${esc(r.flag.text)}</div>` : ""}</span></div>`).join("")}</div>`).join("");
-    return head + probs + classSeg() + weekNav + (rows.length ? groups : `<div class="card empty">Bu sinfda hali o'quvchi yo'q.</div>`) +
+    return head + probs + classSeg() + poolBtns + weekNav + (rows.length ? groups : `<div class="card empty">Bu sinfda hali o'quvchi yo'q.</div>`) +
       `<p class="sub small">Doira: shu haftaga muddati qo'yilgan vazifalarning bajarilgan qismi. Batafsil grafiklar keyingi bosqichda qo'shiladi.</p>`;
   }
 
@@ -780,7 +810,7 @@
       case "logout": signOut(); return;
       case "tab":
         if (S.role === "teacher") {
-          if (T.tab === v) T.sub = null;
+          if (T.tab === v) { T.sub = null; T.poolView = null; }
           T.tab = v; T.editName = null; T.pwFor = null; render(); window.scrollTo(0, 0);
           if (v === "results" || v === "report") loadReport();
         } else {
@@ -815,10 +845,11 @@
         loadCastle(); return;
       }
       // teacher
-      case "cls": T.cls = Number(v); render(); loadReport(); if (T.showMonthly) loadMonthly(); return;
+      case "cls": T.cls = Number(v); T.poolView = null; render(); loadReport(); if (T.showMonthly) loadMonthly(); return;
       case "week": { const d = dayFromStr(T.week); d.setDate(d.getDate() + 7 * Number(v)); T.week = strFromDay(d); loadReport(); return; }
       case "setweek": T.week = v; loadReport(); return;
       case "monthly": T.showMonthly = true; render(); loadMonthly(); return;
+      case "poolView": T.poolView = v ? Number(v) : null; window.scrollTo(0, 0); if (T.poolView) loadPoolRes(); else render(); return;
       case "sub": T.sub = v || null; T.editName = null; T.pwFor = null; T.pwMsg = null; render(); window.scrollTo(0, 0); if (v === "teachers") loadTeachers(); return;
       case "filter": T.filter = v; render(); return;
       case "rn": T.editName = v; render(); { const el = document.getElementById("rn-" + v); if (el) el.focus(); } return;

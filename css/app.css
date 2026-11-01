@@ -218,3 +218,17 @@ input[type=checkbox]{width:20px;height:20px;accent-color:var(--hw)}
 .sheet-in{background:var(--bg);width:100%;max-width:720px;max-height:92vh;overflow:auto;border-radius:22px 22px 0 0;padding:18px max(16px,env(safe-area-inset-right,0px)) calc(20px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:14px}
 @media (min-width:700px){.sheet-in{border-radius:22px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+.pooltbl th{min-width:96px}
+.pooltbl th:nth-child(-n+2){min-width:0}
+@media (max-width:600px){
+  .pooltbl th,.pooltbl td{padding:6px 3px;font-size:12px}
+  .pooltbl{min-width:0;width:100%}
+  .pooltbl th{min-width:0;white-space:normal}
+  .pooltbl td:nth-child(2) b{font-size:12px}
+  .pooltbl th:first-child,.pooltbl td:first-child{display:none}
+  .pooltbl .ring{--sz:34px!important}
+  .pooltbl .ring span{font-size:9px}
+  .pooltbl .pill{font-size:10px;padding:1px 5px}
+  .pooltbl td b.num{font-size:12px!important}
+}

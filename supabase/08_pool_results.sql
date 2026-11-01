@@ -1,0 +1,3 @@
+-- 1 Nov: admin_pool_results(token, class, pool, n=3) — last N assignments of a pool for the students of a class:
+-- per student and quest: pct, ochko (= progress.correct for that quest), answered, seconds, done, late, overdue.
+-- Applied as migration admin_pool_results.
