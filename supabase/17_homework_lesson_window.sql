@@ -1,0 +1,5 @@
+-- Homework by lesson (applied as migration homework_lesson_window):
+-- _lesson_window(class, at): current-or-next lesson {start,end,now} and the lesson before it (prev), from the timetable.
+-- _current_hw(user, lw): homework due in (prev lesson start, this lesson end]; if none, the nearest upcoming deadline day.
+-- admin_lesson_hw(token, class): per student, one cell per current homework (report shows one circle each).
+-- student_home: adds lw + cur, keeps 62 days of homework history. vocab_groups: adds deadline, week, cur.

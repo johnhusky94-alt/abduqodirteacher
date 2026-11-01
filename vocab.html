@@ -11,17 +11,17 @@
 :root{
   --bg:#F2F2F7; --card:#FFFFFF; --card2:#F2F2F7; --ink:#1C1C1E; --sub:#6E6E73; --line:#E5E5EA;
   --hw:#5856D6; --hw-s:#ECEBFF; --cw:#0A84C6; --cw-s:#E1F2FC; --rv:#1C8C4C; --rv-s:#E3F5EA; --tr:#D61F57; --tr-s:#FCE6EE;
-  --wr:#C26A00; --wr-s:#FFF1DE; --warn:#E5484D; --gold:#F5B400;
+  --wr:#C26A00; --wr-s:#FFF1DE; --warn:#E5484D; --gold:#F5B400; --warn-s:#FDE6E5; --amber:#A65F00; --amber-s:#FFF1D6;
   --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,system-ui,sans-serif;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#000; --card:#1C1C1E; --card2:#2C2C2E; --ink:#F2F2F7; --sub:#98989F; --line:#38383A;
   --hw:#8E8CFF; --hw-s:#24234A; --cw:#4FB8F0; --cw-s:#0F2C3B; --rv:#3CCB72; --rv-s:#0F2E1C; --tr:#FF5C8A; --tr-s:#3A1222;
-  --wr:#FFB340; --wr-s:#3A2A10; --warn:#FF6B6E; --gold:#FFC53D; color-scheme:dark}}
+  --wr:#FFB340; --wr-s:#3A2A10; --warn:#FF6B6E; --gold:#FFC53D; --warn-s:#3A1515; --amber:#F2A93B; --amber-s:#3B2E1A; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#000; --card:#1C1C1E; --card2:#2C2C2E; --ink:#F2F2F7; --sub:#98989F; --line:#38383A;
   --hw:#8E8CFF; --hw-s:#24234A; --cw:#4FB8F0; --cw-s:#0F2C3B; --rv:#3CCB72; --rv-s:#0F2E1C; --tr:#FF5C8A; --tr-s:#3A1222;
-  --wr:#FFB340; --wr-s:#3A2A10; --warn:#FF6B6E; --gold:#FFC53D; color-scheme:dark}
+  --wr:#FFB340; --wr-s:#3A2A10; --warn:#FF6B6E; --gold:#FFC53D; --warn-s:#3A1515; --amber:#F2A93B; --amber-s:#3B2E1A; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font:400 16px/1.4 var(--font);margin:0;-webkit-tap-highlight-color:transparent}
 .main{max-width:720px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:14px 40px;display:flex;flex-direction:column;gap:14px}
@@ -45,6 +45,10 @@ h1{font-size:30px;margin:0;letter-spacing:-.02em;text-wrap:balance} h2{font-size
 .seg button{all:unset;cursor:pointer;padding:7px 14px;border-radius:9px;font-size:14px;font-weight:600;color:var(--sub)}
 .seg button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
 .ggrid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(min(100%,160px),1fr))}
+.hwcat{border-radius:18px;border:2px solid var(--k);background:var(--ks);overflow:hidden}
+.hwcat-h{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:10px 14px 8px;color:var(--k);flex-wrap:wrap}
+.hwcat-h b{font-size:20px;font-weight:800;letter-spacing:.02em} .hwcat-h span{font-size:13px;font-weight:600}
+.hwcat .list{border-radius:0}
 .gm{all:unset;box-sizing:border-box;cursor:pointer;background:var(--card);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:8px;min-height:132px}
 .gm .ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--t-s);color:var(--t)}
 .gm .ic svg{width:26px;height:26px}
@@ -152,10 +156,14 @@ async function load() {
   try {
     const r = await api("vocab_groups");
     gold = r.gold == null ? 300 : r.gold; today = r.today || 0;
+    const cur = r.cur || [];
     const groups = (r.groups || []).map((g) => { const at = g.week_start ? g.week_start + "T12:00:00" : g.at, w = weekOf(at);
-      return { id: "q" + g.id, wk: w.key, week: w.label, recent: Date.now() - new Date(g.at).getTime() < 31 * 86400e3,
+      const cat = g.kind === "hw" ? ((cur.includes(g.id) || !g.deadline) ? "cur" : new Date(g.deadline).getTime() > Date.now() ? "fut" : "old")
+        : !g.week_start || !r.week ? "old" : g.week_start === r.week ? "cur" : g.week_start > r.week ? "fut" : "old";
+      return { id: "q" + g.id, wk: w.key, week: w.label, recent: Date.now() - new Date(g.at).getTime() < 31 * 86400e3, cat, kind: g.kind, t: new Date(g.deadline || at).getTime(),
         name: g.kind === "vl" ? `Lug'at · ${g.title}` : g.kind === "cw" ? `${g.lesson ? g.lesson + "-dars · " : "Sinf ishi · "}${g.title}` : `Uy vazifasi · ${g.title}`, words: g.words }; });
-    groups.sort((a, b) => b.wk - a.wk);
+    const KO = { hw: 0, cw: 1, vl: 2 }, CO = { cur: 0, fut: 1, old: 2 };
+    groups.sort((a, b) => CO[a.cat] - CO[b.cat] || (a.cat === "old" ? b.t - a.t : a.t - b.t) || (KO[a.kind] || 0) - (KO[b.kind] || 0));
     GROUPS = groups;
   } catch (e) { LOAD_ERR = "Internet bilan muammo. Sahifani yangilang."; }
   LOADED = true; render();
@@ -234,10 +242,17 @@ function vGroups(){
     <button class="li card" style="flex-direction:row;background:var(--hw);color:#fff" data-act="group" data-v="rand">
       <span style="width:44px;height:44px;border-radius:12px;background:#ffffff26;display:grid;place-items:center">${IC.speed}</span>
       <span class="grow"><b>Tasodifiy so'zlar</b><br><span class="small" style="opacity:.85">Oxirgi bir oydagi so'zlardan aralash</span></span><span>${IC.chev}</span></button>
-    ${weeks.map(w => `<h2>${esc(w)}</h2><div class="list">${GROUPS.filter(g=>g.week===w).map(g => `<button class="li" data-act="group" data-v="${g.id}">
-      <span class="grow"><b style="font-weight:600">${esc(g.name)}</b><br><span class="small sub">${g.words.length} ta so'z · ${esc(g.words.slice(0,3).map(x=>x[0]).join(", "))}…</span></span><span class="chev">${IC.chev}</span></button>`).join("")}</div>`).join("")}
+    <h2>So'z guruhlari</h2>
+    <div style="display:flex;flex-direction:column;gap:12px">${GROUPS.slice(0,5).map(gCard).join("")}</div>
+    ${GROUPS.length > 5 ? `<details class="card"><summary style="cursor:pointer;font-weight:700;font-size:17px">Eski so'zlar · ${GROUPS.length - 5} ta guruh</summary>
+      <p class="small sub" style="margin:6px 0 0">Oxirgi 2 oydagi boshqa so'z guruhlari. Ular ham o'ynasa bo'ladi.</p>
+      <div style="display:flex;flex-direction:column;gap:12px;margin-top:10px">${GROUPS.slice(5).map(gCard).join("")}</div></details>` : ""}
     <p class="small sub">Har hafta sinf ishi va uy vazifasidagi yangi so'zlar shu yerga avtomatik tushadi. 2 oydan eski so'zlar o'chadi.</p>`;
 }
+const VCAT = { cur:{t:"HOZIRGI SO'ZLAR",d:"Shu dars va vazifa so'zlari",c:"--warn",s:"--warn-s"}, fut:{t:"KEYINGI SO'ZLAR",d:"Keyingi vazifa so'zlari",c:"--rv",s:"--rv-s"}, old:{t:"O'TGAN SO'ZLAR",d:"Oldingi darslar so'zlari",c:"--amber",s:"--amber-s"} };
+function gCard(g){ const c = VCAT[g.cat] || VCAT.old;
+  return `<div class="hwcat" style="--k:var(${c.c});--ks:var(${c.s})"><div class="hwcat-h"><b>${c.t}</b><span>${c.d}</span></div><div class="list"><button class="li" data-act="group" data-v="${g.id}">
+    <span class="grow"><b style="font-weight:600">${esc(g.name)}</b><br><span class="small sub">${esc(g.week)} · ${g.words.length} ta so'z · ${esc(g.words.slice(0,3).map(x=>x[0]).join(", "))}…</span></span><span class="chev">${IC.chev}</span></button></div></div>`; }
 function vGames(){
   const card = (g) => `<button class="gm" style="--t:var(${g.c});--t-s:var(${g.c}-s)" data-act="play" data-v="${g.k}"><span class="ic">${IC[g.ic]}</span><b>${g.t}</b><span>${g.d}</span><span class="small" style="opacity:.7">G'oya: ${g.from}</span></button>`;
   const ws = GRP.words;

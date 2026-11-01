@@ -292,3 +292,10 @@ i.lg{display:inline-block;width:12px;height:12px;border-radius:50%}
 
 .cgcode{font-size:72px;font-weight:800;letter-spacing:.12em;font-variant-numeric:tabular-nums;line-height:1}
 .cgq{font-size:40px;font-weight:800;letter-spacing:-.02em;padding:8px 0;overflow-wrap:anywhere}
+
+/* homework status cards: current (red), future (green), old (amber) */
+.hwcat{border-radius:18px;border:2px solid var(--k);background:var(--ks);overflow:hidden}
+.hwcat-h{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:10px 14px 8px;color:var(--k);flex-wrap:wrap}
+.hwcat-h b{font-size:20px;font-weight:800;letter-spacing:.02em}
+.hwcat-h span{font-size:13px;font-weight:600}
+.hwcat .list{border-radius:0}

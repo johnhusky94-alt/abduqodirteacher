@@ -263,13 +263,35 @@
   }
   function today() { const d = new Date(); return `${WEEKDAYS[d.getDay()]}, ${d.getDate()}-${MONTHS[d.getMonth()]}`; }
 
+  /* homework buckets: current = due at the next lesson (server decides from the timetable), future = later, old = past */
+  const HW_CAT = {
+    cur: { t: "HOZIRGI VAZIFA", d: "Keyingi darsgacha bajaring", c: "--warn", s: "--warn-s" },
+    fut: { t: "KEYINGI VAZIFA", d: "Hali vaqt bor", c: "--rv", s: "--rv-s" },
+    old: { t: "O'TGAN VAZIFA", d: "Muddati o'tgan", c: "--amber", s: "--amber-s" },
+  };
+  function hwCat(q, cur, now) {
+    if (cur.includes(q.id) || !q.deadline) return "cur";
+    return new Date(q.deadline).getTime() > now ? "fut" : "old";
+  }
+  function hwGroups(list, cur, now) {
+    const t = (q) => (q.deadline ? new Date(q.deadline).getTime() : 0);
+    list.forEach((q) => (q.cat = hwCat(q, cur, now)));
+    const by = (c) => list.filter((q) => q.cat === c);
+    const ordered = by("cur").sort((a, b) => t(a) - t(b)).concat(by("fut").sort((a, b) => t(a) - t(b)), by("old").sort((a, b) => t(b) - t(a)));
+    return { shown: ordered.slice(0, 5), rest: ordered.slice(5) };
+  }
+  function hwCard(q, inner) {
+    const c = HW_CAT[q.cat] || HW_CAT.cur;
+    return `<div class="hwcat" style="--k:var(${c.c});--ks:var(${c.s})"><div class="hwcat-h"><b>${c.t}</b><span>${c.d}</span></div><div class="list">${inner}</div></div>`;
+  }
   function questPct(q) { return q.completed_at ? 100 : q.gradable ? Math.round((q.done / q.gradable) * 100) : 0; }
   function vHome() {
     const h = ST.home;
     const now = Date.now();
     const qs = h.quests || [];
-    const open = qs.filter((q) => !q.completed_at), done = qs.filter((q) => q.completed_at);
-    const openCw = open.filter((q) => q.kind === "cw"), openHw = open.filter((q) => q.kind !== "cw");
+    const open = qs.filter((q) => !q.completed_at), done = qs.filter((q) => q.completed_at && q.kind === "cw");
+    const openCw = open.filter((q) => q.kind === "cw");
+    const hwSets = hwGroups(qs.filter((q) => q.kind !== "cw"), h.cur || [], now);
     const item = (q) => {
       if (q.lock && !q.completed_at) {
         return `<button class="li qitem" data-act="locked" data-v="${esc(lockText(q.lock))}" style="opacity:.6">
@@ -299,7 +321,10 @@
       <button class="li card" style="flex-direction:row" data-act="practice"><span class="sub">${I.loop}</span><span class="grow"><b style="font-weight:600">Erkin mashq</b><br><span class="small sub">Vazifalar tugadimi? O'tgan savollar aralash, cheksiz</span></span><span class="chev">${I.chev}</span></button>
       ${openCw.length ? `<h2>Sinf ishi</h2><div class="list">${openCw.map(item).join("")}</div>` : ""}
       <h2>Uy vazifasi</h2>
-      ${openHw.length ? `<div class="list">${openHw.map(item).join("")}</div>` : `<div class="card empty">Hozircha uy vazifasi yo'q. O'qituvchingiz bergan vazifalar shu yerda chiqadi.</div>`}
+      ${hwSets.shown.length ? `<div class="stack">${hwSets.shown.map((q) => hwCard(q, item(q))).join("")}</div>` : `<div class="card empty">Hozircha uy vazifasi yo'q. O'qituvchingiz bergan vazifalar shu yerda chiqadi.</div>`}
+      ${hwSets.rest.length ? `<details class="card"><summary style="cursor:pointer;font-weight:700;font-size:17px">Eski vazifalar · ${hwSets.rest.length} ta</summary>
+        <p class="sub small" style="margin:6px 0 0">Oxirgi 2 oydagi eski uy vazifalari. Bajarilmaganlarini hali ham bajarsa bo'ladi.</p>
+        <div class="stack" style="margin-top:10px">${hwSets.rest.map((q) => hwCard(q, item(q))).join("")}</div></details>` : ""}
       ${(h.words || []).length ? `<details class="card"><summary style="cursor:pointer;font-weight:600">Bu haftaning so'zlari · ${h.words.length} ta</summary>
         <div class="list" style="margin-top:10px">${h.words.map((w) => `<div class="li"><b style="font-weight:600" class="grow">${esc(w.en)}</b><span class="sub">${esc(w.uz)}</span></div>`).join("")}</div></details>` : ""}
       ${(ST.writ || []).length ? `<h2>Yozma ishlarim</h2><div class="stack">${ST.writ.slice(0, 6).map((w) => `<details class="card"><summary style="cursor:pointer;list-style:none"><div class="row between" style="flex-wrap:nowrap"><span class="grow"><b style="font-weight:600">${esc(w.title || "Yozma ish")}</b><br><span class="small sub">${esc(w.quest)} · ${w.words} so'z</span></span>
@@ -852,8 +877,14 @@
     if (!force && T.reportKey === key && T.report) return;
     T.reportKey = key; T.report = null; render();
     try {
-      const [r, ov] = await Promise.all([api("admin_report", { p_class: T.cls, p_week: T.week }), api("admin_overview", { p_class: T.cls, p_week: T.week })]);
-      if (T.reportKey === key) { T.report = r; T.ov = Array.isArray(ov) ? ov : []; render(); }
+      const cur = T.week === strFromDay(mondayOf(new Date()));
+      const [r, ov, lh] = await Promise.all([api("admin_report", { p_class: T.cls, p_week: T.week }), api("admin_overview", { p_class: T.cls, p_week: T.week }),
+        cur ? api("admin_lesson_hw", { p_class: T.cls }).catch(() => null) : null]);
+      if (T.reportKey === key) {
+        T.report = r; T.ov = Array.isArray(ov) ? ov : [];
+        T.lh = lh && Array.isArray(lh.rows) ? { lw: lh.lw, map: Object.fromEntries(lh.rows.map((x) => [x.id, x.cells || []])) } : null;
+        render();
+      }
     } catch (e) { quiet(e); }
   }
   const className = (id) => { const c = T.data && T.data.classes.find((x) => x.id === id); return c ? c.name : ""; };
@@ -903,13 +934,24 @@
     { k: "hw", t: "Uy vazifasi", c: "--hw" }, { k: "cw", t: "Sinf ishi", c: "--cw" },
     { k: "wr", t: "Yozma ish", c: "--wr" }, { k: "rv", t: "Takrorlash", c: "--rv" },
   ];
-  function metricPct(o, k) { const m = o && o[k]; return m ? m.pct : null; }
+  const lhOn = () => T.lh && (T.hwMode || "cur") === "cur";
+  const lhCells = (o) => (T.lh && o && T.lh.map[o.id]) || [];
+  function metricPct(o, k) {
+    if (k === "hw" && lhOn()) { const c = lhCells(o); return c.length ? Math.round(c.reduce((a, x) => a + x.pct, 0) / c.length) : null; }
+    const m = o && o[k]; return m ? m.pct : null;
+  }
+  function lhState(c) { return c.done ? (c.late ? "kech bajardi" : "bajardi") : c.overdue ? "bajarmadi" : c.pct ? "bajarmoqda" : "boshlamagan"; }
   function metricSub(o, k) {
     const m = o[k] || {};
     if (k === "hw") return m.n ? `${m.done}/${m.n} vazifa · ${m.ochko || 0} ochko${m.late ? ` · ${m.late} kech` : ""}` : "Bu hafta uy vazifasi yo'q";
     if (k === "cw") return m.n ? `${m.done}/${m.n} dars · ${m.ochko || 0} ochko` : "Bu hafta sinf ishi yo'q";
     if (k === "wr") return m.n ? `${m.n} ta ish · ${m.marked ? `o'rtacha ${m.avg}/10` : "baholanmagan"}` : "Yozma ish yo'q";
     return `${m.days || 0}/${m.of || 7} kun bajarilgan · ${m.ok || 0}/${m.n || 0} to'g'ri`;
+  }
+  function lhRings(r, M) {
+    const cells = lhCells(r);
+    if (!cells.length) return ring(null, `var(${M.c})`, 46);
+    return `<span class="row" style="gap:6px;flex-wrap:nowrap">${cells.map((c) => `<span title="${esc(c.title)}">${ring(c.pct, c.done && !c.late ? "var(--rv)" : c.overdue ? "var(--warn)" : `var(${M.c})`, 46)}</span>`).join("")}</span>`;
   }
   const avgOf = (rows, k) => { const v = rows.map((o) => metricPct(o, k)).filter((x) => x != null); return v.length ? Math.round(v.reduce((a, b) => a + b, 0) / v.length) : null; };
   function vResults() {
@@ -933,9 +975,16 @@
     const byPool = {};
     rows.forEach((r) => { const k = r.pool || "Pulsiz"; (byPool[k] = byPool[k] || []).push(r); });
     const groups = Object.keys(byPool).sort().map((p) => `<h3>${esc(p)} · ${byPool[p].length} o'quvchi · o'rtacha ${avgOf(byPool[p], mk) == null ? "—" : avgOf(byPool[p], mk) + "%"}</h3><div class="list">${byPool[p].slice().sort((a, b) => (metricPct(b, mk) ?? -1) - (metricPct(a, mk) ?? -1)).map((r) => `
-      <button class="li" data-act="stu" data-v="${r.id}">${ring(metricPct(r, mk), `var(${M.c})`, 46)}<span class="grow"><b style="font-weight:600">${esc(r.name)}</b><br>
-        <span class="sub small">${esc(metricSub(r, mk))}</span>${flags[r.id] ? `<div class="flag ${flags[r.id].kind}" style="margin-top:6px">${esc(flags[r.id].text)}</div>` : ""}</span><span class="chev">${I.chev}</span></button>`).join("")}</div>`).join("");
-    return head + probs + classSeg() + weekNav + tiles + poolBtns + `<h2>${M.t}</h2>` + (rows.length ? groups : `<div class="card empty">Bu sinfda hali o'quvchi yo'q.</div>`) +
+      <button class="li" data-act="stu" data-v="${r.id}">${mk === "hw" && lhOn() ? lhRings(r, M) : ring(metricPct(r, mk), `var(${M.c})`, 46)}<span class="grow"><b style="font-weight:600">${esc(r.name)}</b><br>
+        <span class="sub small">${esc(mk === "hw" && lhOn() ? (lhCells(r).length ? lhCells(r).map((c) => `${c.title}: ${lhState(c)}`).join(" · ") : "Hozirgi vazifa yo'q") : metricSub(r, mk))}</span>${flags[r.id] ? `<div class="flag ${flags[r.id].kind}" style="margin-top:6px">${esc(flags[r.id].text)}</div>` : ""}</span><span class="chev">${I.chev}</span></button>`).join("")}</div>`).join("");
+    let hwHead = "";
+    if (mk === "hw" && T.lh) {
+      const lw = T.lh.lw, on = lhOn();
+      const when = !lw ? "" : lw.now ? "Hozir dars ketmoqda" : `Keyingi dars: ${dayName(lw.start)} ${clock(lw.start)}`;
+      hwHead = `<div class="seg" role="group" aria-label="Uy vazifasi ko'rinishi"><button aria-pressed="${on}" data-act="hwMode" data-v="cur">Hozirgi vazifa</button><button aria-pressed="${!on}" data-act="hwMode" data-v="week">Butun hafta</button></div>
+        <p class="sub small" style="margin:0">${on ? `${esc(when)}${when ? ". " : ""}Faqat oldingi darsdan keyin berilgan, shu darsgacha bo'lgan vazifa(lar). Har bir vazifa alohida doira.` : "Shu haftada muddati tugaydigan barcha uy vazifalari birga."}</p>`;
+    }
+    return head + probs + classSeg() + weekNav + tiles + poolBtns + `<h2>${M.t}</h2>` + hwHead + (rows.length ? groups : `<div class="card empty">Bu sinfda hali o'quvchi yo'q.</div>`) +
       `<p class="sub small">O'quvchini bosing: oxirgi 18 ta vazifa grafigi va vaqt taqsimoti. Takrorlash = kunlik 10 so'zlik majburiy takrorlash bajarilgan kunlar.</p>`;
   }
 
@@ -1003,14 +1052,19 @@
     const rows = (T.report.rows || []).slice().sort((a, b) => b.correct - a.correct || (b.pct || 0) - (a.pct || 0));
     if (!rows.length) return head + `<div class="card empty">Bu sinfda hali o'quvchi yo'q.</div>`;
     const withHw = rows.filter((r) => r.pct != null);
-    const avgPct = withHw.length ? Math.round(withHw.reduce((a, r) => a + r.pct, 0) / withHw.length) : null;
+    const lhUse = T.week === thisWeek && lhOn();
+    const lhAvg = (() => { const v = rows.map((r) => metricPct({ id: r.id }, "hw")).filter((x) => x != null); return v.length ? Math.round(v.reduce((a, b) => a + b, 0) / v.length) : null; })();
+    const avgPct = lhUse ? lhAvg : withHw.length ? Math.round(withHw.reduce((a, r) => a + r.pct, 0) / withHw.length) : null;
+    const lw = T.lh && T.lh.lw, when = !lw ? "" : lw.now ? "Hozir dars ketmoqda" : `Keyingi dars: ${dayName(lw.start)} ${clock(lw.start)}`;
+    const hwToggle = T.week === thisWeek && T.lh ? `<div class="row"><div class="seg" role="group" aria-label="Uy vazifasi doirasi"><button aria-pressed="${lhOn()}" data-act="hwMode" data-v="cur">Hozirgi vazifa</button><button aria-pressed="${!lhOn()}" data-act="hwMode" data-v="week">Butun hafta</button></div>
+      <span class="sub small">${lhOn() ? `${esc(when)}${when ? " · " : ""}uy vazifasi doiralari faqat shu darsgacha berilgan vazifa(lar)ni ko'rsatadi, har biri alohida.` : "Uy vazifasi doirasi shu haftaning barcha vazifalari bo'yicha."}</span></div>` : "";
     const avgTime = Math.round(rows.reduce((a, r) => a + r.seconds, 0) / rows.length);
     const totAns = rows.reduce((a, r) => a + r.answered, 0), totCor = rows.reduce((a, r) => a + r.correct, 0);
     const winners = T.report.winners || [];
     const top5 = rows.filter((r) => r.correct > 0).slice(0, 5);
     const ovOf = (id, k) => { const o = (T.ov || []).find((x) => x.id === id); return o && o[k] ? o[k].pct : null; };
     const ovRows = T.ov || [];
-    return head + `<section class="card stack">
+    return head + hwToggle + `<section class="card stack">
       <div class="row between"><div><h2>${esc(className(T.cls))} sinf · haftalik natijalar</h2><p class="sub small">${esc(weekLabel(T.week))} · ${rows.length} o'quvchi</p></div><span class="row"><span class="logo">A</span><b>Abduqodir Teacher</b></span></div>
       <div class="mtiles static">${[["Uy vazifasi", avgPct, "--hw"], ["Takrorlash", avgOf(ovRows, "rv"), "--rv"], ["Lug'at", avgOf(ovRows, "vocab"), "--cw"], ["Yozma ish", avgOf(ovRows, "wr"), "--wr"]].map(([l, v, c]) => `<div class="mtile">${ring(v, `var(${c})`, 56)}<b>${l}</b><span class="small sub">sinf o'rtachasi</span></div>`).join("")}</div>
       <div class="kpis"><div class="kpi"><b>${fmtTime(avgTime)}</b><span>O'rtacha vaqt</span></div>
@@ -1019,7 +1073,7 @@
       ${winners.length ? `<div class="winners">${winners.map((w) => { const b = BIG.find((x) => x.k === w.kind) || {}; return `<div class="winner"><span class="t">${I[b.ic] || ""}${esc(b.t || w.kind)}</span><span class="n">${esc(w.name)}</span><p>${esc(b.n || "")}</p></div>`; }).join("")}</div>` : ""}
       <div class="tablebox" style="background:var(--card)"><table class="wide-table"><thead><tr><th>#</th><th>O'quvchi</th><th class="c">Uy vazifasi</th><th class="c">Takrorlash</th><th class="c">Lug'at</th><th class="c">Yozma ish</th><th>Ochko</th><th>Tugatgan</th><th>Vaqt</th><th>Javoblar</th><th>Izoh</th></tr></thead><tbody>
       ${rows.map((r, i) => `<tr><td class="num sub">${i + 1}</td><td><button class="link" style="font-weight:600;color:var(--ink);text-align:left" data-act="stuR" data-v="${r.id}">${esc(r.first_name + " " + r.last_name)}</button><br><span class="sub small">${esc(r.pool || "")}</span></td>
-        <td class="c">${ring(r.pct, "var(--hw)", 46)}</td><td class="c">${ring(ovOf(r.id, "rv"), "var(--rv)", 46)}</td><td class="c">${ring(ovOf(r.id, "vocab"), "var(--cw)", 46)}</td><td class="c">${ring(ovOf(r.id, "wr"), "var(--wr)", 46)}</td>
+        <td class="c">${lhUse ? `<div style="display:flex;flex-direction:column;align-items:center;gap:4px">${lhRings(r, { c: "--hw" })}${lhCells(r).length > 1 ? `<span class="sub small">${lhCells(r).length} ta vazifa</span>` : ""}</div>` : ring(r.pct, "var(--hw)", 46)}</td><td class="c">${ring(ovOf(r.id, "rv"), "var(--rv)", 46)}</td><td class="c">${ring(ovOf(r.id, "vocab"), "var(--cw)", 46)}</td><td class="c">${ring(ovOf(r.id, "wr"), "var(--wr)", 46)}</td>
         <td class="num"><b>${r.correct}</b></td>
         <td class="num">${r.quests ? `${r.finished} / ${r.quests}` : "—"}${r.late ? ` <span class="pill amber">${r.late} kech</span>` : ""}</td><td class="num">${fmtTime(r.seconds)}</td>
         <td class="num">${r.answered}${r.practice_n ? `<br><span class="sub small">+${r.practice_n} mashq</span>` : ""}</td>
@@ -1405,6 +1459,7 @@ ${w.text}`).join("\n") + "\n---\n";
       case "setweek": T.week = v; loadReport(); return;
       case "monthly": T.showMonthly = true; render(); loadMonthly(); return;
       case "metric": T.metric = v; render(); return;
+      case "hwMode": T.hwMode = v; render(); return;
       case "stu": T.stuView = v ? Number(v) : null; T.stuKind = "hw"; window.scrollTo(0, 0); if (T.stuView) loadStudentPage(T.stuView); else render(); return;
       case "stuR": T.tab = "results"; T.stuView = Number(v); T.stuKind = "hw"; window.scrollTo(0, 0); loadStudentPage(T.stuView); return;
       case "stuKind": T.stuKind = v; render(); return;
