@@ -1,0 +1,5 @@
+-- 1 Nov (migration v2_live_games): vgame / vplayer / vfeed. Live play through the database (phones poll ~1 s), free.
+-- Class game: vg_class_create (teacher, 4-digit code), vg_host_state / vg_host_next, vg_join / vg_state / vg_answer (15 s per question).
+-- Duel: vg_classmates, vg_duel_create (8 words), vg_duels, vg_duel_state / vg_duel_answer (10 s per question); live if both online, else 24 h.
+-- Scoring 50 + speed bonus up to 50. Right answer: 30% chance of a box: steal 15% from the player just above (blocked by shield), shield, or x2.
+-- Gold: class game = right answers + 10/6/3 for places 1-3 (max 25); duel winner 10, draw 5, loser 2.

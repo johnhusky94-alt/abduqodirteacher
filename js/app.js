@@ -1103,7 +1103,47 @@ ${w.text}`).join("\n") + "\n---\n";
         <div class="row"><button class="btn soft" data-act="aiParse">Tekshirish</button></div>${preview}</section>
       ${list.length ? list.map(card).join("") : `<div class="card empty">${T.wAll ? "Hali yozma ish yo'q." : "Hamma ishlar baholangan."}</div>`}`;
   }
+  /* ---------- class game (teacher hosts on the board) ---------- */
+  async function cgPoll() {
+    if (!T.cg || !T.cg.id) return;
+    try { T.cg.st = await api("vg_host_state", { p_id: T.cg.id }); } catch (e) {}
+    if (T.tab === "assign" && T.cg) render();
+  }
+  function cgStop() { clearInterval(T.cgTimer); T.cgTimer = null; }
+  function vClassGame() {
+    const back = `<div><button class="btn soft sm" style="background:var(--card)" data-act="cg" data-v="">${I.back} Topshiriqlar</button></div>`;
+    const cg = T.cg;
+    if (!cg.id) {
+      const cls = T.data.classes;
+      return back + `<h1>Sinf o'yini</h1><p class="sub">Darsda butun sinf bilan so'z o'yini (Kahoot kabi). Doskada kodni ko'rsatasiz, o'quvchilar "Lug'at → Sinf o'yini" orqali kiradi. To'g'ri javobdan keyin ba'zan sandiq chiqadi: o'g'irlash, qalqon yoki ×2.</p>
+        <section class="card stack">
+          <div><label>Sinf</label><div class="seg" role="group">${cls.map((c) => `<button aria-pressed="${cg.cls === c.id}" data-act="cgcls" data-v="${c.id}">${esc(c.name)}</button>`).join("")}</div></div>
+          <div><label for="cgq">So'zlar</label><select id="cgq"><option value="">Oxirgi bir oydagi barcha so'zlar</option>${T.data.quests.map((q) => `<option value="${q.id}">${esc(q.title)}</option>`).join("")}</select></div>
+          <div><label for="cgn">Savollar soni</label><select id="cgn"><option>5</option><option selected>10</option><option>15</option><option>20</option></select></div>
+          <button class="btn" style="--accent:var(--hw)" data-act="cgcreate" ${cg.cls ? "" : "disabled"}>O'yin yaratish</button></section>`;
+    }
+    const st = cg.st;
+    if (!st) return back + `<div class="loading">Yuklanmoqda…</div>`;
+    const board = (n) => `<div class="list">${st.board.slice(0, n).map((x, k) => `<div class="li"><b class="num" style="width:26px;color:${k < 3 ? "var(--tr)" : "var(--sub)"}">${k + 1}</b><span class="grow" style="font-size:18px">${esc(x.name)}</span><b class="num" style="font-size:18px">${x.score}</b></div>`).join("")}</div>`;
+    const feed = st.feed.length ? `<div class="card stack" style="gap:4px">${st.feed.map((f) => `<p class="small" style="margin:0">${esc(f)}</p>`).join("")}</div>` : "";
+    const head = `<div class="row between">${back}<span class="pill">Kod: <b>${esc(st.code)}</b></span></div>`;
+    if (st.state === "lobby") return head + `<section class="card stack" style="align-items:center;text-align:center;padding:28px 16px">
+        <p class="sub" style="margin:0">O'quvchilar: Lug'at → Sinf o'yini → kodni kiriting</p><div class="cgcode">${esc(st.code)}</div>
+        <h2>${st.players} o'quvchi kirdi</h2><div class="row" style="justify-content:center">${st.names.map((n) => `<span class="pill">${esc(n)}</span>`).join("")}</div>
+        <button class="btn" style="--accent:var(--rv)" data-act="cgnext" ${st.players ? "" : "disabled"}>Boshlash · ${st.n} savol</button></section>`;
+    if (st.state === "q") return head + `<section class="card stack" style="text-align:center;padding:24px 16px">
+        <p class="sub" style="margin:0">${st.qi + 1} / ${st.n} savol · ${st.left} soniya · ${st.answered}/${st.players} javob berdi</p>
+        <div class="cgq">${esc(st.q.q)}</div>
+        <div class="opts two" style="display:grid;grid-template-columns:1fr 1fr;gap:10px">${st.q.opts.map((o) => `<div class="opt" style="pointer-events:none;justify-content:center">${esc(o)}</div>`).join("")}</div>
+        <button class="btn soft" style="background:var(--bg)" data-act="cgnext">Vaqtni to'xtatib, keyingisiga</button></section>`;
+    if (st.state === "board") return head + `<section class="card stack" style="text-align:center"><p class="sub" style="margin:0">${st.qi + 1} / ${st.n} savol</p><div class="cgq" style="font-size:28px">${esc(st.q.q)} → <span style="color:var(--rv)">${esc(st.q.ans)}</span></div>
+        <p class="sub" style="margin:0">${st.answered}/${st.players} javob berdi</p></section>${feed}${board(10)}
+        <button class="btn" data-act="cgnext">${st.qi + 1 >= st.n ? "Yakuniy natijalar" : "Keyingi savol"}</button>`;
+    return head + `<section class="card stack" style="text-align:center"><h1>O'yin tugadi!</h1><p class="sub" style="margin:0">Oltin o'quvchilarga berildi: to'g'ri javoblar + 1–3-o'rinlarga bonus.</p></section>
+      ${board(st.board.length)}<button class="btn" data-act="cgnew">Yangi o'yin</button>`;
+  }
   function vAssign() {
+    if (T.cg) return vClassGame();
     if (T.wview) return vWritings();
     const d = T.data, pr = T.parsed;
     let summary = "";
@@ -1148,6 +1188,7 @@ ${w.text}`).join("\n") + "\n---\n";
       <h2>Sinf ishi · ${cws.length}</h2>${cws.length ? cws.map(card).join("") : `<div class="card empty">Sinf ishi yo'q. Kodda <code>@classwork 1</code> deb yozilgan vazifalar shu yerda chiqadi.</div>`}`
       : `<div class="card empty">Hali vazifa yo'q. Yuqoriga kod joylab qo'shing.</div>`;
     return `<h1>Topshiriqlar</h1>${probs}
+      <button class="li card" style="flex-direction:row" data-act="cg" data-v="1"><span class="sub">${I.users}</span><span class="grow"><b style="font-weight:600">Sinf o'yini</b><br><span class="small sub">Darsda butun sinf bilan jonli so'z o'yini</span></span><span class="chev">${I.chev}</span></button>
       <button class="li card" style="flex-direction:row" data-act="wview" data-v="1"><span class="sub">${I.doc}</span><span class="grow"><b style="font-weight:600">Yozma ishlar</b><br><span class="small sub">Baholash, izoh yozish, AI bilan bir yo'la baholash</span></span><span class="chev">${I.chev}</span></button>
       <section class="card stack"><h3>Yangi vazifa qo'shish</h3><p class="sub small">Kodni joylang. Bir yo'la butun haftani joylash mumkin.</p>
         <textarea id="pasteBox" class="code" aria-label="Vazifa kodi" placeholder="@quest Unit 4 · Oila&#10;@circle Kimning?&#10;...">${esc(T.paste)}</textarea>
@@ -1300,6 +1341,7 @@ ${w.text}`).join("\n") + "\n---\n";
       case "tab":
         if (S.role === "teacher") {
           if (T.tab === v) { T.sub = null; T.poolView = null; T.wview = false; T.stuView = null; }
+          if (v !== "assign" && T.cg) { cgStop(); T.cg = null; }
           T.tab = v; T.editName = null; T.pwFor = null; render(); window.scrollTo(0, 0);
           if (v === "results" || v === "report") loadReport();
         } else {
@@ -1450,6 +1492,20 @@ ${w.text}`).join("\n") + "\n---\n";
         if (T.confirm !== "del-q:" + v) { T.confirm = "del-q:" + v; render(); return; }
         T.confirm = ""; await adminCall("admin_quest_delete", { p_id: Number(v) }, "Vazifa o'chirildi"); return;
       }
+      case "cg": cgStop(); T.cg = v ? { cls: T.cls || (T.data.classes[0] && T.data.classes[0].id) } : null; render(); window.scrollTo(0, 0); return;
+      case "cgcls": T.cg.cls = Number(v); render(); return;
+      case "cgcreate": {
+        b.disabled = true;
+        try {
+          const q = $("#cgq").value, n = Number($("#cgn").value);
+          const r = await api("vg_class_create", { p_class: T.cg.cls, p_quest: q ? Number(q) : null, p_n: n });
+          if (r.error) { toast(r.error === "FEW_WORDS" ? "So'zlar yetarli emas (kamida 4 ta kerak)" : "Bo'lmadi"); render(); return; }
+          T.cg.id = r.id; T.cg.st = null; render(); cgPoll(); cgStop(); T.cgTimer = setInterval(cgPoll, 1000);
+        } catch (err) { quiet(err); render(); }
+        return;
+      }
+      case "cgnext": { b.disabled = true; try { T.cg.st = await api("vg_host_next", { p_id: T.cg.id }); } catch (err) { quiet(err); } render(); return; }
+      case "cgnew": cgStop(); T.cg = { cls: T.cg.cls }; render(); return;
       case "wview": T.wview = !!v; T.wParsed = null; T.wCopyText = ""; window.scrollTo(0, 0); if (T.wview) { T.writ = null; render(); loadWritings(); } else render(); return;
       case "wcls": T.wCls = v ? Number(v) : null; render(); return;
       case "wall": T.wAll = v === "1"; T.writ = null; render(); loadWritings(); return;

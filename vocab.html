@@ -193,8 +193,8 @@ const GAMES = [
   {k:"letters",solo:1, t:"Harflardan so'z",     d:"Aralash harflardan so'z yasang",              ic:"letters", c:"--hw", from:"Duolingo, word scramble"},
   {k:"memory", solo:1, t:"Xotira",              d:"Yopiq kartalardan juftlarni eslab toping",    ic:"memory",  c:"--cw", from:"Memory karta o'yini"},
   {k:"boss",   solo:1, t:"Qal'a himoyasi",      d:"To'g'ri javob dushmanni to'xtatadi",          ic:"boss",    c:"--tr", from:"Blooket Tower Defense"},
-  {k:"duel",   solo:0, t:"Duel",                d:"Sinfdoshingizni chaqiring: bir xil so'zlar, kim tezroq", ic:"duel", c:"--wr", from:"Gimkit, Quizizz"},
-  {k:"klass",  solo:0, t:"Sinf o'yini",         d:"O'qituvchi boshlaydi, hamma kod bilan kiradi", ic:"class",  c:"--hw", from:"Kahoot"},
+  {k:"duel",   solo:0, t:"Duel",                d:"Sinfdoshingizni chaqiring: bir xil so'zlar, o'g'irlash va qalqonlar", ic:"duel", c:"--wr", from:"Gimkit, Quizizz"},
+  {k:"klass",  solo:0, t:"Sinf o'yini",         d:"O'qituvchi doskada kod beradi, butun sinf birga o'ynaydi", ic:"class",  c:"--hw", from:"Kahoot"},
 ];
 
 /* ---------- state ---------- */
@@ -227,7 +227,7 @@ function vGames(){
     <div><p class="sub small" style="margin:0">${esc(GRP.week)}</p><h1>${esc(GRP.name)}</h1></div>
     ${ws ? `<div class="wlist">${ws.map(w=>`<span class="wchip"><b>${esc(w[0])}</b> · ${esc(w[1])}</span>`).join("")}</div>` : `<p class="sub" style="margin:0">Har o'yinda oxirgi oydagi so'zlardan yangi aralash to'plam chiqadi.</p>`}
     <h2>Yakka o'yinlar</h2><div class="ggrid">${GAMES.filter(g=>g.solo).map(card).join("")}</div>
-    <h2>Boshqalar bilan</h2><div class="card"><p style="margin:0"><b>Duel</b> va <b>Sinf o'yini</b> tez orada qo'shiladi.</p></div>
+    <h2>Boshqalar bilan</h2><div class="ggrid">${GAMES.filter(g=>!g.solo).map(card).join("")}</div>
     <p class="small sub">Oltin faqat to'g'ri javob uchun beriladi: bir o'yinda 25 tagacha, kuniga ${DAILY_CAP} tagacha. Bugun: ${today}/${DAILY_CAP}.</p>`;
 }
 function gameTop(title, right){
@@ -539,74 +539,99 @@ MAKE.boss = () => {
   };
   return g;
 };
-// 10. Duel (demo: classmate is a computer player)
+// 10. Duel (real classmates; live if both online, otherwise within 24 hours)
+const gid = () => (GRP && GRP.words ? Number(String(GRP.id).slice(1)) : null);
+function liveBars(me, op) {
+  const mx = Math.max(400, me.score, op.score);
+  return `<div class="card"><div class="bar2"><b style="width:80px;overflow:hidden;text-overflow:ellipsis">Siz</b><div class="prog" style="--accent:var(--hw)"><i style="width:${me.score/mx*100}%"></i></div><b style="width:44px;text-align:right">${me.score}</b></div>
+    <div class="bar2"><b style="width:80px;overflow:hidden;text-overflow:ellipsis">${esc(op.name)}</b><div class="prog" style="--accent:var(--wr)"><i style="width:${op.score/mx*100}%"></i></div><b style="width:44px;text-align:right">${op.score}</b></div>
+    <p class="small sub" style="margin:0">${esc(op.name)}: ${op.done ? "tugatdi" : op.answered ? `${op.answered}-savolda` : "hali boshlamadi"}${me.shield ? " · sizda qalqon bor" : ""}${me.dbl ? " · keyingi javob ×2" : ""}</p></div>`;
+}
+const POWER_TXT = (r) => r.power === "steal" ? (r.stolen ? `Sandiq: ${r.target}dan ${r.stolen} ochko o'g'irladingiz!` : "Sandiq: o'g'irlash qalqonga urildi") : r.power === "shield" ? "Sandiq: qalqon! Sizdan o'g'irlay olmaydi" : r.power === "double" ? "Sandiq: keyingi to'g'ri javob ×2" : "";
 MAKE.duel = () => {
-  const ws = shuffle(words()).slice(0, 8);
-  const g = {k:"duel", stage:"pick", foe:null, i:0, me:0, them:0, ans:null, r:null, foeAns:null};
+  const g = {k:"duel", stage:"pick", list:null, mates:null, id:null, st:null, res:null, busy:false};
+  const loadPick = async () => { try { const [l, m] = await Promise.all([api("vg_duels"), api("vg_classmates")]); g.list = l; g.mates = m; } catch (e) { g.err = "Internet bilan muammo"; } if (G === g) render(); };
+  const poll = async () => { if (!g.id || g.busy) return; try { const s = await api("vg_duel_state", { p_id: g.id }); g.st = s; if (G === g && !g.res) render(); } catch (e) {} };
+  const open = (id) => { g.id = id; g.stage = "play"; g.st = null; g.res = null; render(); poll(); stopLoops(); loops.push(setInterval(poll, 1500)); loops.push(setInterval(() => { const t = $("#dleft"); if (t && g.st && g.st.left != null) { const v = Math.max(0, Number(t.textContent) - 1); t.textContent = v; } }, 1000)); };
   g.render = () => {
-    if (g.stage === "pick") return gameTop("Duel") + `<p class="sub" style="margin:0">Kimni chaqirasiz? Ikkalangizga bir xil 8 ta so'z chiqadi. To'g'ri va tez javob ko'proq ochko beradi. G'olib +10 oltin oladi.</p>
-      <div class="list">${CLASSMATES.slice(0,6).map((n,i)=>`<button class="li" data-act="dfoe" data-v="${esc(n)}"><span class="grow"><b style="font-weight:600">${esc(n)}</b><br><span class="small sub">${i%3===0?"Onlayn":"Onlayn · "+(2+i)+" duel yutgan"}</span></span><span class="pill" style="background:var(--rv-s);color:var(--rv)">Chaqirish</span></button>`).join("")}</div>
-      <div class="note">Demo: raqib kompyuter. Haqiqiy saytda chaqiriq sinfdoshga boradi va u "Qabul qilish"ni bosadi.</div>`;
-    if (g.stage === "wait") return gameTop("Duel") + `<div class="card" style="align-items:center;text-align:center;padding:30px"><h2>${esc(g.foe)} kutilmoqda…</h2><p class="sub">Chaqiriq yuborildi</p></div>`;
-    if (g.i >= ws.length) { const win = g.me > g.them, draw = g.me === g.them;
-      return gameTop("Duel") + duelBars() + vEnd(draw ? "Durang" : win ? "G'alaba!" : `${g.foe} yutdi`, g.got); }
-    const r = g.r;
-    return gameTop("Duel", `<span class="pill">${g.i+1}/${ws.length}</span>`) + duelBars() + `
-      <div class="q">${esc(r.q)}</div>
-      <div class="opts">${r.opts.map((o,j)=>`<button class="opt ${g.ans!=null ? (o===r.right?"ok":j===g.ans?"no":"") : ""}" data-act="dq" data-v="${j}" ${g.ans!=null?"disabled":""}>${esc(o)}</button>`).join("")}</div>
-      <div class="fbk sub small">${g.foeAns==null?`${esc(g.foe)} o'ylamoqda…`:g.foeAns?`${esc(g.foe)} to'g'ri javob berdi`:`${esc(g.foe)} xato qildi`}</div>`;
+    if (g.stage === "pick") {
+      if (!g.list) return gameTop("Duel") + `<p class="sub">Yuklanmoqda…</p>`;
+      const mine = g.list.filter((d) => d.state !== "done"), old = g.list.filter((d) => d.state === "done").slice(0, 5);
+      const row = (d) => { const wait = !d.my_done; return `<button class="li" data-act="dopen" data-v="${d.id}"><span class="grow"><b style="font-weight:600">${esc(d.opp)}</b><br><span class="small sub">${d.state === "done" ? (d.won ? `G'alaba · ${d.my_score}:${d.opp_score}` : d.draw ? `Durang · ${d.my_score}:${d.opp_score}` : `Mag'lubiyat · ${d.my_score}:${d.opp_score}`) : wait ? (d.mine ? "Siz chaqirdingiz · o'ynang" : "Sizni duelga chaqirdi!") : "Raqib o'ynashini kutyapmiz"}</span></span>${d.state !== "done" && wait ? `<span class="pill" style="background:var(--tr-s);color:var(--tr)">O'ynash</span>` : ""}</button>`; };
+      return gameTop("Duel") + `<p class="sub" style="margin:0">Sinfdoshingizni chaqiring. Ikkalangizga bir xil 8 ta so'z chiqadi${GRP && GRP.words ? ` (${esc(GRP.name)})` : " (oxirgi oydagi so'zlar)"}. Ikkalangiz onlayn bo'lsangiz, bir-biringizni jonli ko'rasiz; bo'lmasa raqib 24 soat ichida o'ynaydi. G'olib +10 oltin.</p>
+        ${mine.length ? `<h2>Faol duellar</h2><div class="list">${mine.map(row).join("")}</div>` : ""}
+        <h2>Kimni chaqirasiz?</h2>${g.mates.length ? `<div class="list">${g.mates.map((m) => `<button class="li" data-act="dfoe" data-v="${m.id}"><span class="grow"><b style="font-weight:600">${esc(m.name)}</b></span><span class="pill" style="background:var(--rv-s);color:var(--rv)">Chaqirish</span></button>`).join("")}</div>` : `<p class="sub">Sinfdosh topilmadi.</p>`}
+        ${old.length ? `<h2>Oxirgi duellar</h2><div class="list">${old.map(row).join("")}</div>` : ""}`;
+    }
+    const s = g.st;
+    if (!s) return gameTop("Duel") + `<p class="sub">Yuklanmoqda…</p>`;
+    if (s.state === "done") return gameTop("Duel") + liveBars(s.me, s.op) + vEndDuel(s);
+    if (g.res) return gameTop("Duel", `<span class="pill">${s.i}/${s.n}</span>`) + liveBars(s.me, s.op) +
+      `<div class="card" style="text-align:center"><h2 style="color:${g.res.ok ? "var(--rv)" : "var(--warn)"}">${g.res.ok ? `To'g'ri! +${g.res.pts}` : "Xato"}</h2>${g.res.ok ? "" : `<p style="margin:0">To'g'ri javob: <b>${esc(g.res.right)}</b></p>`}${POWER_TXT(g.res) ? `<p class="fbk" style="color:var(--wr)">${esc(POWER_TXT(g.res))}</p>` : ""}</div>`;
+    if (!s.q) return gameTop("Duel") + liveBars(s.me, s.op) + `<div class="card" style="text-align:center"><h2>Siz tugatdingiz!</h2><p class="sub" style="margin:0">${esc(s.op.name)} o'ynashini kutyapmiz. Natija ikkalangiz tugatganda yoki 24 soatdan keyin chiqadi. Sahifani yopsangiz ham bo'ladi.</p></div>`;
+    return gameTop("Duel", `<span class="pill">${s.i + 1}/${s.n}</span><span class="pill"><span id="dleft">${s.left}</span> s</span>`) + liveBars(s.me, s.op) +
+      `<div class="q">${esc(s.q.q)}</div><div class="opts">${s.q.opts.map((o, j) => `<button class="opt" data-act="dq" data-v="${j}" ${g.busy ? "disabled" : ""}>${esc(o)}</button>`).join("")}</div>
+      ${s.feed && s.feed.length ? `<p class="small sub" style="text-align:center">${esc(s.feed[0])}</p>` : ""}`;
   };
-  const duelBars = () => { const mx = Math.max(400, g.me, g.them);
-    return `<div class="card"><div class="bar2"><b style="width:70px">Siz</b><div class="prog" style="--accent:var(--hw)"><i style="width:${g.me/mx*100}%"></i></div><b style="width:44px;text-align:right">${g.me}</b></div>
-      <div class="bar2"><b style="width:70px;overflow:hidden;text-overflow:ellipsis">${esc(g.foe)}</b><div class="prog" style="--accent:var(--wr)"><i style="width:${g.them/mx*100}%"></i></div><b style="width:44px;text-align:right">${g.them}</b></div></div>`; };
-  const round = () => { g.ans = null; g.foeAns = null; g.r = quizRound(ws, g.i); g.t0 = Date.now();
-    const delay = 1500 + Math.random()*3500; loops.push(setTimeout(()=>{ g.foeAns = Math.random() < .72; if (g.foeAns) g.them += 50 + Math.round((1-delay/8000)*50); if (V.screen==="game") render(); maybeNext(); }, delay)); };
-  const maybeNext = () => { if (g.ans != null && g.foeAns != null) loops.push(setTimeout(()=>{ g.i++; if (g.i < ws.length) round(); else g.got = award(g.me > g.them ? 10 : 2); render(); }, 900)); };
-  g.act = (a, v) => {
-    if (a === "dfoe") { g.foe = v; g.stage = "wait"; render(); loops.push(setTimeout(()=>{ g.stage = "play"; round(); render(); }, 1400)); return; }
-    if (g.ans != null) return; g.ans = Number(v);
-    if (g.r.opts[g.ans] === g.r.right) g.me += 50 + Math.max(0, Math.round((1-(Date.now()-g.t0)/8000)*50));
-    render(); maybeNext();
+  g.act = async (a, v) => {
+    if (a === "dfoe") { try { const r = await api("vg_duel_create", { p_opp: Number(v), p_quest: gid() }); if (r.error) { toast(r.error === "LIMIT" ? "Bugun juda ko'p duel" : r.error === "FEW_WORDS" ? "So'zlar yetarli emas" : "Bo'lmadi"); return; } open(r.id); } catch (e) { toast("Internet bilan muammo"); } return; }
+    if (a === "dopen") { open(Number(v)); return; }
+    if (a === "dq") {
+      if (g.busy || !g.st || !g.st.q) return; g.busy = true;
+      const choice = g.st.q.opts[Number(v)], i = g.st.i;
+      try { g.res = await api("vg_duel_answer", { p_id: g.id, p_i: i, p_choice: choice }); } catch (e) { g.res = null; toast("Internet bilan muammo"); }
+      g.busy = false;
+      if (g.res && g.res.error) g.res = null;
+      render();
+      setTimeout(async () => { g.res = null; await poll(); }, g.res ? 1100 : 0);
+    }
   };
+  loadPick();
   return g;
 };
-// 11. Sinf o'yini (demo: classmates are computer players)
+function vEndDuel(s) {
+  const t = s.winner === "me" ? "G'alaba!" : s.winner === "draw" ? "Durang" : `${s.op.name} yutdi`;
+  return `<div class="card" style="align-items:center;text-align:center;padding:24px 16px"><div style="font-size:40px;font-weight:800">${esc(t)}</div>
+    <p class="sub" style="margin:0">${s.winner === "me" ? "+10 oltin" : s.winner === "draw" ? "+5 oltin" : s.me.answered ? "+2 oltin ishtirok uchun" : ""}</p>
+    <div class="row" style="justify-content:center"><button class="btn" data-act="play" data-v="duel">Yana duel</button><button class="btn soft" data-act="games">Boshqa o'yin</button></div></div>`;
+}
+// 11. Sinf o'yini (teacher starts it in class, students join with the code)
 MAKE.klass = () => {
-  const ws = shuffle(words()).slice(0, 5);
-  const others = CLASSMATES.slice(0, 18).map(n=>({n, s:0, skill:.45+Math.random()*.5}));
-  const g = {k:"klass", stage:"join", code:"", joined:[], i:0, me:0, ans:null, r:null, t0:0};
+  const g = {k:"klass", stage:"join", id:null, st:null, res:null, busy:false, lastQi:-1};
+  const poll = async () => { if (!g.id) return; try { const s = await api("vg_state", { p_id: g.id }); if (s.qi !== g.lastQi) { g.res = null; g.lastQi = s.qi; } g.st = s; if (G === g) render(); } catch (e) {} };
   g.render = () => {
-    if (g.stage === "join") return gameTop("Sinf o'yini") + `<div class="card" style="align-items:center;text-align:center"><p class="sub" style="margin:0">O'qituvchi doskada ko'rsatgan kodni kiriting</p>
-      <input class="big" id="kcode" inputmode="numeric" maxlength="4" placeholder="4 xonali kod" aria-label="O'yin kodi" style="max-width:220px;letter-spacing:.3em">
-      <button class="btn" data-act="kjoin">Kirish</button><p class="small sub" style="margin:0">Demo: istalgan 4 ta raqam</p></div>
-      <div class="note">Haqiqiy saytda o'qituvchi o'z telefonida "Sinf o'yini"ni boshlaydi, kod chiqadi, savollar hammaga bir vaqtda chiqadi.</div>`;
-    if (g.stage === "lobby") return gameTop("Sinf o'yini") + `<div class="card" style="text-align:center"><p class="sub" style="margin:0">O'yin kodi</p><div class="code">${esc(g.code)}</div><p class="sub" style="margin:0">${g.joined.length+1} o'quvchi kirdi. O'qituvchi boshlashini kuting…</p></div>
-      <div class="names"><span class="pill" style="background:var(--hw-s);color:var(--hw)">Siz</span>${g.joined.map(n=>`<span class="pill">${esc(n)}</span>`).join("")}</div>`;
-    if (g.stage === "board" || g.i >= ws.length) { const all = others.map(o=>({n:o.n, s:o.s})).concat([{n:"Siz", s:g.me, me:1}]).sort((a,b)=>b.s-a.s);
-      const place = all.findIndex(x=>x.me) + 1, fin = g.i >= ws.length;
-      return gameTop("Sinf o'yini", `<span class="pill">${fin?"Yakun":`${g.i}/${ws.length} savoldan keyin`}</span>`) + `<h2>${fin?`Siz ${place}-o'rindasiz!`:"Reyting"}</h2>
-        <div class="lb">${all.slice(0, 6).map((x,k)=>`<div class="it ${x.me?"me":""}"><b style="width:22px;color:${k<3?"var(--tr)":"var(--sub)"}">${k+1}</b><span class="grow">${esc(x.n)}</span><b>${x.s}</b></div>`).join("")}
-        ${place > 6 ? `<div class="it me"><b style="width:22px">${place}</b><span class="grow">Siz</span><b>${g.me}</b></div>` : ""}</div>
-        ${fin ? vEnd(place <= 3 ? "Top 3!" : `${place}-o'rin`, g.got) : `<p class="sub small" style="text-align:center">Keyingi savol tayyorlanmoqda…</p>`}`; }
-    const r = g.r;
-    return gameTop("Sinf o'yini", `<span class="pill">${g.i+1}/${ws.length}</span>`) + `
-      <div class="prog" style="--accent:var(--hw)"><i id="kbar" style="width:100%"></i></div>
-      <div class="q">${esc(r.q)}</div>
-      <div class="opts">${r.opts.map((o,j)=>`<button class="opt ${g.ans!=null ? (o===r.right?"ok":j===g.ans?"no":"") : ""}" data-act="kq" data-v="${j}" ${g.ans!=null?"disabled":""}>${esc(o)}</button>`).join("")}</div>
-      <div class="fbk sub small" id="kcount">${g.ans!=null?"Javob qabul qilindi. Boshqalar kutilmoqda…":""}</div>`;
+    if (g.stage === "join") return gameTop("Sinf o'yini") + `<div class="card" style="align-items:center;text-align:center"><p class="sub" style="margin:0">O'qituvchi ko'rsatgan 4 xonali kodni kiriting</p>
+      <input class="big" id="kcode" inputmode="numeric" maxlength="4" placeholder="Kod" aria-label="O'yin kodi" style="max-width:220px;letter-spacing:.3em">
+      <button class="btn" data-act="kjoin">Kirish</button></div>
+      <p class="small sub">To'g'ri javobdan keyin ba'zan sandiq chiqadi: o'g'irlash, qalqon yoki ×2. Oxirida 1–3-o'rinlar qo'shimcha oltin oladi.</p>`;
+    const s = g.st;
+    if (!s) return gameTop("Sinf o'yini") + `<p class="sub">Ulanmoqda…</p>`;
+    const top = gameTop("Sinf o'yini", `<span class="pill">${Math.max(0, s.qi) + (s.state === "lobby" ? 0 : 1)}/${s.n}</span><span class="pill">${s.me.score} · ${s.me.rank}-o'rin</span>`);
+    const feed = s.feed && s.feed.length ? `<div class="card" style="gap:4px">${s.feed.map((f) => `<p class="small" style="margin:0">${esc(f)}</p>`).join("")}</div>` : "";
+    const board = `<div class="lb">${s.board.map((x, k) => `<div class="it"><b style="width:22px;color:${k < 3 ? "var(--tr)" : "var(--sub)"}">${k + 1}</b><span class="grow">${esc(x.name)}</span><b>${x.score}</b></div>`).join("")}</div>`;
+    if (s.state === "lobby") return top + `<div class="card" style="text-align:center"><h2>Siz o'yindasiz!</h2><p class="sub" style="margin:0">${s.players} o'quvchi kirdi. O'qituvchi boshlashini kuting…</p></div>`;
+    if (s.state === "done") return top + `<div class="card" style="text-align:center"><h2>O'yin tugadi! Siz ${s.me.rank}-o'rindasiz</h2><p class="sub" style="margin:0">${s.me.correct} ta to'g'ri javob. Oltin hisobingizga qo'shildi.</p></div>` + board +
+      `<div class="row" style="justify-content:center"><button class="btn soft" data-act="games">Chiqish</button></div>`;
+    if (s.state === "board" || (s.state === "q" && !s.q)) {
+      const r = g.res || (s.last && s.last.qi === s.qi ? { ok: s.last.ok, pts: s.last.pts } : null);
+      return top + `<div class="card" style="text-align:center">${s.state === "q" ? `<h2>Javob qabul qilindi</h2><p class="sub" style="margin:0">Boshqalar kutilmoqda…</p>` : r ? `<h2 style="color:${r.ok ? "var(--rv)" : "var(--warn)"}">${r.ok ? `To'g'ri! +${r.pts}` : "Xato"}</h2>` : `<h2>Vaqt tugadi</h2>`}
+        ${s.right && s.state === "board" ? `<p style="margin:0">To'g'ri javob: <b>${esc(s.right)}</b></p>` : ""}${g.res && POWER_TXT(g.res) ? `<p class="fbk" style="color:var(--wr)">${esc(POWER_TXT(g.res))}</p>` : ""}</div>` + feed + board;
+    }
+    return top + `<div class="prog" style="--accent:var(--hw)"><i style="width:${(s.left / 15) * 100}%"></i></div><div class="q">${esc(s.q.q)}</div>
+      <div class="opts">${s.q.opts.map((o, j) => `<button class="opt" data-act="kq" data-v="${j}" ${g.busy ? "disabled" : ""}>${esc(o)}</button>`).join("")}</div>
+      <p class="small sub" style="text-align:center">${s.left} soniya${s.me.shield ? " · qalqon bor" : ""}${s.me.dbl ? " · keyingi javob ×2" : ""}</p>`;
   };
-  const question = () => { g.stage = "q"; g.ans = null; g.r = quizRound(ws, g.i); g.t0 = Date.now(); render();
-    loops.push(setInterval(()=>{ const left = Math.max(0, 1-(Date.now()-g.t0)/10000); const b = $("#kbar"); if (b) b.style.width = left*100 + "%";
-      if (left <= 0) { stopLoops(); others.forEach(o=>{ if (Math.random() < o.skill) o.s += 50 + Math.round(Math.random()*50); }); g.i++; g.stage = "board"; if (g.i >= ws.length) g.got = award(Math.round(g.me/40)); render();
-        if (g.i < ws.length) loops.push(setTimeout(question, 2600)); } }, 100)); };
-  g.act = (a, v) => {
-    if (a === "kjoin") { const c = ($("#kcode").value||"").trim(); if (!/^\d{4}$/.test(c)) { toast("4 xonali kod kiriting"); return; }
-      g.code = c; g.stage = "lobby"; render();
-      const add = () => { if (g.joined.length < others.length) { g.joined.push(others[g.joined.length].n); if (g.stage==="lobby") render(); loops.push(setTimeout(add, 180)); } else loops.push(setTimeout(question, 900)); };
-      add(); return; }
-    if (g.ans != null) return; g.ans = Number(v);
-    if (g.r.opts[g.ans] === g.r.right) g.me += 50 + Math.round(Math.max(0, 1-(Date.now()-g.t0)/10000)*50);
-    render();
+  g.act = async (a, v) => {
+    if (a === "kjoin") {
+      const c = ($("#kcode").value || "").trim(); if (!/^\d{4}$/.test(c)) { toast("4 xonali kod kiriting"); return; }
+      try { const r = await api("vg_join", { p_code: c }); if (r.error) { toast("Bunday o'yin topilmadi"); return; } g.id = r.id; g.stage = "live"; render(); poll(); loops.push(setInterval(poll, 1000)); } catch (e) { toast("Internet bilan muammo"); }
+      return;
+    }
+    if (a === "kq") {
+      if (g.busy || !g.st || !g.st.q) return; g.busy = true;
+      try { const r = await api("vg_answer", { p_id: g.id, p_qi: g.st.qi, p_choice: g.st.q.opts[Number(v)] }); if (!r.error) { g.res = r; g.st.q = null; } } catch (e) { toast("Internet bilan muammo"); }
+      g.busy = false; render();
+    }
   };
   return g;
 };
