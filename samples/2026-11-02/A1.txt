@@ -1,0 +1,763 @@
+# A1 pul (IT 2) · 2–4-noyabr · Unit 3 · All about you
+# Butun faylni Topshiriqlar bo'limiga bir marta joylang.
+# Sinf ishlari o'z darsida ochiladi. Uy vazifalari: dushanba → seshanba darsigacha, seshanba → chorshanba darsigacha, chorshanba → keyingi dushanba darsigacha.
+@week 2026-11-02
+
+# ────────── DUSHANBA ──────────
+@quest Unit 3 · 1-dars · Kasblar (What's his job?)
+@pool A1
+@classwork 1
+@noreview
+
+@circle Kasblar
+@rule Kasblar (jobs)
+Bugun kasblarni o'rganamiz.
+a teacher — o'qituvchi
+a police officer — politsiyachi
+a taxi driver — taksi haydovchisi
+a builder — quruvchi
+a receptionist — qabulxona xodimi (mehmonxona, ofisda)
+a businessman — tadbirkor (erkak) · a businesswoman — tadbirkor (ayol)
+a nurse — hamshira
+an architect — arxitektor (me'mor)
+a doctor — shifokor · a student — talaba, o'quvchi
+
+@match Kasbni tarjimasi bilan juftlang
+teacher = o'qituvchi
+police officer = politsiyachi
+taxi driver = taksi haydovchisi
+builder = quruvchi
+receptionist = qabulxona xodimi
+nurse = hamshira
+- oshpaz
+@endmatch
+@match Yana juftlang
+architect = arxitektor
+businessman = tadbirkor
+doctor = shifokor
+student = talaba
+- haydovchi yordamchisi
+@endmatch
+? Kasalxonada bemorlarga qaraydigan ayol kim?
+- a builder
+* a nurse
+- a receptionist
+? Uylar quradigan odam kim?
+* a builder
+- an architect ! Arxitektor binoning loyihasini chizadi, quruvchi esa quradi.
+- a taxi driver
+? Mehmonxonada sizni kutib oladigan xodim kim?
+- a police officer
+- a teacher
+* a receptionist
+? Odamlarni mashinada pulga olib boradigan odam kim?
+* a taxi driver
+- a businessman
+- a builder
+
+@circle a yoki an?
+@rule Kasbdan oldin a / an
+Ingliz tilida kasb oldidan doim a yoki an qo'yiladi.
+O'zbekchada "U o'qituvchi" deymiz, inglizchada "She's a teacher."
+Undosh tovushdan oldin → a: a teacher, a nurse, a builder
+Unli tovushdan oldin (a, e, i, o, u) → an: an architect, an engineer, an actor
+
+? ___ architect
+- a
+* an
+? ___ police officer
+* a
+- an
+? ___ engineer
+- a
+* an
+? ___ receptionist
+* a
+- an
+@gap She's ___ nurse. = a
+@gap He's ___ actor. = an
+@tf He's teacher. = noto'g'ri ! a tushib qolgan: He's a teacher.
+@tf She's an architect. = to'g'ri
+
+@circle What's his / her job?
+@rule Kasbni so'rash
+What's his job? — Uning (erkakning) kasbi nima? → He's a builder.
+What's her job? — Uning (ayolning) kasbi nima? → She's a nurse.
+What's your job? — Sizning kasbingiz nima? → I'm a student.
+his = erkakniki, her = ayolniki.
+He's = He is · She's = She is
+
+? Ayolning kasbini qanday so'raymiz?
+- What's his job?
+* What's her job?
+- What her job?
+? "What's his job?" savoliga qaysi javob to'g'ri?
+* He's a taxi driver.
+- She's a taxi driver. ! his — erkak haqida, javob ham He bilan.
+- He a taxi driver.
+? "What's your job?"
+- You're a student.
+* I'm a student.
+- I a student.
+@gap "What's ___ job?" "She's an architect." = her
+@gap "What's his job?" "___ a police officer." = He's
+@gap "What's your job?" "I'm ___ teacher." = a
+@order What's | his | job = Uning kasbi nima?
+@order She's | a | receptionist = U qabulxona xodimi.
+@order I'm | a | student = Men talabaman.
+
+@circle Savol va javob
+@rule Ism, qayerdan, kasb
+What's your name? — My name's Jordan.
+Where are you from? — I'm from the US.
+What's your job? — I'm a teacher.
+Uchta savolni yodlang: bu savollar butun unitda ishlatiladi.
+
+? "Where are you from?" savoliga javob qaysi?
+- I'm a nurse.
+* I'm from Uzbekistan.
+- My name's Ali.
+? "What's your name?"
+* My name's Malika.
+- I'm from Tashkent.
+- I'm a doctor.
+@gap ___ are you from? = Where
+@gap What's ___ name? = your
+@order Where | are | you | from = Siz qayerdansiz?
+
+@circle Yangi so'zlar
+@word job = ish, kasb | What's your job?
+@word doctor = shifokor | She isn't a nurse, she's a doctor.
+@word student = talaba, o'quvchi | I'm a student.
+@word bus driver = avtobus haydovchisi | My father is a bus driver.
+
+@quest Unit 3 · 1-dars · Uy vazifasi: kasblar
+@pool A1
+@homework 1
+
+@circle Kasblar
+@word teacher = o'qituvchi | My mother is a teacher.
+@word police officer = politsiyachi | He's a police officer in Tashkent.
+@word taxi driver = taksi haydovchisi | My uncle is a taxi driver.
+@word builder = quruvchi | The builder is very busy.
+@word receptionist = qabulxona xodimi | She's a receptionist in a hotel.
+@word businessman = tadbirkor | He's a businessman from Dubai.
+@word nurse = hamshira | She's a nurse in a big hospital.
+@word architect = arxitektor | Her father is an architect.
+
+@circle a / an
+? ___ doctor
+* a
+- an
+? ___ architect
+- a
+* an
+? ___ actor
+- a
+* an
+@gap He's ___ builder. = a
+@gap She's ___ engineer. = an
+@tf My sister is architect. = noto'g'ri ! an kerak: My sister is an architect.
+@tf He's a taxi driver. = to'g'ri
+
+@circle his / her job
+? Bu erkak o'qituvchi. Qaysi gap to'g'ri?
+- His job is teacher.
+* He's a teacher.
+- He's teacher. ! a tushib qolgan.
+! Kasb: He's / She's + a / an + kasb.
+? Bu ayol hamshira. Qaysi gap to'g'ri?
+* She's a nurse.
+- Her a nurse.
+- She nurse.
+! She's = She is. Kasb oldidan a.
+@gap "What's ___ job?" (Sardor) "He's a police officer." = his
+@gap "What's ___ job?" (Lola) "She's a receptionist." = her
+@gap "What's his job?" "He's ___ businessman." = a
+@order What's | her | job = Uning (ayolning) kasbi nima?
+@order He's | an | architect = U arxitektor.
+
+@circle O'qish
+@reading My family's jobs
+Hello! I'm Nodira and I'm a student. I'm from Namangan.
+My father is a taxi driver. His taxi is yellow.
+My mother is a nurse. She's very kind.
+My brother Aziz is a builder and my sister Zuhra is a receptionist in a hotel.
+My uncle is an architect in Tashkent.
+
+? What's Nodira's job?
+* She's a student.
+- She's a nurse.
+- She's a receptionist.
+? What's her father's job?
+- He's a builder.
+* He's a taxi driver.
+- He's an architect.
+@tf Nodira's mother is a nurse. = to'g'ri
+@tf Zuhra is a builder. = noto'g'ri ! Zuhra — qabulxona xodimi. Quruvchi — Aziz.
+@gap Her uncle is ___ architect. = an
+
+# ────────── SESHANBA ──────────
+@quest Unit 3 · 2-dars · He isn't a teacher · Shaxsiy ma'lumot
+@pool A1
+@classwork 2
+@noreview
+
+@circle isn't
+@rule Inkor: he / she isn't
+Biror narsa "emas" demoqchi bo'lsak, is dan keyin not qo'yamiz.
+He is not = He isn't · She is not = She isn't
+He isn't a teacher. He's a student. — U o'qituvchi emas. U talaba.
+She isn't a nurse. She's a doctor. — U hamshira emas. U shifokor.
+Eslab qoling: 's = is · isn't = is not
+
+? "U o'qituvchi emas." (erkak)
+* He isn't a teacher.
+- He not a teacher.
+- He aren't a teacher.
+? "U shifokor emas." (ayol)
+- She not a doctor.
+* She isn't a doctor.
+- She isn't doctor. ! a tushib qolgan.
+? "isn't" nimaning qisqa shakli?
+* is not
+- are not
+- am not
+@gap Dana isn't a nurse. ___ a doctor. = She's
+@gap Sunil ___ a teacher. He's a student. = isn't
+@gap My brother isn't a builder. ___ a taxi driver. = He's
+@tf She isn't a receptionist. She's a waitress. = to'g'ri
+@tf He isn't a nurse. He a police officer. = noto'g'ri ! He's tushib qolgan: He's a police officer.
+@order He | isn't | a | doctor = U shifokor emas.
+@order She | isn't | from | England = U Angliyadan emas.
+
+@circle Shaxsiy ma'lumot
+@rule ID karta: shaxsiy ma'lumotlar
+surname — familiya · first name — ism · country — mamlakat
+address — manzil · phone (number) — telefon raqami
+age — yosh · job — kasb · married — uylangan / turmushga chiqqan
+
+Savollar (erkak haqida — his, ayol haqida — her):
+What's his surname? · What's his first name? · Where's he from?
+What's his address? · What's his phone number?
+How old is he? · What's his job? · Is he married?
+
+@reading ID card
+ID CARD
+Surname: Mendes
+First name: Laura
+Country: Brazil
+Address: 12 Park Road, Oxford
+Phone: 07711 482 390
+Age: 31
+Job: Architect
+Married: Yes
+
+? What's her surname?
+* Mendes
+- Laura
+- Oxford
+? Where's she from?
+- England
+* Brazil
+- Spain
+? What's her job?
+- She's a nurse.
+* She's an architect.
+- She's a receptionist.
+@gap How ___ is she? She's 31. = old
+@tf Laura is married. = to'g'ri
+@tf Her first name is Mendes. = noto'g'ri ! Mendes — familiya (surname). Ismi — Laura.
+@endreading
+
+@circle Savolni to'ldiring
+@gap What's her ___? Mendes. = surname
+@gap What's her first ___? Laura. = name
+@gap ___ she from? Brazil. = Where's
+@gap What's her phone ___? 07711 482 390. = number
+@gap ___ old is she? 31. = How
+@gap ___ she married? Yes, she is. = Is
+@match Savolni javob bilan juftlang
+Where's he from? = He's from Canada.
+How old is he? = He's 27.
+What's his job? = He's a builder.
+Is he married? = No, he isn't.
+What's his address? = 5 Bridge Street, Leeds.
+- My name's Adam.
+@endmatch
+
+@circle Is he from ...?
+@rule Ha/yo'q savollari
+Savolda is gap boshiga chiqadi:
+He is from Canada. → Is he from Canada?
+Qisqa javoblar:
+Yes, he is. · No, he isn't.
+Yes, she is. · No, she isn't.
+Diqqat: "Yes, he's." deyilmaydi.
+
+? "Is she from Spain?" — ha javobi:
+* Yes, she is.
+- Yes, she's.
+- Yes, she isn't.
+? "Is he a doctor?" — yo'q javobi:
+- No, he is.
+* No, he isn't.
+- No, he not.
+@order Is | he | from | England = U Angliyadanmi?
+@order Is | she | married = U turmushga chiqqanmi?
+@gap "Is Laura from Brazil?" "Yes, she ___." = is
+@gap "Is she a teacher?" "No, she ___. She's an architect." = isn't
+
+@circle Yangi so'zlar
+@word first name = ism | My first name is Laura.
+@word personal information = shaxsiy ma'lumot | Write your personal information here.
+@word forty = qirq (40) | My uncle is forty.
+@word I see = tushundim | Oh, I see.
+
+@quest Unit 3 · 3-dars · I'm not / They aren't · Futbol jamoasi
+@pool A1
+@classwork 3
+@noreview
+
+@circle am not / aren't
+@rule Inkor: I'm not, we / they / you aren't
+I am not = I'm not → I'm not a nurse.
+we are not = we aren't → We aren't teachers.
+they are not = they aren't → They aren't from England.
+you are not = you aren't → You aren't late.
+Diqqat: "I amn't" degan so'z yo'q. Faqat I'm not.
+
+? "Men hamshira emasman."
+- I amn't a nurse.
+* I'm not a nurse.
+- I isn't a nurse.
+? "Biz o'qituvchi emasmiz."
+* We aren't teachers.
+- We isn't teachers.
+- We not teachers.
+? "Ular Angliyadan emas."
+- They isn't from England.
+- They not from England.
+* They aren't from England.
+@gap I ___ from Samarkand. I'm from Bukhara. = 'm
+@gap They ___ sisters. They're friends. = aren't
+@gap We ___ doctors. We're students. = aren't
+@tf I amn't a builder. = noto'g'ri ! To'g'risi: I'm not a builder.
+@tf You aren't a teacher. = to'g'ri
+
+@circle Qisqa javoblar
+@rule Qisqa javoblar: am / is / are
+Are you from Glasgow? → Yes, I am. / No, I'm not.
+Are you sisters? → Yes, we are. / No, we aren't.
+Is this your team? → Yes, it is. / No, it isn't.
+Are they from England? → Yes, they are. / No, they aren't.
+Savoldagi so'zga qarang: are you → I am / we are · is it → it is · are they → they are.
+
+? "Are you a student?" (siz bitta odam)
+* Yes, I am.
+- Yes, you are.
+- Yes, I'm.
+? "Are you sisters?"
+- Yes, I am.
+* Yes, we are.
+- Yes, they are.
+? "Are they from Spain?"
+- No, we aren't.
+- No, it isn't.
+* No, they aren't.
+? "Is this your bag?"
+* Yes, it is.
+- Yes, it's.
+- Yes, is it.
+@gap "Are you married?" "No, I'm ___." = not
+@gap "Are they teachers?" "Yes, they ___." = are
+
+@circle O'qish: futzal jamoasi
+@reading An interview with Tashkent Stars
+Reporter: Good morning. Is this your futsal team?
+Kamola: Yes, it is.
+Reporter: So, you are the Tashkent Stars?
+All: Yes, we are!
+Reporter: Nice to meet you. Are you the captain?
+Kamola: No, I'm not. I'm Kamola. This is Nigora. She's the captain. She's my sister.
+Reporter: Are you both students?
+Nigora: No, we aren't. I'm a student, but Kamola is a nurse.
+Reporter: And where are you from?
+Nigora: We're from Fergana.
+Reporter: And the other girls? Are they all students?
+Kamola: Yes, they are. They're students at the same college.
+Reporter: Are you the best footballer in the team, Nigora?
+Nigora: No, I'm not. We're all good footballers.
+Reporter: Good luck in the final!
+
+? What's the team's name?
+* Tashkent Stars
+- Fergana Stars
+- Kamola's team
+? Who is the captain?
+- Kamola
+* Nigora
+- the reporter
+? Are Kamola and Nigora sisters?
+* Yes, they are.
+- No, they aren't.
+? What's Kamola's job?
+- She's a student.
+* She's a nurse.
+- She's a teacher.
+@tf The girls are from Tashkent. = noto'g'ri ! Ular Farg'onadan.
+@tf The other girls are students. = to'g'ri
+@tf Nigora says she's the best footballer. = noto'g'ri ! "We're all good footballers."
+@gap "Are you the captain?" "No, I'm ___." = not
+@endreading
+
+@circle O'zingiz haqingizda
+? "Are you from Scotland?" — siz uchun to'g'ri javob:
+- Yes, I am.
+* No, I'm not.
+? "Are you an architect?"
+- Yes, I am.
+* No, I'm not.
+? "Are you a student?"
+* Yes, I am.
+- No, I'm not.
+@order Are | you | a | taxi | driver = Siz taksi haydovchisimisiz?
+@order We | aren't | from | Russia = Biz Rossiyadan emasmiz.
+
+@circle Yangi so'zlar
+@word football team = futbol jamoasi | This is our football team.
+@word footballer = futbolchi | He's a good footballer.
+@word twin = egizak | Ali and Vali are twins.
+@word best = eng yaxshi | She's the best player.
+
+@quest Unit 3 · Seshanba uy vazifasi: inkor va savollar
+@pool A1
+@homework 3
+
+@circle So'zlar
+@word surname = familiya | What's your surname?
+@word address = manzil | My address is 14 Navoi Street.
+@word phone number = telefon raqami | What's your phone number?
+@word age = yosh | Age: 15
+@word married = uylangan, turmushga chiqqan | My brother is married.
+@word captain = jamoa sardori | She's the captain of the team.
+@word sister = opa, singil | Nigora is my sister.
+@word both = ikkalasi ham | We are both students.
+
+@circle Inkor
+? "U shifokor emas." (ayol)
+* She isn't a doctor.
+- She aren't a doctor.
+- She not doctor.
+? "Men Toshkentdan emasman."
+- I amn't from Tashkent.
+* I'm not from Tashkent.
+- I not from Tashkent.
+@gap They ___ from England. They're from Scotland. = aren't
+@gap He ___ a builder. He's an architect. = isn't
+@gap We ___ teachers. We're students. = aren't
+@gap I'm ___ married. = not
+@tf She isn't from Spain. = to'g'ri
+@tf They isn't nurses. = noto'g'ri ! they bilan aren't: They aren't nurses.
+
+@circle Qisqa javoblar
+@match Savolni qisqa javob bilan juftlang
+Are you a student? = Yes, I am.
+Is he from Egypt? = No, he isn't.
+Are they sisters? = Yes, they are.
+Is it your phone? = No, it isn't.
+Are you and Ali friends? = Yes, we are.
+- Yes, I'm.
+@endmatch
+@gap "Is she married?" "No, she ___." = isn't
+@gap "Are you from Andijan?" "Yes, I ___." = am
+@gap "Are they doctors?" "No, they ___." = aren't
+
+@circle Shaxsiy ma'lumot
+@reading ID card
+Surname: Rakhimov
+First name: Sanjar
+Country: Uzbekistan
+Address: 7 Mustaqillik Street, Termez
+Phone: 91 304 55 18
+Age: 24
+Job: police officer
+Married: No
+
+@gap What's his ___? Rakhimov. = surname
+@gap ___ is he from? Uzbekistan. = Where
+@gap How old is he? He's ___. = 24
+@gap What's his ___? He's a police officer. = job
+@tf Sanjar is married. = noto'g'ri ! Married: No — "No, he isn't."
+? Is he from Termez?
+* Yes, he is.
+- No, he isn't.
+@endreading
+@order What's | his | phone | number = Uning telefon raqami qanday?
+@order Is | he | married = U uylanganmi?
+
+# ────────── CHORSHANBA ──────────
+@quest Unit 3 · 4-dars · Is he a taxi driver? · Mashq
+@pool A1
+@classwork 4
+@noreview
+
+@circle Ikki odam
+@rule Takrorlash: savollar to'plami
+What's your first name? · What's your surname?
+Where are you from? · What's your phone number?
+How old are you? · What's your job? · Are you married?
+Boshqa odam haqida: you → he / she, your → his / her, are → is.
+Masalan: Where are you from? → Where's he from?
+
+@reading Two people
+Marco Rossi is from Italy. He's from Milan. He's a taxi driver and he's 42. He's married. His phone number is 07734 218 905.
+Amina Saidova is from Uzbekistan. She's from Bukhara. She isn't a taxi driver, she's a waitress in a café. She's 23 and she isn't married. Her phone number is 93 517 20 64.
+
+? Where's Marco from?
+* Italy
+- Spain
+- Uzbekistan
+? What's Marco's job?
+- He's a waiter.
+* He's a taxi driver.
+- He's a police officer.
+? Is Marco married?
+* Yes, he is.
+- No, he isn't.
+? What's Amina's surname?
+- Amina
+* Saidova
+- Bukhara
+? Is Amina a receptionist?
+- Yes, she is.
+* No, she isn't.
+! U ofitsiant (waitress).
+@tf Marco is 24. = noto'g'ri ! U 42 yoshda.
+@tf Amina is from Bukhara. = to'g'ri
+@gap Amina ___ married. = isn't
+@gap Marco is ___ taxi driver. = a
+@endreading
+
+@circle Savolni tuzing
+@rule Savol so'zlari tartibi
+What's + his / her / your + ...? → What's her surname?
+Where + is / are + ega + from? → Where's she from?
+How old + is / are + ega? → How old is he?
+Is / Are + ega + ...? → Is she married?
+
+@order What's | her | surname = Uning familiyasi nima?
+@order Where's | he | from = U qayerdan?
+@order How | old | is | she = U necha yoshda?
+@order Is | he | married = U uylanganmi?
+@order What's | your | phone | number = Telefon raqamingiz qanday?
+@gap ___ your first name? = What's
+@gap Where ___ you from? = are
+@gap How ___ are you? = old
+@gap ___ you married? = Are
+
+@circle To'g'ri gapni tanlang
+? 1
+- She's name's Maria.
+* Her name's Maria.
+! Egalik: her name (uning ismi). She's = she is.
+? 2
+- His job is an architect.
+* He's an architect.
+? 3
+* We aren't sisters.
+- We's not sisters.
+? 4
+* I'm not a doctor.
+- I aren't a doctor.
+? 5
+- They isn't from Spain.
+* They aren't from Spain.
+? 6
+* She isn't married.
+- She not married.
+
+@circle Gapirish uchun tayyorgarlik
+? Sherigingizning ismini qanday so'raysiz?
+* What's your first name?
+- What's you first name?
+- What your first name?
+? Sherigingiz haqida sinfga qanday aytasiz? (ayol)
+- His surname's Karimova.
+* Her surname's Karimova.
+- She surname's Karimova.
+@gap Her first name's Dilnoza. ___ surname's Aliyeva. = Her
+@gap He's from Jizzakh. ___ phone number is 90 112 34 56. = His
+
+@circle Yangi so'zlar
+@word interesting = qiziqarli | That's very interesting.
+@word That's right = to'g'ri, shunday | "You're from Bukhara?" "That's right."
+@word other = boshqa | And the other girls?
+@word now = hozir | He's in Tashkent now.
+
+@quest Unit 3 · 5-dars · We're in Istanbul! · Kundalik iboralar
+@pool A1
+@classwork 5
+@noreview
+
+@circle O'qish
+@reading Tashkent Stars in Istanbul
+The futsal team Tashkent Stars are in the final in Istanbul! The team from Uzbekistan are in the Asian final.
+They are all from Fergana. Two of the girls, Nigora and Kamola, are sisters. Nigora is the captain of the team.
+"We're so happy we're in Istanbul," says Nigora. "The city is beautiful and the food is amazing."
+The final is tomorrow and the girls are very excited. "We're all fine," says Kamola. "We aren't nervous at all. It's great to be in the final."
+Today they are in a café near the sea. Tomorrow they play the team from Japan in the final.
+
+? Where are the girls?
+- in Tashkent
+* in Istanbul
+- in Japan
+? When is the final?
+- today
+* tomorrow
+- next week
+? Are the girls nervous?
+- Yes, they are.
+* No, they aren't.
+? Who is the captain?
+* Nigora
+- Kamola
+- the girl from Japan
+@tf The girls are from Fergana. = to'g'ri
+@tf The final is today. = noto'g'ri ! The final is tomorrow.
+@tf They're in a hotel now. = noto'g'ri ! Ular hozir kafeda (in a café).
+@tf They play the team from Japan. = to'g'ri
+@gap The girls are very ___ (hayajonda). = excited
+@endreading
+
+@circle Xatoni to'g'rilang
+@rule We're = We are
+"We're in Istanbul" = We are in Istanbul.
+Xato gapni to'g'rilash uchun: avval inkor, keyin to'g'risi.
+They aren't in Tashkent. They're in Istanbul.
+
+? "Tashkent Stars are in Tashkent." To'g'risi:
+* They aren't in Tashkent. They're in Istanbul.
+- They isn't in Tashkent. They're in Istanbul.
+- They aren't in Tashkent. They in Istanbul.
+? "Kamola is the captain." To'g'risi:
+- She's not captain. Nigora is.
+* She isn't the captain. Nigora is the captain.
+@gap The final ___ today. It's tomorrow. = isn't
+@gap They ___ in a hotel now. They're in a café. = aren't
+
+@circle Kundalik iboralar
+@rule Social expressions (1)
+I'm so sorry. — Juda uzr. → That's OK. No problem. — Hechqisi yo'q.
+Thanks. / Thank you very much. — Rahmat. / Katta rahmat. → You're welcome. — Arzimaydi.
+That's very kind. — Juda mehribonsiz.
+Excuse me! Where's the station? — Kechirasiz, vokzal qayerda?
+I'm sorry. I don't know. — Uzr, bilmayman.
+I'm sorry. I don't understand. — Uzr, tushunmadim.
+Excuse me! Where are the toilets? → They're over there. — Ana u yerda.
+Thanks a lot. — Katta rahmat.
+
+@match Iborani javob bilan juftlang
+I'm so sorry. = That's OK. No problem.
+Thank you very much. = You're welcome.
+Where are the toilets? = They're over there.
+Where's the station? = I'm sorry. I don't know.
+- Good luck.
+@endmatch
+? Notanish odamga murojaat qilishdan oldin nima deysiz?
+* Excuse me!
+- Thanks a lot!
+- You're welcome!
+? Gapni tushunmadingiz. Nima deysiz?
+- I don't know.
+* I'm sorry. I don't understand.
+- That's very kind.
+@gap A black coffee, ___. (iltimos) = please
+@gap Thank you very much. That's very ___. = kind
+@gap Excuse me! Where's the ___? (vokzal) = station
+@gap They're over ___. = there
+@order Thank | you | very | much = Katta rahmat.
+@order I | don't | understand = Tushunmadim.
+
+@circle Yangi so'zlar
+@word café = kafe | They're in a café.
+@word Good luck = omad | Good luck in the final!
+@word I don't know = bilmayman | I'm sorry, I don't know.
+@word I don't understand = tushunmayapman | Sorry, I don't understand.
+
+@quest Unit 3 · Chorshanba uy vazifasi: takrorlash va yozish
+@pool A1
+@homework 5
+
+@circle So'zlar
+@word waitress = ofitsiant (ayol) | She's a waitress in a café.
+@word final = final | The final is tomorrow.
+@word tomorrow = ertaga | See you tomorrow.
+@word excited = hayajonda | The girls are very excited.
+@word nervous = asabiy, hayajonlangan | I'm not nervous.
+@word happy = xursand, baxtli | We're so happy.
+@word station = vokzal, bekat | Where's the station?
+@word over there = ana u yerda | The toilets are over there.
+
+@circle Kundalik iboralar
+@match Javobni toping
+I'm sorry. = No problem.
+Thanks a lot. = You're welcome.
+Excuse me! Where's the café? = It's over there.
+¿Qué hora es? = I'm sorry. I don't understand.
+- Yes, I am.
+@endmatch
+? Kimdir sizga yordam berdi. Nima deysiz?
+* Thank you. That's very kind.
+- I'm sorry. I don't know.
+- Excuse me!
+? "Where's the station?" Siz bilmaysiz:
+- No problem.
+* I'm sorry. I don't know.
+- You're welcome.
+@gap I'm ___ sorry. = so
+@gap That's OK. No ___. = problem
+
+@circle Unit 3 takrorlash
+? "U arxitektor." (erkak)
+* He's an architect.
+- He's a architect.
+- His an architect.
+? "Are you married?" (yo'q)
+- No, I amn't.
+* No, I'm not.
+- No, I isn't.
+? "Is she from Egypt?" (ha)
+* Yes, she is.
+- Yes, she's.
+@gap What's ___ job? (Nodira) = her
+@gap They ___ teachers. They're students. = aren't
+@gap ___ old is he? = How
+@tf We isn't from Spain. = noto'g'ri ! We aren't from Spain.
+@order Where's | she | from = U qayerdan?
+
+@circle O'qish
+@reading A new student
+This is Oliver. His surname is Brown. He's from Manchester in England, but now he's in Tashkent. He's 16 and he's a student at our school. His father is an engineer and his mother is a teacher.
+Oliver isn't married, of course! His phone number is 07800 513 266. He's very happy in Tashkent, but he isn't happy with the weather. It's cold!
+
+? What's Oliver's surname?
+* Brown
+- Oliver
+- Manchester
+? Where's he from?
+- Tashkent
+* England
+- Scotland
+@tf Oliver's mother is an engineer. = noto'g'ri ! Onasi o'qituvchi, otasi muhandis.
+@tf Oliver is 16. = to'g'ri
+@gap Oliver ___ happy with the weather. = isn't
+@endreading
+
+@circle Yozish
+@writing My classmate | 40-80
+Sinfdoshingiz haqida yozing (40–80 so'z). Avval undan so'rang:
+What's your first name? · What's your surname? · Where are you from?
+How old are you? · What's your phone number? · What's your job?
+Keyin yozing: Her / His first name's ... Her / His surname's ... She's / He's from ... She / He isn't ...
+Kamida bitta isn't yoki aren't ishlating.
