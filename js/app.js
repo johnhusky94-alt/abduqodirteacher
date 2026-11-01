@@ -24,6 +24,24 @@
   const strFromDay = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
   const mondayOf = (d) => { const x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate() - ((x.getDay() + 6) % 7)); return x; };
   const weekLabel = (s) => { const a = dayFromStr(s); const b = new Date(a); b.setDate(b.getDate() + 6); return `${a.getDate()}-${MONTHS[a.getMonth()]} – ${b.getDate()}-${MONTHS[b.getMonth()]}`; };
+  const DOWN = ["", "Dushanba", "Seshanba", "Chorshanba", "Payshanba", "Juma", "Shanba", "Yakshanba"];
+  const hm = (m) => `${pad(Math.floor(m / 60))}:${pad(m % 60)}`;
+  const toMin = (t) => { const [h, m] = String(t || "").split(":").map(Number); return h * 60 + m; };
+  const clock = (iso) => { const d = new Date(iso); return `${pad(d.getHours())}:${pad(d.getMinutes())}`; };
+  const dayName = (iso) => WEEKDAYS[new Date(iso).getDay()];
+  function defaultWeek() { const d = new Date(), mon = mondayOf(d); if ([0, 5, 6].includes(d.getDay())) mon.setDate(mon.getDate() + 7); return strFromDay(mon); }
+  function dueToDate(week, due) {
+    if (!due) return null;
+    if (due.date) { const [y, m, dd] = due.date.split("-").map(Number); return new Date(y, m - 1, dd, due.h, due.m); }
+    const d = dayFromStr(week); d.setDate(d.getDate() + due.dow - 1); d.setHours(due.h, due.m, 0, 0); return d;
+  }
+  function lockText(l) {
+    if (!l) return "";
+    if (l.code === "cw_soon") return `${dayName(l.at)} ${clock(l.at)} darsda ochiladi`;
+    if (l.code === "cw_closed") return "Yopildi: 3 kunlik muddat tugadi";
+    if (l.code === "in_lesson") return `Dars paytida yopiq · ${clock(l.at)} da ochiladi`;
+    return "Hozir yopiq";
+  }
   const shuffle = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
   const clone = (o) => JSON.parse(JSON.stringify(o));
 
@@ -119,6 +137,7 @@
     if (e && e.net) return "Internet bilan muammo. Qayta urinib ko'ring.";
     const m = (e && e.message) || "";
     if (/duplicate key|unique/i.test(m)) return "Bu nom allaqachon bor.";
+    if (m === "LOCKED") return "Bu vazifa hozir yopiq. Bosh sahifada qachon ochilishini ko'ring.";
     if (/violates check|check constraint/i.test(m)) return "Ma'lumot noto'g'ri kiritildi.";
     return m || "Xatolik yuz berdi.";
   }
@@ -235,11 +254,16 @@
     const now = Date.now();
     const qs = h.quests || [];
     const open = qs.filter((q) => !q.completed_at), done = qs.filter((q) => q.completed_at);
+    const openCw = open.filter((q) => q.kind === "cw"), openHw = open.filter((q) => q.kind !== "cw");
     const item = (q) => {
+      if (q.lock && !q.completed_at) {
+        return `<button class="li qitem" data-act="locked" data-v="${esc(lockText(q.lock))}" style="opacity:.6">
+          <span class="sub">${I.lock}</span><span class="grow"><b style="font-weight:600">${esc(q.title)}</b><br><span class="small sub">${esc(lockText(q.lock))}</span></span></button>`;
+      }
       const pct = questPct(q);
       const late = q.deadline && new Date(q.deadline).getTime() < now && !q.completed_at;
       const doneLate = q.completed_at && q.deadline && new Date(q.completed_at) > new Date(q.deadline);
-      let sub = q.deadline ? `Muddat: ${esc(fmtDate(q.deadline))}` : "Muddatsiz";
+      let sub = q.kind === "cw" ? `${q.lesson ? q.lesson + "-dars · " : ""}Sinf ishi` : q.deadline ? `Muddat: ${esc(fmtDate(q.deadline))}` : "Muddatsiz";
       if (late) sub = `Muddat o'tdi · hali ham bajarsa bo'ladi`;
       if (q.completed_at) sub = doneLate ? "Bajarildi · kech" : "Bajarildi";
       return `<button class="li qitem" data-act="${q.completed_at ? "noop" : "play"}" data-v="${q.id}" style="--accent:var(--hw)">
@@ -253,8 +277,12 @@
         <div class="stats"><span class="stat" title="Ketma-ket kunlar">${I.fire}${h.streak || 0}</span><span class="stat" title="Askarlar">${I.sword}${h.soldiers || 0}</span><span class="stat" title="O'lja">${I.coin}${h.loot == null ? 50 : h.loot}</span>
         <button class="btn soft sm" data-act="logout" aria-label="Chiqish" style="background:var(--card)">${I.out}</button></div></div>
       <p class="sub small">Bu hafta: <b>${wk.correct || 0}</b> ta to'g'ri javob · <b>${fmtTime(wk.seconds)}</b></p>
-      <h2>Vazifalar</h2>
-      ${open.length ? `<div class="list">${open.map(item).join("")}</div>` : `<div class="card empty">Hozircha vazifa yo'q. O'qituvchingiz bergan vazifalar shu yerda chiqadi.</div>`}
+      ${h.lesson_until ? `<div class="banner" style="background:var(--cw-s);color:var(--cw)">Hozir dars ketmoqda. Uy vazifalari ${clock(h.lesson_until)} da ochiladi.</div>` : ""}
+      ${openCw.length ? `<h2>Sinf ishi</h2><div class="list">${openCw.map(item).join("")}</div>` : ""}
+      <h2>Uy vazifasi</h2>
+      ${openHw.length ? `<div class="list">${openHw.map(item).join("")}</div>` : `<div class="card empty">Hozircha uy vazifasi yo'q. O'qituvchingiz bergan vazifalar shu yerda chiqadi.</div>`}
+      ${(h.words || []).length ? `<details class="card"><summary style="cursor:pointer;font-weight:600">Bu haftaning so'zlari · ${h.words.length} ta</summary>
+        <div class="list" style="margin-top:10px">${h.words.map((w) => `<div class="li"><b style="font-weight:600" class="grow">${esc(w.en)}</b><span class="sub">${esc(w.uz)}</span></div>`).join("")}</div></details>` : ""}
       ${done.length ? `<h3 class="sub">Bajarilganlar</h3><div class="list">${done.map(item).join("")}</div>` : ""}`;
   }
 
@@ -658,9 +686,12 @@
       else {
         const total = pr.quests.reduce((a, q) => a + q.gradable, 0);
         summary = `<div class="fb good"><b>${pr.quests.length} ta vazifa · ${total} ta savol tayyor</b></div>
+          <div class="row"><label for="weekPick" style="margin:0">Hafta (dushanba):</label><input id="weekPick" type="date" value="${esc(T.weekPick)}" data-chg="weekPick" style="max-width:180px"><span class="sub small">${esc(weekLabel(T.weekPick))}</span></div>
           <div class="list">${pr.quests.map((q, i) => {
             const missing = q.pool && !d.pools.some((p) => p.name.toLowerCase() === q.pool.toLowerCase());
-            return `<div class="li" style="flex-wrap:wrap"><span class="grow" style="min-width:180px"><b style="font-weight:600">${esc(q.title)}</b><br><span class="sub small">${q.circles.length} doira · ${q.gradable} savol</span>${missing ? `<br><span class="err small">"${esc(q.pool)}" nomli pul topilmadi</span>` : ""}</span>
+            const dd = q.kind === "hw" ? dueToDate(T.weekPick, q.due) : null;
+            const kindTxt = q.kind === "cw" ? `<span class="pill cw">Sinf ishi · ${q.lesson}-dars</span>` : `<span class="pill hw">Uy vazifasi</span> <span class="sub small">${dd ? "muddat: " + esc(fmtDate(dd.toISOString())) : "muddatsiz"}</span>`;
+            return `<div class="li" style="flex-wrap:wrap"><span class="grow" style="min-width:180px"><b style="font-weight:600">${esc(q.title)}</b><br>${kindTxt}<br><span class="sub small">${q.circles.length} doira · ${q.gradable} savol</span>${missing ? `<br><span class="err small">"${esc(q.pool)}" nomli pul topilmadi</span>` : ""}</span>
               <select data-chg="poolPick" data-v="${i}" aria-label="Pul" style="max-width:220px">${opts(d.pools, T.poolPick[i] ? Number(T.poolPick[i]) : null, "— pulni tanlang —")}</select></div>`;
           }).join("")}</div>
           <button class="btn" style="--accent:var(--rv)" data-act="saveQuests" ${T.saving ? "disabled" : ""}>${T.saving ? "Saqlanmoqda…" : "Hammasini saqlash"}</button>`;
@@ -669,13 +700,13 @@
     const probs = T.problems.length ? `<section class="card stack"><h3>O'quvchilar xabar bergan savollar · ${T.problems.length}</h3>
       ${T.problems.map((r) => `<div class="fb bad"><p><b style="display:inline">${esc(r.quest)}</b> · ${esc(r.student)} · ${esc(fmtDate(r.at))}</p><p>Savol: <i>${esc(r.text || r.step)}</i></p>${r.note ? `<p>Izoh: ${esc(r.note)}</p>` : ""}
         <div class="row" style="margin-top:6px"><button class="btn soft sm" data-act="preview" data-v="${r.quest_id}">Vazifani ko'rish</button><button class="btn sm" data-act="probDone" data-v="${r.id}">Ko'rib chiqildi</button></div></div>`).join("")}</section>` : "";
-    const list = d.quests.length ? d.quests.map((q) => {
+    const card = (q) => {
       const conf = T.confirm === "del-q:" + q.id, open = T.openStudents === q.id, indiv = q.students || [];
       return `<section class="card stack">
         <div class="row between"><h3>${esc(q.title)}</h3><div class="row">${q.problems ? `<span class="pill warn">${q.problems} xabar</span>` : ""}${q.hidden ? `<span class="pill">Yashirin</span>` : ""}<span class="pill rv">${q.finished} tugatdi</span></div></div>
         <div class="grid2"><div><label for="qp-${q.id}">Pul</label><select id="qp-${q.id}" data-chg="qPool" data-v="${q.id}">${opts(d.pools, q.pool_id, "— faqat alohida o'quvchilar —")}</select></div>
-          <div><label for="qd-${q.id}">Muddat</label><div class="row" style="flex-wrap:nowrap"><input id="qd-${q.id}" type="datetime-local" value="${esc(toLocalInput(q.deadline))}" data-chg="qDeadline" data-v="${q.id}">
-            ${q.deadline ? `<button class="btn soft sm" data-act="qNoDeadline" data-v="${q.id}" aria-label="Muddatni olib tashlash">${I.x}</button>` : ""}</div></div></div>
+          ${q.kind === "cw" ? `<div><label>Qachon ochiladi</label><p style="margin:6px 0 0">${q.lesson ? `<b>${q.lesson}-dars</b>` : "Darsga bog'lanmagan"}${q.week_start ? ` · ${esc(weekLabel(q.week_start))}` : ""}</p><p class="sub small" style="margin:2px 0 0">Dars jadvaliga ko'ra ochiladi, tugatilmasa 3 kun ochiq turadi.</p></div>` : `<div><label for="qd-${q.id}">Muddat</label><div class="row" style="flex-wrap:nowrap"><input id="qd-${q.id}" type="datetime-local" value="${esc(toLocalInput(q.deadline))}" data-chg="qDeadline" data-v="${q.id}">
+            ${q.deadline ? `<button class="btn soft sm" data-act="qNoDeadline" data-v="${q.id}" aria-label="Muddatni olib tashlash">${I.x}</button>` : ""}</div></div>`}</div>
         <div class="row"><label class="row" style="margin:0;gap:8px;color:var(--ink);font-size:15px;font-weight:500"><input type="checkbox" data-chg="qHidden" data-v="${q.id}" ${q.hidden ? "checked" : ""}> O'quvchilardan yashirish</label>
           <span class="sub small">${q.gradable} savol · ${(q.circles || []).length} doira · ${esc(fmtDate(q.created_at))}</span></div>
         <div class="row"><button class="btn sm" style="--accent:var(--cw)" data-act="preview" data-v="${q.id}">Sinab ko'rish</button>
@@ -684,13 +715,18 @@
         ${open ? `<div class="stack"><div class="checklist">${d.students.map((s) => `<label><input type="checkbox" class="indiv-box" value="${s.id}" ${indiv.includes(s.id) ? "checked" : ""}> ${esc(s.first_name + " " + s.last_name)} <span class="sub small">${esc(className(s.class_id))}</span></label>`).join("")}</div>
           <div class="row"><button class="btn sm" data-act="indivSave" data-v="${q.id}">Saqlash</button><button class="btn soft sm" data-act="indiv" data-v="${q.id}">Yopish</button></div></div>` : ""}
       </section>`;
-    }).join("") : `<div class="card empty">Hali vazifa yo'q. Yuqoriga kod joylab qo'shing.</div>`;
+    };
+    const cws = d.quests.filter((q) => q.kind === "cw").sort((a, b) => (b.week_start || "").localeCompare(a.week_start || "") || (a.lesson || 0) - (b.lesson || 0));
+    const hws = d.quests.filter((q) => q.kind !== "cw");
+    const list = d.quests.length ? `<h2>Uy vazifasi · ${hws.length}</h2>${hws.length ? hws.map(card).join("") : `<div class="card empty">Uy vazifasi yo'q.</div>`}
+      <h2>Sinf ishi · ${cws.length}</h2>${cws.length ? cws.map(card).join("") : `<div class="card empty">Sinf ishi yo'q. Kodda <code>@classwork 1</code> deb yozilgan vazifalar shu yerda chiqadi.</div>`}`
+      : `<div class="card empty">Hali vazifa yo'q. Yuqoriga kod joylab qo'shing.</div>`;
     return `<h1>Topshiriqlar</h1>${probs}
       <section class="card stack"><h3>Yangi vazifa qo'shish</h3><p class="sub small">Kodni joylang. Bir yo'la butun haftani joylash mumkin.</p>
         <textarea id="pasteBox" class="code" aria-label="Vazifa kodi" placeholder="@quest Unit 4 · Oila&#10;@circle Kimning?&#10;...">${esc(T.paste)}</textarea>
         <div class="row"><button class="btn" style="--accent:var(--cw)" data-act="parse">Tekshirish</button></div>
         <div id="pasteSummary" class="stack">${summary}</div></section>
-      <h2>Vazifalar</h2>${list}`;
+      ${list}`;
   }
 
   /* settings */
@@ -698,15 +734,40 @@
     if (T.sub === "people") return vPeople();
     if (T.sub === "pw") return vPassword();
     if (T.sub === "teachers") return vTeachers();
+    if (T.sub === "tt") return vTimetable();
     const isAdmin = T.me && T.me.is_admin;
     return `<h1>Sozlamalar</h1>
       <div class="list">
         <button class="li" data-act="sub" data-v="people"><span class="sub">${I.users}</span><span class="grow">Sinflar, pullar, o'quvchilar<br><span class="sub small">Qo'shish, ko'chirish, parolni tiklash</span></span><span class="chev">${I.chev}</span></button>
+        <button class="li" data-act="sub" data-v="tt"><span class="sub">${I.class}</span><span class="grow">Dars jadvali<br><span class="sub small">Sinf ishlari shu jadvalga ko'ra ochiladi</span></span><span class="chev">${I.chev}</span></button>
         <button class="li" data-act="sub" data-v="pw"><span class="sub">${I.key}</span><span class="grow">Parolni o'zgartirish</span><span class="chev">${I.chev}</span></button>
         <button class="li" data-act="logout"><span class="sub">${I.out}</span><span class="grow">Chiqish</span></button>
       </div>
-      <p class="sub small">Dars jadvali keyingi bosqichda shu yerga qo'shiladi.</p>
       ${isAdmin ? `<button class="link" style="align-self:flex-start;color:var(--sub)" data-act="sub" data-v="teachers">O'qituvchilarni boshqarish</button>` : ""}`;
+  }
+  async function loadTT() {
+    if (!T.cls) return;
+    const c = T.cls; T.tt = null; render();
+    try { const r = await api("admin_timetable", { p_class: c }); if (T.cls === c) { T.tt = r.map((x) => ({ dow: x.dow, start: x.start, end: x.end })); T.ttDirty = false; render(); } }
+    catch (e) { quiet(e); }
+  }
+  function vTimetable() {
+    const d = T.data;
+    if (!d.classes.length) return `${backBtn()}<h1>Dars jadvali</h1><div class="card empty">Avval sinf yarating.</div>`;
+    const segs = `<div class="seg" role="group" aria-label="Sinf">${d.classes.map((c) => `<button aria-pressed="${T.cls === c.id}" data-act="ttCls" data-v="${c.id}">${esc(c.name)}</button>`).join("")}</div>`;
+    if (!T.tt) return `${backBtn()}<h1>Dars jadvali</h1>${segs}<div class="loading">Yuklanmoqda…</div>`;
+    const sorted = T.tt.map((x, i) => Object.assign({ i }, x)).sort((a, b) => a.dow - b.dow || a.start - b.start);
+    const rows = sorted.length ? `<div class="list">${sorted.map((x, n) => `<div class="li"><span class="pill cw" style="min-width:58px;justify-content:center">${n + 1}-dars</span>
+        <span class="grow"><b style="font-weight:600">${DOWN[x.dow]}</b> <span class="num">${hm(x.start)}–${hm(x.end)}</span></span>
+        <button class="btn soft sm" data-act="ttDel" data-v="${x.i}" aria-label="O'chirish">${I.x}</button></div>`).join("")}</div>` : `<div class="card empty">Bu sinf uchun hali dars qo'shilmagan.</div>`;
+    return `${backBtn()}<h1>Dars jadvali</h1>${segs}
+      <p class="sub">${esc(className(T.cls))} sinf · haftasiga ${sorted.length} ta dars. Sinf ishlari shu tartibda ochiladi: 1-sinf ishi 1-darsda, 2-sinf ishi 2-darsda va hokazo. Dars paytida uy vazifalari yopiq turadi.</p>
+      ${rows}
+      <section class="card stack"><h3>Dars qo'shish</h3>
+        <div class="grid2"><div><label for="ttDow">Kun</label><select id="ttDow">${DOWN.slice(1).map((n, i) => `<option value="${i + 1}">${n}</option>`).join("")}</select></div>
+        <div class="row" style="flex-wrap:nowrap"><div class="grow"><label for="ttS">Boshlanishi</label><input id="ttS" type="time" value="08:30"></div><div class="grow"><label for="ttE">Tugashi</label><input id="ttE" type="time" value="09:15"></div></div></div>
+        <button class="btn soft" data-act="ttAdd">${I.plus} Qo'shish</button></section>
+      <button class="btn" style="--accent:var(--rv)" data-act="ttSave" ${T.ttDirty ? "" : "disabled"}>${T.ttDirty ? "Jadvalni saqlash" : "Saqlangan"}</button>`;
   }
   const backBtn = () => `<button class="btn soft sm" style="background:var(--card);align-self:flex-start" data-act="sub" data-v="">${I.back} Sozlamalar</button>`;
 
@@ -805,6 +866,7 @@
     if (!/^(delName|delStu|delQuest|tDel)$/.test(a)) T.confirm = "";
     switch (a) {
       case "noop": return;
+      case "locked": toast(v); return;
       case "role": V = { screen: "login", role: v }; render(); return;
       case "back": V = { screen: "pick" }; render(); return;
       case "logout": signOut(); return;
@@ -850,7 +912,19 @@
       case "setweek": T.week = v; loadReport(); return;
       case "monthly": T.showMonthly = true; render(); loadMonthly(); return;
       case "poolView": T.poolView = v ? Number(v) : null; window.scrollTo(0, 0); if (T.poolView) loadPoolRes(); else render(); return;
-      case "sub": T.sub = v || null; T.editName = null; T.pwFor = null; T.pwMsg = null; render(); window.scrollTo(0, 0); if (v === "teachers") loadTeachers(); return;
+      case "sub": T.sub = v || null; T.editName = null; T.pwFor = null; T.pwMsg = null; render(); window.scrollTo(0, 0); if (v === "teachers") loadTeachers(); if (v === "tt") loadTT(); return;
+      case "ttCls": if (T.ttDirty) { toast("Avval jadvalni saqlang"); return; } T.cls = Number(v); loadTT(); return;
+      case "ttDel": T.tt.splice(Number(v), 1); T.ttDirty = true; render(); return;
+      case "ttAdd": {
+        const dow = Number($("#ttDow").value), a = toMin($("#ttS").value), z = toMin($("#ttE").value);
+        if (!(a >= 0) || !(z > a)) { toast("Tugash vaqti boshlanishidan keyin bo'lsin"); return; }
+        if (T.tt.some((x) => x.dow === dow && a < x.end && z > x.start)) { toast("Bu vaqtda boshqa dars bor"); return; }
+        T.tt.push({ dow, start: a, end: z }); T.ttDirty = true; render(); return;
+      }
+      case "ttSave": {
+        const r = await adminCall("admin_timetable_save", { p_class: T.cls, p_slots: T.tt }, "Jadval saqlandi", false);
+        if (r) { T.ttDirty = false; render(); } return;
+      }
       case "filter": T.filter = v; render(); return;
       case "rn": T.editName = v; render(); { const el = document.getElementById("rn-" + v); if (el) el.focus(); } return;
       case "rnCancel": T.editName = null; render(); return;
@@ -897,18 +971,20 @@
       case "parse": {
         const ta = $("#pasteBox"); T.paste = ta ? ta.value : T.paste;
         if (!T.paste.trim()) { toast("Avval kodni joylang"); return; }
-        T.parsed = window.QuestParser.parse(T.paste); T.poolPick = {};
+        T.parsed = window.QuestParser.parse(T.paste); T.poolPick = {}; T.weekPick = T.parsed.week || defaultWeek();
         T.parsed.quests.forEach((q, i) => { const p = q.pool && T.data.pools.find((x) => x.name.toLowerCase() === q.pool.toLowerCase()); T.poolPick[i] = p ? String(p.id) : ""; });
         render(); return;
       }
       case "saveQuests": {
         const pr = T.parsed; if (!pr || pr.errors.length) return;
         const scripts = scriptsFor(T.paste, pr);
-        const payload = pr.quests.map((q, i) => ({ title: q.title, pool_id: T.poolPick[i] || "", script: scripts[i], steps: q.steps, circles: q.circles }));
+        const payload = pr.quests.map((q, i) => { const dd = q.kind === "hw" ? dueToDate(T.weekPick, q.due) : null;
+          return { title: q.title, pool_id: T.poolPick[i] || "", script: scripts[i], steps: q.steps, circles: q.circles,
+            kind: q.kind, lesson: q.lesson || "", week_start: T.weekPick, deadline: dd ? dd.toISOString() : "" }; });
         T.saving = true; render();
         const r = await adminCall("admin_quests_create", { p_quests: payload }, null);
         T.saving = false;
-        if (r) { toast(`${payload.length} ta vazifa saqlandi. Endi muddat qo'ying.`); T.paste = ""; T.parsed = null; }
+        if (r) { toast(`${payload.length} ta vazifa saqlandi.`); T.paste = ""; T.parsed = null; }
         render(); return;
       }
       case "qNoDeadline": updateQuest(Number(v), { deadline: null }, "Muddat olib tashlandi"); return;
@@ -979,6 +1055,7 @@
       case "bulkCls": T.bulkCls = el.value; break;
       case "bulkPool": T.bulkPool = el.value; break;
       case "poolPick": T.poolPick[el.dataset.v] = el.value; break;
+      case "weekPick": if (el.value) { T.weekPick = strFromDay(mondayOf(dayFromStr(el.value))); render(); } break;
       case "qPool": updateQuest(id, { pool_id: val }); break;
       case "qHidden": updateQuest(id, { hidden: el.checked }, el.checked ? "Yashirildi" : "Ko'rinadigan qilindi"); break;
       case "qDeadline": if (el.value) updateQuest(id, { deadline: new Date(el.value).toISOString() }, "Muddat saqlandi"); break;

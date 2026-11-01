@@ -35,11 +35,13 @@
     const lines = String(text || "").replace(/\r/g, "").split("\n");
     const quests = [];
     const errors = [];
-    let q = null, circle = null, choice = null, body = null, passage = null;
+    let q = null, circle = null, choice = null, body = null, passage = null, week = "";
+    const DAYS = { mon: 1, monday: 1, du: 1, dushanba: 1, tue: 2, tuesday: 2, se: 2, seshanba: 2, wed: 3, wednesday: 3, chorshanba: 3,
+      thu: 4, thursday: 4, pa: 4, payshanba: 4, fri: 5, friday: 5, juma: 5, sat: 6, saturday: 6, sh: 6, shanba: 6, sun: 7, sunday: 7, yakshanba: 7 };
 
     const err = (ln, msg) => errors.push({ line: ln, msg });
     const newQuest = (title, ln) => {
-      q = { title: title || "Nomsiz vazifa", pool: "", circles: [], words: [], line: ln };
+      q = { title: title || "Nomsiz vazifa", pool: "", circles: [], words: [], line: ln, kind: "hw", lesson: null, due: null };
       quests.push(q);
       circle = null; choice = null; body = null; passage = null;
     };
@@ -68,7 +70,27 @@
         if (!m) return err(ln, "Noto'g'ri buyruq");
         const cmd = m[1].toLowerCase(), rest = m[2].trim();
         switch (cmd) {
-          case "week": case "settings": case "deadline": return; // accepted, unused here
+          case "settings": return; // accepted, unused here
+          case "week": case "hafta":
+            if (!/^\d{4}-\d{2}-\d{2}$/.test(rest)) return err(ln, "@week sanasi shunday yozilsin: 2026-11-02");
+            week = rest; return;
+          case "classwork": case "sinf": {
+            if (!q) newQuest("Nomsiz vazifa", ln);
+            const n = parseInt(rest, 10);
+            if (!(n >= 1 && n <= 30)) return err(ln, "@classwork dan keyin dars raqami yozilsin: @classwork 3");
+            q.kind = "cw"; q.lesson = n; return;
+          }
+          case "homework": case "uy": if (!q) newQuest("Nomsiz vazifa", ln); q.kind = "hw"; return;
+          case "due": case "muddat": case "deadline": {
+            if (!q) newQuest("Nomsiz vazifa", ln);
+            const m2 = rest.toLowerCase().match(/^(\S+)(?:\s+(\d{1,2}):(\d{2}))?$/);
+            if (!m2) return err(ln, "Muddat shunday yozilsin: @due tue 08:00");
+            const hh = m2[2] ? Number(m2[2]) : 8, mm = m2[3] ? Number(m2[3]) : 0;
+            if (hh > 23 || mm > 59) return err(ln, "Vaqt noto'g'ri: " + rest);
+            if (/^\d{4}-\d{2}-\d{2}$/.test(m2[1])) { q.due = { date: m2[1], h: hh, m: mm }; return; }
+            if (!DAYS[m2[1]]) return err(ln, "Kun nomi tushunilmadi: " + m2[1] + " (mon, tue, wed, thu, fri, sat, sun)");
+            q.due = { dow: DAYS[m2[1]], h: hh, m: mm }; return;
+          }
           case "quest": return newQuest(rest, ln);
           case "pool": if (!q) newQuest("Nomsiz vazifa", ln); q.pool = rest; return;
           case "circle":
@@ -171,7 +193,7 @@
       if (ri >= 0) qq.circles.splice(ri, 0, rc); else qq.circles.push(rc);
     });
     const built = quests.map((qq) => build(qq, errors));
-    return { quests: built, errors };
+    return { quests: built, errors, week };
   }
 
   function build(q, errors) {
@@ -264,7 +286,7 @@
     const gradable = steps.filter((s) => s.a).length;
     if (!gradable) errors.push({ line: q.line, msg: `"${q.title}" vazifasida birorta savol yo'q` });
     return {
-      title: q.title, pool: q.pool, line: q.line,
+      title: q.title, pool: q.pool, line: q.line, kind: q.kind, lesson: q.lesson, due: q.kind === "hw" ? q.due : null,
       circles: q.circles.map((c, i) => ({ name: c.name, n: steps.filter((s) => s.c === i && s.a).length })),
       steps, gradable,
     };

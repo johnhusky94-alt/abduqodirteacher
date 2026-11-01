@@ -1,0 +1,6 @@
+-- 1 Nov, V2 stage 2 (applied as migration v2_stage2_timetable):
+-- quests.kind ('hw'|'cw'), quests.lesson, quests.week_start; table timetable(class_id, dow 1-7, start_min, end_min)
+-- _slot(class, week, n), _lesson_now(class), _quest_lock(user, quest): classwork opens at its lesson slot and stays open 3 days
+-- after the lesson if unfinished; homework is locked while the student's class is in a lesson.
+-- get_quest/advance raise LOCKED; student_home returns kind, lesson, lock, lesson_until, words (this week);
+-- admin_quests_create takes kind/lesson/week_start/deadline; admin_timetable / admin_timetable_save.
