@@ -1,0 +1,636 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lug'at · Abduqodir Teacher</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#F2F2F7">
+<style>
+/* Layout: phone-first app screen like the main site — groups list → game picker → game. Apple-style tokens matching Abduqodir Teacher. */
+:root{
+  --bg:#F2F2F7; --card:#FFFFFF; --card2:#F2F2F7; --ink:#1C1C1E; --sub:#6E6E73; --line:#E5E5EA;
+  --hw:#5856D6; --hw-s:#ECEBFF; --cw:#0A84C6; --cw-s:#E1F2FC; --rv:#1C8C4C; --rv-s:#E3F5EA; --tr:#D61F57; --tr-s:#FCE6EE;
+  --wr:#C26A00; --wr-s:#FFF1DE; --warn:#E5484D; --gold:#F5B400;
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#000; --card:#1C1C1E; --card2:#2C2C2E; --ink:#F2F2F7; --sub:#98989F; --line:#38383A;
+  --hw:#8E8CFF; --hw-s:#24234A; --cw:#4FB8F0; --cw-s:#0F2C3B; --rv:#3CCB72; --rv-s:#0F2E1C; --tr:#FF5C8A; --tr-s:#3A1222;
+  --wr:#FFB340; --wr-s:#3A2A10; --warn:#FF6B6E; --gold:#FFC53D; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#000; --card:#1C1C1E; --card2:#2C2C2E; --ink:#F2F2F7; --sub:#98989F; --line:#38383A;
+  --hw:#8E8CFF; --hw-s:#24234A; --cw:#4FB8F0; --cw-s:#0F2C3B; --rv:#3CCB72; --rv-s:#0F2E1C; --tr:#FF5C8A; --tr-s:#3A1222;
+  --wr:#FFB340; --wr-s:#3A2A10; --warn:#FF6B6E; --gold:#FFC53D; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:400 16px/1.4 var(--font);margin:0;-webkit-tap-highlight-color:transparent}
+.main{max-width:720px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:14px 40px;display:flex;flex-direction:column;gap:14px}
+h1{font-size:30px;margin:0;letter-spacing:-.02em;text-wrap:balance} h2{font-size:21px;margin:6px 0 0;letter-spacing:-.01em} h3{font-size:17px;margin:0}
+.sub{color:var(--sub)} .small{font-size:13px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap} .between{justify-content:space-between} .grow{flex:1;min-width:0}
+.card{background:var(--card);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.list{background:var(--card);border-radius:18px;overflow:hidden}
+.li{all:unset;box-sizing:border-box;display:flex;gap:12px;align-items:center;padding:13px 14px;width:100%;cursor:pointer;border-bottom:1px solid var(--line)}
+.li:last-child{border-bottom:0}
+.li:focus-visible,.btn:focus-visible,.gm:focus-visible,.opt:focus-visible{outline:3px solid var(--hw);outline-offset:2px}
+.chev{color:var(--sub)}
+.pill{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;padding:3px 9px;border-radius:99px;background:var(--card2);color:var(--sub);white-space:nowrap}
+.btn{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:12px 18px;border-radius:14px;background:var(--accent,var(--hw));color:#fff;font-weight:600;font-size:16px;text-align:center}
+.btn.soft{background:var(--card2);color:var(--ink)} .btn.wide{width:100%} .btn.sm{padding:8px 12px;font-size:14px;border-radius:11px}
+.btn[disabled]{opacity:.4;pointer-events:none}
+.top{display:flex;align-items:center;gap:10px}
+.gold{display:inline-flex;align-items:center;gap:6px;background:var(--card);border-radius:99px;padding:6px 12px 6px 7px;font-weight:700;font-variant-numeric:tabular-nums}
+.coin{width:20px;height:20px;border-radius:50%;background:var(--gold);box-shadow:inset 0 -2px 0 #0002;display:inline-block}
+.seg{display:inline-flex;background:var(--card);border-radius:12px;padding:3px;gap:2px}
+.seg button{all:unset;cursor:pointer;padding:7px 14px;border-radius:9px;font-size:14px;font-weight:600;color:var(--sub)}
+.seg button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+.ggrid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(min(100%,160px),1fr))}
+.gm{all:unset;box-sizing:border-box;cursor:pointer;background:var(--card);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:8px;min-height:132px}
+.gm .ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--t-s);color:var(--t)}
+.gm .ic svg{width:26px;height:26px}
+.gm b{font-size:16px} .gm span{font-size:13px;color:var(--sub);line-height:1.35}
+.wlist{display:flex;flex-wrap:wrap;gap:6px}
+.wchip{background:var(--card2);border-radius:9px;padding:4px 9px;font-size:13px}
+.prog{height:6px;background:var(--line);border-radius:9px;overflow:hidden}.prog i{display:block;height:100%;background:var(--accent,var(--hw));transition:width .2s}
+.q{font-size:26px;font-weight:700;letter-spacing:-.02em;text-align:center;padding:10px 0;overflow-wrap:anywhere}
+.opts{display:grid;gap:10px;grid-template-columns:1fr 1fr}
+.opt{all:unset;box-sizing:border-box;cursor:pointer;background:var(--card);border:2px solid transparent;border-radius:16px;padding:14px;font-size:17px;font-weight:600;text-align:center;min-height:58px;display:grid;place-items:center;overflow-wrap:anywhere}
+.opt.ok{border-color:var(--rv);background:var(--rv-s)} .opt.no{border-color:var(--warn);background:#E5484D22} .opt.sel{border-color:var(--hw);background:var(--hw-s)}
+.opt.gone{visibility:hidden}
+.fbk{text-align:center;font-weight:700;min-height:24px}
+.flash{perspective:900px;height:220px;cursor:pointer}
+.flash .in{position:relative;width:100%;height:100%;transition:transform .45s;transform-style:preserve-3d}
+.flash.on .in{transform:rotateY(180deg)}
+.flash .f{position:absolute;inset:0;backface-visibility:hidden;border-radius:22px;background:var(--card);display:grid;place-items:center;font-size:32px;font-weight:700;padding:16px;text-align:center}
+.flash .b{transform:rotateY(180deg);background:var(--hw-s);color:var(--hw)}
+.arena{position:relative;height:340px;background:linear-gradient(var(--cw-s),var(--card));border-radius:20px;overflow:hidden}
+.fall{position:absolute;left:50%;transform:translateX(-50%);background:var(--card);border:2px solid var(--cw);color:var(--ink);font-weight:700;padding:8px 14px;border-radius:12px;white-space:nowrap;box-shadow:0 4px 10px #0002}
+.ground{position:absolute;left:0;right:0;bottom:0;height:10px;background:var(--warn);opacity:.5}
+input.big{width:100%;font:600 20px var(--font);padding:13px 14px;border-radius:14px;border:2px solid var(--line);background:var(--card);color:var(--ink);text-align:center}
+input.big:focus{outline:none;border-color:var(--hw)}
+.tiles{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.tile{all:unset;cursor:pointer;width:44px;height:50px;border-radius:12px;background:var(--card);display:grid;place-items:center;font-size:22px;font-weight:700;text-transform:uppercase;box-shadow:0 2px 0 var(--line)}
+.tile.used{opacity:.25;pointer-events:none}
+.slots{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;min-height:54px}
+.slot{width:40px;height:50px;border-bottom:3px solid var(--sub);display:grid;place-items:center;font-size:24px;font-weight:700;text-transform:uppercase}
+.wd{display:grid;gap:6px;justify-content:center}
+.wd .r{display:flex;gap:6px}
+.wd .c{width:46px;height:50px;border:2px solid var(--line);border-radius:10px;display:grid;place-items:center;font-size:22px;font-weight:800;text-transform:uppercase;background:var(--card)}
+.wd .c.g{background:#3CB46E;border-color:#3CB46E;color:#fff}.wd .c.y{background:#E6B325;border-color:#E6B325;color:#fff}.wd .c.x{background:#8E8E93;border-color:#8E8E93;color:#fff}
+.kb{display:flex;flex-direction:column;gap:6px;align-items:center}
+.kb{width:100%}
+.kb .r{display:flex;gap:4px;width:100%;justify-content:center}
+.kb button{all:unset;cursor:pointer;flex:0 1 34px;min-width:0;height:44px;padding:0;border-radius:8px;background:var(--card);display:grid;place-items:center;font-weight:700;text-transform:uppercase;font-size:15px}
+.kb button.g{background:#3CB46E;color:#fff}.kb button.y{background:#E6B325;color:#fff}.kb button.x{background:#8E8E93;color:#fff;opacity:.6}
+.mem{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.mc{all:unset;cursor:pointer;aspect-ratio:3/4;max-width:100%;border-radius:14px;background:var(--hw);color:#fff;display:grid;place-items:center;font-weight:700;font-size:15px;text-align:center;padding:4px;overflow-wrap:anywhere}
+.mc.up{background:var(--card);color:var(--ink);border:2px solid var(--hw)}
+.mc.done{background:var(--rv-s);color:var(--rv);border:2px solid var(--rv)}
+.balloons{display:flex;justify-content:center;gap:10px;height:70px;align-items:flex-end}
+.bl{width:30px;height:38px;border-radius:50% 50% 48% 48%;position:relative;transition:transform .3s,opacity .3s}
+.bl::after{content:"";position:absolute;left:50%;top:100%;width:1px;height:24px;background:var(--sub)}
+.bl.pop{transform:scale(1.6);opacity:0}
+.bar2{display:flex;gap:8px;align-items:center}
+.bar2 .prog{flex:1;height:12px}
+.lb{display:flex;flex-direction:column;gap:6px}
+.lb .it{display:flex;gap:10px;align-items:center;background:var(--card);border-radius:12px;padding:9px 12px;transition:transform .3s}
+.lb .it.me{background:var(--hw-s)}
+.code{font-size:44px;font-weight:800;letter-spacing:.15em;text-align:center;font-variant-numeric:tabular-nums}
+.names{display:flex;flex-wrap:wrap;gap:6px}
+.boss{position:relative;height:200px;background:linear-gradient(#bfe6ff,#e8f6ff 70%,#7cc77f 70%);border-radius:20px;overflow:hidden}
+.boss .castle{position:absolute;left:8px;bottom:22px;width:54px;height:80px}
+.boss .en{position:absolute;bottom:26px;width:26px;height:34px;transition:left .1s linear}
+.hp{position:absolute;left:10px;top:10px;display:flex;gap:3px}
+.hp i{width:16px;height:6px;border-radius:3px;background:var(--rv)} .hp i.off{background:#0003}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#000d;color:#fff;padding:10px 16px;border-radius:12px;font-weight:600;z-index:20;max-width:90vw;text-align:center}
+.note{background:var(--wr-s);color:var(--wr);border-radius:14px;padding:10px 12px;font-size:13px;font-weight:600}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.shake{animation:shake .25s}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%235856D6'/%3E%3Ctext x='32' y='45' font-family='Arial' font-weight='bold' font-size='38' text-anchor='middle' fill='white'%3EA%3C/text%3E%3C/svg%3E">
+
+
+
+
+</head>
+<body>
+<div class="main" id="app"></div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(function(){
+"use strict";
+/* ---------- demo words (real site: words from each week's classwork and homework) ---------- */
+let GROUPS = [];
+const RANDOM = {id:"rand", week:"Oxirgi oy", name:"Tasodifiy so'zlar", words:null};
+const CLASSMATES = ["Bek","Sardor","Madina","Jasur","Zarina","Omina","Ilyos","Bobur","Nilufar","Diyor","Shahzod","Malika","Aziz","Laylo","Temur","Sevara","Javohir","Kamola","Otabek"];
+const DAILY_CAP = 150;
+
+/* ---------- helpers ---------- */
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const shuffle = (a) => { a = a.slice(); for (let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+const pick = (a, n) => shuffle(a).slice(0, n);
+const norm = (s) => String(s).toLowerCase().replace(/[’‘`ʻʼ]/g,"'").replace(/\s+/g," ").trim();
+function toast(t){ const el=$("#toast"); el.textContent=t; el.hidden=false; clearTimeout(toast.t); toast.t=setTimeout(()=>el.hidden=true,1800); }
+/* ---------- server ---------- */
+const SB_URL = "https://meiokexdxhyjcyfpvjvx.supabase.co", SB_KEY = "sb_publishable_YXhY13kbBK3sv89Y9c1uwg_83HfRqME";
+let SES = null; try { SES = JSON.parse(localStorage.getItem("at_session") || "null"); } catch (e) {}
+if (!SES || SES.role !== "student") location.replace("./");
+async function api(fn, args) {
+  const r = await fetch(`${SB_URL}/rest/v1/rpc/${fn}`, { method: "POST", headers: { apikey: SB_KEY, "Content-Type": "application/json" }, body: JSON.stringify(Object.assign({ p_token: SES && SES.token }, args || {})) });
+  const t = await r.text(); let d = null; try { d = t ? JSON.parse(t) : null; } catch (e) {}
+  if (!r.ok) { if (d && d.message === "AUTH") location.replace("./"); throw new Error((d && d.message) || "HTTP " + r.status); }
+  return d;
+}
+let gold = 0, today = 0, LOADED = false, LOAD_ERR = "";
+const MONTHS = ["yanvar","fevral","mart","aprel","may","iyun","iyul","avgust","sentabr","oktabr","noyabr","dekabr"];
+function weekOf(iso) { const d = new Date(iso); const m = new Date(d.getFullYear(), d.getMonth(), d.getDate()); m.setDate(m.getDate() - ((m.getDay() + 6) % 7)); const e = new Date(m); e.setDate(e.getDate() + 6);
+  return { key: m.getTime(), label: m.getMonth() === e.getMonth() ? `${m.getDate()}–${e.getDate()} ${MONTHS[e.getMonth()]}` : `${m.getDate()}-${MONTHS[m.getMonth()]} – ${e.getDate()}-${MONTHS[e.getMonth()]}` }; }
+async function load() {
+  try {
+    const r = await api("vocab_groups");
+    gold = r.gold == null ? 300 : r.gold; today = r.today || 0;
+    const groups = (r.groups || []).map((g) => { const at = g.week_start ? g.week_start + "T12:00:00" : g.at, w = weekOf(at);
+      return { id: "q" + g.id, wk: w.key, week: w.label, recent: Date.now() - new Date(g.at).getTime() < 31 * 86400e3,
+        name: g.kind === "cw" ? `${g.lesson ? g.lesson + "-dars · " : "Sinf ishi · "}${g.title}` : `Uy vazifasi · ${g.title}`, words: g.words }; });
+    groups.sort((a, b) => b.wk - a.wk);
+    GROUPS = groups;
+  } catch (e) { LOAD_ERR = "Internet bilan muammo. Sahifani yangilang."; }
+  LOADED = true; render();
+}
+function award(n){
+  const game = G;
+  api("vocab_finish", { p_game: game.k, p_n: Math.round(n) }).then((r) => {
+    if (r && r.gold != null) gold = r.gold; if (r && r.today != null) today = r.today;
+    if (G === game) { G.got = r ? r.got : 0; render(); }
+  }).catch(() => { if (G === game) { G.got = 0; render(); } });
+  return undefined;
+}
+const SV = (d) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+const IC = {
+  back:SV('<path d="M15 6l-6 6 6 6"/>'), chev:SV('<path d="M9 6l6 6-6 6"/>'),
+  match:SV('<rect x="3" y="4" width="7" height="7" rx="2"/><rect x="14" y="13" width="7" height="7" rx="2"/><path d="M10 7.5h4v9"/>'),
+  fall:SV('<path d="M12 3v12M7 10l5 5 5-5M4 21h16"/>'),
+  speed:SV('<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>'),
+  cards:SV('<rect x="6" y="3" width="13" height="16" rx="2"/><path d="M3 7v12a2 2 0 0 0 2 2h10"/>'),
+  balloon:SV('<ellipse cx="12" cy="9" rx="6" ry="7"/><path d="M12 16v6"/>'),
+  wordle:SV('<rect x="3" y="3" width="5" height="5" rx="1"/><rect x="10" y="3" width="5" height="5" rx="1"/><rect x="17" y="3" width="4" height="5" rx="1"/><rect x="3" y="10" width="5" height="5" rx="1"/><rect x="10" y="10" width="5" height="5" rx="1"/>'),
+  letters:SV('<path d="M4 18L8 6l4 12M5.5 14h5M14 6h4a3 3 0 0 1 0 6h-4zm0 6h5a3 3 0 0 1 0 6h-5z"/>'),
+  memory:SV('<rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><path d="M15 15h4v4h-4z"/>'),
+  boss:SV('<path d="M3 21V9h3v2h3V9h6v2h3V9h3v12z"/><path d="M10 21v-4a2 2 0 0 1 4 0v4"/>'),
+  duel:SV('<path d="M14.5 17.5L3 6V3h3l11.5 11.5M13 19l6-6M16 16l4 4M19 21l2-2M9.5 17.5L21 6V3h-3L6.5 14.5M11 19l-6-6M8 16l-4 4M5 21l-2-2"/>'),
+  class:SV('<circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0 1 14 0M17 4a4 4 0 0 1 0 8M22 21a6 6 0 0 0-4-5.7"/>'),
+};
+const GAMES = [
+  {k:"match",  solo:1, t:"Juftlik",            d:"Inglizcha va o'zbekcha juftlarni tez toping", ic:"match",   c:"--hw", from:"Quizlet Match, Duolingo"},
+  {k:"fall",   solo:1, t:"Tushayotgan so'zlar", d:"So'zlar turli joydan, turli yo'l bilan tushadi. Yerga tushmasdan yozing",  ic:"fall",    c:"--cw", from:"Quizlet Gravity"},
+  {k:"speed",  solo:1, t:"Tezkor savol",        d:"10 savol, tez javob ko'proq ochko",           ic:"speed",   c:"--tr", from:"Kahoot, Blooket"},
+  {k:"cards",  solo:1, t:"Kartochkalar",        d:"Bilaman / Bilmayman. Bilmaganlar qaytadi",    ic:"cards",   c:"--rv", from:"Anki, Leitner usuli"},
+  {k:"balloon",solo:1, t:"Sharlar",             d:"So'zni harfma-harf toping, 6 ta shar",        ic:"balloon", c:"--wr", from:"Dar (Hangman)"},
+  {k:"wordle", solo:1, t:"So'z topish",         d:"6 urinishda so'zni toping, rangli yordam",    ic:"wordle",  c:"--rv", from:"Wordle"},
+  {k:"letters",solo:1, t:"Harflardan so'z",     d:"Aralash harflardan so'z yasang",              ic:"letters", c:"--hw", from:"Duolingo, word scramble"},
+  {k:"memory", solo:1, t:"Xotira",              d:"Yopiq kartalardan juftlarni eslab toping",    ic:"memory",  c:"--cw", from:"Memory karta o'yini"},
+  {k:"boss",   solo:1, t:"Qal'a himoyasi",      d:"To'g'ri javob dushmanni to'xtatadi",          ic:"boss",    c:"--tr", from:"Blooket Tower Defense"},
+  {k:"duel",   solo:0, t:"Duel",                d:"Sinfdoshingizni chaqiring: bir xil so'zlar, kim tezroq", ic:"duel", c:"--wr", from:"Gimkit, Quizizz"},
+  {k:"klass",  solo:0, t:"Sinf o'yini",         d:"O'qituvchi boshlaydi, hamma kod bilan kiradi", ic:"class",  c:"--hw", from:"Kahoot"},
+];
+
+/* ---------- state ---------- */
+let V = {screen:"groups", tab:"week"}, GRP = null, G = null;
+const loops = [];
+function stopLoops(){ while (loops.length) { const l = loops.pop(); clearInterval(l); cancelAnimationFrame(l); clearTimeout(l); } }
+function words(){ if (GRP.words) return GRP.words; const pool = GROUPS.filter(g=>g.recent).flatMap(g=>g.words); const uniq = [...new Map(pool.map(w=>[w[0].toLowerCase(), w])).values()]; return shuffle(uniq).slice(0, 12); }
+function wrongs(w, list, n){ return pick(list.filter(x=>x[0]!==w[0]), n); }
+
+/* ---------- screens ---------- */
+function goldChip(){ return `<span class="gold"><span class="coin"></span><span id="goldN">${gold}</span></span>`; }
+function vGroups(){
+  const weeks = [...new Set(GROUPS.map(g=>g.week))];
+  if (!LOADED) return `<div class="row between"><a class="btn soft sm" href="./">${IC.back.replace('<svg','<svg width="18" height="18"')} Bosh sahifa</a></div><h1>Lug'at</h1><p class="sub">Yuklanmoqda…</p>`;
+  if (LOAD_ERR) return `<div class="row between"><a class="btn soft sm" href="./">${IC.back.replace('<svg','<svg width="18" height="18"')} Bosh sahifa</a></div><h1>Lug'at</h1><p class="sub">${esc(LOAD_ERR)}</p>`;
+  if (!GROUPS.length) return `<div class="row between"><a class="btn soft sm" href="./">${IC.back.replace('<svg','<svg width="18" height="18"')} Bosh sahifa</a></div><h1>Lug'at</h1><div class="card"><p style="margin:0">Hali so'z yo'q. Vazifalardagi yangi so'zlar shu yerga avtomatik tushadi.</p></div>`;
+  return `<div class="row between"><a class="btn soft sm" href="./">${IC.back.replace('<svg','<svg width="18" height="18"')} Bosh sahifa</a>${goldChip()}</div><h1>Lug'at</h1>
+    <p class="sub" style="margin:0">Har doim ochiq. Guruhni tanlang va o'ynang. Bugun: <b>${today}/${DAILY_CAP}</b> oltin.</p>
+    <button class="li card" style="flex-direction:row;background:var(--hw);color:#fff" data-act="group" data-v="rand">
+      <span style="width:44px;height:44px;border-radius:12px;background:#ffffff26;display:grid;place-items:center">${IC.speed}</span>
+      <span class="grow"><b>Tasodifiy so'zlar</b><br><span class="small" style="opacity:.85">Oxirgi bir oydagi so'zlardan aralash</span></span><span>${IC.chev}</span></button>
+    ${weeks.map(w => `<h2>${esc(w)}</h2><div class="list">${GROUPS.filter(g=>g.week===w).map(g => `<button class="li" data-act="group" data-v="${g.id}">
+      <span class="grow"><b style="font-weight:600">${esc(g.name)}</b><br><span class="small sub">${g.words.length} ta so'z · ${esc(g.words.slice(0,3).map(x=>x[0]).join(", "))}…</span></span><span class="chev">${IC.chev}</span></button>`).join("")}</div>`).join("")}
+    <p class="small sub">Har hafta sinf ishi va uy vazifasidagi yangi so'zlar shu yerga avtomatik tushadi. 2 oydan eski so'zlar o'chadi.</p>`;
+}
+function vGames(){
+  const card = (g) => `<button class="gm" style="--t:var(${g.c});--t-s:var(${g.c}-s)" data-act="play" data-v="${g.k}"><span class="ic">${IC[g.ic]}</span><b>${g.t}</b><span>${g.d}</span><span class="small" style="opacity:.7">G'oya: ${g.from}</span></button>`;
+  const ws = GRP.words;
+  return `<div class="top"><button class="btn soft sm" data-act="home">${IC.back.replace('<svg','<svg width="18" height="18"')} Guruhlar</button><span class="grow"></span>${goldChip()}</div>
+    <div><p class="sub small" style="margin:0">${esc(GRP.week)}</p><h1>${esc(GRP.name)}</h1></div>
+    ${ws ? `<div class="wlist">${ws.map(w=>`<span class="wchip"><b>${esc(w[0])}</b> · ${esc(w[1])}</span>`).join("")}</div>` : `<p class="sub" style="margin:0">Har o'yinda oxirgi oydagi so'zlardan yangi aralash to'plam chiqadi.</p>`}
+    <h2>Yakka o'yinlar</h2><div class="ggrid">${GAMES.filter(g=>g.solo).map(card).join("")}</div>
+    <h2>Boshqalar bilan</h2><div class="card"><p style="margin:0"><b>Duel</b> va <b>Sinf o'yini</b> tez orada qo'shiladi.</p></div>
+    <p class="small sub">Oltin faqat to'g'ri javob uchun beriladi: bir o'yinda 25 tagacha, kuniga ${DAILY_CAP} tagacha. Bugun: ${today}/${DAILY_CAP}.</p>`;
+}
+function gameTop(title, right){
+  return `<div class="top"><button class="btn soft sm" data-act="quit" aria-label="O'yindan chiqish">${IC.back.replace('<svg','<svg width="18" height="18"')}</button><h3 class="grow">${esc(title)}</h3>${right||""}${goldChip()}</div>`;
+}
+function vEnd(msg, got){
+  return `<div class="card" style="align-items:center;text-align:center;padding:28px 16px">
+    <div style="font-size:44px;font-weight:800">${esc(msg)}</div>
+    <p class="sub" style="margin:0">${got === undefined ? "Oltin hisoblanmoqda…" : got ? `+${got} oltin` : today >= DAILY_CAP ? "Bugungi oltin limiti tugadi, lekin mashq davom etadi" : "Bu safar oltin yo'q (o'yin juda qisqa yoki to'g'ri javob kam)"}</p>
+    <div class="row" style="justify-content:center"><button class="btn" data-act="play" data-v="${G.k}">Yana o'ynash</button><button class="btn soft" data-act="games">Boshqa o'yin</button></div></div>`;
+}
+function render(){
+  let h;
+  if (V.screen === "groups") h = vGroups();
+  else if (V.screen === "games") h = vGames();
+  else h = G && G.render ? G.render() : "";
+  $("#app").innerHTML = h;
+  if (G && G.after) G.after();
+}
+
+/* ---------- games ---------- */
+const MAKE = {};
+// 1. Juftlik
+MAKE.match = () => {
+  const ws = pick(words(), 6), L = shuffle(ws.map(w=>({w, s:"en"}))), R = shuffle(ws.map(w=>({w, s:"uz"})));
+  const g = {k:"match", t0:Date.now(), sel:null, done:new Set(), bad:null, mist:0};
+  g.render = () => {
+    if (g.done.size === 6) return gameTop("Juftlik") + vEnd(`${Math.round((g.end-g.t0)/100)/10} soniya`, g.got);
+    const cell = (x) => { const id = x.s + x.w[0]; const isDone = g.done.has(x.w[0]);
+      return `<button class="opt ${isDone?"gone":""} ${g.sel===id?"sel":""} ${g.bad===id?"no shake":""}" data-act="m" data-v="${esc(id)}">${esc(x.s==="en"?x.w[0]:x.w[1])}</button>`; };
+    return gameTop("Juftlik", `<span class="pill">${g.done.size}/6</span>`) + `<p class="sub small" style="margin:0;text-align:center">Chapdan inglizcha, o'ngdan o'zbekcha ma'nosini bosing</p>
+      <div class="opts">${L.map((x,i)=>cell(x)+cell(R[i])).join("")}</div>`;
+  };
+  g.act = (v) => {
+    if (!g.sel) { g.sel = v; g.bad = null; render(); return; }
+    if (g.sel === v) { g.sel = null; render(); return; }
+    const a = g.sel, b = v;
+    if (a[0] === b[0] && a.slice(0,2) === b.slice(0,2)) { g.sel = v; render(); return; }
+    const wa = a.slice(2), wb = b.slice(2);
+    if (wa === wb) { g.done.add(wa); g.sel = null; if (g.done.size === 6) { g.end = Date.now(); g.got = award(g.mist ? 4 : 6); } }
+    else { g.bad = b; g.sel = null; g.mist++; }
+    render();
+  };
+  return g;
+};
+// 2. Tushayotgan so'zlar: several words at once, each from its own point and path
+MAKE.fall = () => {
+  const ws = shuffle(words()).slice(0, 12);
+  const g = {k:"fall", next:0, live:[], lives:3, score:0, missed:0, msg:"", ok:false, t:0, lastSpawn:-9, nid:0, mode:null};
+  // difficulty: speed (px/s), speed-up per right answer, words on screen at once, seconds between words, gold multiplier
+  const MODES = {
+    easy:   {n:"Oson",  d:"Sekin tushadi, ekranda ko'pi bilan 2 ta so'z", vy:14, up:0.8, max:2, gap:[4.2, 3.0], gold:1},
+    medium: {n:"O'rta", d:"O'rtacha tezlik, ekranda ko'pi bilan 3 ta so'z", vy:21, up:1.5, max:3, gap:[3.4, 2.0], gold:1.5},
+    hard:   {n:"Qiyin", d:"Tez tushadi, ekranda 4 tagacha so'z", vy:30, up:2.2, max:4, gap:[2.6, 1.2], gold:2},
+  };
+  const W = () => { const el = $("#arena"); return el ? el.clientWidth : 340; };
+  const spawn = () => {
+    if (g.next >= ws.length) return;
+    const w = W(), kind = ["straight","diagonal","zigzag","curve"][Math.floor(Math.random()*4)];
+    g.live.push({id:g.nid++, w:ws[g.next++], kind, x0: 30 + Math.random()*(w-140), y:-30, vx:(Math.random()<.5?-1:1)*(20+Math.random()*35),
+      vy: MODES[g.mode].vy + g.score*MODES[g.mode].up + Math.random()*(MODES[g.mode].vy/2), amp: 30 + Math.random()*40, ph: Math.random()*6, born:g.t});
+  };
+  const xOf = (o) => { const age = g.t - o.born, w = W();
+    let x = o.x0;
+    if (o.kind === "diagonal") x = o.x0 + o.vx*age;
+    if (o.kind === "zigzag") { const span = w-120; const raw = o.x0 + Math.abs(o.vx)*1.4*age; const m = raw % (2*span); x = 10 + (m < span ? m : 2*span - m); }
+    if (o.kind === "curve") x = o.x0 + Math.sin(age*1.6 + o.ph)*o.amp;
+    return Math.max(4, Math.min(w-110, x)); };
+  g.render = () => {
+    if (!g.mode) return gameTop("Tushayotgan so'zlar") + `<p class="sub" style="margin:0">Qiyinlikni tanlang. Qiyinroq rejim ko'proq oltin beradi.</p>
+      <div class="list">${Object.entries(MODES).map(([k, m]) => `<button class="li" data-act="fmode" data-v="${k}"><span class="grow"><b style="font-weight:600">${m.n}</b><br><span class="small sub">${m.d}</span></span><span class="pill" style="background:var(--wr-s);color:var(--wr)">×${m.gold} oltin</span></button>`).join("")}</div>`;
+    const done = g.lives <= 0 || (g.next >= ws.length && !g.live.length);
+    if (done) return gameTop("Tushayotgan so'zlar") + vEnd(`${g.score} / ${ws.length}`, g.got);
+    return gameTop("Tushayotgan so'zlar", `<span class="pill">${MODES[g.mode].n}</span><span class="pill">${"❤".repeat(g.lives)}</span><span class="pill">${g.score}</span>`) + `
+      <div class="arena" id="arena" aria-live="polite">${g.live.map(o=>`<div class="fall" data-id="${o.id}" style="left:${xOf(o)}px;top:${o.y}px;transform:none">${esc(o.w[1])}</div>`).join("")}<div class="ground"></div></div>
+      <div class="fbk" style="color:${g.ok?"var(--rv)":"var(--warn)"}">${esc(g.msg)}</div>
+      <input class="big" id="fin" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Inglizchasini yozing…" aria-label="Inglizcha so'z">`;
+  };
+  const finish = () => { if (g.lives <= 0 || (g.next >= ws.length && !g.live.length)) { stopLoops(); g.got = award(Math.round(g.score * MODES[g.mode].gold)); render(); return true; } return false; };
+  const tryHit = (val) => {
+    const o = g.live.find(x => norm(x.w[0]) === norm(val)); if (!o) return false;
+    g.live = g.live.filter(x => x !== o); g.score++; g.ok = true; g.msg = `To'g'ri: ${o.w[0]}`;
+    const inp = $("#fin"); if (inp) inp.value = "";
+    if (!finish()) { const el = document.querySelector(`.fall[data-id="${o.id}"]`); if (el) el.remove(); const f = document.querySelector(".fbk"); if (f) { f.textContent = g.msg; f.style.color = "var(--rv)"; } const sc = document.querySelectorAll(".top .pill")[2]; if (sc) sc.textContent = g.score; }
+    return true;
+  };
+  g.act = (a, v) => { if (a === "fmode" && !g.mode) { g.mode = v; render(); } };
+  g.after = () => {
+    const inp = $("#fin"); if (!inp || !g.mode) return;
+    inp.focus();
+    inp.oninput = () => tryHit(inp.value);
+    inp.onkeydown = (e) => { if (e.key === "Enter" && inp.value.trim() && !tryHit(inp.value)) { inp.classList.add("shake"); setTimeout(()=>inp.classList.remove("shake"),300); inp.value = ""; } };
+    if (!loops.length) {
+      let last = performance.now();
+      const step = (now) => {
+        const dt = Math.min(0.05, (now - last)/1000); last = now; g.t += dt;
+        const M = MODES[g.mode], gap = Math.max(M.gap[1], M.gap[0] - g.score*0.1);
+        if ((g.t - g.lastSpawn > gap && g.live.length < M.max) || !g.live.length) { spawn(); g.lastSpawn = g.t; }
+        let lost = false;
+        g.live.forEach(o => { o.y += o.vy*dt; });
+        const fallen = g.live.filter(o => o.y > 300);
+        if (fallen.length) { g.live = g.live.filter(o => o.y <= 300); g.lives -= fallen.length; g.missed += fallen.length; g.ok = false; g.msg = `Tushib ketdi: ${fallen.map(o=>o.w[0]).join(", ")}`; lost = true; }
+        if (finish()) return;
+        if (lost) { const v = ($("#fin")||{}).value || ""; render(); const i2 = $("#fin"); if (i2) { i2.value = v; } }
+        else {
+          const arena = $("#arena");
+          g.live.forEach(o => { let el = arena && arena.querySelector(`.fall[data-id="${o.id}"]`);
+            if (!el && arena) { el = document.createElement("div"); el.className = "fall"; el.dataset.id = o.id; el.style.transform = "none"; el.textContent = o.w[1]; arena.insertBefore(el, arena.lastElementChild); }
+            if (el) { el.style.top = o.y + "px"; el.style.left = xOf(o) + "px"; } });
+        }
+        loops[0] = requestAnimationFrame(step);
+      };
+      loops.push(requestAnimationFrame(step));
+    }
+  };
+  return g;
+};
+// 3. Tezkor savol (also used by duel and class game)
+function quizRound(list, i){
+  const w = list[i], dir = Math.random() < .5 ? "en" : "uz";
+  const opts = shuffle([w].concat(wrongs(w, GROUPS.flatMap(x=>x.words), 3)));
+  return {w, dir, q: dir === "en" ? w[0] : w[1], opts: opts.map(o => dir === "en" ? o[1] : o[0]), right: dir === "en" ? w[1] : w[0]};
+}
+MAKE.speed = () => {
+  const ws = shuffle(words()).slice(0, 10);
+  const g = {k:"speed", i:0, pts:0, streak:0, ok:0, ans:null, t0:0, left:1, r:quizRound(ws,0)};
+  const LIM = 8000;
+  g.render = () => {
+    if (g.i >= ws.length) return gameTop("Tezkor savol") + vEnd(`${g.pts} ochko`, g.got);
+    const r = g.r;
+    return gameTop("Tezkor savol", `<span class="pill">${g.i+1}/10 · ${g.pts}</span>`) + `
+      <div class="prog" style="--accent:var(--tr)"><i id="tbar" style="width:${g.left*100}%"></i></div>
+      ${g.streak >= 2 ? `<div class="fbk" style="color:var(--wr)">${g.streak} ketma-ket!</div>` : `<div class="fbk"></div>`}
+      <div class="q">${esc(r.q)}</div>
+      <div class="opts">${r.opts.map((o,j)=>`<button class="opt ${g.ans!=null ? (o===r.right?"ok":j===g.ans?"no":"") : ""}" data-act="sq" data-v="${j}" ${g.ans!=null?"disabled":""}>${esc(o)}</button>`).join("")}</div>`;
+  };
+  const go = () => { g.i++; g.ans = null; if (g.i < ws.length) { g.r = quizRound(ws, g.i); start(); } else g.got = award(g.ok); render(); };
+  const start = () => { stopLoops(); g.t0 = Date.now(); g.left = 1;
+    loops.push(setInterval(() => { g.left = Math.max(0, 1 - (Date.now()-g.t0)/LIM); const b = $("#tbar"); if (b) b.style.width = g.left*100 + "%";
+      if (g.left <= 0 && g.ans == null) { g.ans = -1; g.streak = 0; render(); stopLoops(); setTimeout(go, 900); } }, 80)); };
+  g.act = (v) => {
+    if (g.ans != null) return; g.ans = Number(v); stopLoops();
+    if (g.r.opts[g.ans] === g.r.right) { g.ok++; g.streak++; g.pts += 50 + Math.round(g.left*50) + Math.min(g.streak,5)*10; } else g.streak = 0;
+    render(); setTimeout(go, 800);
+  };
+  start();
+  return g;
+};
+// 4. Kartochkalar
+MAKE.cards = () => {
+  const g = {k:"cards", q:shuffle(words()), known:0, flip:false, seen:0};
+  const total = g.q.length;
+  g.render = () => {
+    if (!g.q.length) return gameTop("Kartochkalar") + vEnd(`${total} ta so'z`, g.got);
+    const w = g.q[0];
+    return gameTop("Kartochkalar", `<span class="pill">Bilaman: ${g.known}/${total}</span>`) + `
+      <div class="flash ${g.flip?"on":""}" data-act="flip" role="button" tabindex="0" aria-label="Kartani aylantirish"><div class="in"><div class="f">${esc(w[0])}</div><div class="f b">${esc(w[1])}</div></div></div>
+      <p class="sub small" style="text-align:center;margin:0">${g.flip ? "O'zingizni tekshiring" : "Ma'nosini eslang, keyin kartani bosing"}</p>
+      <div class="opts"><button class="btn" style="--accent:var(--warn)" data-act="cno" ${g.flip?"":"disabled"}>Bilmayman</button><button class="btn" style="--accent:var(--rv)" data-act="cyes" ${g.flip?"":"disabled"}>Bilaman</button></div>
+      <p class="small sub" style="text-align:center;margin:0">Bilmagan so'z 3 kartadan keyin yana chiqadi.</p>`;
+  };
+  g.act = (a) => {
+    if (a === "flip") { g.flip = !g.flip; render(); return; }
+    const w = g.q.shift(); g.flip = false;
+    if (a === "cyes") { g.known++; } else g.q.splice(Math.min(3, g.q.length), 0, w);
+    if (!g.q.length) g.got = award(Math.round(total/2));
+    render();
+  };
+  return g;
+};
+// 5. Sharlar (hangman, friendly)
+MAKE.balloon = () => {
+  const list = words().filter(w=>/^[a-z]+$/.test(w[0]));
+  const g = {k:"balloon", w:list[Math.floor(Math.random()*list.length)], tried:new Set(), miss:0};
+  const COLORS = ["#FF5C8A","#5856D6","#0A84C6","#1C8C4C","#F5B400","#C26A00"];
+  g.render = () => {
+    const word = g.w[0], win = [...word].every(c=>g.tried.has(c)), lose = g.miss >= 6;
+    if (win || lose) return gameTop("Sharlar") + `<div class="q">${esc(word)}</div>` + vEnd(win ? "Topdingiz!" : "Sharlar tugadi", g.got);
+    return gameTop("Sharlar", `<span class="pill">${6-g.miss} ta shar</span>`) + `
+      <div class="balloons">${COLORS.map((c,i)=>`<span class="bl ${i<g.miss?"pop":""}" style="background:${c}"></span>`).join("")}</div>
+      <p class="sub" style="text-align:center;margin:6px 0 0">Ma'nosi: <b style="color:var(--ink)">${esc(g.w[1])}</b></p>
+      <div class="slots">${[...word].map(c=>`<span class="slot">${g.tried.has(c)?c:""}</span>`).join("")}</div>
+      <div class="kb">${["qwertyuiop","asdfghjkl","zxcvbnm"].map(r=>`<div class="r">${[...r].map(c=>`<button data-act="bk" data-v="${c}" class="${g.tried.has(c)?(word.includes(c)?"g":"x"):""}" ${g.tried.has(c)?"disabled":""}>${c}</button>`).join("")}</div>`).join("")}</div>`;
+  };
+  g.act = (c) => { if (g.tried.has(c)) return; g.tried.add(c); if (!g.w[0].includes(c)) g.miss++;
+    const win = [...g.w[0]].every(x=>g.tried.has(x)); if (win) g.got = award(Math.max(1, 6 - g.miss)); render(); };
+  return g;
+};
+// 6. So'z topish (Wordle-style)
+MAKE.wordle = () => {
+  let list = words().filter(w=>/^[a-z]{4,6}$/.test(w[0])); if (!list.length) list = GROUPS[1].words.filter(w=>/^[a-z]{4,6}$/.test(w[0]));
+  const g = {k:"wordle", w:list[Math.floor(Math.random()*list.length)], rows:[], cur:"", keys:{}};
+  const N = g.w[0].length;
+  const score = (guess) => { const t = [...g.w[0]], res = Array(N).fill("x"), left = {};
+    t.forEach((c,i)=>{ if (guess[i]===c) res[i]="g"; else left[c]=(left[c]||0)+1; });
+    [...guess].forEach((c,i)=>{ if (res[i]!=="g" && left[c]) { res[i]="y"; left[c]--; } }); return res; };
+  try { g.intro = !localStorage.getItem("wordle_seen"); } catch (e) { g.intro = true; }
+  g.render = () => {
+    if (g.intro) return gameTop("So'z topish") + `<div class="card"><h3>Qanday o'ynaladi?</h3>
+      <p style="margin:0">Yashirin inglizcha so'zni 6 urinishda toping. Tepada o'zbekcha ma'nosi yozilgan, kataklar soni = harflar soni.</p>
+      <p style="margin:0">Har urinishdan keyin harflar rangga bo'yaladi:</p>
+      <div class="wd"><div class="r">${[["F","x"],["A","x"],["T","g"],["H","g"],["E","g"],["R","g"]].map(([c,k])=>`<span class="c ${k}">${c}</span>`).join("")}</div><div class="r">${[..."MOTHER"].map(c=>`<span class="c g">${c}</span>`).join("")}</div></div>
+      <p style="margin:0"><b style="color:#3CB46E">Yashil</b> = harf to'g'ri joyda. <b style="color:#E6B325">Sariq</b> = harf so'zda bor, lekin boshqa joyda. <b style="color:#8E8E93">Kulrang</b> = bu harf so'zda yo'q.</p>
+      <p class="sub small" style="margin:0">Misol: so'z MOTHER (ona). FATHER yozsangiz T H E R yashil bo'ladi, demak so'z ...THER bilan tugaydi.</p>
+      <button class="btn" data-act="wstart">Tushundim, boshlash</button></div>`;
+    const win = g.rows.some(r=>r.word===g.w[0]), lose = !win && g.rows.length >= 6;
+    const grid = `<div class="wd">${Array.from({length:6},(_,i)=>{ const r = g.rows[i]; const s = r ? r.word : i===g.rows.length ? g.cur : "";
+      return `<div class="r">${Array.from({length:N},(_,j)=>`<span class="c ${r?r.res[j]:""}">${esc(s[j]||"")}</span>`).join("")}</div>`; }).join("")}</div>`;
+    if (win || lose) return gameTop("So'z topish") + grid + vEnd(win ? `${g.rows.length}-urinishda!` : g.w[0], g.got);
+    return gameTop("So'z topish", `<span class="pill">${N} harf</span>`) + `<p class="sub small" style="text-align:center;margin:0">Yordam: <b style="color:var(--ink)">${esc(g.w[1])}</b> · yashil = joyida, sariq = bor, lekin boshqa joyda</p>` + grid + `
+      <div class="kb">${["qwertyuiop","asdfghjkl","zxcvbnm"].map((r,ri)=>`<div class="r">${ri===2?`<button data-act="wk" data-v="enter" style="padding:0 8px">OK</button>`:""}${[...r].map(c=>`<button data-act="wk" data-v="${c}" class="${g.keys[c]||""}">${c}</button>`).join("")}${ri===2?`<button data-act="wk" data-v="del" style="padding:0 8px" aria-label="O'chirish">⌫</button>`:""}</div>`).join("")}</div>`;
+  };
+  g.act = (k) => {
+    if (k === "wstart") { g.intro = false; try { localStorage.setItem("wordle_seen", "1"); } catch (e) {} render(); return; }
+    if (g.intro) return;
+    if (g.rows.some(r=>r.word===g.w[0]) || g.rows.length >= 6) return;
+    if (k === "del") g.cur = g.cur.slice(0,-1);
+    else if (k === "enter") { if (g.cur.length !== N) { toast(`${N} harfli so'z yozing`); return; }
+      const res = score(g.cur); g.rows.push({word:g.cur, res});
+      [...g.cur].forEach((c,i)=>{ const o = g.keys[c]; if (res[i]==="g" || (res[i]==="y" && o!=="g") || (!o)) g.keys[c] = res[i]==="x" && o ? o : res[i]; });
+      if (g.cur === g.w[0]) g.got = award(7 - g.rows.length); g.cur = ""; }
+    else if (g.cur.length < N) g.cur += k;
+    render();
+  };
+  g.key = (e) => { if (/^[a-z]$/i.test(e.key)) g.act(e.key.toLowerCase()); else if (e.key==="Backspace") g.act("del"); else if (e.key==="Enter") g.act("enter"); };
+  return g;
+};
+// 7. Harflardan so'z
+MAKE.letters = () => {
+  const ws = shuffle(words().filter(w=>/^[a-z]+$/.test(w[0]))).slice(0, 6);
+  const g = {k:"letters", i:0, pick:[], ok:0, L:null, res:null};
+  const load = () => { g.L = shuffle([...ws[g.i][0]]); g.pick = []; g.res = null; };
+  load();
+  g.render = () => {
+    if (g.i >= ws.length) return gameTop("Harflardan so'z") + vEnd(`${g.ok} / ${ws.length}`, g.got);
+    const w = ws[g.i];
+    return gameTop("Harflardan so'z", `<span class="pill">${g.i+1}/${ws.length}</span>`) + `
+      <div class="q">${esc(w[1])}</div>
+      <div class="slots">${g.L.map((_,j)=>`<span class="slot" style="${g.res===false?"color:var(--warn)":g.res?"color:var(--rv)":""}">${g.pick[j]!=null?g.L[g.pick[j]]:""}</span>`).join("")}</div>
+      <div class="tiles">${g.L.map((c,j)=>`<button class="tile ${g.pick.includes(j)?"used":""}" data-act="lt" data-v="${j}">${c}</button>`).join("")}</div>
+      <div class="row" style="justify-content:center"><button class="btn soft" data-act="lclr">Tozalash</button></div>
+      ${g.res===false?`<div class="fbk" style="color:var(--warn)">To'g'risi: ${esc(w[0])}</div>`:""}`;
+  };
+  g.act = (a, v) => {
+    if (g.res != null) return;
+    if (a === "lclr") { g.pick = []; render(); return; }
+    g.pick.push(Number(v));
+    if (g.pick.length === g.L.length) {
+      const word = g.pick.map(j=>g.L[j]).join(""); g.res = word === ws[g.i][0]; if (g.res) g.ok++;
+      render(); setTimeout(()=>{ g.i++; if (g.i < ws.length) load(); else g.got = award(g.ok); render(); }, g.res ? 700 : 1500); return;
+    }
+    render();
+  };
+  return g;
+};
+// 8. Xotira
+MAKE.memory = () => {
+  const ws = pick(words(), 6);
+  const g = {k:"memory", cards:shuffle(ws.flatMap(w=>[{w:w[0], t:w[0]},{w:w[0], t:w[1]}])), up:[], done:new Set(), moves:0, lock:false};
+  g.render = () => {
+    if (g.done.size === 6) return gameTop("Xotira") + vEnd(`${g.moves} urinish`, g.got);
+    return gameTop("Xotira", `<span class="pill">${g.moves} urinish</span>`) + `<div class="mem">${g.cards.map((c,i)=>{
+      const st = g.done.has(c.w) ? "done" : g.up.includes(i) ? "up" : "";
+      return `<button class="mc ${st}" data-act="mm" data-v="${i}" aria-label="${st?esc(c.t):"Yopiq karta"}">${st?esc(c.t):"?"}</button>`; }).join("")}</div>`;
+  };
+  g.act = (v) => {
+    const i = Number(v); if (g.lock || g.up.includes(i) || g.done.has(g.cards[i].w)) return;
+    g.up.push(i);
+    if (g.up.length === 2) { g.moves++; const [a,b] = g.up.map(j=>g.cards[j]);
+      if (a.w === b.w) { g.done.add(a.w); g.up = []; if (g.done.size === 6) g.got = award(g.moves <= 9 ? 6 : 4); }
+      else { g.lock = true; setTimeout(()=>{ g.up = []; g.lock = false; render(); }, 900); } }
+    render();
+  };
+  return g;
+};
+// 9. Qal'a himoyasi
+MAKE.boss = () => {
+  const ws = shuffle(words());
+  const g = {k:"boss", hp:5, en:[], spawned:0, total:10, killed:0, qi:0, r:null, shot:null};
+  g.r = quizRound(ws, 0);
+  const enemy = `<svg viewBox="0 0 26 34" class="en-s"><ellipse cx="13" cy="32" rx="8" ry="2" fill="#0003"/><rect x="7" y="20" width="4" height="12" rx="2" fill="#4a3b2c"/><rect x="15" y="20" width="4" height="12" rx="2" fill="#4a3b2c"/><rect x="5" y="11" width="16" height="12" rx="4" fill="#D61F57"/><circle cx="13" cy="7" r="5.5" fill="#f2c49b"/><path d="M7 6q6-8 12 0z" fill="#555"/><line x1="3" y1="4" x2="3" y2="26" stroke="#8a5a2b" stroke-width="2"/></svg>`;
+  g.render = () => {
+    const end = g.hp <= 0 || (g.spawned >= g.total && !g.en.length);
+    if (end) return gameTop("Qal'a himoyasi") + vEnd(g.hp > 0 ? "Qal'a omon qoldi!" : "Qal'a yiqildi", g.got);
+    const r = g.r;
+    return gameTop("Qal'a himoyasi", `<span class="pill">${g.killed}/${g.total}</span>`) + `
+      <div class="boss" id="bossA"><div class="hp">${Array.from({length:5},(_,i)=>`<i class="${i<g.hp?"":"off"}"></i>`).join("")}</div>
+        <svg class="castle" viewBox="0 0 54 80"><rect x="6" y="24" width="42" height="56" fill="#9aa6b6"/><rect x="6" y="16" width="8" height="8" fill="#9aa6b6"/><rect x="23" y="16" width="8" height="8" fill="#9aa6b6"/><rect x="40" y="16" width="8" height="8" fill="#9aa6b6"/><path d="M21 80V64a6 6 0 0 1 12 0v16z" fill="#5a3a1c"/><line x1="27" y1="16" x2="27" y2="2" stroke="#5a3a1c" stroke-width="2"/><path d="M27 2h14l-4 4 4 4H27z" fill="#0A84C6"/></svg>
+        ${g.en.map(e=>`<div class="en" data-id="${e.id}" style="left:${e.x}%">${enemy}</div>`).join("")}
+        ${g.shot!=null?`<svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none"><line x1="13%" y1="55%" x2="${g.shot}%" y2="80%" stroke="#C26A00" stroke-width="3" stroke-dasharray="8 6"/></svg>`:""}</div>
+      <div class="q" style="font-size:22px;padding:4px 0">${esc(r.q)}</div>
+      <div class="opts">${r.opts.map((o,j)=>`<button class="opt" data-act="bq" data-v="${j}">${esc(o)}</button>`).join("")}</div>`;
+  };
+  let nid = 0, lastSpawn = 0;
+  const tick = () => {
+    const now = Date.now();
+    if (g.spawned < g.total && now - lastSpawn > 2600) { g.en.push({id:nid++, x:92}); g.spawned++; lastSpawn = now; }
+    g.en.forEach(e => e.x -= 0.32);
+    const hit = g.en.filter(e => e.x <= 14); if (hit.length) { g.hp -= hit.length; g.en = g.en.filter(e => e.x > 14); render(); }
+    else { g.en.forEach(e => { const el = document.querySelector(`.en[data-id="${e.id}"]`); if (el) el.style.left = e.x + "%"; else render(); }); }
+    if (g.hp <= 0 || (g.spawned >= g.total && !g.en.length)) { stopLoops(); g.got = award(g.hp > 0 ? g.killed : Math.floor(g.killed/2)); render(); }
+  };
+  loops.push(setInterval(tick, 60));
+  g.act = (v) => {
+    const ok = g.r.opts[Number(v)] === g.r.right;
+    if (ok && g.en.length) { const front = g.en.reduce((a,b)=>a.x<b.x?a:b); g.shot = front.x; g.en = g.en.filter(e=>e!==front); g.killed++; setTimeout(()=>{ g.shot = null; }, 250); }
+    else if (!ok) { toast(`To'g'risi: ${g.r.right}`); g.en.forEach(e => e.x -= 3); }
+    g.qi++; g.r = quizRound(ws, g.qi % ws.length); render();
+  };
+  return g;
+};
+// 10. Duel (demo: classmate is a computer player)
+MAKE.duel = () => {
+  const ws = shuffle(words()).slice(0, 8);
+  const g = {k:"duel", stage:"pick", foe:null, i:0, me:0, them:0, ans:null, r:null, foeAns:null};
+  g.render = () => {
+    if (g.stage === "pick") return gameTop("Duel") + `<p class="sub" style="margin:0">Kimni chaqirasiz? Ikkalangizga bir xil 8 ta so'z chiqadi. To'g'ri va tez javob ko'proq ochko beradi. G'olib +10 oltin oladi.</p>
+      <div class="list">${CLASSMATES.slice(0,6).map((n,i)=>`<button class="li" data-act="dfoe" data-v="${esc(n)}"><span class="grow"><b style="font-weight:600">${esc(n)}</b><br><span class="small sub">${i%3===0?"Onlayn":"Onlayn · "+(2+i)+" duel yutgan"}</span></span><span class="pill" style="background:var(--rv-s);color:var(--rv)">Chaqirish</span></button>`).join("")}</div>
+      <div class="note">Demo: raqib kompyuter. Haqiqiy saytda chaqiriq sinfdoshga boradi va u "Qabul qilish"ni bosadi.</div>`;
+    if (g.stage === "wait") return gameTop("Duel") + `<div class="card" style="align-items:center;text-align:center;padding:30px"><h2>${esc(g.foe)} kutilmoqda…</h2><p class="sub">Chaqiriq yuborildi</p></div>`;
+    if (g.i >= ws.length) { const win = g.me > g.them, draw = g.me === g.them;
+      return gameTop("Duel") + duelBars() + vEnd(draw ? "Durang" : win ? "G'alaba!" : `${g.foe} yutdi`, g.got); }
+    const r = g.r;
+    return gameTop("Duel", `<span class="pill">${g.i+1}/${ws.length}</span>`) + duelBars() + `
+      <div class="q">${esc(r.q)}</div>
+      <div class="opts">${r.opts.map((o,j)=>`<button class="opt ${g.ans!=null ? (o===r.right?"ok":j===g.ans?"no":"") : ""}" data-act="dq" data-v="${j}" ${g.ans!=null?"disabled":""}>${esc(o)}</button>`).join("")}</div>
+      <div class="fbk sub small">${g.foeAns==null?`${esc(g.foe)} o'ylamoqda…`:g.foeAns?`${esc(g.foe)} to'g'ri javob berdi`:`${esc(g.foe)} xato qildi`}</div>`;
+  };
+  const duelBars = () => { const mx = Math.max(400, g.me, g.them);
+    return `<div class="card"><div class="bar2"><b style="width:70px">Siz</b><div class="prog" style="--accent:var(--hw)"><i style="width:${g.me/mx*100}%"></i></div><b style="width:44px;text-align:right">${g.me}</b></div>
+      <div class="bar2"><b style="width:70px;overflow:hidden;text-overflow:ellipsis">${esc(g.foe)}</b><div class="prog" style="--accent:var(--wr)"><i style="width:${g.them/mx*100}%"></i></div><b style="width:44px;text-align:right">${g.them}</b></div></div>`; };
+  const round = () => { g.ans = null; g.foeAns = null; g.r = quizRound(ws, g.i); g.t0 = Date.now();
+    const delay = 1500 + Math.random()*3500; loops.push(setTimeout(()=>{ g.foeAns = Math.random() < .72; if (g.foeAns) g.them += 50 + Math.round((1-delay/8000)*50); if (V.screen==="game") render(); maybeNext(); }, delay)); };
+  const maybeNext = () => { if (g.ans != null && g.foeAns != null) loops.push(setTimeout(()=>{ g.i++; if (g.i < ws.length) round(); else g.got = award(g.me > g.them ? 10 : 2); render(); }, 900)); };
+  g.act = (a, v) => {
+    if (a === "dfoe") { g.foe = v; g.stage = "wait"; render(); loops.push(setTimeout(()=>{ g.stage = "play"; round(); render(); }, 1400)); return; }
+    if (g.ans != null) return; g.ans = Number(v);
+    if (g.r.opts[g.ans] === g.r.right) g.me += 50 + Math.max(0, Math.round((1-(Date.now()-g.t0)/8000)*50));
+    render(); maybeNext();
+  };
+  return g;
+};
+// 11. Sinf o'yini (demo: classmates are computer players)
+MAKE.klass = () => {
+  const ws = shuffle(words()).slice(0, 5);
+  const others = CLASSMATES.slice(0, 18).map(n=>({n, s:0, skill:.45+Math.random()*.5}));
+  const g = {k:"klass", stage:"join", code:"", joined:[], i:0, me:0, ans:null, r:null, t0:0};
+  g.render = () => {
+    if (g.stage === "join") return gameTop("Sinf o'yini") + `<div class="card" style="align-items:center;text-align:center"><p class="sub" style="margin:0">O'qituvchi doskada ko'rsatgan kodni kiriting</p>
+      <input class="big" id="kcode" inputmode="numeric" maxlength="4" placeholder="4 xonali kod" aria-label="O'yin kodi" style="max-width:220px;letter-spacing:.3em">
+      <button class="btn" data-act="kjoin">Kirish</button><p class="small sub" style="margin:0">Demo: istalgan 4 ta raqam</p></div>
+      <div class="note">Haqiqiy saytda o'qituvchi o'z telefonida "Sinf o'yini"ni boshlaydi, kod chiqadi, savollar hammaga bir vaqtda chiqadi.</div>`;
+    if (g.stage === "lobby") return gameTop("Sinf o'yini") + `<div class="card" style="text-align:center"><p class="sub" style="margin:0">O'yin kodi</p><div class="code">${esc(g.code)}</div><p class="sub" style="margin:0">${g.joined.length+1} o'quvchi kirdi. O'qituvchi boshlashini kuting…</p></div>
+      <div class="names"><span class="pill" style="background:var(--hw-s);color:var(--hw)">Siz</span>${g.joined.map(n=>`<span class="pill">${esc(n)}</span>`).join("")}</div>`;
+    if (g.stage === "board" || g.i >= ws.length) { const all = others.map(o=>({n:o.n, s:o.s})).concat([{n:"Siz", s:g.me, me:1}]).sort((a,b)=>b.s-a.s);
+      const place = all.findIndex(x=>x.me) + 1, fin = g.i >= ws.length;
+      return gameTop("Sinf o'yini", `<span class="pill">${fin?"Yakun":`${g.i}/${ws.length} savoldan keyin`}</span>`) + `<h2>${fin?`Siz ${place}-o'rindasiz!`:"Reyting"}</h2>
+        <div class="lb">${all.slice(0, 6).map((x,k)=>`<div class="it ${x.me?"me":""}"><b style="width:22px;color:${k<3?"var(--tr)":"var(--sub)"}">${k+1}</b><span class="grow">${esc(x.n)}</span><b>${x.s}</b></div>`).join("")}
+        ${place > 6 ? `<div class="it me"><b style="width:22px">${place}</b><span class="grow">Siz</span><b>${g.me}</b></div>` : ""}</div>
+        ${fin ? vEnd(place <= 3 ? "Top 3!" : `${place}-o'rin`, g.got) : `<p class="sub small" style="text-align:center">Keyingi savol tayyorlanmoqda…</p>`}`; }
+    const r = g.r;
+    return gameTop("Sinf o'yini", `<span class="pill">${g.i+1}/${ws.length}</span>`) + `
+      <div class="prog" style="--accent:var(--hw)"><i id="kbar" style="width:100%"></i></div>
+      <div class="q">${esc(r.q)}</div>
+      <div class="opts">${r.opts.map((o,j)=>`<button class="opt ${g.ans!=null ? (o===r.right?"ok":j===g.ans?"no":"") : ""}" data-act="kq" data-v="${j}" ${g.ans!=null?"disabled":""}>${esc(o)}</button>`).join("")}</div>
+      <div class="fbk sub small" id="kcount">${g.ans!=null?"Javob qabul qilindi. Boshqalar kutilmoqda…":""}</div>`;
+  };
+  const question = () => { g.stage = "q"; g.ans = null; g.r = quizRound(ws, g.i); g.t0 = Date.now(); render();
+    loops.push(setInterval(()=>{ const left = Math.max(0, 1-(Date.now()-g.t0)/10000); const b = $("#kbar"); if (b) b.style.width = left*100 + "%";
+      if (left <= 0) { stopLoops(); others.forEach(o=>{ if (Math.random() < o.skill) o.s += 50 + Math.round(Math.random()*50); }); g.i++; g.stage = "board"; if (g.i >= ws.length) g.got = award(Math.round(g.me/40)); render();
+        if (g.i < ws.length) loops.push(setTimeout(question, 2600)); } }, 100)); };
+  g.act = (a, v) => {
+    if (a === "kjoin") { const c = ($("#kcode").value||"").trim(); if (!/^\d{4}$/.test(c)) { toast("4 xonali kod kiriting"); return; }
+      g.code = c; g.stage = "lobby"; render();
+      const add = () => { if (g.joined.length < others.length) { g.joined.push(others[g.joined.length].n); if (g.stage==="lobby") render(); loops.push(setTimeout(add, 180)); } else loops.push(setTimeout(question, 900)); };
+      add(); return; }
+    if (g.ans != null) return; g.ans = Number(v);
+    if (g.r.opts[g.ans] === g.r.right) g.me += 50 + Math.round(Math.max(0, 1-(Date.now()-g.t0)/10000)*50);
+    render();
+  };
+  return g;
+};
+
+/* ---------- events ---------- */
+document.addEventListener("click", (e) => {
+  const b = e.target.closest("[data-act]"); if (!b || b.disabled) return;
+  const a = b.dataset.act, v = b.dataset.v;
+  if (a === "home") { stopLoops(); G = null; V.screen = "groups"; render(); window.scrollTo(0,0); return; }
+  if (a === "group") { GRP = v === "rand" ? RANDOM : GROUPS.find(g=>g.id===v); V.screen = "games"; render(); window.scrollTo(0,0); return; }
+  if (a === "games" || a === "quit") { stopLoops(); G = null; V.screen = "games"; render(); window.scrollTo(0,0); return; }
+  if (a === "play") { stopLoops(); G = MAKE[v](); V.screen = "game"; api("vocab_start", { p_game: v }).catch(() => {}); render(); window.scrollTo(0,0); return; }
+  if (!G) return;
+  if (a === "wstart") G.act("wstart");
+  else if (["m","sq","mm","bq","bk","wk"].includes(a)) G.act(v);
+  else G.act(a, v);
+});
+document.addEventListener("keydown", (e) => {
+  if (G && G.key && V.screen === "game") G.key(e);
+  const f = e.target.closest && e.target.closest(".flash"); if (f && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); G.act("flip"); }
+});
+render(); load();
+})();
+</script>
+
+</body>
+</html>

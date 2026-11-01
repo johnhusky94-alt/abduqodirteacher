@@ -161,7 +161,7 @@
   let P = null;          // player
   let SHEET = null;      // bottom sheet render function
 
-  const STU_TABS = [["home", "Bosh sahifa", "home", "--hw"], ["review", "Mashq", "loop", "--rv"], ["troph", "Kuboklar", "trophy", "--tr"], ["board", "Reyting", "list", "--cw"], ["castle", "Qal'a", "castle", "--wr"]];
+  const STU_TABS = [["home", "Bosh sahifa", "home", "--hw"], ["vocab", "Lug'at", "book", "--rv"], ["troph", "Kuboklar", "trophy", "--tr"], ["board", "Reyting", "list", "--cw"], ["castle", "Qal'a", "castle", "--wr"]];
   const TEA_TABS = [["results", "Natijalar", "chart", "--hw"], ["assign", "Topshiriqlar", "send", "--cw"], ["report", "Hisobot", "doc", "--rv"], ["settings", "Sozlamalar", "gear", "--sub"]];
 
   function nav(tabs, cur) {
@@ -296,6 +296,7 @@
       ${(() => { const dl = h.daily || { n: 0, goal: 10 }, dd = dl.n >= dl.goal;
         return `<button class="li card" style="flex-direction:row;--accent:var(--rv)" data-act="${dd ? "noop" : "daily"}">${ring(Math.round((Math.min(dl.n, dl.goal) / dl.goal) * 100), "var(--rv)", 46)}
           <span class="grow"><b style="font-weight:600">Kunlik takrorlash</b> <span class="pill ${dd ? "rv" : "warn"}">${dd ? "Bajarildi" : "Majburiy"}</span><br><span class="small sub">${dd ? "Bugungi 10 ta so'z takrorlandi. Ertaga yana!" : `${dl.n}/${dl.goal} so'z · taxminan 5 daqiqa`}</span></span>${dd ? I.check : `<span class="chev">${I.chev}</span>`}</button>`; })()}
+      <button class="li card" style="flex-direction:row" data-act="practice"><span class="sub">${I.loop}</span><span class="grow"><b style="font-weight:600">Erkin mashq</b><br><span class="small sub">Vazifalar tugadimi? O'tgan savollar aralash, cheksiz</span></span><span class="chev">${I.chev}</span></button>
       ${openCw.length ? `<h2>Sinf ishi</h2><div class="list">${openCw.map(item).join("")}</div>` : ""}
       <h2>Uy vazifasi</h2>
       ${openHw.length ? `<div class="list">${openHw.map(item).join("")}</div>` : `<div class="card empty">Hozircha uy vazifasi yo'q. O'qituvchingiz bergan vazifalar shu yerda chiqadi.</div>`}
@@ -1302,6 +1303,7 @@ ${w.text}`).join("\n") + "\n---\n";
           T.tab = v; T.editName = null; T.pwFor = null; render(); window.scrollTo(0, 0);
           if (v === "results" || v === "report") loadReport();
         } else {
+          if (v === "vocab") { location.href = "vocab.html"; return; }
           ST.tab = v; ST.castleMsg = null; render(); window.scrollTo(0, 0);
           if (v === "board") loadBoard(); else if (v === "troph") loadTrophies(); else if (v === "castle") loadCastle(); else if (v === "home") loadStudent();
         }

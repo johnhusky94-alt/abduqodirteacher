@@ -1,0 +1,2 @@
+-- 1 Nov (migration v2_vocab_section): vocab_groups (words of visible quests, last 62 days, grouped by quest),
+-- vocab_start / vocab_finish: game gold, at most 25 per game, game must last 15 s, 150 a day (vocab_gold).
