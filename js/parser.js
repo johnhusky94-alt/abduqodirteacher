@@ -228,6 +228,7 @@
         return;
       }
       if (line.startsWith("*") || line.startsWith("-")) {
+        if (!choice && body) { body.text.push(line); return; }
         if (!choice) return err(ln, "Variantdan oldin ? savol bo'lishi kerak");
         const [t, why] = splitWhy(line.slice(1).trim());
         if (!t) return err(ln, "Variant bo'sh");
