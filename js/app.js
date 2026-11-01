@@ -111,7 +111,13 @@
     { k: "comeback", ic: "bolt", t: "Qaytmas", n: "Xato qilgan savolini qayta ishlab, to'g'ri topdi" },
     { k: "reader", ic: "openbook", t: "Kitobxon", n: "Birinchi o'qish matnini o'qidi" },
     { k: "practice20", ic: "loop", t: "Mashqchi", n: "Erkin mashqda 20 ta savol ishladi" },
-    { k: "defender", ic: "castle", t: "Mustahkam qal'a", n: "Qal'a mudofaasini 5-darajaga yetkazdi" },
+    { k: "defender", ic: "castle", t: "Mustahkam qal'a", n: "Devorni 5-darajaga yetkazdi" },
+    { k: "olov7", ic: "flame", t: "7 kunlik olov", n: "7 kun ketma-ket mashq qildi" },
+    { k: "yozuvchi", ic: "doc", t: "Yozuvchi", n: "Birinchi yozma ishini yubordi" },
+    { k: "ielts_ace", ic: "openbook", t: "IELTS ustasi", n: "IELTS matnini birinchi urinishda xatosiz ishladi" },
+    { k: "takror5", ic: "loop", t: "Takrorlash ustasi", n: "Kunlik takrorlashni 5 kun bajardi" },
+    { k: "g3", ic: "star", t: "Uch yulduz", n: "Qal'a jangida 3 yulduz bilan yutdi (har kuni yutish mumkin)" },
+    { k: "himoya", ic: "shield", t: "Qal'a himoyachisi", n: "Qal'asi hujumga bardosh berdi (har kuni yutish mumkin)" },
   ];
 
   /* ---------- server calls ---------- */
@@ -283,7 +289,7 @@
     };
     const wk = h.week || {};
     return `<div class="hello"><div><p class="sub">${today()}</p><h1>Salom, ${esc(h.me.first_name)}</h1></div>
-        <div class="stats"><span class="stat" title="Ketma-ket kunlar">${I.fire}${h.streak || 0}</span><span class="stat" title="Askarlar">${I.sword}${h.soldiers || 0}</span><span class="stat" title="O'lja">${I.coin}${h.loot == null ? 50 : h.loot}</span>
+        <div class="stats"><span class="stat" title="Ketma-ket kunlar">${I.fire}${h.streak || 0}</span><span class="stat" title="Oltin">${I.coin}${h.gold == null ? 300 : h.gold}</span>
         <button class="btn soft sm" data-act="logout" aria-label="Chiqish" style="background:var(--card)">${I.out}</button></div></div>
       <p class="sub small">Bu hafta: <b>${wk.correct || 0}</b> ta to'g'ri javob · <b>${fmtTime(wk.seconds)}</b></p>
       ${h.lesson_until ? `<div class="banner" style="background:var(--cw-s);color:var(--cw)">Hozir dars ketmoqda. Uy vazifalari ${clock(h.lesson_until)} da ochiladi.</div>` : ""}
@@ -310,48 +316,175 @@
         <span class="grow">${esc(s.name)}${s.me ? " (siz)" : ""}</span><b class="num">${s.points}</b></div>`).join("")}</div>`;
   }
 
-  async function loadTrophies() { try { ST.troph = await api("my_trophies"); } catch (e) { quiet(e); } render(); }
+  /* ---------- trophies (count, sell for gold, shop) ---------- */
+  async function loadTrophies() {
+    try { const [t, g] = await Promise.all([api("my_trophies"), api("game_state")]); ST.troph = t; ST.g = g; } catch (e) { quiet(e); }
+    render();
+  }
+  const T_VAL = (k) => (BIG.some((b) => b.k === k) ? 250 : 40);
+  const SHOP = [
+    { k: "builder", n: "Ikkinchi quruvchi", p: 6, d: "Ikki binoni bir vaqtda qurish", ic: "hammer" },
+    { k: "shield", n: "Qalqon · 12 soat", p: 2, d: "Hech kim hujum qila olmaydi", ic: "shield" },
+    { k: "rush", n: "Qurilishni darhol tugatish", p: 1, d: "Hozirgi qurilish shu zahoti tayyor", ic: "bolt" },
+    { k: "banner", n: "Oltin bayroq", p: 3, d: "Qal'angizda oltin bayroq hilpiraydi", ic: "flag" },
+  ];
   function vTrophies() {
-    if (!ST.troph) return `<h1>Kuboklar</h1><div class="loading">Yuklanmoqda…</div>`;
-    const mine = ST.troph.mine || [], leaders = ST.troph.leaders || [];
-    const me = (ST.home.me.first_name + " " + ST.home.me.last_name).trim();
-    const big = BIG.map((b) => {
-      const won = mine.filter((m) => m.kind === b.k && m.week).length;
-      const lead = leaders.find((l) => l.kind === b.k);
-      return `<div class="troph big ${won ? "" : "locked"}"><span class="medal">${I[b.ic]}</span><h3>${b.t}</h3><p>${b.n}</p>
-        <span class="pill ${won ? "rv" : ""}">${won ? won + " marta yutilgan" : "Hali yutilmagan"}</span>
-        ${lead ? `<span class="pill ${lead.name.trim() === me ? "rv" : ""}">${lead.name.trim() === me ? "Bu hafta siz yetakchisiz!" : "Bu hafta yetakchi: " + esc(lead.name)}</span>` : ""}</div>`;
-    }).join("");
-    const small = SMALL.map((t) => { const has = mine.some((m) => m.kind === t.k); return `<div class="troph small ${has ? "" : "locked"}"><span class="medal">${I[t.ic]}</span><h3>${t.t}</h3><p>${t.n}</p></div>`; }).join("");
-    return `<div class="row between"><h1>Kuboklar</h1><span class="pill">${mine.length} ta yig'ildi</span></div>
-      <p class="sub">Katta kuboklar har dushanba o'tgan hafta g'oliblariga beriladi.</p>
-      <div class="trophies">${big}</div><h2>Kichik kuboklar</h2><div class="trophies">${small}</div>`;
+    if (!ST.troph || !ST.g) return `<h1>Kuboklar</h1><div class="loading">Yuklanmoqda…</div>`;
+    const leaders = ST.troph.leaders || [], cnt = ST.g.trophies || {}, me = (ST.home.me.first_name + " " + ST.home.me.last_name).trim();
+    const have = (k) => (cnt[k] ? cnt[k].have : 0), won = (k) => (cnt[k] ? cnt[k].won : 0);
+    const total = Object.values(cnt).reduce((a, x) => a + x.have, 0), g = ST.g.me;
+    const sellBtn = (k) => have(k) ? `<button class="btn soft sm" style="background:var(--card)" data-act="tsell" data-v="${k}">${I.coin} ${T_VAL(k)} oltinga</button>` : "";
+    const big = BIG.map((b) => { const lead = leaders.find((l) => l.kind === b.k);
+      return `<div class="troph big ${won(b.k) ? "" : "locked"}">${have(b.k) ? `<span class="tcount">×${have(b.k)}</span>` : ""}<span class="medal">${I[b.ic]}</span><h3>${b.t}</h3><p>${b.n}</p>
+        <span class="pill ${won(b.k) ? "rv" : ""}">${won(b.k) ? won(b.k) + " marta yutilgan" : "Hali yutilmagan"}</span>
+        ${lead ? `<span class="pill ${lead.name.trim() === me ? "rv" : ""}">${lead.name.trim() === me ? "Bu hafta siz yetakchisiz!" : "Bu hafta yetakchi: " + esc(lead.name)}</span>` : ""}${sellBtn(b.k)}</div>`; }).join("");
+    const small = SMALL.map((t) => `<div class="troph small ${won(t.k) ? "" : "locked"}">${have(t.k) > 1 ? `<span class="tcount">×${have(t.k)}</span>` : ""}<span class="medal">${I[t.ic]}</span><h3>${t.t}</h3><p>${t.n}</p>${sellBtn(t.k)}</div>`).join("");
+    const shop = SHOP.map((it) => { const owned = (it.k === "builder" && g.builders > 1) || (it.k === "banner" && g.banner);
+      return `<div class="card" style="flex-direction:row;align-items:center;gap:12px"><span class="medal shopi" style="color:var(--wr)">${I[it.ic]}</span><span class="grow"><b style="font-weight:600">${it.n}</b><br><span class="small sub">${it.d}</span></span>
+        ${owned ? `<span class="pill rv">Olingan</span>` : `<button class="btn sm" style="--accent:var(--wr)" data-act="tbuy" data-v="${it.k}" ${total < it.p || (it.k === "rush" && !g.queue.length) ? "disabled" : ""}>${it.p} kubok</button>`}</div>`; }).join("");
+    return `<div class="row between"><h1>Kuboklar</h1><span class="pill">${total} ta bor</span></div>
+      <p class="sub">Katta kuboklar har dushanba o'tgan hafta g'oliblariga beriladi. Kubokni oltinga almashtirish yoki do'konda sarflash mumkin. Ota-onalar hisobotida jami yutilganlar saqlanadi.</p>
+      <div class="trophies">${big}</div><h2>Kichik kuboklar</h2><div class="trophies">${small}</div>
+      <h2>Kubok do'koni</h2><div class="stack">${shop}</div>`;
   }
 
-  async function loadCastle() { try { ST.castle = await api("castle_state"); } catch (e) { quiet(e); } render(); }
-  function vCastle() {
-    const c = ST.castle;
-    if (!c) return `<h1>Qal'a</h1><div class="loading">Yuklanmoqda…</div>`;
-    const me = c.me, msg = ST.castleMsg, h = 70 + Math.min(me.defense, 20) * 4;
-    return `<h1>Qal'a</h1>
-      <div class="grid2"><section class="card stack"><h3>Mening qal'am</h3>
-        <div class="castle" aria-hidden="true"><div class="tower" style="height:${h}px"></div><div class="keep"><span class="flagpole"></span></div><div class="tower" style="height:${h}px"></div></div><div class="ground"></div>
-        <div class="row"><span class="pill hw">Mudofaa: ${me.defense}</span><span class="pill wr">O'lja: ${me.loot}</span></div>
-        <button class="btn soft sm" data-act="defend" ${me.soldiers < 5 || me.defense >= 20 ? "disabled" : ""}>Mudofaani kuchaytirish · 5 askar</button></section>
-      <section class="card stack"><h3>Askarlar: <span class="num">${me.soldiers}</span></h3>
-        <div class="army">${Array.from({ length: Math.min(me.soldiers, 80) }, () => '<span class="soldier"></span>').join("")}</div>
-        <p class="sub small">Har to'g'ri javob = 1 askar. Hujum 10 askar, mudofaa 5 askar. Vazifani tugatsangiz +20 o'lja.</p></section></div>
-      ${msg ? `<div class="fb ${msg.ok ? "good" : "bad"}" role="status"><b>${esc(msg.t)}</b></div>` : ""}
-      <h2>Hujum qilish</h2>
-      ${c.others.length ? `<div class="list">${c.others.map((o) => `<div class="li" style="flex-wrap:wrap"><span class="grow" style="min-width:120px">${esc(o.name)}<br><span class="sub small">Mudofaa ${o.defense} · O'lja ${o.loot}</span></span>
-        <button class="btn sm" style="--accent:var(--tr)" data-act="attack" data-v="${o.id}" ${me.soldiers < 10 || o.cooldown ? "disabled" : ""}>${o.cooldown ? "1 soat kuting" : "Hujum"}</button></div>`).join("")}</div>` : `<div class="card empty">Sinfingizda boshqa o'quvchi yo'q.</div>`}
-      ${c.log.length ? `<h3>So'nggi janglar</h3><div class="card stack">${c.log.map((l) => `<p class="small">${l.mine ? (l.win ? `${esc(l.other)}ning qal'asidan <b>${l.loot}</b> o'lja oldingiz.` : `${esc(l.other)}ning qal'asi chidadi.`) : (l.win ? `${esc(l.other)} qal'angizdan <b>${l.loot}</b> o'lja oldi.` : `${esc(l.other)} hujum qildi, qal'angiz chidadi.`)}</p>`).join("")}</div>` : ""}`;
+  /* ---------- castle game ---------- */
+  const GB = {
+    castle: { n: "Qal'a", base: 250, g: 2.2, t: 2.0, d: "Boshqa binolar darajasi qal'adan oshmaydi. Qal'a qanchalik baland bo'lsa, shuncha kuchli dushmanlar chiqadi." },
+    wall: { n: "Devor", base: 60, g: 1.8, t: 1.0, d: "Dushman askarlarini to'xtatadi. Katapulta devorni ikki barobar tez buzadi." },
+    tower: { n: "Kamon minorasi", base: 90, g: 1.85, t: 1.2, d: "Hujumchilarga o'q otadi. Otliqlarga o'q kam tegadi." },
+    barracks: { n: "Kazarma", base: 80, g: 1.8, t: 1.2, d: "Qo'shin sig'imi, askarlar kuchi va yangi askar turlari." },
+    storage: { n: "Ombor", base: 100, g: 1.9, t: 1.0, d: "Qancha oltin saqlash mumkinligini belgilaydi." },
+  };
+  const G_ORDER = ["castle", "wall", "tower", "barracks", "storage"];
+  const gCost = (k, l) => Math.round((GB[k].base * Math.pow(GB[k].g, l - 1)) / 5) * 5;
+  const gHours = (k, l) => Math.round(GB[k].t * Math.pow(2.1, l - 1) * 10) / 10;
+  const gCap = (l) => Math.round((400 * Math.pow(1.8, l - 1)) / 10) * 10;
+  const gArmy = (l) => Math.round(10 * Math.pow(1.22, l - 1));
+  const gMul = (l) => Math.pow(1.2, l - 1);
+  const gDef = (k, l) => Math.round({ wall: 162, tower: 144, keep: 306 }[k] * Math.pow(1.464, l - 1));
+  const GT = {
+    spear: { n: "Nayzachi", cost: 15, sp: 1, atk: 5, hp: 16, open: 1, d: "Arzon va chidamli. Har qanday qo'shinning asosi." },
+    archer: { n: "Kamonchi", cost: 25, sp: 1, atk: 7, hp: 12, open: 2, d: "Minorani tez yiqitadi, devorga kuchsiz." },
+    cav: { n: "Otliq", cost: 50, sp: 2, atk: 11, hp: 30, open: 3, d: "Tez yuguradi: minora o'qlari yarim kuch bilan tegadi." },
+    cat: { n: "Katapulta", cost: 95, sp: 4, atk: 28, hp: 22, open: 4, d: "Devorni ikki barobar kuchli buzadi." },
+  };
+  const housing = (a) => Object.keys(GT).reduce((s, k) => s + (a[k] || 0) * GT[k].sp, 0);
+  const hrs = (h) => (h >= 24 ? `${Math.round((h / 24) * 10) / 10} kun` : h >= 1 ? `${h} soat` : `${Math.round(h * 60)} daqiqa`);
+  const coin = (w) => `<svg viewBox="0 0 24 24" style="width:${w || 18}px;height:${w || 18}px;flex:none" aria-hidden="true"><use href="#coin"/></svg>`;
+  async function loadCastle(silent) {
+    try { const [g, t] = await Promise.all([api("game_state"), ST.gsub === "battle" && !ST.targets ? api("game_targets") : Promise.resolve(ST.targets)]); ST.g = g; ST.targets = t; }
+    catch (e) { if (!silent) quiet(e); }
+    render();
   }
+  function gSet() {
+    const me = ST.g.me, off = Date.now() - new Date(me.now).getTime();
+    window.GameArt.set({ gold: me.gold, army: me.army, cap: me.cap, queue: me.queue.map((q) => ({ k: q.k, start: new Date(q.start).getTime() + off, end: new Date(q.end).getTime() + off })) });
+    ST.gOff = off;
+  }
+  const gTime = (iso) => new Date(iso).getTime() + (ST.gOff || 0);
+  function vCastle() {
+    if (!ST.g) return `<h1>Qal'a</h1><div class="loading">Yuklanmoqda…</div>`;
+    gSet();
+    const me = ST.g.me, b = me.b, sub = ST.gsub || "base";
+    const used = housing(me.army), capA = gArmy(b.barracks);
+    const head = `<div class="gres"><div class="chip-g grow">${coin(22)}<div class="grow"><div class="row between" style="flex-wrap:nowrap"><b class="num">${me.gold}</b><span class="small sub">/ ${me.cap}</span></div><div class="bar" style="margin:3px 0 0"><i style="width:${(me.gold / me.cap) * 100}%;background:var(--gold)"></i></div></div></div>
+      <div class="chip-g"><svg viewBox="0 0 24 24" style="width:20px;height:20px"><use href="#sword"/></svg><b class="num">${used}/${capA}</b></div></div>
+      <div class="seg" role="group" aria-label="Bo'lim">${[["base", "Qal'a"], ["army", "Qo'shin"], ["battle", "Jang"]].map(([k, l]) => `<button aria-pressed="${sub === k}" data-act="gsub" data-v="${k}">${l}</button>`).join("")}</div>`;
+    if (ST.battle) return `<h1>Jang</h1>` + vBattleRun();
+    if (sub === "army") return `<h1>Qo'shin</h1>` + head + vArmy(me, used, capA);
+    if (sub === "battle") return `<h1>Jang</h1>` + head + vBattleList(me, used);
+    const free = me.queue.length < me.builders, damaged = !!me.damaged;
+    const cards = G_ORDER.map((k) => {
+      const l = b[k], q = me.queue.find((x) => x.k === k), max = k === "castle" ? 10 : Math.min(10, b.castle), atMax = l >= max, c = gCost(k, l);
+      const eff = { castle: `Boshqa binolar maks. ${l + 1}-daraja`, wall: `Mustahkamlik ${gDef("wall", l)} → ${gDef("wall", l + 1)}`, tower: `Kuch ${gDef("tower", l)} → ${gDef("tower", l + 1)}`,
+        barracks: `Sig'im ${gArmy(l)} → ${gArmy(l + 1)}, askarlar +20% kuchli`, storage: `${gCap(l)} → ${gCap(l + 1)} oltin` }[k];
+      let btn;
+      if (q) btn = `<div class="stack" style="gap:5px"><span class="small"><span class="ico">${I.hammer}</span> ${l + 1}-darajaga ko'tarilmoqda · qoldi: <b data-glive="q:${k}" style="color:var(--wr)"></b></span><div class="bar" style="margin:0"><i data-glive="qb:${k}" style="background:var(--rv)"></i></div></div>`;
+      else if (atMax) btn = `<span class="small sub">${k === "castle" ? "Eng yuqori daraja" : "Avval qal'ani ko'taring"}</span>`;
+      else btn = `<button class="btn sm" style="--accent:var(--wr);align-self:flex-start" data-act="gup" data-v="${k}" ${me.gold < c || !free || damaged ? "disabled" : ""}>${coin()} ${c} · ${hrs(gHours(k, l))}</button>`;
+      return `<div class="card" style="flex-direction:row;gap:12px;align-items:flex-start"><div class="gicon">${window.GameArt.buildIcon(k)}</div><div class="grow stack" style="gap:6px">
+        <div class="row between"><h3>${GB[k].n}</h3><span class="pill" style="background:var(--hw-s);color:var(--hw)">${l}-daraja · ${window.GameArt.LOOKNAME[window.GameArt.look(l).k]}</span></div>
+        <span class="small sub">${GB[k].d}</span>${atMax || q ? "" : `<span class="small">${eff}</span>`}${btn}</div></div>`;
+    }).join("");
+    return `<h1>Qal'a</h1>` + head + `<div class="gscene">${window.GameArt.scene(b, { damaged, shield: !!me.shield, banner: me.banner })}</div>
+      ${damaged ? `<div class="banner" style="background:var(--warn-s);color:var(--warn)">Qal'angizga hujum bo'ldi. Ta'mirlanmoqda: <b data-glive="dmg"></b>. Ta'mir tugaguncha qurilish boshlab bo'lmaydi.</div>` : ""}
+      <div class="card stack" style="gap:6px"><div class="row small sub"><span class="ico">${I.shield}</span> Qalqon: <b data-glive="shield">${me.shield ? "" : "yo'q"}</b> · Quruvchilar: ${me.builders - me.queue.length}/${me.builders} bo'sh</div>
+        <span class="small sub">Oltin faqat o'qish orqali keladi: har to'g'ri javob +5, vazifani tugatish +120, kunlik takrorlash +40.</span></div>
+      <h2>Binolar</h2><div class="stack">${cards}</div>`;
+  }
+  function vArmy(me, used, capA) {
+    const bl = me.b.barracks;
+    return `<p class="sub small" style="margin:0">Kazarmani ko'tarsangiz joy ko'payadi, askarlar kuchayadi va yangi turlar ochiladi. Jangdan tirik qaytganlar qo'shinda qoladi.</p>
+      <div class="stack">${Object.keys(GT).map((k) => { const t = GT[k], locked = bl < t.open, n = me.army[k] || 0;
+        return `<div class="card" style="flex-direction:row;gap:12px;${locked ? "opacity:.55" : ""}"><div class="gicon"><svg viewBox="0 0 56 48" style="width:52px;height:46px"><use href="#t-${k}"/></svg></div>
+          <div class="grow stack" style="gap:6px"><div class="row between"><h3>${t.n}</h3><b class="num" style="font-size:20px">${n}</b></div>
+          <span class="small sub">${t.d}</span><span class="small">Hujum ${Math.round(t.atk * gMul(bl))} · Jon ${Math.round(t.hp * gMul(bl))} · Joy ${t.sp}</span>
+          ${locked ? `<span class="small sub">Kazarma ${t.open}-darajada ochiladi</span>` : `<div class="row">
+            <button class="btn sm" style="--accent:var(--wr)" data-act="gtrain" data-v="${k}|1" ${me.gold < t.cost || used + t.sp > capA ? "disabled" : ""}>${coin()} ${t.cost}</button>
+            <button class="btn soft sm" style="background:var(--card2,var(--bg))" data-act="gtrain" data-v="${k}|5" ${me.gold < t.cost * 5 || used + t.sp * 5 > capA ? "disabled" : ""}>×5</button>
+            <button class="btn soft sm" style="background:var(--card2,var(--bg))" data-act="guntrain" data-v="${k}" ${n ? "" : "disabled"} aria-label="Bittasini qaytarish (yarim narx)">−</button></div>`}</div></div>`; }).join("")}</div>`;
+  }
+  function vBattleList(me, used) {
+    const tg = ST.targets;
+    const log = (ST.g.log || []).map((l) => `<p class="small" style="margin:0">${l.mine ? (l.win ? `${esc(l.other)}ga hujum: g'alaba, +${l.loot} oltin` : `${esc(l.other)}ga hujum: mag'lubiyat`) : (l.win ? `${esc(l.other)} hujum qildi va ${l.loot} oltin oldi` : `${esc(l.other)} hujum qildi, qal'angiz chidadi`)}</p>`).join("");
+    return `<p class="sub small" style="margin:0">Dushmanlar darajangizga yaqin qal'alardan tanlanadi. Hujum qilsangiz qalqoningiz o'chadi. Qal'aning yarmi ham buzilmasa, butun qo'shin va oltinning 10% i yo'qoladi.</p>
+      ${used ? "" : `<div class="banner" style="background:var(--warn-s);color:var(--warn)">Qo'shiningiz yo'q. Avval "Qo'shin" bo'limida askar tayyorlang.</div>`}
+      ${!tg ? `<div class="loading">Yuklanmoqda…</div>` : tg.length ? `<div class="stack">${tg.map((e) => `<div class="card" style="flex-direction:row;gap:12px;align-items:center;flex-wrap:wrap">
+          <div style="width:120px;border-radius:12px;overflow:hidden;flex:none">${window.GameArt.scene(e.b, { enemy: 1, id: "e" + e.id })}</div>
+          <div class="grow stack" style="gap:3px;min-width:150px"><b style="font-weight:600">${esc(e.name)}</b><span class="small sub">Qal'a ${e.b.castle} · Devor ${e.b.wall} · Minora ${e.b.tower}</span>
+            <span class="small row" style="gap:4px">${coin(14)} ${e.gold} oltin · <b style="color:${e.chance >= 60 ? "var(--rv)" : e.chance >= 30 ? "var(--wr)" : "var(--warn)"}">g'alaba ehtimoli ~${e.chance}%</b></span></div>
+          <button class="btn sm" style="--accent:var(--tr)" data-act="gattack" data-v="${e.id}" ${used ? "" : "disabled"}>Hujum</button></div>`).join("")}</div>`
+        : `<div class="card empty">Hozir hujum qilish mumkin bo'lgan qal'a yo'q (hammada qalqon bor yoki darajasi uzoq). Keyinroq qayta urinib ko'ring.</div>`}
+      <button class="btn soft sm" style="background:var(--card);align-self:flex-start" data-act="gretarget">Boshqa dushmanlar</button>
+      ${log ? `<div class="card stack" style="gap:6px"><h3>So'nggi janglar</h3>${log}</div>` : ""}`;
+  }
+  function battleSvg() {
+    const r = ST.battle.r, f = ST.battle.f, fr = r.frames[Math.min(f, r.frames.length - 1)] || { h: [100, 100, 100], ti: 1, a: [r.sent.spear || 0, r.sent.archer || 0, r.sent.cav || 0, r.sent.cat || 0] };
+    const e = r.b, X = [236, 300, 350], gy = 168, cur = (fr.ti || 1) - 1;
+    let s = `<svg viewBox="0 0 400 200" role="img" aria-label="Jang"><rect width="400" height="200" fill="#8fd0ff"/><path d="M0 150 Q100 130 200 148 T400 140 V200 H0z" fill="#6fbf73"/><rect y="${gy}" width="400" height="32" fill="#4f9a53"/>`;
+    s += fr.h[0] > 0 ? `<rect x="${X[0]}" y="${gy - 14 - e.wall * 3}" width="14" height="${14 + e.wall * 3}" fill="#9aa6b6" stroke="#0003"/>` : `<rect x="${X[0] - 4}" y="${gy - 6}" width="18" height="6" fill="#9aa6b6"/>`;
+    s += fr.h[1] > 0 ? `<rect x="${X[1] - 11}" y="${gy - 50 - e.tower * 7}" width="22" height="${50 + e.tower * 7}" fill="#9aa6b6" stroke="#0003"/><path d="M${X[1] - 13} ${gy - 50 - e.tower * 7} l13 -12 13 12z" fill="#b5482f"/>` : `<g class="smoke" fill="#666"><circle cx="${X[1]}" cy="${gy - 10}" r="8"/></g><rect x="${X[1] - 12}" y="${gy - 10}" width="24" height="10" fill="#8e9bb0"/>`;
+    s += fr.h[2] > 0 ? `<rect x="${X[2] - 24}" y="${gy - 60 - e.castle * 5}" width="48" height="${60 + e.castle * 5}" fill="#9aa6b6" stroke="#0003"/><path class="flagw" d="M${X[2]} ${gy - 86 - e.castle * 5} h16 l-4 5 4 5 h-16z" fill="#ff5d6c"/><line x1="${X[2]}" y1="${gy - 60 - e.castle * 5}" x2="${X[2]}" y2="${gy - 86 - e.castle * 5}" stroke="#5a3a1c" stroke-width="2"/>` : `<g class="smoke" fill="#555"><circle cx="${X[2]}" cy="${gy - 20}" r="10"/></g><rect x="${X[2] - 26}" y="${gy - 14}" width="52" height="14" fill="#8e9bb0"/>`;
+    fr.h.forEach((p, i) => { if (p > 0) s += `<rect x="${X[i] - 18 + (i === 0 ? 7 : 0)}" y="22" width="36" height="5" rx="2" fill="#0005"/><rect x="${X[i] - 18 + (i === 0 ? 7 : 0)}" y="22" width="${0.36 * p}" height="5" rx="2" fill="${p > 50 ? "#3ccf7a" : p > 25 ? "#ffc53d" : "#ff5d6c"}"/>`; });
+    const front = f === 0 ? 30 : X[cur] - 26, kinds = ["spear", "archer", "cav", "cat"], units = [];
+    fr.a.forEach((n, i) => { for (let j = 0; j < Math.min(n, 30); j++) units.push(kinds[i]); });
+    units.forEach((k, i) => { const big = k === "cav" || k === "cat", row = i % 4, col = Math.floor(i / 4);
+      s += `<use href="#t-${k}" x="${Math.max(2, front - col * 13 - row * 4 - (big ? 10 : 0))}" y="${gy - 22 + row * 5}" width="${big ? 26 : 18}" height="22"/>`; });
+    if (fr.h[1] > 0 && f > 0) for (let i = 0; i < 3; i++) s += `<line x1="${X[1]}" y1="${gy - 60}" x2="${front - 8 - i * 12}" y2="${gy - 14}" stroke="#5a3a1c" stroke-width="1.5" stroke-dasharray="6 30"/>`;
+    return s + `</svg>`;
+  }
+  function vBattleRun() {
+    const r = ST.battle.r, done = ST.battle.done;
+    const lost = Object.keys(GT).map((k) => { const d = (r.sent[k] || 0) - (r.surv[k] || 0); return d ? `${d} ${GT[k].n.toLowerCase()}` : ""; }).filter(Boolean).join(", ") || "yo'qotish yo'q";
+    return `<div class="card stack"><div class="row between"><h3>${esc(r.name)}ning qal'asi</h3><span class="sub">${done ? r.pct + "% buzildi" : "Jang ketmoqda…"}</span></div>
+      <div class="gscene" id="battleBox">${battleSvg()}</div>
+      ${done ? `<div class="stars">${[1, 2, 3].map((i) => `<svg viewBox="0 0 24 24" style="color:${i <= r.stars ? "#ffc53d" : "var(--line)"}"><use href="#star"/></svg>`).join("")}</div>
+        ${r.stars ? `<div class="fb good"><b>G'alaba!</b>${coin(16)} +${r.got} oltin${r.got < r.loot ? ` (omborga ${r.loot - r.got} sig'madi)` : ""}. Halok bo'lganlar: ${lost}.</div>`
+                  : `<div class="fb bad"><b>Mag'lubiyat</b>Qal'aning yarmi ham buzilmadi. Butun qo'shin yo'qotildi va ${r.penalty} oltin dushmanga tovon sifatida berildi.</div>`}
+        <p class="small sub" style="margin:0">1 yulduz: 50% buzildi (dushman oltinining 10%) · 2: 80% (18%) · 3: 100% (25%)</p>
+        <button class="btn" data-act="gbattleEnd">Davom etish</button>` : `<p class="small sub" style="margin:0">Devor → minora → qal'a tartibida hujum qilinadi.</p>`}</div>`;
+  }
+  function gTick() {
+    if (!ST.g || ST.tab !== "castle" || !S || S.role !== "student") return;
+    const me = ST.g.me; let reload = false;
+    me.queue.forEach((q) => {
+      const end = gTime(q.end), st = gTime(q.start), left = end - Date.now();
+      if (left <= 0) reload = true;
+      document.querySelectorAll(`[data-glive="q:${q.k}"]`).forEach((el) => (el.textContent = window.GameArt.dur(left)));
+      document.querySelectorAll(`[data-glive="qb:${q.k}"]`).forEach((el) => (el.style.width = Math.min(100, ((Date.now() - st) / (end - st)) * 100) + "%"));
+      document.querySelectorAll(`[data-live="q:${q.k}"]`).forEach((el) => (el.textContent = window.GameArt.dur(left)));
+    });
+    const sh = document.querySelector('[data-glive="shield"]'); if (sh && me.shield) sh.textContent = window.GameArt.dur(gTime(me.shield) - Date.now());
+    const dm = document.querySelector('[data-glive="dmg"]'); if (dm && me.damaged) { const l = gTime(me.damaged) - Date.now(); dm.textContent = window.GameArt.dur(l); if (l <= 0) reload = true; }
+    if (reload && !gTick.busy) { gTick.busy = true; loadCastle(true).then(() => (gTick.busy = false)); }
+  }
+  setInterval(gTick, 1000);
 
   function vPracticeIntro() {
     return `<h1>Mashq</h1><p class="sub">Vazifalar tugadimi? O'tgan so'z va savollar aralash chiqadi, xatolaringiz ko'proq chiqadi.</p>
       <section class="card stack"><div class="row between"><h3>Erkin mashq</h3><span class="pill rv">Cheksiz</span></div>
-      <p class="sub small">Har to'g'ri javob = 1 askar.</p>
+      <p class="sub small">Har to'g'ri javob = 1 oltin. Vazifa va kunlik takrorlash ko'proq oltin beradi.</p>
       <button class="btn" style="--accent:var(--rv)" data-act="practice">Boshlash</button></section>`;
   }
 
@@ -643,7 +776,7 @@
       catch (e) { if (e.net) { retryLater(check); return; } P.busy = false; quiet(e); render(); return; }
       P.busy = false; P.offline = false;
       if (res && res.error) { nextPractice(); return; }
-      P.answered += 1; if (res.ok) { P.right += 1; if (ST.home) ST.home.soldiers = (ST.home.soldiers || 0) + 1; }
+      P.answered += 1; if (res.ok) P.right += 1;
       if (P.daily) { P.n = res.n; if (res.done) P.finishAfter = true; }
       P.result = res; render(); return;
     }
@@ -1194,20 +1327,34 @@ ${w.text}`).join("\n") + "\n---\n";
       case "ihl": { const d = P.idet.find((y) => y.i === Number(v)); P.ihl = d ? d.ev : null; render(); const m = $("#hlMark"); if (m) m.scrollIntoView({ block: "center", behavior: "smooth" }); return; }
       case "repToggle": P.reportOpen = !P.reportOpen; render(); { const el = $("#repNote"); if (el) el.focus(); } return;
       case "repSend": sendReport(); return;
-      case "defend": {
+      case "gsub": ST.gsub = v; if (v === "battle" && !ST.targets) { ST.targets = null; render(); loadCastle(); } else render(); return;
+      case "gup": case "gtrain": case "guntrain": {
         b.disabled = true;
-        try { const r = await api("castle_defend"); ST.castleMsg = r.error ? { ok: false, t: r.error === "MAX" ? "Mudofaa eng yuqori darajada." : "5 ta askar kerak." } : { ok: true, t: "Mudofaa kuchaytirildi!" }; } catch (err) { quiet(err); }
-        loadCastle(); return;
-      }
-      case "attack": {
-        b.disabled = true;
+        const [k, n] = String(v).split("|");
         try {
-          const r = await api("castle_attack", { p_target: Number(v) });
-          if (r.error) ST.castleMsg = { ok: false, t: r.error === "COOLDOWN" ? "Bu qal'aga 1 soatdan keyin yana hujum qilish mumkin." : r.error === "NO_SOLDIERS" ? "10 ta askar kerak." : "Hujum qilib bo'lmadi." };
-          else ST.castleMsg = r.win ? { ok: true, t: `G'alaba! ${r.name}dan ${r.loot} o'lja oldingiz.` } : { ok: false, t: `${r.name}ning qal'asi chidadi. Keyingi safar omad!` };
+          const r = a === "gup" ? await api("game_upgrade", { p_k: k }) : a === "gtrain" ? await api("game_train", { p_k: k, p_n: Number(n || 1) }) : await api("game_untrain", { p_k: k });
+          if (r.error) toast({ GOLD: "Oltin yetmaydi", BUSY: "Quruvchi band", MAX: "Eng yuqori daraja", DAMAGED: "Avval qal'a ta'mirlansin", FULL: "Kazarmada joy yo'q", LOCKED: "Hali ochilmagan" }[r.error] || "Bo'lmadi");
+          else { ST.g.me = r.me; if (a === "gup") toast(`${GB[k].n} qurilmoqda`); if (a === "guntrain") toast(`Yarim narx qaytarildi: +${Math.floor(GT[k].cost / 2)}`); }
         } catch (err) { quiet(err); }
-        loadCastle(); return;
+        render(); return;
       }
+      case "gretarget": ST.targets = null; render(); try { ST.targets = await api("game_targets"); } catch (err) { quiet(err); } render(); return;
+      case "gattack": {
+        b.disabled = true;
+        let r;
+        try { r = await api("game_attack", { p_target: Number(v) }); } catch (err) { quiet(err); render(); return; }
+        if (r.error) { toast({ SHIELD: "Bu qal'ada qalqon bor", COOLDOWN: "Bu qal'aga 1 soatdan keyin", NO_ARMY: "Qo'shin yo'q", LEVEL: "Darajasi juda uzoq" }[r.error] || "Hujum qilib bo'lmadi"); ST.targets = null; loadCastle(); return; }
+        ST.battle = { r, f: 0, done: false }; render(); window.scrollTo(0, 0);
+        const step = () => {
+          if (!ST.battle) return;
+          ST.battle.f += 1; const box = $("#battleBox"); if (box) box.innerHTML = battleSvg();
+          if (ST.battle.f < r.frames.length) setTimeout(step, 170); else setTimeout(() => { if (ST.battle) { ST.battle.done = true; render(); } }, 500);
+        };
+        setTimeout(step, 400); return;
+      }
+      case "gbattleEnd": ST.battle = null; ST.targets = null; ST.gsub = "battle"; loadCastle(); return;
+      case "tsell": { b.disabled = true; try { const r = await api("trophy_sell", { p_kind: v }); toast(r.error ? "Bo'lmadi" : r.got ? `+${r.got} oltin` : "Ombor to'la"); } catch (err) { quiet(err); } loadTrophies(); return; }
+      case "tbuy": { b.disabled = true; try { const r = await api("shop_buy", { p_item: v }); toast(r.error ? ({ TROPHIES: "Kubok yetmaydi", OWNED: "Allaqachon olingan", NOTHING: "Hozir hech narsa qurilmayapti" }[r.error] || "Bo'lmadi") : "Olindi!"); } catch (err) { quiet(err); } loadTrophies(); return; }
       // teacher
       case "cls": T.cls = Number(v); T.poolView = null; T.stuView = null; T.ov = null; render(); loadReport(); if (T.showMonthly) loadMonthly(); return;
       case "week": { const d = dayFromStr(T.week); d.setDate(d.getDate() + 7 * Number(v)); T.week = strFromDay(d); loadReport(); return; }
@@ -1397,6 +1544,7 @@ ${w.text}`).join("\n") + "\n---\n";
     if (e.target.closest && e.target.closest("[data-nocopy], .noselect")) e.preventDefault();
   }));
 
+  if (window.GameArt && !document.getElementById("gameDefs")) document.body.insertAdjacentHTML("afterbegin", `<div id="gameDefs">${window.GameArt.DEFS}</div>`);
   function boot() {
     if (!S) { V = { screen: "pick" }; render(); return; }
     if (S.role === "teacher") { render(); loadAdmin(); }

@@ -1,0 +1,7 @@
+-- 1 Nov, V2 stage 6 (migration v2_stage6_game_economy): table game (gold, buildings, army, build queue, builders, shield, damage, banner);
+-- trophies.spent. Rules match the approved demo: costs grow per level, build time ~doubles per level (real hours),
+-- storage cap, army cap and +20% troop strength per barracks level, 4 troop types, server-side battle (_battle) with
+-- 50/80/100% stars, loot 10/18/25%, defeat = whole army + 10% gold to defender, defender damaged 4h + shield 4-12h.
+-- Gold only from learning: +5 per right answer (quest, IELTS first try), +120 per finished homework, practice +1,
+-- daily review +1 per right answer and +40 for finishing. trophy_sell (big 250, small 40), shop_buy (builder 6, shield 2, rush 1, banner 3).
+-- New small trophies: olov7, yozuvchi, ielts_ace, takror5, g3 (3-star raid, daily), himoya (castle held, daily).

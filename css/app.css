@@ -267,3 +267,25 @@ input[type=checkbox]{width:20px;height:20px;accent-color:var(--hw)}
 .chart{width:100%;height:auto;display:block}
 .chart .ct{font-size:12px;fill:var(--sub);font-family:inherit}
 i.lg{display:inline-block;width:12px;height:12px;border-radius:50%}
+
+/* stage 6: castle game */
+:root{--gold:#E0A100}
+.gres{display:flex;gap:8px;align-items:center}
+.chip-g{display:flex;align-items:center;gap:8px;background:var(--card);border-radius:14px;padding:8px 12px;min-width:0}
+.gscene{border-radius:18px;overflow:hidden;background:#8fd0ff}
+.gscene svg{display:block;width:100%;height:auto}
+.gicon{width:58px;height:58px;flex:none;background:var(--bg);border-radius:14px;display:grid;place-items:center}
+.gicon svg{width:50px;height:50px}
+.troph{position:relative}
+.tcount{position:absolute;top:8px;right:8px;background:var(--gold);color:#3a2700;font-weight:800;font-size:13px;border-radius:9px;padding:1px 8px}
+.stars{display:flex;justify-content:center;gap:6px}.stars svg{width:48px;height:48px}
+@keyframes gsmoke{0%{transform:translateY(0) scale(.6);opacity:.8}100%{transform:translateY(-34px) scale(1.6);opacity:0}}
+@keyframes gflag{0%,100%{transform:skewY(0)}50%{transform:skewY(-8deg)}}
+@keyframes gspark{0%,100%{opacity:.2}50%{opacity:1}}
+.smoke circle{animation:gsmoke 2.2s linear infinite;transform-box:fill-box;transform-origin:center}
+.flagw{animation:gflag 1.4s ease-in-out infinite;transform-box:fill-box;transform-origin:left}
+.spark{animation:gspark 1.3s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){.smoke circle,.flagw,.spark{animation:none}}
+
+.ico{display:inline-flex;vertical-align:-3px}.ico svg{width:16px;height:16px}
+.shopi{width:44px;height:44px;flex:none;display:grid;place-items:center;background:var(--wr-s);border-radius:12px}.shopi svg{width:24px;height:24px}
