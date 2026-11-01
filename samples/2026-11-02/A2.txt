@@ -1,0 +1,661 @@
+# A2 pul (IT 1 va IT 3) · 2–4-noyabr · Takrorlash: Jobs, Culture, Past simple & Past continuous
+# Butun faylni Topshiriqlar bo'limiga bir marta joylang. Har sinf o'z jadvali bo'yicha oladi:
+# 1–2-sinf ishi = dushanbadagi ikki dars · 3–4-sinf ishi = IT 1 da chorshanba, IT 3 da seshanba.
+# 1-uy vazifasi dushanba darslaridan keyin ochiladi, 2-uy vazifasi oxirgi darsdan keyin (muddat — keyingi dushanba).
+@week 2026-11-02
+
+# ────────── 1-DARS ──────────
+@quest A2 · 1-dars · Ish joylari va kasblar (takrorlash)
+@pool A2
+@classwork 1
+@noreview
+
+@circle Ish joylari
+@rule Places of work: ish joylari
+clinic — klinika · factory — zavod, fabrika · garage — avtoservis
+hospital — kasalxona · office — ofis · outdoors — ochiq havoda
+restaurant — restoran · school / university — maktab / universitet
+shop — do'kon · studio — studiya (radio, TV, rassom ustaxonasi)
+Gap tuzish: A nurse works in a hospital. A farmer works outdoors.
+Diqqat: outdoors oldidan "in" ishlatilmaydi: works outdoors.
+
+@match Kasbni ish joyi bilan juftlang
+mechanic = garage
+dentist = clinic
+cook = restaurant
+secretary = office
+shop assistant = shop
+farmer = outdoors
+- studio
+@endmatch
+? A singer usually works in a ...
+- garage
+* studio
+- factory
+? Where does a professor usually work?
+- in a clinic
+- in a factory
+* at a university
+@gap A nurse works in a ___. = hospital ! Hamshira kasalxonada ishlaydi.
+@gap A farmer works ___. = outdoors ! "in" kerak emas.
+@tf A mechanic usually works in a studio. = noto'g'ri ! Mexanik avtoservisda (garage) ishlaydi.
+
+@circle Kasbni toping
+@rule Jobs and work
+Ta'rif bilan kasbni toping. Kalit so'zlar:
+reports the news → journalist · builds or repairs houses → builder
+looks after your teeth → dentist · cleans rooms → cleaner
+works in films or theatre → actor / actress · paints pictures → artist
+cuts people's hair → hairdresser · prepares food in a restaurant → cook
+
+? Someone who reports the news for a newspaper or TV.
+* a journalist
+- a writer
+- a secretary
+? Someone whose job is to look after your teeth.
+- a doctor
+* a dentist
+- a nurse
+? Someone whose job is to cut people's hair.
+- a cleaner
+- a cook
+* a hairdresser
+? Someone who paints pictures.
+* an artist
+- an actor
+- an author
+? Someone whose job is to prepare food in a restaurant.
+- a waiter ! Ofitsiant ovqat olib keladi, tayyorlamaydi.
+* a cook
+- a cleaner
+@gap Someone whose job is to build or repair houses is a ___. = builder
+@gap Someone who cleans rooms in a building is a ___. = cleaner
+@gap Someone who writes books is a writer or an ___. = author
+
+@circle Urg'u: Ooo, oOo, ooO
+@rule Uch bo'g'inli so'zlarda urg'u
+Ooo — urg'u birinchi bo'g'inda: BUS-i-ness-man, HAIR-dres-ser, FOOT-ball-er, SEC-re-ta-ry
+oOo — urg'u ikkinchi bo'g'inda: as-SIS-tant, me-CHAN-ic, pro-FES-sor, bus DRIV-er
+ooO — urg'u uchinchi bo'g'inda: en-gi-NEER
+journalist — JOUR-na-list (Ooo)
+
+? "engineer" — urg'u qayerda?
+- Ooo
+- oOo
+* ooO
+? "mechanic" — urg'u qayerda?
+- Ooo
+* oOo
+- ooO
+? "hairdresser" — urg'u qayerda?
+* Ooo
+- oOo
+- ooO
+? "assistant" — urg'u qayerda?
+- Ooo
+* oOo
+- ooO
+@tf "professor" so'zida urg'u ikkinchi bo'g'inda. = to'g'ri ! pro-FES-sor.
+@tf "journalist" so'zida urg'u oxirgi bo'g'inda. = noto'g'ri ! JOUR-na-list — birinchi bo'g'inda.
+
+@circle Do you ...? 20 savol o'yini
+@rule Yes / No savollari (Present simple)
+Do you work in an office? — Yes, I do. / No, I don't.
+Do you have to make phone calls? — Yes, I do.
+Do you make a lot of money? — No, I don't.
+Are you a cleaner? — Yes, I am.
+
+? "Do you work outdoors?" — inkor qisqa javob:
+- No, I not.
+* No, I don't.
+- No, I doesn't.
+? "Are you a dentist?" — ha javobi:
+* Yes, I am.
+- Yes, I do.
+- Yes, I'm.
+@order Do | you | sit | all | day = Kun bo'yi o'tirasizmi?
+@order Do | you | make | a lot of | money = Ko'p pul topasizmi?
+@gap ___ you work in a hospital? Yes, I do. = Do
+@gap Do you wear a uniform? No, I ___. = don't
+
+# ────────── 2-DARS ──────────
+@circle Yangi so'zlar
+@word dentist = tish shifokori | A dentist looks after your teeth.
+@word hairdresser = sartarosh | My aunt is a hairdresser.
+@word mechanic = mexanik, usta | The mechanic repaired our car.
+@word journalist = jurnalist | She's a journalist for a newspaper.
+
+@quest A2 · 2-dars · Past simple: inkor va savollar (takrorlash)
+@pool A2
+@classwork 2
+@noreview
+
+@circle Past simple inkor
+@rule Past simple: inkor (didn't)
+Inkor: did not (didn't) + fe'lning 1-shakli (infinitive).
+He didn't plan to write books. — U kitob yozishni rejalashtirmagan.
+They didn't like the story. — Ularga hikoya yoqmadi.
+Diqqat: didn't dan keyin fe'l o'zgarmaydi: didn't liked emas → didn't like.
+didn't went emas → didn't go.
+
+? Qaysi gap to'g'ri?
+- She didn't liked the film.
+* She didn't like the film.
+- She not liked the film.
+? Qaysi gap to'g'ri?
+- They didn't went to school.
+- They don't went to school.
+* They didn't go to school.
+@gap He ___ (not plan) to be a writer. = didn't ! didn't + plan.
+@gap I didn't ___ (have) breakfast this morning. = have ! didn't dan keyin 1-shakl.
+@gap We didn't ___ (win) the match. = win
+@tf She didn't wanted to be a teacher. = noto'g'ri ! didn't want.
+@tf The children loved the story. — bu gap inkor. = noto'g'ri ! loved — tasdiq gap.
+
+@circle Notanish fe'llar: 2-shakl
+@match Fe'lni o'tgan zamon shakli bilan juftlang
+write = wrote
+become = became
+begin = began
+win = won
+make = made
+give = gave
+- writed
+@endmatch
+@match Yana juftlang
+go = went
+have = had
+take = took
+tell = told
+leave = left
+- goed
+@endmatch
+@gap Last year she ___ (win) a big prize. = won
+@gap He ___ (become) famous in 1998. = became
+@gap They ___ (leave) the city in 2010. = left
+
+@circle Savollar va qisqa javoblar
+@rule Past simple: savol
+Savol: (So'roq so'z) + did + ega + fe'lning 1-shakli?
+How did he become a writer? · When did he become famous?
+Did he want to be a writer? — Yes, he did. / No, he didn't.
+Qisqa javobda asosiy fe'l takrorlanmaydi: Yes, he did. (Yes, he wanted emas)
+
+? Qaysi savol to'g'ri?
+- When he became famous?
+* When did he become famous?
+- When did he became famous?
+? "Did you watch the film?" — ha javobi:
+- Yes, I watched.
+* Yes, I did.
+- Yes, I do.
+? "Did she like the book?" — yo'q javobi:
+* No, she didn't.
+- No, she don't.
+- No, she didn't like.
+@gap What film ___ he star in? = did
+@gap Did they ___ (play) football yesterday? = play
+@order Where | did | you | go | last weekend = O'tgan dam olish kunlari qayerga bordingiz?
+@order Did | she | win | the | prize = U mukofotni yutdimi?
+@order What | did | they | do | on Sunday = Ular yakshanba kuni nima qilishdi?
+
+@circle O'qish: yozuvchi
+@reading A writer by accident
+Lucy Grant didn't plan to be a writer. After university she became a nurse in a big hospital in Leeds. She loved her job, but in the evenings she often felt tired and lonely.
+One winter her little brother was ill, and every night she told him stories about a brave cat called Pepper. He loved them. "Write them down!" he said.
+She didn't think it was a good idea, but she did it. Her first book, Pepper in the Snow, came out in 2015. Children all over the country read it, and in 2019 it won an important award.
+Today Lucy doesn't work at the hospital. She writes books for children and visits schools. She also started a charity that buys books for children's hospitals.
+
+? What was Lucy's first job?
+- writer
+* nurse
+- teacher
+? Who were her first stories for?
+- her students
+* her little brother
+- her husband
+? When did her first book come out?
+- 2019
+* 2015
+- 2010
+@tf Lucy always wanted to be a writer. = noto'g'ri ! She didn't plan to be a writer.
+@tf Her book won an award. = to'g'ri
+@tf Lucy still works at the hospital. = noto'g'ri ! Today Lucy doesn't work at the hospital.
+@gap Lucy started a ___ that buys books for hospitals. = charity
+@endreading
+
+# ────────── 1-UY VAZIFASI (dushanba darslaridan keyin) ──────────
+@circle Yangi so'zlar
+@word author = muallif | Who is the author of this book?
+@word recognition = e'tirof, tan olinish | She won recognition for her work.
+@word official = rasmiy | It was an official award.
+@word sign = imzolamoq | The writer signed my book.
+
+@quest A2 · 1-uy vazifasi · Kasblar va Past simple
+@pool A2
+@homework 2
+
+@circle So'zlar
+@word ambition = orzu-maqsad, intilish | It was always his ambition to be a writer.
+@word award = mukofot | She won an important award.
+@word charity = xayriya tashkiloti | They started a charity in 1976.
+@word celebrity = mashhur odam | He's a TV celebrity.
+@word best-seller = eng ko'p sotilgan kitob | Her novel was a best-seller.
+@word novel = roman | I'm reading a long novel.
+@word chapter = bob | Read chapter three for homework.
+@word repair = ta'mirlamoq | A mechanic repairs cars.
+
+@circle Kasblar va ish joylari
+? Where does a dentist usually work?
+* in a clinic
+- in a garage
+- in a studio
+? Someone who serves food in a restaurant (ayol).
+- a cook
+* a waitress
+- a cleaner
+@gap A mechanic works in a ___. = garage
+@gap Someone who reports the news is a ___. = journalist
+@gap A ___ looks after people's teeth. = dentist
+@tf A secretary usually works in an office. = to'g'ri
+
+@circle Past simple
+@gap Lola ___ (not help) her mother in the shop. = didn't ! Inkor: didn't + help.
+@gap As a boy, Ali ___ (want) to be a journalist. = wanted
+@gap He ___ (not like) school. = didn't
+@gap When he left school, he ___ (work) as a builder. = worked
+@gap In the end, he ___ (go) to work in another company. = went
+@gap He ___ (write) his first songs after the accident. = wrote
+? "Did you go out last night?" — yo'q javobi:
+* No, I didn't.
+- No, I wasn't.
+- No, I don't.
+? Qaysi savol to'g'ri?
+- What dance did Michael Jackson made famous?
+* What dance did Michael Jackson make famous?
+- What dance Michael Jackson made famous?
+@order Did | you | do | sport | last weekend = O'tgan dam olish kunlari sport bilan shug'ullandingizmi?
+@order I | didn't | watch | a | film = Men film ko'rmadim.
+
+@circle O'qish
+@reading Before they became famous
+Many famous people didn't start their lives as stars. Before she became a singer, Amira worked in her aunt's café. She didn't like the job, but she sang for the customers every Friday.
+The actor Tom Reed didn't want to be an actor at all. He studied engineering and worked in a factory for three years. One day a friend took him to the theatre and he fell in love with acting.
+The writer Sara Kim was a secretary in an office. She wrote her first novel on the bus to work. It became a best-seller in 2012.
+
+? Where did Amira work before she became a singer?
+* in a café
+- in a factory
+- in an office
+? What did Tom Reed study?
+- acting
+* engineering
+- literature
+@tf Amira liked her job in the café. = noto'g'ri ! She didn't like the job.
+@tf Sara Kim wrote her first novel on the bus. = to'g'ri
+@gap Tom worked in a ___ for three years. = factory
+@endreading
+
+# ────────── 3-DARS ──────────
+@quest A2 · 3-dars · Madaniyat va kitob o'qish odati
+@pool A2
+@classwork 3
+@noreview
+
+@circle Madaniyat va kasblar
+@rule Culture and work
+art — san'at → painter (rassom) · ballet — balet → dancer (raqqos)
+classical music — mumtoz musiqa → composer (bastakor), musician (musiqachi)
+film — kino → director (rejissyor), actor (aktyor)
+literature — adabiyot → novelist (romannavis), writer (yozuvchi)
+opera — opera → singer (xonanda) · poetry — she'riyat → poet (shoir)
+theatre — teatr → playwright (dramaturg)
+Shakespeare — playwright, poet · Mozart — composer, musician
+
+@match So'zni kasb bilan juftlang
+art = painter
+ballet = dancer
+classical music = composer
+poetry = poet
+theatre = playwright
+film = director
+- novel
+@endmatch
+? Who writes plays for the theatre?
+- a poet
+* a playwright
+- a novelist
+? Who writes novels?
+* a novelist
+- a director
+- a composer
+? Mozart was a ...
+- painter and poet
+* composer and musician
+- director and actor
+@gap A ___ writes poetry. = poet
+@gap A ___ makes films. = director
+@tf A composer writes music. = to'g'ri
+
+@circle O'qish: kitob o'qish odati
+@rule Kalit so'zlar
+non-fiction — badiiy bo'lmagan kitoblar (tarix, fan) · improve — yaxshilamoq
+literacy — savodxonlik · comprehension — tushunish
+increase — oshirmoq · benefit — foyda · pleasure — zavq
+
+@reading Why read for pleasure?
+A lot of research shows that reading for pleasure is really important for young people. When you read a book because you want to, and not because a teacher says so, your brain gets many benefits.
+First, reading improves your vocabulary and your grammar. It also helps you to spell correctly and to write well. Readers often understand other people better, because in books they see the world through other people's eyes.
+Reading can also stop people feeling lonely, and it can be relaxing. Some people prefer novels, others prefer non-fiction, like history books.
+But there is a problem. A recent study found that many teenagers don't want their friends to see them reading a book. They think reading isn't cool. Maybe it's time to stop worrying about that and start enjoying a good book.
+
+? Why is reading for pleasure good?
+* It improves your vocabulary and grammar.
+- It makes you famous.
+- It helps you sleep in class.
+? What can reading stop?
+- writing
+* feeling lonely
+- learning
+? Why don't some teenagers read in front of their friends?
+- They can't read.
+* They think reading isn't cool.
+- Books are expensive.
+@tf History books are an example of non-fiction. = to'g'ri
+@tf Reading can't help you spell correctly. = noto'g'ri ! It helps you to spell correctly.
+@gap Reading ___ your vocabulary. (yaxshilaydi) = improves
+@endreading
+
+@circle Do or Don't?
+@rule Kitob o'qish odati uchun maslahatlar
+Do — yaxshi fikr · Don't — yomon fikr
+Masalan: Ask your friends for ideas. (Do) · Read the back of the book before you begin. (Do)
+Choose very long books when you start. (Don't — qisqa kitobdan boshlagan yaxshi)
+
+@tf Ask your friends what books to read. — yaxshi maslahat. = to'g'ri
+@tf Read the first page or two of the book before you choose it. — yaxshi maslahat. = to'g'ri
+@tf Never stop reading a book, even if you hate it. — yaxshi maslahat. = noto'g'ri ! Kitob yoqmasa, boshqasini tanlash mumkin.
+? A blurb is ...
+* the short text on the back of a book
+- the first chapter
+- a famous writer
+? A best-seller is ...
+- a very old book
+* a book that a lot of people buy
+- a shop assistant
+
+@circle Past continuous
+@rule Past continuous: o'tgan davomli zamon
+was / were + fe'l-ing → o'tgan zamonda ma'lum vaqtda davom etayotgan harakat.
+I / he / she / it → was · you / we / they → were
+At 8 o'clock I was reading. — Soat 8 da men o'qiyotgan edim.
+Inkor: wasn't / weren't + -ing → It wasn't raining.
+Savol: Was he working? — Yes, he was. / No, he wasn't.
+
+? At 10 last night I ___ TV.
+- were watching
+* was watching
+- watched
+? They ___ football at 5 o'clock yesterday.
+* were playing
+- was playing
+- are playing
+? It was grey, but it ___.
+- didn't raining
+* wasn't raining
+- weren't raining
+@gap A boy was ___ (run) down the street. = running
+@gap The old man and woman ___ buying fruit. = were
+@gap "Were you sleeping?" "No, I ___." = wasn't
+@order What | were | you | doing | at seven = Soat yettida nima qilayotgan edingiz?
+@order She | was | wearing | old | clothes = U eski kiyim kiyib olgan edi.
+
+# ────────── 4-DARS ──────────
+@circle Yangi so'zlar
+@word playwright = dramaturg | Shakespeare was a playwright.
+@word composer = bastakor | Mozart was a famous composer.
+@word novelist = romannavis | Dickens was a great novelist.
+@word non-fiction = badiiy bo'lmagan adabiyot | I like non-fiction, especially history books.
+
+@quest A2 · 4-dars · Past simple va Past continuous · Hikoya
+@pool A2
+@classwork 4
+@noreview
+
+@circle Ikki zamon birga
+@rule Past simple + Past continuous
+Uzoq davom etgan harakat → Past continuous. Uni bo'lgan qisqa harakat → Past simple.
+I was reading a book when my friend called. — Kitob o'qiyotganimda do'stim qo'ng'iroq qildi.
+While she was living in Portugal, she had her first daughter.
+when + Past simple (qisqa harakat) · while + Past continuous (uzoq harakat)
+
+? I ___ a book when my friend called.
+* was reading
+- read
+- were reading
+? She saw an accident while she ___ for the bus.
+- waited
+* was waiting
+- is waiting
+? They ___ a knock on the door while they were watching TV.
+* heard
+- were hearing
+- hear
+? He was walking in the park when he ___ an idea for a novel.
+- was having
+* had
+- has
+@gap While she ___ (live) in Portugal, she had a daughter. = was ! was living.
+@gap My mum was waiting for me when I ___ (get) home. = got
+@gap We weren't listening when the teacher ___ (give) the answer. = gave
+@tf She was having the idea while she travelled by train. = noto'g'ri ! She had the idea while she was travelling by train.
+@order I | was | sleeping | when | the phone rang = Telefon jiringlaganda men uxlayotgan edim.
+
+@circle Matn: J. K. Rowling
+@reading Facts about a famous writer
+J. K. Rowling wrote her first story when she was six. It was about a rabbit called Rabbit.
+She had the idea for the Harry Potter books while she was travelling by train from Manchester to London. She didn't have a pen, and she was too shy to ask anybody for one.
+In 1991 she went to Portugal to work as an English teacher.
+
+? When did she write her first story?
+* when she was six
+- when she was a teacher
+- in 1991
+? Where was she when she had the idea for Harry Potter?
+- in Portugal
+* on a train
+- at school
+? Why didn't she write the idea down?
+- She was sleeping.
+* She didn't have a pen.
+- She didn't like it.
+@gap In 1991 she ___ to Portugal. = went
+@endreading
+
+@circle Qiziqish bildirish
+@rule Speaking bank: suhbatdoshga qiziqish bildirish
+Did you? / Did she? / Was he? — Rostdanmi?
+Really? — Rostdanmi? · Then what happened? — Keyin nima bo'ldi?
+Wow! / Cool! / That's amazing! — Zo'r! · That's interesting. — Qiziq.
+Oh, no! / Oh, dear! — Voy! · What a shame! — Afsus! · Poor you! — Bechora!
+
+@match Gapga mos javobni toping
+I lost my phone at the concert. = Oh, no! Poor you!
+I met a famous actor yesterday. = Wow! That's amazing!
+Then we heard a strange noise. = Really? Then what happened?
+We missed the last bus. = What a shame!
+- Yes, I did.
+@endmatch
+? Do'stingiz "I won a prize!" dedi. Eng mos javob:
+* Did you? That's incredible!
+- What a shame!
+- Poor you!
+? Do'stingiz "My cat was ill all week." dedi:
+- Cool!
+* Oh, dear! Poor you!
+- That's amazing!
+? Do'stingiz hikoyani to'xtatdi. Davom ettirishini so'raysiz:
+- I see.
+* Then what happened?
+- Wow!
+@tf "What a shame!" — yaxshi xabarga javob. = noto'g'ri ! Bu "Afsus!" — yomon xabarga.
+
+@circle Hikoya: vaqt so'zlari
+@rule Writing bank: vaqt ifodalari
+First, · Then, · Next, · After that, · Suddenly, · In the end,
+Two months ago, · Two years later, · The following year, · In 2012,
+When I was 12, ... · When the play started, ...
+Hikoya tartibi: 1) qachon, qayerda, kim bilan → 2) nima qilayotgan edingiz, nima bo'ldi → 3) keyin nima bo'ldi → 4) oxiri.
+
+? Hikoyaning oxirgi qismini qaysi ibora bilan boshlaymiz?
+- First,
+- Suddenly,
+* In the end,
+? Kutilmagan voqea uchun qaysi so'z?
+* Suddenly,
+- After that,
+- Two years later,
+@order Two | months | ago | our class | went on | a school trip = Ikki oy oldin sinfimiz ekskursiyaga bordi.
+@order We | were | travelling | by coach | when | the teacher told us = Avtobusda ketayotganimizda o'qituvchi bizga aytdi.
+? "___, I had a great time." (Oxir-oqibat)
+* In the end
+- Suddenly
+- Two months ago
+
+@circle Yangi so'zlar
+@word blurb = kitob muqovasidagi qisqa ta'rif | Read the blurb on the back of the book.
+@word clap = qarsak chalmoq | Everybody clapped at the end.
+@word choose = tanlamoq | Choose a book you like.
+@word look after = g'amxo'rlik qilmoq | A nurse looks after sick people.
+
+# ────────── 2-UY VAZIFASI (oxirgi darsdan keyin, muddat — keyingi dushanba) ──────────
+@quest A2 · 2-uy vazifasi · Past continuous va hikoya
+@pool A2
+@homework 4
+
+@circle So'zlar
+@word improve = yaxshilamoq | Reading improves your English.
+@word increase = oshirmoq | It increases your vocabulary.
+@word benefit = foyda | There are many benefits of reading.
+@word behaviour = xulq-atvor | Books help you understand human behaviour.
+@word lonely = yolg'iz (yolg'izlikni his qiluvchi) | Reading can stop people feeling lonely.
+@word pleasure = zavq | I read for pleasure.
+@word literacy = savodxonlik | Literacy is the ability to read and write.
+@word patient = sabrli | A good teacher is patient.
+
+@circle Madaniyat so'zlari
+? Who wrote "Romeo and Juliet"? He was a playwright and poet.
+* Shakespeare
+- Mozart
+- Dickens
+@gap A ___ writes music. = composer
+@gap Someone who dances in a ballet is a ___. = dancer
+@gap The person who makes a film is the ___. = director
+
+@circle Past continuous
+@gap At 7.30 this morning I ___ having breakfast. = was
+@gap My parents ___ watching TV at 10 last night. = were
+@gap It ___ raining yesterday morning, it was sunny. = wasn't
+? A boy ___ down the street with an apple in his hand.
+* was running
+- were running
+- ran running
+? "What were you doing at 3.30 yesterday?"
+- I'm doing my homework.
+* I was doing my homework.
+- I did doing my homework.
+
+@circle Past simple yoki Past continuous?
+@gap While I ___ (cross) the road, I saw my teacher. = was ! was crossing.
+@gap I was reading when the lights ___ (go) out. = went
+@gap They were dancing when he ___ (stand) on her toe. = stood
+@gap She ___ (study) at primary school when she wrote her first story. = was ! was studying.
+? He ___ in the park when he had an idea.
+- walked
+* was walking
+- is walking
+? We were watching TV when we ___ a knock on the door.
+* heard
+- were hearing
+@order I | was | reading | a book | when | my friend called = Do'stim qo'ng'iroq qilganda men kitob o'qiyotgan edim.
+
+@circle Qiziqish bildirish
+@match Mos javob
+I broke my leg. = Oh, dear! Poor you!
+We won the final! = Wow! That's amazing!
+I saw a strange light in the sky. = Really? Then what happened?
+- Yes, I am.
+@endmatch
+
+@circle Yozish
+@writing A special day | 80-120
+Hayotingizdagi qiziqarli, kulgili yoki g'ayrioddiy voqea haqida hikoya yozing (80–120 so'z). Hikoyaga sarlavha qo'ying.
+1-qism: Qachon, qayerda bo'ldi? Kim bilan edingiz?
+2-qism: Nima qilayotgan edingiz? Avval nima bo'ldi?
+3-qism: Keyin nima bo'ldi?
+4-qism: Oxiri qanday tugadi?
+Past simple va Past continuous ishlating. Vaqt so'zlari: First, Then, Suddenly, After that, In the end.
+
+# ────────── LUG'AT GURUHLARI (faqat Lug'at va kunlik takrorlash uchun, vazifa emas) ──────────
+@quest A2 · Places of work
+@pool A2
+@vocab
+@circle So'zlar
+@word clinic = klinika
+@word factory = zavod, fabrika
+@word garage = avtoservis, garaj
+@word hospital = kasalxona
+@word office = ofis
+@word outdoors = ochiq havoda
+@word restaurant = restoran
+@word university = universitet
+@word shop = do'kon
+@word studio = studiya
+
+@quest A2 · Jobs and work
+@pool A2
+@vocab
+@circle So'zlar
+@word actor = aktyor
+@word actress = aktrisa
+@word artist = rassom
+@word builder = quruvchi
+@word lorry driver = yuk mashinasi haydovchisi
+@word businesswoman = tadbirkor (ayol)
+@word cleaner = farrosh
+@word cook = oshpaz
+@word engineer = muhandis
+@word farmer = fermer, dehqon
+@word secretary = kotib(a)
+@word shop assistant = sotuvchi
+@word singer = qo'shiqchi, xonanda
+@word professor = professor
+@word waiter = ofitsiant
+
+@quest A2 · Culture and work
+@pool A2
+@vocab
+@circle So'zlar
+@word art = san'at
+@word ballet = balet
+@word classical music = mumtoz musiqa
+@word dancer = raqqos(a)
+@word director = rejissyor
+@word literature = adabiyot
+@word musician = musiqachi
+@word opera = opera
+@word painter = rassom
+@word poet = shoir
+@word poetry = she'riyat
+@word theatre = teatr
+
+@quest A2 · Other words
+@pool A2
+@vocab
+@circle So'zlar
+@word comprehend = tushunmoq
+@word comprehension = tushunish
+@word creativity = ijodkorlik
+@word kind = tur, xil
+@word literate = savodli
+@word quotation = iqtibos
