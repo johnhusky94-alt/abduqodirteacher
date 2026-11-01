@@ -154,7 +154,7 @@ async function load() {
     gold = r.gold == null ? 300 : r.gold; today = r.today || 0;
     const groups = (r.groups || []).map((g) => { const at = g.week_start ? g.week_start + "T12:00:00" : g.at, w = weekOf(at);
       return { id: "q" + g.id, wk: w.key, week: w.label, recent: Date.now() - new Date(g.at).getTime() < 31 * 86400e3,
-        name: g.kind === "cw" ? `${g.lesson ? g.lesson + "-dars · " : "Sinf ishi · "}${g.title}` : `Uy vazifasi · ${g.title}`, words: g.words }; });
+        name: g.kind === "vl" ? `Lug'at · ${g.title}` : g.kind === "cw" ? `${g.lesson ? g.lesson + "-dars · " : "Sinf ishi · "}${g.title}` : `Uy vazifasi · ${g.title}`, words: g.words }; });
     groups.sort((a, b) => b.wk - a.wk);
     GROUPS = groups;
   } catch (e) { LOAD_ERR = "Internet bilan muammo. Sahifani yangilang."; }

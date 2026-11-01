@@ -100,6 +100,8 @@
             q.kind = "cw"; q.lesson = n; return;
           }
           case "homework": case "uy": if (!q) newQuest("Nomsiz vazifa", ln); q.kind = "hw"; return;
+          case "vocab": case "lugat": if (!q) newQuest("Lug'at", ln); q.kind = "vl"; q.noReview = true; return;
+          case "noreview": if (!q) newQuest("Nomsiz vazifa", ln); q.noReview = true; return;
           case "due": case "muddat": case "deadline": {
             if (!q) newQuest("Nomsiz vazifa", ln);
             const m2 = rest.toLowerCase().match(/^(\S+)(?:\s+(\d{1,2}):(\d{2}))?$/);
@@ -279,7 +281,7 @@
     closeMatch();
 
     quests.forEach((qq) => {
-      if (qq.hasReview || !qq.circles.length) return;
+      if (qq.hasReview || qq.noReview || !qq.circles.length) return;
       const rc = { name: "Takrorlash", items: [{ k: "review", n: 6 }] };
       const ri = qq.circles.findIndex((c) => c.items.some((it) => it.k === "reading" || it.k === "ielts"));
       if (ri >= 0) qq.circles.splice(ri, 0, rc); else qq.circles.push(rc);

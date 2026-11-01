@@ -1,0 +1,981 @@
+# A1 IT1 · 2–4-noyabr haftasi. Butun faylni Topshiriqlar bo'limiga bir marta joylang.
+# ────────────────────────────────────────
+@week 2026-11-02
+# ────────────────────────────────────────
+
+# ────────────────────────────────────────
+# 13-dars kitobdan o'tiladi (dushanba 08:30). Uyga vazifa — shu dars bo'yicha.
+# ────────────────────────────────────────
+@quest 13-dars · Alifbo, telefon va e-mail
+@pool A1 IT1
+@due wed 08:00
+
+@circle Alifbo tovushlari
+@rule Harflar tovush guruhlari
+Ingliz alifbosida 26 ta harf bor. Harflarni nomi aytilganda chiqadigan tovushga qarab guruhlash oson:
+
+/eɪ/ → A H J K
+/iː/ → B C D E G P T V
+/e/ → F L M N S X Z
+/aɪ/ → I Y
+/əʊ/ → O
+/uː/ → Q U W
+/ɑː/ → R
+
+Eslab qoling: E harfi "i:" deb, I harfi "ay" deb aytiladi. G "ji:", J "jey" deb aytiladi.
+
+? Qaysi harf A, H, K bilan bir guruhda?
+* J
+- G ! G /iː/ guruhida: B C D E G...
+- E
+- I
+! A H J K — hammasi /eɪ/.
+? Qaysi harf B, D, T bilan bir guruhda?
+- F ! F /e/ guruhida.
+* V
+- Y
+- R
+? "E" harfi qanday aytiladi?
+- ey
+* i:
+- ay
+! E = /iː/, I = /aɪ/. Ko'p o'quvchi bu ikkisini almashtirib yuboradi.
+? "I" harfi qanday aytiladi?
+* ay
+- i:
+- ey
+? Qaysi harf boshqalardan farq qiladi: F, M, S, U?
+- F
+- M
+- S
+* U
+! F M S — /e/ guruhi, U esa /uː/.
+@tf "Q", "U" va "W" bir guruhda. = to'g'ri ! Hammasi /uː/ bilan aytiladi.
+@tf "G" va "J" bir xil aytiladi. = noto'g'ri ! G = /dʒiː/, J = /dʒeɪ/.
+
+@circle Harflab aytish
+@rule How do you spell it?
+Ismingizni yoki shahringizni harflab aytish kerak bo'lsa, shunday so'raladi:
+How do you spell your name? = Ismingiz qanday yoziladi?
+How do you spell that? = Bu qanday yoziladi?
+
+Ikki bir xil harf ketma-ket kelsa "double" deymiz:
+Anna → A - double N - A
+Bukhara → B - U - K - H - A - R - A
+Javob berganda shoshmang: har bir harfni aniq ayting.
+
+? "How do you spell your surname?" — bu nimani so'rayapti?
+* Familiyangiz qanday yoziladi?
+- Familiyangiz nima?
+- Qayerdansiz?
+- Necha yoshdasiz?
+? "Mohammed" so'zini harflab aytganda "mm" qanday aytiladi?
+- two M
+* double M
+- M M M
+- big M
+? Qaysi biri "Fergana" so'zining to'g'ri harflanishi?
+- F - A - R - G - A - N - A
+* F - E - R - G - A - N - A
+- F - E - R - G - E - N - A
+@gap How do you ___ your name? = spell ! spell = harflab aytmoq.
+@gap A - double ___ - A → Anna = N ! Anna ichida ikki N bor.
+@order How | do | you | spell | that = Bu qanday yoziladi?
+
+@circle Qisqartmalar
+@rule Qisqartmalar (abbreviations)
+Ba'zi nomlar bosh harflar bilan yoziladi va harfma-harf o'qiladi:
+the USA = the United States of America (Amerika Qo'shma Shtatlari)
+the UK = the United Kingdom (Buyuk Britaniya)
+the BBC = Britaniya radio va televideniyesi
+a PC = personal computer (shaxsiy kompyuter)
+ID = identification (shaxsni tasdiqlovchi hujjat)
+a VIP = very important person (juda muhim mehmon)
+Masalan: the UK → "yu: key", the BBC → "bi: bi: si:".
+
+@match Qisqartmani ma'nosi bilan juftlang
+the USA = Amerika Qo'shma Shtatlari
+the UK = Buyuk Britaniya
+PC = shaxsiy kompyuter
+ID = shaxsni tasdiqlovchi hujjat
+VIP = juda muhim mehmon
+- Yevropa Ittifoqi
+@endmatch
+? "the UK" qanday o'qiladi?
+* yu: key
+- uk
+- yu: ka
+? "the BBC" qanday o'qiladi?
+- bibisi
+* bi: bi: si:
+- be be se
+
+@circle Telefon raqami va e-mail
+@rule Telefon raqami va e-mail manzilini aytish
+Telefon raqami raqamma-raqam aytiladi: 90 123 45 67 → nine oh, one two three, four five, six seven.
+0 = "oh" (yoki zero). 55 = double five.
+
+E-mail manzilida:
+belgi @ = at
+belgi . = dot
+belgi _ = underscore
+belgi - = dash
+Masalan: lola.karimova@mail.uz → lola dot karimova at mail dot uz
+
+Telefonda tanishish:
+— Hello, can I speak to Anvar, please? (Anvar bilan gaplashsam bo'ladimi?)
+— Speaking. (Men eshitaman.)
+— What's your phone number? · What's your email address?
+
+? "@" belgisi qanday o'qiladi?
+- dot
+* at
+- dash
+- underscore
+? "." belgisi e-mail manzilida qanday o'qiladi?
+* dot
+- point
+- at
+- stop
+? "ali_2010@gmail.com" qanday o'qiladi?
+* ali underscore two oh one oh at gmail dot com
+- ali dash two oh one oh at gmail dot com
+- ali underscore two oh one oh dot gmail at com
+? "077" raqami qanday aytilishi mumkin?
+- oh seven seven seven
+* oh double seven
+- seventy-seven oh
+@gap 0 raqami telefon raqamida ko'pincha "___" deb aytiladi. = oh ! 0 = oh (yoki zero).
+@gap What's your email ___? = address ! email address = elektron pochta manzili.
+@gap "Can I speak to Malika, please?" "___." (Men eshitaman) = Speaking ! Telefonda o'zi gapirayotgan bo'lsa: Speaking.
+@tf "dilnoza.r@inbox.uz" → "dilnoza dot r at inbox dot uz" = to'g'ri
+@order What's | your | phone | number = Telefon raqamingiz qanday?
+
+@circle Lug'at
+@word first name = ism | My first name is Madina.
+@word surname = familiya | Her surname is Rahimova.
+@word address = manzil | What's your address?
+@word phone number = telefon raqami | My phone number is 90 555 12 34.
+@word email address = elektron pochta manzili | Can I have your email address?
+@word married = uylangan, turmushga chiqqan | Is your brother married?
+
+@circle O'qish
+@reading A phone call
+Dilnoza: Hello, is that the Sun Language Centre?
+Man: Yes, it is. How can I help you?
+Dilnoza: I want English lessons, please.
+Man: OK. What's your name?
+Dilnoza: Dilnoza Rakhimova.
+Man: How do you spell your surname?
+Dilnoza: R - A - K - H - I - M - O - V - A.
+Man: Thank you. What's your phone number?
+Dilnoza: It's 93 410 77 25.
+Man: And your email address?
+Dilnoza: It's dilnoza.r at inbox dot uz.
+Man: Great. Your first lesson is on Monday.
+
+? Who does Dilnoza call?
+* a language centre
+- a hospital
+- her friend
+? What's Dilnoza's surname?
+- Dilnoza
+* Rakhimova
+- Rakhim
+@tf Dilnoza's phone number is 93 410 77 25. = to'g'ri
+@tf Her first lesson is on Friday. = noto'g'ri ! Matnda: on Monday.
+@gap Her email is dilnoza.r@inbox.___ = uz
+
+# ────────────────────────────────────────
+# 14-dars · dushanba 14:00 · sinfda sayt orqali
+# ────────────────────────────────────────
+@quest 14-dars · Progress Test 1 (1–4-unitlar)
+@pool A1 IT1
+@classwork 2
+
+@noreview
+
+@circle A · am / is / are
+@rule Progress Test 1
+Bu 1–4-unitlar bo'yicha nazorat ishi.
+Har bir savolni diqqat bilan o'qing va bitta javobni tanlang.
+Darslikka, telefonga va do'stingizga qaramang: natija sizning haqiqiy bilimingizni ko'rsatsin.
+Keyingi darsda har bir xatoni birga tahlil qilamiz.
+
+? I ___ a student.
+* am
+- is
+- are
+? My brother ___ a doctor.
+- am
+* is
+- are
+? Aziz and Jasur ___ from Samarkand.
+- am
+- is
+* are
+@gap We ___ in class 7 this year. = are
+@gap "Where ___ your teacher from?" "She's from Bukhara." = is
+
+@circle B · Inkor va qisqa javoblar
+? "Are you married?" "No, I ___."
+- amn't
+* 'm not
+- isn't
+- aren't
+? "Is she a nurse?" "Yes, ___."
+* she is
+- she's
+- she are
+- he is
+? They ___ from England. They're from Canada.
+- isn't
+* aren't
+- not
+- am not
+@gap "Is your phone new?" "No, it ___." = isn't
+@tf "Are they doctors?" "Yes, they're." = noto'g'ri
+
+@circle C · Savol so'zlari
+? "___ is your name?" "Lola."
+* What
+- Where
+- Who
+- How
+? "___ are you from?" "I'm from Namangan."
+- What
+* Where
+- Who
+- How old
+? "___ is she?" "She's my sister."
+- What
+- Where
+* Who
+- How many
+? "___ are you?" "I'm fourteen."
+- How
+- What
+* How old
+- How many
+@gap "___ are you?" "I'm fine, thanks." = How
+
+@circle D · my / your / his / her / our / their
+? This is Sardor. ___ school is big.
+* His
+- Her
+- He
+- Their
+? I'm Malika. ___ surname is Karimova.
+- I
+* My
+- Your
+- Her
+? We are students. ___ teacher is from London.
+- We
+- Their
+* Our
+- Your
+@gap Nodira is a teacher. ___ students are very good. = Her
+@gap Ali and Vali are brothers. ___ house is in Andijan. = Their
+
+@circle E · 's belgisi
+? Bu Jasurning velosipedi. Qaysi biri to'g'ri?
+* This is Jasur's bike.
+- This is Jasur bike.
+- This is bike Jasur's.
+- This is Jasurs bike.
+? "Who's Kamola?" "She's ___ sister."
+- Aziz
+* Aziz's
+- Azizs
+- Aziz is
+? "Tom's a doctor." Bu yerda 's nimani bildiradi?
+- Tomning
+* Tom is (Tom ... -dir)
+- Tom has
+- ko'plik
+? "Madina's car is red." Bu yerda 's nimani bildiradi?
+* Madinaning
+- Madina is
+- ko'plik
+- Madina has
+@tf "My mother's name is Gulnora." Bu gapda 's = "ning". = to'g'ri
+
+@circle F · has / have · likes / loves
+? My sister ___ two children.
+- have
+* has
+- is
+- are
+? I ___ a new phone.
+* have
+- has
+- am
+- is
+? Our grandparents ___ a big house.
+* have
+- has
+- is
+- haves
+? He ___ football very much.
+- like
+* likes
+- liking
+- is like
+@gap She ___ her job. She is very happy. (love) = loves
+
+@circle G · a / an · ko'plik
+? ___ apple
+- a
+* an
+? ___ book
+* a
+- an
+? ___ engineer
+- a
+* an
+? one sandwich → two ___
+- sandwichs
+* sandwiches
+- sandwich
+@gap one dictionary → three ___ = dictionaries
+
+@circle H · Sonlar va alifbo
+? 15 qanday yoziladi?
+- fifty
+* fifteen
+- fiveteen
+- fivety
+? 30 qanday yoziladi?
+* thirty
+- thirteen
+- threety
+- therty
+? Qaysi harf boshqacha tovushga ega?
+- B
+- C
+- D
+* F
+? Qaysi harf "A" bilan bir xil tovushga ega?
+* K
+- E
+- I
+- R
+@gap 12 = ___ (so'z bilan yozing) = twelve
+
+# ────────────────────────────────────────
+# 15-dars · chorshanba 08:30
+# ────────────────────────────────────────
+@quest 15-dars · Test tahlili
+@pool A1 IT1
+@classwork 3
+
+@noreview
+
+@circle A · am / is / are
+@rule A bo'lim tahlili: to be
+"to be" fe'li o'zbek tilidagi "-man, -san, -dir" qo'shimchalariga o'xshaydi.
+
+I → am (I am = I'm)
+he / she / it → is (he is = he's)
+you / we / they → are (they are = they're)
+
+Diqqat: ikki kishi (Aziz and Jasur) = they, shuning uchun are.
+Ko'p xato: "My brother are..." emas, "My brother is..." (bitta aka = he).
+
+? Testdagi xato: "Aziz and Jasur is from Samarkand." Nima uchun noto'g'ri?
+* Ikki kishi = they, they bilan are ishlatiladi.
+- is o'rniga am kerak. ! am faqat I bilan.
+- from so'zi ortiqcha. ! from = -dan, kerakli so'z.
+@gap My parents ___ teachers. = are ! parents = they → are.
+@gap It ___ a big city. = is ! it → is.
+@gap I ___ not from Tashkent. = am ! I → am.
+@tf My sister and I is students. = noto'g'ri ! my sister and I = we → are.
+@order My | friends | are | from | Bukhara = Do'stlarim Buxorodan.
+
+@circle B · Inkor va qisqa javoblar
+@rule B bo'lim tahlili: not va qisqa javoblar
+Inkor: am / is / are dan keyin not qo'yamiz.
+I'm not · he isn't (is not) · they aren't (are not)
+"amn't" degan so'z YO'Q. Faqat I'm not.
+
+Qisqa javob:
+Yes, I am. · Yes, she is. · Yes, they are.
+No, I'm not. · No, she isn't. · No, they aren't.
+Diqqat: "Yes" javobida qisqartirmaymiz: "Yes, she's." emas, "Yes, she is."
+
+? "Are you a teacher?" — inkor qisqa javob qaysi?
+- No, I amn't. ! Bunday so'z yo'q.
+* No, I'm not.
+- No, I not.
+- No, I isn't.
+? "Is he from Spain?" — ha javobi qaysi?
+* Yes, he is.
+- Yes, he's. ! Yes javobida qisqartirilmaydi.
+- Yes, he are.
+@gap "Are they married?" "No, they ___." = aren't ! they → aren't.
+@gap She ___ a doctor. She's a nurse. = isn't ! she → isn't.
+@tf "Is it your bag?" "Yes, it's." = noto'g'ri ! To'g'risi: Yes, it is.
+@order We | aren't | from | Russia = Biz Rossiyadan emasmiz.
+
+@circle C · Savol so'zlari
+@rule C bo'lim tahlili: savol so'zlari
+What = nima? (What's your name?)
+Where = qayerda? qayerdan? (Where are you from?)
+Who = kim? (Who is she?)
+How = qanday? (How are you?)
+How old = necha yosh? (How old are you?)
+How many = nechta? (How many brothers have you got?)
+
+Javobga qarab savol so'zini toping: "I'm 14" → yosh → How old.
+
+@match Savolni javob bilan juftlang
+What's your job? = I'm a nurse.
+Where's she from? = She's from Egypt.
+Who's he? = He's my uncle.
+How old is your sister? = She's nine.
+How are you? = Fine, thanks.
+- It's in my bag.
+@endmatch
+? "___ is my book?" "It's on the table."
+* Where
+- Who
+- How
+? "___ is your phone number?" "It's 90 123 45 67."
+* What
+- How many
+- Where
+@gap "___ is that man?" "He's my father." = Who ! Odam haqida so'rayapmiz → Who.
+@gap "How ___ is your grandfather?" "He's seventy." = old ! Yosh → How old.
+
+@circle D · Egalik so'zlari
+@rule D bo'lim tahlili: my, your, his, her, our, their
+I → my · you → your · he → his · she → her · we → our · they → their
+his = erkakniki, her = ayolniki.
+Ko'p xato: "He name is..." emas, "His name is..."
+Ko'p xato: Sardor (o'g'il bola) → his, Nodira (qiz) → her.
+
+? Kamola is my friend. ___ dog is small.
+- His ! Kamola qiz bola.
+* Her
+- Their
+? I'm Doniyor. ___ name is Doniyor.
+- I
+* My
+- Me
+@gap You're a new student. What's ___ name? = your ! you → your.
+@gap Bekzod's in London. ___ hotel is very nice. = His ! Bekzod → he → his.
+@tf They are students. Their school is in Chirchiq. = to'g'ri ! they → their.
+@order What's | his | phone | number = Uning telefon raqami qanday?
+
+@circle E · 's belgisi
+@rule E bo'lim tahlili: 's ning ikki ma'nosi
+1) 's = is → Tom's a doctor. = Tom is a doctor.
+2) 's = -ning (egalik) → Tom's car = Tomning mashinasi.
+Qanday ajratamiz? 's dan keyin ot (car, sister, house) kelsa → egalik.
+'s dan keyin a / an / sifat / joy kelsa → is.
+
+? "Malika's from Fergana." 's = ?
+* is
+- -ning
+? "Malika's brother is a pilot." 's = ?
+- is
+* -ning
+? Bu Dilshodning kitobi.
+* This is Dilshod's book.
+- This is Dilshod book.
+- This is book of Dilshod's.
+@tf "What's your name?" — bu yerda 's = is. = to'g'ri ! What is your name?
+@order This | is | my | sister's | flat = Bu opamning kvartirasi.
+
+@circle F · has / have · likes / loves
+@rule F bo'lim tahlili: has / have va -s qo'shimchasi
+I / you / we / they → have
+he / she / it → has
+Xuddi shunday: he / she / it bilan fe'lga -s qo'shiladi:
+I like → she likes · I love → he loves · I live → she lives · I work → he works
+Ko'p xato: "She have", "He like" — he/she bilan -s unutilmasin.
+
+? My father ___ a car.
+- have
+* has
+? Our teacher ___ coffee.
+* likes
+- like
+? Zarina and Lola ___ a cat.
+* have
+- has ! Ikki kishi = they → have.
+@gap My grandmother ___ in a small village. (live) = lives ! she → lives.
+@gap I ___ two sisters. = have ! I → have.
+@tf He love his job. = noto'g'ri ! He loves his job.
+
+@circle G · a / an va ko'plik
+@rule G bo'lim tahlili: a / an va ko'plik
+Undosh TOVUSH oldidan a: a book, a car, a doctor.
+Unli TOVUSH (a, e, i, o, u) oldidan an: an apple, an engineer, an orange, an email.
+Ko'plik: odatda -s (book → books).
+-s, -ss, -sh, -ch, -x bilan tugasa -es: bus → buses, sandwich → sandwiches.
+Undosh + y bo'lsa -ies: dictionary → dictionaries, city → cities.
+Lekin: day → days (y oldida unli).
+
+? ___ email
+- a
+* an
+? ___ student
+* a
+- an
+? one city → two ___
+- citys
+* cities
+- cityes
+? one box → three ___
+- boxs
+* boxes
+- box
+@gap one bus → two ___ = buses ! bus -s bilan tugaydi → -es.
+@gap one key → four ___ = keys ! e + y: faqat -s.
+
+@circle H · Sonlar va alifbo
+@rule H bo'lim tahlili: sonlar va harflar
+13 thirteen · 14 fourteen · 15 fifteen · 16 sixteen · 17 seventeen · 18 eighteen · 19 nineteen
+20 twenty · 30 thirty · 40 forty · 50 fifty
+Diqqat: fifteen (fiveteen emas), fifty (fivety emas), forty (fourty emas).
+-teen oxirida urg'u: fif-TEEN. -ty boshida urg'u: FIF-ty.
+
+Harflar tovush guruhlari:
+/eɪ/ A H J K · /iː/ B C D E G P T V · /e/ F L M N S X Z
+/aɪ/ I Y · /əʊ/ O · /uː/ Q U W · /ɑː/ R
+
+? 40 qanday yoziladi?
+- fourty
+* forty
+- fourteen
+? Qaysi harf boshqalardan farq qiladi: B, D, L, T?
+- B
+- D
+* L
+- T
+@match Sonni so'z bilan juftlang
+13 = thirteen
+30 = thirty
+18 = eighteen
+80 = eighty
+- eightteen
+@endmatch
+@gap 50 = ___ = fifty ! fifty, fivety emas.
+@tf "H" harfi "A" va "K" bilan bir guruhda. = to'g'ri ! A H J K — /eɪ/.
+
+# ────────────────────────────────────────
+# 16-dars · chorshanba 09:30
+# ────────────────────────────────────────
+@quest 16-dars · Fonetik belgilar
+@pool A1 IT1
+@classwork 4
+
+@circle Fonetik belgilar nima?
+@rule Fonetik belgilar (transkripsiya)
+Ingliz tilida so'z yozilishi va o'qilishi ko'pincha har xil. Masalan: "two", "too", "to" — uchalasi ham bir xil o'qiladi: /tuː/.
+Shuning uchun lug'atlarda har bir so'zning o'qilishi maxsus belgilar bilan yoziladi. Bu transkripsiya deyiladi va / / ichida yoziladi.
+
+book → /bʊk/
+name → /neɪm/
+three → /θriː/
+
+Belgini bilsangiz, lug'atdagi istalgan yangi so'zni o'zingiz to'g'ri o'qiy olasiz.
+Belgilar to'rt guruhga bo'linadi: qisqa unlilar, cho'ziq unlilar, diftonglar (ikki tovush birga) va undoshlar.
+
+? Transkripsiya nima uchun kerak?
+* So'z qanday o'qilishini ko'rsatadi.
+- So'z qanday yozilishini ko'rsatadi. ! Yozilishi oddiy harflar bilan.
+- So'zning tarjimasini beradi.
+? Transkripsiya qaysi belgilar ichida yoziladi?
+- ( )
+* / /
+- " "
+@tf "two" va "too" bir xil o'qiladi. = to'g'ri ! Ikkalasi ham /tuː/.
+
+@circle Qisqa va cho'ziq unlilar
+@rule Qisqa va cho'ziq unlilar
+Ikki nuqta (ː) tovush cho'ziq ekanini bildiradi.
+
+Qisqa unlilar:
+/ɪ/ sit, big · /e/ bed, ten · /æ/ cat, bag · /ʌ/ bus, sun
+/ɒ/ hot, dog · /ʊ/ book, good · /ə/ teacher, banana (kuchsiz "ə")
+
+Cho'ziq unlilar:
+/iː/ see, three · /ɑː/ car, father · /ɔː/ door, four
+/uː/ two, school · /ɜː/ girl, work
+
+Juftliklarni solishtiring: ship /ɪ/ – sheep /iː/ · full /ʊ/ – fool /uː/
+
+? Qaysi belgi cho'ziq unlini bildiradi?
+* /iː/
+- /ɪ/
+- /e/
+- /æ/
+? "cat" so'zida qaysi unli bor?
+- /e/
+* /æ/
+- /ʌ/
+- /ɑː/
+? "school" so'zida qaysi unli bor?
+- /ʊ/
+* /uː/
+- /ɒ/
+? "girl" so'zida qaysi unli bor?
+- /ɪ/
+- /e/
+* /ɜː/
+- /ɑː/
+? Qaysi so'zda /ʌ/ tovushi bor?
+* bus
+- book
+- bag
+- bed
+? Qaysi so'zda /ɒ/ tovushi bor?
+- car
+* dog
+- door
+- duck
+@tf "ship" va "sheep" bir xil o'qiladi. = noto'g'ri ! ship /ʃɪp/ qisqa, sheep /ʃiːp/ cho'ziq.
+@tf "book" so'zida qisqa /ʊ/ bor. = to'g'ri
+
+@circle Diftonglar
+@rule Diftonglar: ikki unli birga
+Diftong — bir tovushdan ikkinchisiga sirpanib o'tish.
+/eɪ/ name, day · /aɪ/ my, five · /ɔɪ/ boy, toy
+/əʊ/ go, phone · /aʊ/ now, house
+/ɪə/ here, near · /eə/ where, chair
+
+Eslab qoling: harflarning nomlari ham diftong bo'lishi mumkin: A /eɪ/, I /aɪ/, O /əʊ/.
+
+? "five" so'zida qaysi diftong bor?
+- /eɪ/
+* /aɪ/
+- /ɔɪ/
+? "phone" so'zida qaysi diftong bor?
+* /əʊ/
+- /aʊ/
+- /ɔː/
+? "house" so'zida qaysi diftong bor?
+- /əʊ/
+* /aʊ/
+- /eə/
+? Qaysi so'zda /eə/ bor?
+- here
+* where
+- we
+@match So'zni diftong bilan juftlang
+day = /eɪ/
+boy = /ɔɪ/
+now = /aʊ/
+near = /ɪə/
+- /uː/
+@endmatch
+
+@circle Undoshlar
+@rule O'zbek tilida yo'q yoki boshqacha undoshlar
+/θ/ think, three — tilni tishlar orasiga qo'yib, ovozsiz "s"
+/ð/ this, mother — xuddi shunday, lekin ovozli "z"
+/ʃ/ she, English — "sh"
+/tʃ/ chair, teacher — "ch"
+/dʒ/ job, Japan — "j" (jurnal emas, jo'ja dagi kabi)
+/ʒ/ television — yumshoq "j" (jurnal dagi kabi)
+/ŋ/ sing, morning — burundan "ng"
+/w/ we, what — lablarni dumaloq qilib "u" dan boshlanadi (v emas)
+/j/ yes, you — "y"
+
+Diqqat: /θ/ ni "t" yoki "s" deb, /ð/ ni "d" yoki "z" deb aytmang. /w/ ni "v" deb aytmang.
+
+? "three" so'zi qaysi tovush bilan boshlanadi?
+* /θ/
+- /ð/
+- /t/
+- /s/
+? "this" so'zi qaysi tovush bilan boshlanadi?
+- /θ/
+* /ð/
+- /d/
+? "she" so'zi qaysi tovush bilan boshlanadi?
+- /s/
+* /ʃ/
+- /tʃ/
+? "job" so'zi qaysi tovush bilan boshlanadi?
+- /j/
+- /ʒ/
+* /dʒ/
+? "yes" so'zi qaysi tovush bilan boshlanadi?
+* /j/
+- /dʒ/
+- /ʒ/
+? Qaysi so'z /ŋ/ bilan tugaydi?
+- son
+* sing
+- sun
+@tf "what" so'zi /v/ tovushi bilan boshlanadi. = noto'g'ri ! /w/ — lablar dumaloq: /wɒt/.
+@tf "mother" so'zida /ð/ tovushi bor. = to'g'ri ! /ˈmʌðə/
+
+@circle Transkripsiyani o'qish
+@rule Transkripsiyadan so'zni topish
+Endi belgilarni birlashtirib, butun so'zni o'qiymiz.
+/bʊk/ → book · /tʃɪldrən/ → children · /θæŋk juː/ → thank you
+Avval har bir belgini aytib chiqing, keyin tez va birga ayting.
+
+@match Transkripsiyani so'z bilan juftlang
+/kɑː/ = car
+/hɒt/ = hot
+/frend/ = friend
+/fəʊn/ = phone
+/ˈtiːtʃə/ = teacher
+- tree
+@endmatch
+? /ʃuː/ qaysi so'z?
+* shoe
+- show
+- she
+? /ˈbɜːθdeɪ/ qaysi so'z?
+* birthday
+- bath day
+- Thursday ! Thursday = /ˈθɜːzdeɪ/.
+! /b/ + /ɜː/ + /θ/ + /deɪ/ = birthday.
+@gap /sɪks/ = ___ = six ! /s/ + /ɪ/ + /k/ + /s/.
+@gap /naɪt/ = ___ = night / knight ! /naɪt/ — night (tun). knight ham shunday o'qiladi.
+@gap /wɒtʃ/ = ___ = watch ! /w/ + /ɒ/ + /tʃ/.
+
+@circle So'z urg'usi
+@rule Urg'u (word stress)
+Ko'p bo'g'inli so'zlarda bitta bo'g'in kuchliroq aytiladi. Transkripsiyada urg'uli bo'g'in oldiga ˈ belgisi qo'yiladi.
+ˈteacher → TEA-cher · ˈdoctor → DOC-tor
+enˈgineer → en-gi-NEER · Jaˈpan → Ja-PAN
+-teen bilan tugaydigan sonlar: fifˈteen (oxirida). -ty bilan tugaydiganlar: ˈfifty (boshida).
+Urg'usiz bo'g'inda unli ko'pincha kuchsiz /ə/ bo'ladi: doctor /ˈdɒktə/.
+
+? "teacher" so'zida urg'u qaysi bo'g'inda?
+* TEA-cher
+- tea-CHER
+? "engineer" so'zida urg'u qaysi bo'g'inda?
+- EN-gi-neer
+- en-GI-neer
+* en-gi-NEER
+? "thirteen" so'zida urg'u qayerda?
+- THIR-teen
+* thir-TEEN
+? "thirty" so'zida urg'u qayerda?
+* THIR-ty
+- thir-TY
+@tf /ˈdɒktə/ — "doctor" so'zining oxirida kuchsiz /ə/ bor. = to'g'ri
+
+# ────────────────────────────────────────
+@quest 16-dars · Fonetika va oila (uy vazifasi)
+@pool A1 IT1
+@due thu 08:00
+
+@circle Fonetika mashqi
+@rule Eslatma: fonetik belgilar
+Cho'ziq unlilar (ː): /iː/ see · /ɑː/ car · /ɔː/ four · /uː/ school · /ɜː/ girl
+Qisqa unlilar: /ɪ/ sit · /e/ ten · /æ/ cat · /ʌ/ bus · /ɒ/ dog · /ʊ/ book · /ə/ teacher
+Diftonglar: /eɪ/ day · /aɪ/ five · /ɔɪ/ boy · /əʊ/ go · /aʊ/ now · /ɪə/ here · /eə/ where
+Undoshlar: /θ/ three · /ð/ this · /ʃ/ she · /tʃ/ chair · /dʒ/ job · /ŋ/ sing · /w/ we · /j/ yes
+
+? Qaysi so'zda /iː/ bor?
+- fish
+* green
+- bed
+? Qaysi so'zda /æ/ bor?
+* black
+- bus
+- car
+? Qaysi so'zda /ɔː/ bor?
+- hot
+* four
+- phone
+? Qaysi so'zda /aɪ/ bor?
+- day
+* nine
+- boy
+? Qaysi so'z /θ/ bilan boshlanadi?
+* Thursday
+- that
+- Tuesday
+? Qaysi so'z /tʃ/ bilan boshlanadi?
+- she
+- shop
+* cheese
+@match Transkripsiyani so'z bilan juftlang
+/ˈfɑːðə/ = father
+/ˈsɪstə/ = sister
+/waɪf/ = wife
+/ˈʌŋkl/ = uncle
+/ˈbrʌðə/ = brother
+- mother
+@endmatch
+@gap /bɪɡ/ = ___ = big
+@gap /haʊs/ = ___ = house
+@gap /ˈmʌðə/ = ___ = mother
+@tf "son" va "sun" bir xil o'qiladi: /sʌn/. = to'g'ri ! Yozilishi har xil, o'qilishi bir xil.
+@tf "fifteen" so'zida urg'u birinchi bo'g'inda. = noto'g'ri ! fifˈteen — urg'u oxirida.
+
+@circle Test xatolarini takrorlash
+? My parents ___ from Jizzakh.
+- is
+* are
+? "Is your sister a student?" "Yes, ___."
+* she is
+- she's ! Yes javobida qisqartirilmaydi.
+? "___ old is your brother?" "He's twelve."
+* How
+- What
+- Who
+@gap Sherzod is my friend. ___ sister is a nurse. = His
+@gap My aunt ___ two sons. = has
+@gap one sandwich → two ___ = sandwiches
+@tf Kamola's from Termez. — bu yerda 's = is. = to'g'ri
+@order She | loves | her | job = U ishini yaxshi ko'radi.
+
+@circle Lug'at
+@word parents = ota-ona | My parents are teachers.
+@word husband = er | Her husband is a doctor.
+@word wife = xotin, rafiqa | His wife is from Namangan.
+@word daughter = qiz farzand | They have one daughter.
+@word son = o'g'il | My uncle has two sons.
+@word cousin = amakivachcha, xolavachcha | My cousin lives in Tashkent.
+
+@circle O'qish
+@reading My family
+Hi! My name's Bobur and I'm fourteen. I live in a flat in Chirchiq with my family.
+My father's name is Ravshan. He's an engineer. My mother, Feruza, is a teacher. She loves her job.
+I have one sister and one brother. My sister's name is Sevara. She's seventeen and she's a student at college. My brother, Diyor, is only six.
+My grandmother lives with us too. She has a small garden and she likes flowers.
+My best friend is my cousin, Aziz. His house is near our flat.
+
+? How old is Bobur?
+- four
+* fourteen
+- forty
+? What's Bobur's father's job?
+* He's an engineer.
+- He's a teacher. ! Ona o'qituvchi.
+- He's a student.
+@tf Bobur's mother loves her job. = to'g'ri
+@tf Sevara is six. = noto'g'ri ! Sevara 17 yoshda. 6 yoshda — Diyor.
+@gap Bobur's grandmother likes ___. = flowers
+@gap Bobur's best friend is his ___. = cousin
+
+@circle Yozish
+@writing About me | 40-80
+O'zingiz haqingizda yozing (40–80 so'z):
+- ismingiz va familiyangiz (harflab ham yozing)
+- yoshingiz va qayerdan ekanligingiz
+- oilangiz: kimlar bor, ular nima ish qiladi
+- nimani yoqtirasiz
+Shu so'zlarni ishlating: I'm, my, his / her, has / have, likes / loves.
+
+# ────────────────────────────────────────
+# Lug'at guruhlari: faqat Lug'at bo'limi va kunlik takrorlash uchun, vazifa emas.
+# ────────────────────────────────────────
+@quest Unit 1 · Hello
+@pool A1 IT1
+@vocab
+@circle So'zlar
+@word hello = salom
+@word goodbye = xayr
+@word name = ism
+@word Good morning = xayrli tong
+@word Good afternoon = xayrli kun
+@word Good evening = xayrli kech
+@word Good night = xayrli tun
+@word See you later = keyinroq ko'rishguncha
+@word Thank you = rahmat
+@word fine = yaxshi
+@word bag = sumka
+@word book = kitob
+@word camera = fotoapparat
+@word car = mashina
+@word computer = kompyuter
+@word house = uy
+@word key = kalit
+@word phone = telefon
+@word photo = surat
+@word sandwich = sendvich, buterbrod
+@word ticket = chipta
+@word apple = olma
+@word orange = apelsin
+@word bus = avtobus
+@word student = o'quvchi, talaba
+@word dictionary = lug'at kitobi
+
+@quest Unit 2 · Your world
+@pool A1 IT1
+@vocab
+@circle So'zlar
+@word country = mamlakat
+@word city = shahar
+@word capital = poytaxt
+@word Australia = Avstraliya
+@word Brazil = Braziliya
+@word Canada = Kanada
+@word China = Xitoy
+@word Egypt = Misr
+@word England = Angliya
+@word Japan = Yaponiya
+@word Spain = Ispaniya
+@word Russia = Rossiya
+@word the USA = AQSh
+@word big = katta
+@word small = kichik
+@word hot = issiq
+@word cold = sovuq
+@word old = eski, qari
+@word new = yangi
+@word beautiful = chiroyli
+@word lovely = juda yoqimli
+@word very = juda
+@word twelve = o'n ikki
+@word fifteen = o'n besh
+@word twenty = yigirma
+@word thirty = o'ttiz
+
+@quest Unit 3 · All about you
+@pool A1 IT1
+@vocab
+@circle So'zlar
+@word teacher = o'qituvchi
+@word actor = aktyor
+@word businessman = tadbirkor
+@word engineer = muhandis
+@word footballer = futbolchi
+@word job = ish, kasb
+@word doctor = shifokor
+@word nurse = hamshira
+@word police officer = politsiyachi
+@word shop assistant = sotuvchi
+@word taxi driver = taksi haydovchisi
+@word age = yosh
+@word Excuse me = kechirasiz (murojaat qilganda)
+@word Sorry = uzr, kechirasiz
+@word I don't know = bilmayman
+@word I don't understand = tushunmayapman
+@word Pardon? = qaytadan ayta olasizmi?
+
+@quest Unit 4 · Family and friends
+@pool A1 IT1
+@vocab
+@circle So'zlar
+@word mother = ona
+@word father = ota
+@word sister = opa, singil
+@word brother = aka, uka
+@word children = bolalar
+@word grandmother = buvi
+@word grandfather = bobo
+@word aunt = xola, amma
+@word uncle = amaki, tog'a
+@word boyfriend = yigit (sevgan)
+@word girlfriend = qiz (sevgan)
+@word best friend = eng yaqin do'st
+@word flat = kvartira
+@word live = yashamoq
+@word work = ishlamoq
+@word love = sevmoq, juda yaxshi ko'rmoq
+@word like = yoqtirmoq
+@word happy = baxtli, xursand

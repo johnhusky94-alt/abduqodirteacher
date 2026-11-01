@@ -1156,7 +1156,7 @@ ${w.text}`).join("\n") + "\n---\n";
           <div class="list">${pr.quests.map((q, i) => {
             const missing = q.pool && !d.pools.some((p) => p.name.toLowerCase() === q.pool.toLowerCase());
             const dd = q.kind === "hw" ? dueToDate(T.weekPick, q.due) : null;
-            const kindTxt = q.kind === "cw" ? `<span class="pill cw">Sinf ishi · ${q.lesson}-dars</span>` : `<span class="pill hw">Uy vazifasi</span> <span class="sub small">${dd ? "muddat: " + esc(fmtDate(dd.toISOString())) : "muddatsiz"}</span>`;
+            const kindTxt = q.kind === "cw" ? `<span class="pill cw">Sinf ishi · ${q.lesson}-dars</span>` : q.kind === "vl" ? `<span class="pill">Lug'at guruhi</span> <span class="sub small">faqat takrorlash, vazifa emas</span>` : `<span class="pill hw">Uy vazifasi</span> <span class="sub small">${dd ? "muddat: " + esc(fmtDate(dd.toISOString())) : "muddatsiz"}</span>`;
             return `<div class="li" style="flex-wrap:wrap"><span class="grow" style="min-width:180px"><b style="font-weight:600">${esc(q.title)}</b><br>${kindTxt}<br><span class="sub small">${q.circles.length} doira · ${q.gradable} savol</span>${missing ? `<br><span class="err small">"${esc(q.pool)}" nomli pul topilmadi</span>` : ""}</span>
               <select data-chg="poolPick" data-v="${i}" aria-label="Pul" style="max-width:220px">${opts(d.pools, T.poolPick[i] ? Number(T.poolPick[i]) : null, "— pulni tanlang —")}</select></div>`;
           }).join("")}</div>
@@ -1183,9 +1183,9 @@ ${w.text}`).join("\n") + "\n---\n";
       </section>`;
     };
     const cws = d.quests.filter((q) => q.kind === "cw").sort((a, b) => (b.week_start || "").localeCompare(a.week_start || "") || (a.lesson || 0) - (b.lesson || 0));
-    const hws = d.quests.filter((q) => q.kind !== "cw");
+    const hws = d.quests.filter((q) => q.kind === "hw" || !q.kind), vls = d.quests.filter((q) => q.kind === "vl");
     const list = d.quests.length ? `<h2>Uy vazifasi · ${hws.length}</h2>${hws.length ? hws.map(card).join("") : `<div class="card empty">Uy vazifasi yo'q.</div>`}
-      <h2>Sinf ishi · ${cws.length}</h2>${cws.length ? cws.map(card).join("") : `<div class="card empty">Sinf ishi yo'q. Kodda <code>@classwork 1</code> deb yozilgan vazifalar shu yerda chiqadi.</div>`}`
+      <h2>Sinf ishi · ${cws.length}</h2>${cws.length ? cws.map(card).join("") : `<div class="card empty">Sinf ishi yo'q. Kodda <code>@classwork 1</code> deb yozilgan vazifalar shu yerda chiqadi.</div>`}${vls.length ? `<h2>Lug'at guruhlari · ${vls.length}</h2>${vls.map(card).join("")}` : ""}`
       : `<div class="card empty">Hali vazifa yo'q. Yuqoriga kod joylab qo'shing.</div>`;
     return `<h1>Topshiriqlar</h1>${probs}
       <button class="li card" style="flex-direction:row" data-act="cg" data-v="1"><span class="sub">${I.users}</span><span class="grow"><b style="font-weight:600">Sinf o'yini</b><br><span class="small sub">Darsda butun sinf bilan jonli so'z o'yini</span></span><span class="chev">${I.chev}</span></button>
