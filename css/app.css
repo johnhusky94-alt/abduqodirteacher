@@ -251,3 +251,7 @@ input[type=checkbox]{width:20px;height:20px;accent-color:var(--hw)}
   .ielts{display:grid;grid-template-columns:1fr 1fr;align-items:start}
   .ipass{position:sticky;top:0;max-height:calc(100vh - 220px)}
 }
+
+/* writing */
+.wbox{width:100%;min-height:220px;font:inherit;font-size:16px;line-height:1.55;padding:12px 14px;border-radius:14px;border:2px solid var(--line);background:var(--card);color:var(--ink);resize:vertical}
+.wbox:focus{outline:none;border-color:var(--hw)}

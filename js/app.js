@@ -188,6 +188,14 @@
     }
     const ta = $("#pasteBox");
     if (ta) ta.oninput = () => { T.paste = ta.value; if (T.parsed) { T.parsed = null; const s = $("#pasteSummary"); if (s) s.innerHTML = ""; } };
+    const wb = $("#wbox");
+    if (wb && P) {
+      wb.oninput = () => { P.wtext = wb.value; store.set(P.wkey, wb.value); writeCounter(); };
+      wb.onkeydown = () => { P.wkeys += 1; };
+      wb.onpaste = (e) => { e.preventDefault(); toast("Nusxa joylash mumkin emas. O'zingiz yozing."); };
+      wb.ondrop = (e) => { e.preventDefault(); };
+      writeCounter();
+    }
     document.querySelectorAll(".ishort").forEach((el) => { el.oninput = () => { if (P) P.ia[Number(el.dataset.i)] = el.value; }; });
     const bulk = $("#bulkBox");
     if (bulk) bulk.oninput = () => (T.bulk = bulk.value);
@@ -234,7 +242,7 @@
   const ST = { tab: "home", home: null, board: null, troph: null, castle: null, castleMsg: null };
 
   async function loadStudent() {
-    try { ST.home = await api("student_home"); } catch (e) { quiet(e); }
+    try { const [h, w] = await Promise.all([api("student_home"), api("my_writings").catch(() => [])]); ST.home = h; ST.writ = w || []; } catch (e) { quiet(e); }
     render();
   }
   function vStudent() {
@@ -284,6 +292,9 @@
       ${openHw.length ? `<div class="list">${openHw.map(item).join("")}</div>` : `<div class="card empty">Hozircha uy vazifasi yo'q. O'qituvchingiz bergan vazifalar shu yerda chiqadi.</div>`}
       ${(h.words || []).length ? `<details class="card"><summary style="cursor:pointer;font-weight:600">Bu haftaning so'zlari · ${h.words.length} ta</summary>
         <div class="list" style="margin-top:10px">${h.words.map((w) => `<div class="li"><b style="font-weight:600" class="grow">${esc(w.en)}</b><span class="sub">${esc(w.uz)}</span></div>`).join("")}</div></details>` : ""}
+      ${(ST.writ || []).length ? `<h2>Yozma ishlarim</h2><div class="stack">${ST.writ.slice(0, 6).map((w) => `<details class="card"><summary style="cursor:pointer;list-style:none"><div class="row between" style="flex-wrap:nowrap"><span class="grow"><b style="font-weight:600">${esc(w.title || "Yozma ish")}</b><br><span class="small sub">${esc(w.quest)} · ${w.words} so'z</span></span>
+          ${w.mark != null ? `<span class="pill rv" style="font-size:15px">${w.mark}/10</span>` : `<span class="pill">Tekshirilmoqda</span>`}</div></summary>
+          ${w.comment ? `<div class="fb good" style="margin-top:10px"><b>O'qituvchi izohi</b>${esc(w.comment)}</div>` : ""}<p class="small" style="white-space:pre-wrap;margin:10px 0 0;overflow-wrap:anywhere">${esc(w.text)}</p></details>`).join("")}</div>` : ""}
       ${done.length ? `<h3 class="sub">Bajarilganlar</h3><div class="list">${done.map(item).join("")}</div>` : ""}`;
   }
 
@@ -375,6 +386,11 @@
     P.sel = null; P.pick = []; P.typed = ""; P.result = null; P.busy = false; P.offline = false; P.reportOpen = false; P.reportSent = false;
     const s = P.practice ? P.cur : P.state.i < P.state.order.length ? curStep() : null;
     P.opts = s && s.opts ? (s.t === "tf" ? s.opts.slice() : shuffle(s.opts)) : null;
+    if (s && s.t === "write") {
+      const key = `w:${P.quest.id}:${s.id}`;
+      P.wkey = key; P.wtext = store.get(key) || ""; P.wkeys = 0; P.wprev = null;
+      if (!P.preview) api("writing_get", { p_quest: P.quest.id, p_step: s.id }).then((r) => { if (!P || curStep() !== s) return; P.wprev = r; if (r && !P.wtext) P.wtext = r.text; render(); }).catch(() => {});
+    }
     if (s && s.t === "ielts") {
       const stt = (P.istat && P.istat[s.id]) || {};
       P.ia = s.qs.map(() => ""); P.ires = stt.tries ? { tries: stt.tries, wrong: stt.wrong || [], can_reveal: stt.tries >= 5 && !stt.done, score: null } : null;
@@ -449,6 +465,40 @@
     const m = $("#hlMark"); if (m) m.scrollIntoView({ block: "center", behavior: "smooth" });
     const q = $("#iq" + i); if (q) q.scrollIntoView({ block: "nearest", behavior: "smooth" });
   }
+  /* ---------- writing ---------- */
+  const wordCount = (t) => (String(t || "").trim() ? String(t).trim().split(/\s+/).length : 0);
+  function writeBody(s) {
+    const marked = P.wprev && P.wprev.mark != null;
+    return `<span class="p-kind">Yozma ish</span><p class="p-q">${esc(s.title)}</p>
+      <div class="card" style="white-space:pre-wrap">${esc(s.prompt)}</div>
+      ${marked ? `<div class="fb good"><b>Baho: ${P.wprev.mark}/10</b>${esc(P.wprev.comment || "")}</div>` : P.wprev ? `<p class="sub small" style="margin:0">Siz buni yuborgansiz. O'qituvchi baholamaguncha o'zgartirib, qayta yuborishingiz mumkin.</p>` : ""}
+      <textarea id="wbox" class="wbox" aria-label="Yozma ish" placeholder="Shu yerga o'zingiz yozing…" ${marked ? "disabled" : ""}>${esc(P.wtext || "")}</textarea>
+      <div class="row between small"><span id="wcount" class="num"></span><span class="sub">Nusxa joylash (paste) o'chirilgan</span></div>`;
+  }
+  function writeFoot(s) {
+    if (P.wprev && P.wprev.mark != null) return `<button class="btn wide" data-act="wnext">Davom etish</button>`;
+    return `<button class="btn wide" id="wsend" data-act="wsend" ${P.busy ? "disabled" : ""}>${P.busy ? "Yuborilmoqda…" : P.wprev ? "Qayta yuborish" : "Yuborish"}</button>${P.wprev ? `<button class="link small" style="align-self:center;color:var(--sub)" data-act="wnext">O'zgartirmasdan davom etish</button>` : ""}`;
+  }
+  function writeCounter() {
+    const s = curStep(), n = wordCount(P.wtext), el = $("#wcount"), b = $("#wsend");
+    if (el) { el.textContent = `${n} / ${s.max} so'z · kamida ${s.min}`; el.style.color = n > s.max ? "var(--warn)" : n >= s.min ? "var(--rv)" : "var(--sub)"; }
+    if (b && !P.busy) b.disabled = n < s.min || n > s.max;
+  }
+  async function writeSend() {
+    const s = curStep(), n = wordCount(P.wtext);
+    if (n < s.min) { toast(`Kamida ${s.min} so'z yozing`); return; }
+    if (n > s.max) { toast(`Ko'pi bilan ${s.max} so'z`); return; }
+    P.busy = true; render();
+    try {
+      const st = clone(P.state); st.i += 1; if (!st.final.includes(s.id)) st.final.push(s.id);
+      const r = await api("writing_submit", { p_quest: P.quest.id, p_step: s.id, p_text: P.wtext, p_ms: Date.now() - P.t0, p_keys: P.wkeys, p_state: P.preview ? null : st });
+      P.busy = false;
+      if (r && r.error) { toast(r.error === "MARKED" ? "Bu ish allaqachon baholangan" : r.error === "TOO_SHORT" ? "Juda qisqa" : "Juda uzun"); render(); return; }
+      store.del(P.wkey); toast(P.preview ? "Sinov: yuborish ishlaydi" : "Yuborildi! O'qituvchi baholaydi.");
+      P.state = st; loadStep(); render(); const b = $(".p-body"); if (b) b.scrollTop = 0;
+    } catch (e) { P.busy = false; quiet(e); render(); }
+  }
+
   function ieltsNext() {
     const s = curStep(), st = clone(P.state); st.i += 1;
     if (!st.final.includes(s.id)) st.final.push(s.id);
@@ -482,6 +532,7 @@
     if (!P.practice) label = label || circleName(s.c);
     P.wide = s.t === "ielts";
     if (s.t === "ielts") return shell(ieltsBody(s), ieltsFoot(s), pct, label);
+    if (s.t === "write") return shell(writeBody(s), writeFoot(s), pct, label);
     const locked = !!P.result || P.busy;
     const passage = s.p && P.byId && P.byId[s.p] ? `<details class="pbox"><summary>Matnni ko'rish: ${esc(P.byId[s.p].title)}</summary><div class="passage" data-nocopy>${esc(P.byId[s.p].text)}</div></details>` : "";
     let body = "";
@@ -761,7 +812,68 @@
     const lines = text.replace(/\r/g, "").split("\n");
     return parsed.quests.map((q, i) => lines.slice(q.line - 1, i + 1 < parsed.quests.length ? parsed.quests[i + 1].line - 1 : lines.length).join("\n").trim());
   }
+  async function loadWritings() {
+    try { T.writ = await api("admin_writings", { p_class: null, p_all: !!T.wAll }); } catch (e) { quiet(e); }
+    render();
+  }
+  function writingRequest(list) {
+    return `Abduqodir Teacher — writing feedback request
+Instructions for Claude: below are English writings by Uzbek school students (beginner to pre-intermediate). For EACH writing give a mark out of 10 for its level (task done, grammar, vocabulary, organisation) and short, kind feedback IN UZBEK: one thing done well, then 1–3 concrete mistakes with the corrected version. Keep each feedback under 60 words, on one line.
+Reply ONLY with one code block, one line per writing, exactly in this format:
+@w ID | MARK | feedback
+` + list.map((w) => `
+---
+#${w.id} · ${w.student} · ${w.class || ""} · ${w.title || "Yozma ish"} (${w.words} words, max ${w.max || 150})
+Task: ${String(w.prompt || "").replace(/\s+/g, " ")}
+Text:
+${w.text}`).join("\n") + "\n---\n";
+  }
+  function parseFeedback(text) {
+    const out = [], errs = [];
+    String(text || "").split(/\r?\n/).forEach((l, i) => {
+      const t = l.trim(); if (!t.startsWith("@w")) return;
+      const m = t.match(/^@w\s*#?(\d+)\s*\|\s*(\d+(?:[.,]\d+)?)\s*(?:\/\s*10)?\s*\|\s*(.+)$/);
+      if (!m) { errs.push(`${i + 1}-qator tushunilmadi`); return; }
+      const mark = Math.round(Number(m[2].replace(",", ".")));
+      if (!(mark >= 0 && mark <= 10)) { errs.push(`${i + 1}-qator: baho 0–10 bo'lsin`); return; }
+      out.push({ id: Number(m[1]), mark, comment: m[3].trim() });
+    });
+    return { items: out, errs };
+  }
+  function vWritings() {
+    const all = T.writ;
+    const back = `<div><button class="btn soft sm" style="background:var(--card)" data-act="wview" data-v="">${I.back} Topshiriqlar</button></div>`;
+    if (!all) return back + `<div class="loading">Yuklanmoqda…</div>`;
+    const list = T.wCls ? all.filter((w) => w.class_id === T.wCls) : all;
+    const unmarked = list.filter((w) => w.mark == null);
+    const segs = `<div class="seg" role="group" aria-label="Sinf"><button aria-pressed="${!T.wCls}" data-act="wcls" data-v="">Hammasi</button>${T.data.classes.map((c) => `<button aria-pressed="${T.wCls === c.id}" data-act="wcls" data-v="${c.id}">${esc(c.name)}</button>`).join("")}</div>`;
+    const fp = T.wParsed;
+    const preview = fp ? `<div class="fb ${fp.items.length ? "good" : "bad"}"><b>${fp.items.length} ta baho topildi${fp.errs.length ? ` · ${fp.errs.length} ta xato qator` : ""}</b>
+        ${fp.items.map((x) => { const w = all.find((y) => y.id === x.id); return `<div class="small" style="margin-top:4px">${w ? esc(w.student) : `#${x.id} (topilmadi)`}: <span style="font-weight:700">${x.mark}/10</span> · ${esc(x.comment.slice(0, 80))}${x.comment.length > 80 ? "…" : ""}</div>`; }).join("")}
+        ${fp.errs.map((e) => `<div class="small err">${esc(e)}</div>`).join("")}</div>
+        ${fp.items.length ? `<button class="btn" style="--accent:var(--rv)" data-act="aiSave">Hammasini saqlash (${fp.items.length})</button>` : ""}` : "";
+    const card = (w) => {
+      const sus = w.text.length > 120 && w.keys < w.text.length * 0.5;
+      return `<section class="card stack"><div class="row between"><div><b style="font-weight:600">${esc(w.student)}</b> <span class="sub small">${esc(w.class || "")}</span><br>
+          <span class="small sub">${esc(w.quest)} · ${esc(w.title || "")} · ${w.words} so'z · ${fmtTime(Math.round(w.ms / 1000))} · ${esc(fmtDate(w.submitted_at))}</span></div>
+          ${w.mark != null ? `<span class="pill rv" style="font-size:15px">${w.mark}/10</span>` : `<span class="pill amber">Baholanmagan</span>`}</div>
+        ${sus ? `<div class="flag amber">Shubhali: matnning katta qismi klaviaturada yozilmaganga o'xshaydi (avtoto'ldirish yoki boshqa usul bilan qo'yilgan bo'lishi mumkin).</div>` : ""}
+        <p style="white-space:pre-wrap;margin:0;overflow-wrap:anywhere">${esc(w.text)}</p>
+        <div class="row" style="flex-wrap:nowrap;align-items:flex-start"><select id="wm-${w.id}" aria-label="Baho" style="max-width:90px">${w.mark == null ? `<option value="" selected>Baho</option>` : ""}${Array.from({ length: 11 }, (_, i) => `<option value="${i}" ${w.mark === i ? "selected" : ""}>${i}/10</option>`).join("")}</select>
+          <textarea id="wc-${w.id}" aria-label="Izoh" style="min-height:44px" placeholder="Izoh (o'quvchi ko'radi)">${esc(w.comment || "")}</textarea></div>
+        <button class="btn sm" style="align-self:flex-start" data-act="wsave" data-v="${w.id}">Saqlash</button></section>`;
+    };
+    return back + `<div class="row between"><h1>Yozma ishlar</h1><div class="seg" role="group"><button aria-pressed="${!T.wAll}" data-act="wall" data-v="0">Baholanmagan</button><button aria-pressed="${!!T.wAll}" data-act="wall" data-v="1">Hammasi</button></div></div>${segs}
+      <section class="card stack"><h3>AI bilan baholash</h3>
+        <p class="sub small" style="margin:0">1) "Nusxalash"ni bosing va Claude'ga yuboring. 2) Claude qaytargan kodni pastga joylang. 3) Tekshirib, "Hammasini saqlash"ni bosing. Har o'quvchi faqat o'z izohini ko'radi.</p>
+        <div class="row"><button class="btn" style="--accent:var(--cw)" data-act="wcopy" ${unmarked.length ? "" : "disabled"}>Baholanmaganlarni nusxalash (${unmarked.length})</button></div>
+        ${T.wCopyText ? `<textarea id="wCopyBox" class="code" readonly style="min-height:120px">${esc(T.wCopyText)}</textarea><p class="sub small" style="margin:0">Nusxalash ishlamasa, matnni belgilab o'zingiz nusxalang.</p>` : ""}
+        <textarea id="aiBox" class="code" placeholder="@w 12 | 7 | Yaxshi..." style="min-height:90px">${esc(T.aiText || "")}</textarea>
+        <div class="row"><button class="btn soft" data-act="aiParse">Tekshirish</button></div>${preview}</section>
+      ${list.length ? list.map(card).join("") : `<div class="card empty">${T.wAll ? "Hali yozma ish yo'q." : "Hamma ishlar baholangan."}</div>`}`;
+  }
   function vAssign() {
+    if (T.wview) return vWritings();
     const d = T.data, pr = T.parsed;
     let summary = "";
     if (pr) {
@@ -805,6 +917,7 @@
       <h2>Sinf ishi · ${cws.length}</h2>${cws.length ? cws.map(card).join("") : `<div class="card empty">Sinf ishi yo'q. Kodda <code>@classwork 1</code> deb yozilgan vazifalar shu yerda chiqadi.</div>`}`
       : `<div class="card empty">Hali vazifa yo'q. Yuqoriga kod joylab qo'shing.</div>`;
     return `<h1>Topshiriqlar</h1>${probs}
+      <button class="li card" style="flex-direction:row" data-act="wview" data-v="1"><span class="sub">${I.doc}</span><span class="grow"><b style="font-weight:600">Yozma ishlar</b><br><span class="small sub">Baholash, izoh yozish, AI bilan bir yo'la baholash</span></span><span class="chev">${I.chev}</span></button>
       <section class="card stack"><h3>Yangi vazifa qo'shish</h3><p class="sub small">Kodni joylang. Bir yo'la butun haftani joylash mumkin.</p>
         <textarea id="pasteBox" class="code" aria-label="Vazifa kodi" placeholder="@quest Unit 4 · Oila&#10;@circle Kimning?&#10;...">${esc(T.paste)}</textarea>
         <div class="row"><button class="btn" style="--accent:var(--cw)" data-act="parse">Tekshirish</button></div>
@@ -955,7 +1068,7 @@
       case "logout": signOut(); return;
       case "tab":
         if (S.role === "teacher") {
-          if (T.tab === v) { T.sub = null; T.poolView = null; }
+          if (T.tab === v) { T.sub = null; T.poolView = null; T.wview = false; }
           T.tab = v; T.editName = null; T.pwFor = null; render(); window.scrollTo(0, 0);
           if (v === "results" || v === "report") loadReport();
         } else {
@@ -975,6 +1088,8 @@
       case "next": nextCard(); return;
       case "ians": { const k = v.indexOf("|"); P.ia[Number(v.slice(0, k))] = v.slice(k + 1); document.querySelectorAll(".ishort").forEach((el) => (P.ia[Number(el.dataset.i)] = el.value)); render(); return; }
       case "icheck": ieltsCheck(); return;
+      case "wsend": writeSend(); return;
+      case "wnext": ieltsNext(); return;
       case "ireveal": ieltsReveal(); return;
       case "irevNext": P.irev.k += 1; ieltsFocus(); return;
       case "inext": ieltsNext(); return;
@@ -1083,6 +1198,29 @@
       case "delQuest": {
         if (T.confirm !== "del-q:" + v) { T.confirm = "del-q:" + v; render(); return; }
         T.confirm = ""; await adminCall("admin_quest_delete", { p_id: Number(v) }, "Vazifa o'chirildi"); return;
+      }
+      case "wview": T.wview = !!v; T.wParsed = null; T.wCopyText = ""; window.scrollTo(0, 0); if (T.wview) { T.writ = null; render(); loadWritings(); } else render(); return;
+      case "wcls": T.wCls = v ? Number(v) : null; render(); return;
+      case "wall": T.wAll = v === "1"; T.writ = null; render(); loadWritings(); return;
+      case "wcopy": {
+        const list = (T.wCls ? T.writ.filter((w) => w.class_id === T.wCls) : T.writ).filter((w) => w.mark == null);
+        const text = writingRequest(list); T.wCopyText = "";
+        try { await navigator.clipboard.writeText(text); toast(`${list.length} ta ish nusxalandi. Endi Claude'ga yuboring.`); }
+        catch (err) { T.wCopyText = text; render(); const box = $("#wCopyBox"); if (box) { box.focus(); box.select(); } }
+        return;
+      }
+      case "aiParse": { const box = $("#aiBox"); T.aiText = box ? box.value : ""; T.wParsed = parseFeedback(T.aiText); render(); return; }
+      case "aiSave": {
+        const items = T.wParsed.items.filter((x) => T.writ.some((w) => w.id === x.id));
+        const r = await adminCall("admin_writings_mark", { p_items: items }, null, false);
+        if (r) { toast(`${r.saved} ta ish baholandi`); T.wParsed = null; T.aiText = ""; loadWritings(); } return;
+      }
+      case "wsave": {
+        const id = Number(v), m = $("#wm-" + id).value, c = $("#wc-" + id).value.trim();
+        if (m === "") { toast("Bahoni tanlang"); return; }
+        const r = await adminCall("admin_writings_mark", { p_items: [{ id, mark: Number(m), comment: c }] }, null, false);
+        if (r && r.saved) { toast("Saqlandi"); const w = T.writ.find((x) => x.id === id); if (w) { w.mark = Number(m); w.comment = c; } if (!T.wAll) T.writ = T.writ.filter((x) => x.id !== id); render(); }
+        return;
       }
       case "probDone": await adminCall("admin_problem_resolve", { p_id: Number(v) }, "Belgilandi"); return;
       case "changePw": {

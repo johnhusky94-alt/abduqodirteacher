@@ -1,0 +1,4 @@
+-- 1 Nov, V2 stage 4 (migration v2_stage4_writing): writings(user, quest, step, body, words, ms, keys, mark 0-10, comment).
+-- writing_submit (word limits checked on the server; can resubmit until marked), writing_get, my_writings,
+-- admin_writings(class|null, all), admin_writings_mark(items [{id, mark, comment}]) for one or many at once.
+-- _quest_fin counts a write step as finished once submitted.

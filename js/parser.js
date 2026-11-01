@@ -122,6 +122,19 @@
             circle.items.push(ielts); body = ielts; return;
           }
           case "endielts": ielts = null; return;
+          case "writing": case "yozish": {
+            needCircle(ln);
+            const [title, lim] = rest.split("|").map((x) => (x || "").trim());
+            let min = 40, max = 150;
+            if (lim) {
+              const mm = lim.match(/^(\d+)\s*-\s*(\d+)$/);
+              if (!mm) return err(ln, "So'z chegarasi shunday yozilsin: @writing Mavzu | 60-150");
+              min = Number(mm[1]); max = Number(mm[2]);
+              if (min < 1 || max > 300 || min >= max) return err(ln, "So'z chegarasi noto'g'ri (masalan 60-150, ko'pi bilan 300)");
+            }
+            body = { k: "write", title: title || "Yozma ish", text: [], min, max, line: ln };
+            circle.items.push(body); return;
+          }
           case "tfng": case "short": {
             if (!ielts) return err(ln, "@" + cmd + " faqat @ielts matnidan keyin yoziladi");
             const [m0, ev] = splitEv(rest);
@@ -277,6 +290,10 @@
           const sid = id();
           passageIds.set(it, sid);
           steps.push({ id: sid, c, t: "read", title: it.title, text: it.text.join("\n").trim() });
+        } else if (it.k === "write") {
+          const prompt = it.text.join("\n").trim();
+          if (!prompt) errors.push({ line: it.line, msg: "@writing topshirig'i (matni) bo'sh" });
+          steps.push({ id: id(), c, t: "write", title: it.title, prompt, min: it.min, max: it.max, a: [] });
         } else if (it.k === "ielts") {
           const text = it.text.join("\n").trim(), low = text.toLowerCase();
           if (!text) errors.push({ line: it.line, msg: "@ielts matni bo'sh" });
