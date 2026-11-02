@@ -126,7 +126,7 @@ button.li:focus-visible{outline:2px solid var(--hw);outline-offset:-2px}
 .p-top .x svg{width:20px;height:20px}
 .p-prog{flex:1;height:8px;background:var(--line);border-radius:9px;overflow:hidden}
 .p-prog i{display:block;height:100%;background:var(--accent);border-radius:9px;transition:width .3s}
-.p-body{flex:1;overflow:auto;max-width:640px;width:100%;margin:0 auto;padding:18px 0 12px;display:flex;flex-direction:column;gap:14px}
+.p-body{flex:1;min-height:0;overflow:auto;-webkit-overflow-scrolling:touch;max-width:640px;width:100%;margin:0 auto;padding:18px 0 12px;display:flex;flex-direction:column;gap:14px}
 .p-kind{font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--accent)}
 .p-q{font-size:23px;font-weight:700;letter-spacing:-.02em;line-height:1.25;overflow-wrap:anywhere}
 .opts{display:grid;gap:10px}
@@ -299,3 +299,6 @@ i.lg{display:inline-block;width:12px;height:12px;border-radius:50%}
 .hwcat-h b{font-size:20px;font-weight:800;letter-spacing:.02em}
 .hwcat-h span{font-size:13px;font-weight:600}
 .hwcat .list{border-radius:0}
+
+/* question screen: children keep their natural height so long lists (matching) scroll instead of being squashed */
+.p-body>*{flex-shrink:0}

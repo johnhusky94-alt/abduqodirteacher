@@ -1637,6 +1637,20 @@ ${w.text}`).join("\n") + "\n---\n";
     }
   });
 
+  /* Enter = press the main button of the question screen (Tekshirish / Davom etish / Tushundim) */
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter" || e.repeat || e.defaultPrevented || e.isComposing) return;
+    if (!P) return;
+    const t = e.target, tag = (t && t.tagName) || "";
+    if (tag === "TEXTAREA" || tag === "BUTTON" || tag === "A" || tag === "SELECT" || (tag === "INPUT" && t.id !== "answerInput")) return;
+    const foot = document.querySelector(".player .p-foot");
+    if (!foot) return;
+    const btn = foot.querySelector('[data-act="cont"]:not([disabled]), [data-act="check"]:not([disabled]), [data-act="next"]:not([disabled])');
+    if (!btn) return;
+    e.preventDefault();
+    btn.click();
+  });
+
   document.addEventListener("submit", async (e) => {
     const f = e.target.closest("[data-form]"); if (!f) return;
     e.preventDefault();

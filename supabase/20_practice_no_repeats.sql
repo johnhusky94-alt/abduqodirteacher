@@ -1,0 +1,3 @@
+-- Migration practice_no_repeats: practice_recent(user_id, key, at) keeps the last 40 served practice items
+-- ('s:quest:step' / 'w:word'); practice_next skips them, only re-serves mistakes not yet fixed,
+-- and picks words randomly weighted by box instead of always the weakest first.
