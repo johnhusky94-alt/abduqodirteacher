@@ -1,0 +1,1213 @@
+TYPE: classwork
+LEVEL: A2
+BOOK: Gateway A2
+UNIT: 6
+PAGE: 78
+LESSON: 1
+TITLE: Food and drink
+
+[vocabulary 22] Food and drink · 1a–3b
+
+## 1a Read the descriptions of the food and drink in the photos. Can you name a–n? Use the words in the box to help you if necessary.
+FROM: photo
+HELP: Ta'rifni o'qing va qutidagi so'zlardan mosini yozing. So'zni bossangiz, u bo'sh joyga tushadi.
+BOX: apple | banana | beans | biscuit | bread | burger | butter | cake | cheese | chicken | chips | coffee | soft drink/fizzy drink | egg | fish | grape | ice cream | lemon | lemonade | meat | melon | milk | milkshake | nuts | orange juice | pizza | rice | salad | salt | strawberry | sugar | tea | tomato | water | yoghurt
+_ a  Long, thin, green vegetables. You cook them. [beans]
+_ b  White or brown. A chicken lays it. [egg/eggs]
+_ c  It lives in the sea or in a river. Here it's cooked with lemon. [fish]
+_ d  A long yellow fruit. Monkeys love it. [banana/bananas]
+_ e  A big round fruit: green outside, sweet and juicy inside. [melon]
+_ f  A small yellow fruit. It's very sour. [lemon/lemons]
+_ g  A cold brown drink in a glass with ice. It has got bubbles. [soft drink/fizzy drink/soft drinks/fizzy drinks]
+_ h  Small and hard. They grow on trees, for example almonds. [nuts]
+_ i  It comes from a cow. You can grill it. [meat]
+_ j  A bird. Here it's cooked in the oven. [chicken]
+_ k  A small red fruit with very small seeds on the outside. [strawberry/strawberries]
+_ l  Small green or purple fruit. They grow in bunches. [grape/grapes]
+_ m  An orange drink in a glass. It's made from oranges. [orange juice]
+_ n  A white drink. It comes from cows. [milk]
+
+## 1b Read the words in 1a quietly to yourself. Then find the odd one out in each group.
+FROM: listening
+HELP: Har bir guruhda bitta so'z boshqalarga o'xshamaydi. O'shani tanlang.
+? 1 banana · melon · grape · cheese | banana | melon | grape | cheese*
+? 2 coffee · tea · lemonade · rice | coffee | tea | lemonade | rice*
+? 3 butter · cheese · yoghurt · bread | butter | cheese | yoghurt | bread*
+? 4 burger · chips · pizza · strawberry | burger | chips | pizza | strawberry*
+? 5 water · milk · milkshake · biscuit | water | milk | milkshake | biscuit*
+
+## 2a Which words in 1a have two syllables? Where is the stress in these words – on the first or second syllable?
+FROM: pronunciation
+HELP: Bo'g'in – so'zning qismi: ap-ple = 2 bo'g'in. Ikki bo'g'inli so'zlarning hammasini tanlang.
+EXAMPLE: ápple → AP-ple
+? 1 Which of these words have two syllables? Choose all. | apple* | banana | biscuit* | burger* | butter* | chicken* | coffee* | lemonade | melon* | strawberry | sugar* | tomato | water* | yoghurt*
+? 2 Where is the stress in these two-syllable words? | on the first syllable* | on the second syllable
+
+## 2b Read, check and repeat.
+FROM: listening
+TEXT: Stress in food words
+"""
+Two syllables: **AP**-ple · **BIS**-cuit · **BUR**-ger · **BUT**-ter · **CHICK**-en · **COF**-fee · **LEM**-on · **MEL**-on · **SU**-gar · **WA**-ter · **YOG**-hurt · **PIZ**-za · **SAL**-ad · **MILK**-shake
+Three syllables: ba-**NA**-na · to-**MA**-to · **STRAW**-ber-ry · lem-on-**ADE**
+"""
+? 1 In two-syllable food words, the stress is usually on … | the first syllable* | the second syllable
+? 2 Where is the stress in banana? | BA-na-na | ba-NA-na* | ba-na-NA
+? 3 Where is the stress in lemonade? | LEM-on-ade | lem-ON-ade | lem-on-ADE*
+
+## 3a How often do you eat or drink the things in 1a? Put each word into one of these columns.
+HELP: To'g'ri yoki noto'g'ri javob yo'q. Har bir so'z uchun o'zingizga mos ustunni tanlang.
+COLUMNS: Often | Not often | Never
+WORDS: apple | banana | beans | biscuit | bread | burger | butter | cake | cheese | chicken | chips | coffee | fizzy drink | egg | fish | grape | ice cream | lemon | lemonade | meat | melon | milk | milkshake | nuts | orange juice | pizza | rice | salad | salt | strawberry | sugar | tea | tomato | water | yoghurt
+
+## 3b Compare your lists. Are they similar?
+FROM: speaking
+HELP: Ro'yxatingizga qarang va inglizcha uchta gap yozing: nimani tez-tez yeysiz, nimani kam, nimani hech qachon.
+EXAMPLE: I often eat bananas, but I never eat fish.
+KIND: sentences
+MIN: 12
+MAX: 60
+PROMPT: Write three sentences about your lists: what you often eat, what you don't often eat and what you never eat.
+
+[vocabulary 18] Food and drink · 4–5
+
+## 4 Read four dialogues. Complete with the food and drink that the people want.
+FROM: listening
+HELP: To'rtta suhbatni o'qing. Odamlar nima buyurtma qilayotganini bo'sh joylarga yozing.
+TEXT: At the café
+"""
+# Dialogue 1
+Waiter: Hello. What would you like?
+Boy: Can we have two burgers, please?
+Waiter: Two burgers. With chips?
+Boy: Yes, with chips. And salad too, please. Oh, and some tomato on the burgers.
+Waiter: OK. So that's two burgers with chips, salad and tomato.
+# Dialogue 2
+Waitress: What can I get you?
+Woman: One apple juice for my son, please. And a coffee for me.
+Waitress: With milk?
+Woman: Yes, please. A white coffee. No sugar.
+# Dialogue 3
+Waiter: Are you ready to order?
+Girl: Yes. A pizza, please. And a salad.
+Waiter: Do you want anything on the salad?
+Girl: Yes, some cheese, please.
+# Dialogue 4
+Man: Two sandwiches, please. One sandwich with chicken …
+Waitress: Chicken. And the other one?
+Man: Hmm … with egg, please. My daughter doesn't eat meat.
+"""
+_ 1 Two [burgers/burger] with [chips], [salad] and [tomato/tomatoes].
+_ 2 One [apple juice] and one [white] coffee.
+_ 3 A [pizza], and a [salad] with [cheese].
+_ 4 One sandwich with [chicken] and one sandwich with [egg/eggs].
+
+## 5 You are hungry. Create your ideal meal using the food and drink from 1a.
+FROM: speaking
+HELP: Eng yoqtirgan ovqatingizni 1a dagi so'zlar bilan inglizcha yozing.
+EXAMPLE: I'd like pizza, with chips and a salad!
+KIND: sentences
+MIN: 8
+MAX: 50
+PROMPT: Write your ideal meal. Start with "I'd like …".
+
+
+=====
+
+TYPE: classwork
+LEVEL: A2
+BOOK: Gateway A2
+UNIT: 6
+PAGE: 79
+LESSON: 2
+TITLE: What's in your food?
+
+[reading 40] What's in your food? · 1–6
+
+## 1 Answer the questions.
+FROM: speaking
+HELP: Matnni o'qishdan oldin o'ylab ko'ring va inglizcha qisqa yozing. Bu yerda xato javob yo'q.
+> What do you think the ingredients are in a chicken burger?
+> What do you think the ingredients are in a strawberry milkshake?
+
+## 2 Read the article and check your answers in 1.
+HELP: Maqolani to'liq o'qing. Keyin burger va kokteylda nimalar borligini tanlang.
+TEXT: What's in your food?
+"""
+It's lunch time. You're hungry so you buy yourself a chicken burger and a strawberry milkshake. Yum! But have you got any idea what exactly is inside the food you're eating?
+
+Of course, in the chicken burger there's some chicken. There's also some tomato and some cheese, and there's even some healthy salad with it. But there are also some extra ingredients in the chicken. For example there are at least seven or eight chemical __additives__. They include salt and sugar, to give extra __flavour__ to the meat. But they also include __preservatives__ (to stop the food going bad) and antioxidants (to protect the food from oxygen in the air). The people who make burgers can also __choose__ to add chemical flavours – there are over 4,500 different possibilities! And before they cook the chicken, some already contain chemical __hormones__. These hormones help to make the chickens get big quickly. And, finally, don't forget water! Chicken burgers are 45% water. They add extra water to make the chicken look big.
+
+So, now you're thirsty. It's time to drink some strawberry milkshake. But what's inside that? It's just strawberries and milk, right? Wrong. There's some milk and sugar, but there aren't usually any real strawberries in strawberry milkshakes. Strawberries are expensive and they go bad. Also, modern __consumers__ find that the flavour of real strawberries isn't very strong or very sweet. The solution: scientists create special flavours in laboratories and then they add their secret ingredients. That means that in the end a typical strawberry milkshake can contain 60 chemicals and not one real strawberry. You've got E129, cinnamyl valerate, benzyl isobutyrate, amyl valerate … Mmmm, delicious!
+
+So, as you can see, a simple snack isn't that simple. That explains why we all typically __consume__ between five and seven kilos of food additives a year! Our advice? See if there's a list of ingredients and look at it carefully before you start eating!
+"""
+? 1 Which of these are in a chicken burger? Choose all. | chicken* | tomato* | cheese* | salad* | salt* | sugar* | water* | strawberries
+? 2 Which of these are usually in a strawberry milkshake? Choose all. | milk* | sugar* | real strawberries | chemicals*
+
+## 3 Read the article again. Are these sentences True (T) or False (F)?
+SEE: 2
+? 1 Chicken burgers and milkshakes have got very simple ingredients. | T | F*
+? 2 There is no chicken in a chicken burger. | T | F*
+? 3 Antioxidants stop food from going bad because of the air. | T | F*
+? 4 Burger companies use a total of 4,500 extra ingredients in each burger. | T | F*
+? 5 They don't use strawberries in strawberry milkshakes. | T* | F
+? 6 There is just one problem with real strawberries – they cost a lot of money. | T | F*
+? 7 The chemicals that scientists create are very important for making milkshakes. | T* | F
+
+## 4 Critical thinking. What does the writer do to make us agree with their ideas? Tick (✓) the ideas below and find examples of them in the text.
+SEE: 2
+HELP: Muallif qaysi usullardan foydalangan? Bir nechtasini tanlang, keyin matndan bitta misol yozing.
+? 1 Tick the ideas. | a They give us facts and figures.* | b They tell us how they feel. | c They give us surprising information.* | d They ask us questions.*
+> 2 Write one example from the text for one of your ticks.
+
+## 5 What do the underlined words mean? Guess and then check in your dictionary.
+SEE: 2
+HELP: Matnda tagiga chizilgan so'zlarni toping. Ma'nosini gapdan taxmin qiling.
+? 1 additives | things that people add to food* | things that grow on trees | kinds of meat
+? 2 flavour | the colour of food | the taste of food* | the price of food
+? 3 preservatives | chemicals that stop food going bad* | people who sell food | healthy vegetables
+? 4 choose | decide which one you want* | cook | throw away
+? 5 hormones | chemicals in a body that make it change or grow* | small bottles | kinds of salad
+? 6 consumers | people who buy and use things* | people who make burgers | scientists
+? 7 consume | sell | eat or use* | lose
+
+## 6 What about you?
+FROM: speaking
+HELP: Savollarga o'zingiz haqingizda inglizcha javob yozing.
+EXAMPLE: I don't usually look at the list of ingredients. — Me neither. But I don't usually eat fast food.
+> 1 Do you know what is in the food you eat? Why/Why not?
+> 2 How often do you eat food that is healthy and natural?
+> 3 How often do you eat fast food?
+
+
+=====
+
+TYPE: classwork
+LEVEL: A2
+BOOK: Gateway A2
+UNIT: 6
+PAGE: 80
+LESSON: 3
+TITLE: Grammar in context: countable, uncountable, some/any/a/an
+
+[grammar 25] Countable and uncountable · some/any/a/an · 1a–5
+
+## 1a Read the sentences. In a, the words in bold are countable nouns. In b, the words in bold are uncountable.
+TEXT: Sentences
+"""
+a You've got a **burger** and a **milkshake**.
+b There's **milk** and **sugar**.
+"""
+? 1 Countable nouns … | have got a singular and a plural form: a burger, two burgers* | have got only one form: milk, sugar
+? 2 Uncountable nouns … | have got a plural form | don't usually have got a plural form*
+
+## 1b Which list below is of countable nouns? Which list is of uncountable nouns?
+? 1 LIST A: milk, salt, cheese, juice | countable | uncountable*
+? 2 LIST B: apple, banana, egg, strawberry | countable* | uncountable
+
+## 2 Put these food and drink words in the correct column.
+HELP: Sanaladigan (countable) yoki sanalmaydigan (uncountable) ekanini tanlang.
+EXAMPLE: biscuit → Countable
+SORT Countable: biscuit | burger | egg | tomato
+SORT Uncountable: bread | butter | cheese | meat | rice | sugar
+
+## 3 Read the sentences. Then match the sentence halves to make rules.
+TEXT: Sentences
+"""
+a You buy **a** chicken burger.
+b There aren't **any** strawberries.
+c There's **some** cheese.
+d Is there **any** milk?
+e There are **some** extra ingredients.
+f Do you want **an** apple?
+g There isn't **any** milk.
+h She hasn't got **a** banana.
+"""
+= 1 We use a/an with => singular countable nouns (apple, banana) in affirmative and negative sentences and questions.
+= 2 We use some with => uncountable nouns (water) and plural countable nouns (apples) in affirmative sentences.
+= 3 We use any with => uncountable nouns (water) and plural countable nouns (apples) in negative sentences and questions.
+
+## 4 Read about the kitchen and complete the sentences with some, any, a/an.
+FROM: photo
+TEXT: Tom's kitchen
+"""
+Look at Tom's kitchen. On the table there are some tomatoes and some strawberries. Next to them there's a big bottle of milk. There's nothing else in the kitchen.
+"""
+_ 1 He's got [some] tomatoes.
+_ 2 He hasn't got [an] egg.
+_ 3 He hasn't got [any] apples.
+_ 4 He's got [some] strawberries.
+_ 5 He hasn't got [any] bread.
+_ 6 He's got [some] milk.
+_ 7 He hasn't got [a] burger.
+
+## 5 Complete the dialogue with some, any, a/an.
+_ Katy: Excuse me, have you got [any] small pizzas with tomatoes?
+_ Waitress: No, sorry. We haven't got [any] small pizzas. But we've got [a] big pizza with tomatoes.
+_ Katy: Has the pizza got [any] cheese on it?
+| Waitress: Yes, it has.
+_ Katy: OK. What about drinks? Have you got [any] orange juice?
+_ Waitress: Yes, and we've got [some] apple juice too.
+| Katy: OK. I'll take the pizza and the apple juice, please!
+
+[grammar 15] some/any/a/an · 6a–7
+
+## 6a Read about the fridge. Complete the sentences with is, are, isn't, aren't and some, any, a/an.
+FROM: photo
+HELP: Har bir bo'sh joyga ikki so'z yozing: is/are/isn't/aren't + some/any/a/an. Masalan: isn't any.
+TEXT: The fridge on this page
+"""
+In the fridge there's a jug of orange juice, a big pizza and an apple. There are some tomatoes on the bottom shelf, and there's a piece of cheese. That's all. There's nothing else in the fridge.
+"""
+_ 1 There [isn't any/is not any] water.
+_ 2 There [is some/'s some] orange juice.
+_ 3 There [is a/'s a] big pizza.
+_ 4 There [are some] tomatoes.
+_ 5 There [isn't any/is not any] bread.
+_ 6 There [is some/'s some] cheese.
+_ 7 There [is an/'s an] apple.
+_ 8 There [aren't any/are not any] strawberries.
+
+## 6b Look at the fridge on this page and the one on page 156. Find differences between them.
+FROM: speaking
+HELP: Ikki muzlatgichni solishtiring va farqlarini inglizcha yozing.
+TEXT: The fridge on page 156
+"""
+In this fridge there's some water and some milk. There are some strawberries and there's some bread. There isn't any orange juice, there isn't any cheese and there aren't any tomatoes.
+"""
+EXAMPLE: In this fridge, there's some orange juice. In the other fridge, there isn't any orange juice.
+KIND: sentences
+MIN: 20
+MAX: 120
+PROMPT: Write five differences between the two fridges.
+
+## 7 What food and drink do you usually have or not have in your fridge at home?
+FROM: speaking
+HELP: Uydagi muzlatgichingizda odatda nima bor va nima yo'qligini yozing.
+EXAMPLE: We have usually got some milk in the fridge. But we haven't usually got any …
+KIND: sentences
+MIN: 20
+MAX: 100
+PROMPT: Write about your fridge at home.
+
+
+=====
+
+TYPE: classwork
+LEVEL: A2
+BOOK: Gateway A2
+UNIT: 6
+PAGE: 81–82
+LESSON: 4
+TITLE: Containers · Planning a balanced diet
+
+[vocabulary 20] Containers · 1a–3b
+
+## 1a Read the descriptions of the photos and complete the phrases using the words in the box.
+FROM: photo
+HELP: Ta'rifni o'qing va ro'yxatdan mos idishni tanlang.
+CHOOSE: bottle | can | carton | cup | glass | packet | slice
+_ a (small, red and made of metal; you open it at the top) a [can] of fizzy drink
+_ b (tall and made of plastic, with a lid) a [bottle] of water
+_ c (you drink from it and you can see through it) a [glass] of milk
+_ d (a box made of thick paper) a [carton] of orange juice
+_ e (small and hot, with a handle) a [cup] of coffee
+_ f (a triangle cut from a big round pizza) a [slice] of pizza
+_ g (a long paper bag) a [packet] of biscuits
+
+## 1b Read the phrases in 1a aloud quietly. Then choose the correct word.
+FROM: listening
+? 1 a ___ of tea | cup* | packet | slice
+? 2 a ___ of bread | can | slice* | cup
+? 3 a ___ of crisps | glass | packet* | slice
+
+## 2 Which word(s) in 1 can we usually use with these products?
+HELP: Bir nechta javob bo'lishi mumkin. Mos keladiganlarning hammasini tanlang.
+EXAMPLE: 1 cake → a slice of cake
+ANSWER: many
+? 2 lemonade | bottle* | can* | carton | cup | glass* | packet | slice
+? 3 milk | bottle* | can | carton* | cup~ | glass* | packet | slice
+? 4 tea | bottle | can | carton | cup* | glass~ | packet | slice
+? 5 rice | bottle | can | carton | cup | glass | packet* | slice
+? 6 crisps | bottle | can | carton | cup | glass | packet* | slice
+? 7 apple juice | bottle* | can~ | carton* | cup | glass* | packet | slice
+
+## 3a Use the words on this page to write seven true sentences about yourself.
+HELP: Idish so'zlari bilan o'zingiz haqingizda yettita to'g'ri gap yozing.
+EXAMPLE: I drink five or six glasses of water a day. I eat three or four slices of pizza a week.
+KIND: sentences
+MIN: 30
+MAX: 140
+PROMPT: Write seven true sentences about yourself.
+
+## 3b Compare your sentences with another student's. Are you similar or different?
+FROM: speaking
+HELP: Boshqa o'quvchining gaplarini o'qing. Har biriga o'xshash yoki farqli ekaningizni yozing: Me too / I don't …
+TEXT: Another student's sentences
+"""
+I drink five or six glasses of water a day.
+I eat one slice of pizza a day.
+I drink two cups of tea every morning.
+I never drink cans of fizzy drink.
+"""
+EXAMPLE: I drink five or six glasses of water a day. — Me too. / I eat one slice of pizza a day. — I don't. I eat three or four slices a week.
+KIND: sentences
+MIN: 12
+MAX: 80
+PROMPT: Answer each sentence. Are you similar or different?
+
+[lifeskills 25] Planning a balanced diet · 1–3
+
+## Life skills objectives and key concepts.
+TEXT: Planning a balanced diet
+"""
+# Life skills objectives
+- To learn about balanced diets
+- To assess your own diet
+- To plan a balanced diet for the weekend
+# Key concepts
+- **carbohydrate** (n): Carbohydrates come from pasta, rice and cereals and they give us energy.
+- **protein** (n): Proteins come from meat and fish and build and repair muscles, skin, and hair.
+- **fat** (n): Fats come from milk, meat and oil and give energy and insulation, but they are unhealthy in large quantities.
+- **balanced** (adj): A balanced diet contains a good mixture of all the different food groups.
+"""
+
+## 1 The eatwell plate has five coloured sections: two sections of 33%, one of 15%, one of 12% and one of 7%. Match each food group to its section. How many different types of food and drink can you name for each group?
+FROM: photo
+HELP: Har bir oziq-ovqat guruhi likopchaning qancha qismini egallashini taxmin qiling. Keyingi mashqda matndan tekshirasiz.
+? 1 bread, rice, potatoes, pasta | 33%* | 15% | 12% | 7%
+? 2 fruit and vegetables | 33%* | 15% | 12% | 7%
+? 3 foods and drinks high in fat and/or sugar | 33% | 15% | 12% | 7%*
+? 4 meat, fish, eggs, beans | 33% | 15%* | 12% | 7%
+? 5 milk and dairy foods | 33% | 15% | 12%* | 7%
+> 6 Write all the food and drink words you know for one of the groups.
+
+## 2 Read the text and check your answers in 1.
+HELP: Matnni o'qing va 1-mashqdagi javoblaringizni tekshiring.
+CHART: Fruit and vegetables 33 #3FAE49 | Bread, rice, potatoes, pasta 33 #F5B700 | Meat, fish, eggs, beans 15 #E8337E | Milk and dairy foods 12 #4FA3F7 | Food and drinks high in fat and/or sugar 7 #B07CFF
+TEXT: The eatwell plate
+"""
+The eatwell plate makes healthy eating easy to understand by showing the types and quantities of foods we need to have a healthy and well-balanced diet. It shows how much of what you eat should come from each group.
+# You should try to eat:
+# Plenty of fruit and vegetables
+Fruit and vegetables give us vitamins, fibre and energy. Most people know that they need to eat five portions of fruit and veg every day, but they don't usually do it. Fruit and veg should be about 33% of what we eat in a day.
+# Plenty of bread, rice, potatoes and pasta
+These foods give us fibre and energy. Like fruit and vegetables, they should be about a third of what we eat in a day. Some people worry about eating carbohydrates because they think they make you fat. But these foods give us important nutrients, and low carbohydrate diets often have a lot of fat.
+# Some milk and dairy products
+Milk, cheese and yoghurt are very important because they give us protein, vitamins and calcium. The only problem is that they can contain a lot of fat and this can be bad for our hearts. So either control how much you eat or choose products with low fat, like skimmed or semi-skimmed milk.
+# Some meat, fish, eggs and beans
+These are a good source of proteins, vitamins and minerals. Meat also contains fat, so try to eat meat with only very little fat and prepare it without much oil. Fish contains very important proteins, and oily fish contains omega 3 fatty acids. Omega 3 is good for your heart.
+# Just a small amount of food and drinks high in fat and/or sugar
+Fat and sugar give us energy. But eating a lot of fat and sugar makes us have more energy than we need or can use. Look for low fat alternatives instead and try to eat fatty foods only occasionally. Limit cakes, sweets, biscuits and fizzy drinks that contain a lot of sugar.
+
+So, remember to use the eatwell plate. You don't need to get the balance right at every meal. But try to get it right for a whole day or week. And try to choose options that are low in fat, salt and sugar when you can.
+"""
+? 1 Fruit and vegetables should be about a third of what we eat in a day. | T* | F
+? 2 Low carbohydrate diets often have a lot of fat. | T* | F
+? 3 You need to get the balance right at every meal. | T | F*
+
+## 3 Read the text again and make notes about each food group. Answer these questions: 1 Why is it good for you? 2 Are there any possible problems?
+SEE: 2
+HELP: Har bir guruh uchun qisqa yozing: nega foydali va qanday muammosi bor.
+> Fruit and vegetables – why good? Any problems?
+> Bread, rice, potatoes and pasta – why good? Any problems?
+> Milk and dairy products – why good? Any problems?
+> Meat, fish, eggs and beans – why good? Any problems?
+> Food and drinks high in fat and/or sugar – why good? Any problems?
+
+
+=====
+
+TYPE: classwork
+LEVEL: A2
+BOOK: Gateway A2
+UNIT: 6
+PAGE: 83–84
+LESSON: 5
+TITLE: Healthy snacks · Fizzy drinks
+
+[lifeskills 20] Planning a balanced diet · 4–Life task
+
+## 4 Is your diet balanced like the eatwell plate? Give reasons for your answers.
+FROM: speaking
+HELP: Ovqatlanishingiz muvozanatli ekanmi? Sababini inglizcha yozing.
+KIND: sentences
+MIN: 20
+MAX: 100
+PROMPT: Is your diet balanced like the eatwell plate? Why/Why not?
+
+## 5a Think about yesterday. Did you eat five portions of fruit and vegetables? Complete the 'You' column.
+HELP: Kecha yegan meva va sabzavotlaringizni yozing. Bo'lmasa "nothing" deb yozing.
+> Portion 1
+> Portion 2
+> Portion 3
+> Portion 4
+> Portion 5
+
+## 5b Are you eating the right amount of fruit and vegetables?
+FROM: speaking
+HELP: Kitobda sherigingizdan so'rardingiz. Bu yerda o'zingiz haqingizda yozing.
+KIND: sentences
+MIN: 10
+MAX: 60
+PROMPT: Are you eating the right amount of fruit and vegetables? Write two or three sentences.
+
+## 6 Four teenagers are talking about their favourite snacks. Read the first half and match the person with the snack.
+FROM: listening
+HELP: Matnni o'qing va har bir o'smirga uning sevimli yeguligini tanlang.
+TEXT: My favourite snack – part 1
+"""
+Amelia: After school I'm always hungry. I usually eat some fruit, an apple or a banana. Sometimes, when it's very hot, I have a milkshake instead.
+Kieran: I haven't got much time in the morning, so my snack is a bowl of cereal at eleven o'clock. Or, if I'm out, a cereal bar.
+Molly: I love yoghurt! I eat one every afternoon, usually a natural one with no sugar.
+George: I'm always hungry after football. I have a cheese sandwich, a yoghurt and a big glass of milk.
+"""
+= 1 Amelia => fruit or a milkshake
+= 2 Kieran => cereal or a cereal bar
+= 3 Molly => yoghurt
+= 4 George => a cheese sandwich, yoghurt and milk
+
+## 7a Read the second half. Which two speakers think their snacks are very healthy? Which two speakers think their snacks are quite healthy? Why?
+FROM: listening
+TEXT: My favourite snack – part 2
+"""
+Amelia: I think my snack is very healthy. Fruit has got a lot of vitamins and fibre. A milkshake isn't so good – there's a lot of sugar in it – but I only have one when it's really hot.
+Kieran: My snack is quite healthy. Cereal gives you a lot of energy, but some cereal bars have got a lot of sugar in them. I should look at the list of ingredients.
+Molly: Mine is very healthy. Natural yoghurt has got protein and calcium, and there isn't any sugar in it.
+George: Hmm, quite healthy, I think. Milk and yoghurt are good for you, but there's a lot of fat in cheese. But I play a lot of sport, so I need the energy!
+"""
+? 1 Amelia thinks her snack is … | very healthy* | quite healthy
+? 2 Kieran thinks his snack is … | very healthy | quite healthy*
+? 3 Molly thinks her snack is … | very healthy* | quite healthy
+? 4 George thinks his snack is … | very healthy | quite healthy*
+? 5 Why is Kieran's snack only quite healthy? | Some cereal bars have got a lot of sugar.* | Cereal hasn't got any energy. | He eats it at night.
+? 6 Why is George's snack only quite healthy? | There's a lot of fat in cheese.* | He doesn't like milk. | It's very small.
+
+## 7b Do you agree with the four teenagers? Discuss your answers.
+FROM: speaking
+HELP: To'rt o'smirning fikriga qo'shilasizmi? Ikki gap yozing.
+KIND: sentences
+MIN: 10
+MAX: 60
+PROMPT: Do you agree with the four teenagers? Why/Why not?
+
+## 7c Talk about your favourite snacks. How healthy do you think they are?
+FROM: speaking
+KIND: sentences
+MIN: 15
+MAX: 80
+PROMPT: Write about your favourite snacks. How healthy are they?
+
+## Life task. You and your friends are spending a weekend together. You want to plan a balanced diet for the weekend.
+FROM: speaking
+HELP: Kitobda bu guruh ishi. Bu yerda rejani o'zingiz yozasiz. Ovozga qo'yishni o'qituvchi sinfda o'tkazadi.
+TEXT: Follow this plan
+"""
+1 Decide what to eat for breakfast, lunch and dinner on Saturday and Sunday. Make sure you have a balance of all the different food groups, and that your meals are attractive. Use the eatwell plate and any other information on the Internet for ideas.
+2 Decide how to present your balanced weekend diet to the class. You could create a poster or prepare a computer presentation.
+3 Vote for the winning weekend food plan!
+"""
+> Saturday: breakfast
+> Saturday: lunch
+> Saturday: dinner
+> Sunday: breakfast
+> Sunday: lunch
+> Sunday: dinner
+> Why is your plan balanced? How will you present it to the class?
+
+[listening 25] Fizzy drinks · p84 1–4
+
+## 1 Answer the questions.
+FROM: speaking
+> 1 Do you like fizzy drinks?
+> 2 How often do you have fizzy drinks?
+> 3 Do you ever buy supersize (very big) fizzy drinks?
+> 4 How healthy do you think fizzy drinks are? Why?
+
+## 2 Read a radio programme about fizzy drinks and answer the questions.
+FROM: listening
+TEXT: Radio programme: Too big to drink?
+"""
+Presenter: Good morning and welcome to Your View. In March 2013, the mayor of New York wanted to stop restaurants, cafés and cinemas selling supersize fizzy drinks – drinks bigger than about half a litre. He said there is too much sugar in these drinks and a lot of people in the city are getting fat. What do you think? Our first caller is Claire.
+Claire: Hi. I think the mayor is right. A supersize drink has got about twenty-five spoons of sugar in it! Some people can't control themselves. When there's a big drink in front of them, they drink it all. They need help, and this law helps them.
+Presenter: Thanks, Claire. Now, Jack.
+Jack: I don't agree with the mayor at all. We aren't children. The government shouldn't tell us what to drink. People should make their own decisions and accept responsibility for them.
+Presenter: OK. Sam, what's your opinion?
+Sam: I don't like the law either. Stopping big drinks doesn't help. The important thing is information. Cafés should show how much sugar there is in every drink. Then people can choose.
+Presenter: And finally, Natalie.
+Natalie: I agree with the mayor, but there's a bigger problem. In a lot of cinemas you can only buy fizzy drinks. They should sell different types of drinks, like water and fruit juice, so people have got a healthy choice.
+Presenter: Thank you all. That's all we've got time for today.
+"""
+? 1 In March 2013, what did the mayor of New York want? | to stop places selling very big fizzy drinks* | to stop all fizzy drinks in New York | to make fizzy drinks cheaper
+? 2 Which speaker or speakers agree with the mayor? Choose all. | Claire* | Jack | Sam | Natalie*
+
+## 3 Read again. Match the people with their ideas. One idea is not stated by any of the speakers.
+SEE: 2
+HELP: Har bir odamga uning fikrini tanlang. Bitta fikrni hech kim aytmagan.
+= 1 Claire => Some people can't control themselves and need help.
+= 2 Jack => The government should let people accept responsibility for their actions.
+= 3 Sam => The important thing is to give the public information about fizzy drinks.
+= 4 Natalie => It's important to give the public different types of drinks.
+EXTRA: Coffee is the problem, not fizzy drinks.
+
+## 4 What about you?
+FROM: speaking
+EXAMPLE: I don't think it's a big problem. — I don't agree. There's a lot of sugar in fizzy drinks.
+> 1 Do you think supersize fizzy drinks are a problem? Why/Why not?
+> 2 If they are a problem, what do you think is a good solution?
+
+
+=====
+
+TYPE: classwork
+LEVEL: A2
+BOOK: Gateway A2
+UNIT: 6
+PAGE: 84–85
+LESSON: 6
+TITLE: Grammar in context: a lot of, much, many, should
+
+[grammar 22] a lot of / much / many · 1–4b
+
+## 1 Read the sentences and then decide if the statements below are true or false.
+TEXT: Sentences
+"""
+a How **much** coffee do they drink a day?
+b How **many** people drink coffee every day?
+c There is/isn't **a lot of** sugar in these drinks.
+d Is there **a lot of** sugar in fizzy drinks?
+e There isn't **much** sugar in this coffee.
+f I don't drink **many** fizzy drinks.
+"""
+? 1 We use much for uncountable nouns and many for countable nouns. | True* | False
+? 2 We usually use much and many in questions and negative sentences. | True* | False
+? 3 We use a lot of for countable and uncountable nouns. | True* | False
+? 4 We use a lot of in affirmative and negative sentences and in questions. | True* | False
+
+## 2 Complete the sentences with much, many or a lot of. If you can use two alternatives, choose both.
+HELP: Ikkala javob to'g'ri bo'lsa, ikkalasini tanlang.
+ANSWER: many
+? 1 There's ___ chocolate in a chocolate brownie. | much | many | a lot of*
+? 2 There isn't ___ food in the Arctic. | much* | many | a lot of*
+? 3 There's ___ water in the Atlantic Ocean. | much | many | a lot of*
+? 4 There aren't ___ people living in the North Pole. | much | many* | a lot of*
+? 5 There isn't ___ water in the Sahara. | much* | many | a lot of*
+? 6 There are ___ fast-food restaurants in the US. | much | many | a lot of*
+
+## 3 Read about the picture. Write sentences about it using much, many or a lot of.
+FROM: speaking
+TEXT: The picture
+"""
+On the table there are a lot of bananas and a lot of strawberries. There are a lot of bottles of fizzy drink and four cartons of juice. There's one small glass of water and there are two slices of bread. There isn't any cheese.
+"""
+EXAMPLE: There isn't much water.
+KIND: sentences
+MIN: 15
+MAX: 80
+PROMPT: Write four sentences about the table with much, many or a lot of.
+
+## 4a Complete the questions with How much or How many.
+CHOOSE: How much | How many
+_ 1 [How many] fizzy drinks do you drink a week?
+_ 2 [How many] burgers do you eat a month?
+_ 3 [How many] eggs do you eat a week?
+_ 4 [How much] milk do you drink a week?
+_ 5 [How many] apples do you eat a week?
+_ 6 [How much] meat do you eat a week?
+_ 7 [How many] glasses of water do you drink a day?
+_ 8 [How much] juice do you drink a week?
+
+## 4b Ask and answer the questions. Choose from these answers: A lot. / Quite a lot. / Not much. / Not many. / I never eat/drink …
+FROM: speaking
+HELP: 4a dagi to'rtta savolga o'zingiz haqingizda javob yozing.
+EXAMPLE: How many fizzy drinks do you drink a week? — Not many. I prefer water or juice.
+KIND: sentences
+MIN: 15
+MAX: 100
+PROMPT: Choose four questions from 4a. Write each question and your answer.
+
+[grammar 20] should / shouldn't · 5–8b
+
+## 5 Read the sentences and choose the correct alternatives to complete rules 1 and 2.
+TEXT: Sentences
+"""
+a They **should** explain why fizzy drinks are bad.
+b You **shouldn't** sell drinks that contain a lot of sugar.
+c What **should** we do about the problem?
+"""
+? 1 We use should for something that it ___ a good idea. | is* | isn't
+? 2 We use shouldn't for something that it ___ a good idea. | is | isn't*
+
+## 6 Complete the sentences with should or shouldn't.
+CHOOSE: should | shouldn't
+_ 1 You [should] eat fruit and vegetables every day.
+_ 2 You [shouldn't] throw cans and bottles on the floor.
+_ 3 People [shouldn't] eat fast food all the time.
+_ 4 We [should] be careful about what we eat.
+_ 5 You [shouldn't] have a big lunch just before you swim.
+_ 6 Young children [shouldn't] go to bed very late.
+
+## 7 Read about the pictures. Write what the people should or shouldn't do. Use these words.
+FROM: photo
+HELP: Vaziyatni o'qing va qutidagi fe'l bilan maslahatni yozing: fe'l + qolgan so'zlar.
+BOX: eat | open | move | play | wash | put
+!_ a Ben's fish smells very bad. He shouldn't [eat the fish].
+_ b Lucy is in the garden. Her hands are very dirty and it's lunch time. She should [wash her hands].
+_ c The kitchen is full of smoke. She should [open the window/open the windows/open the door].
+_ d His baby brother is next to a hot cup of coffee. He should [move the coffee/move the cup/move the cup of coffee/move his brother/move the baby].
+_ e It's a very hot day and the milk is on the table. She should [put the milk in the fridge/put it in the fridge].
+_ f The children are next to a hot barbecue with a ball. They shouldn't [play near the barbecue/play next to the barbecue/play football near the barbecue/play football next to the barbecue].
+
+## 8a Give advice to a friend who wants to stay healthy. Make a list of eight things they should or shouldn't do.
+HELP: Sog'lom bo'lishni xohlagan do'stingizga sakkizta maslahat yozing.
+EXAMPLE: You should do exercise regularly.
+KIND: list
+MIN: 30
+MAX: 150
+PROMPT: Write eight things your friend should or shouldn't do.
+
+## 8b Tell the class your ideas. Choose the top five ideas.
+FROM: speaking
+HELP: Ro'yxatingizdan eng yaxshi beshtasini tanlab yozing. O'qituvchi sinfda eng yaxshilarini tanlaydi.
+KIND: list
+MIN: 15
+MAX: 90
+PROMPT: Write your top five ideas.
+
+
+=====
+
+TYPE: classwork
+LEVEL: A2
+BOOK: Gateway A2
+UNIT: 6
+PAGE: 86–87
+LESSON: 7
+TITLE: Ordering food · An invitation
+
+[speaking 22] Developing speaking: Ordering food · 1–7
+
+## 1 Look at the menu. Would you like to eat at this café? Why/Why not?
+FROM: speaking
+TEXT: Soul Café – our menu
+"""
+# Meals
+Fish and chips | £6.50
+Chicken club sandwich | £4.75
+Cheeseburger | £7.10
+Vegetarian pizza | £6.85
+# Extras
+Garlic bread | £3.20
+Greek salad | £4.95
+Chips | £1.80
+Rice | £1.50
+# Desserts
+Cheesecake | £4.75
+Chocolate brownie | £4.30
+Ice cream | £3.30
+Fruit salad | £3.90
+# Drinks
+Milkshake | £2.95
+Juice | £2.10
+Lemonade – regular | £2.20
+Lemonade – large | £2.90
+"""
+> Would you like to eat at this café? Why/Why not?
+
+## 2a Read how we say the prices for the first two meals.
+FROM: pronunciation
+TEXT: How we say prices
+"""
+£6.50 → six pounds fifty, or six fifty
+£4.75 → four pounds seventy-five, or four seventy-five
+"""
+? 1 How do we say £7.10? | seven pounds ten* | seven pounds one zero | seven point ten pounds
+? 2 How do we say £3.30? | three thirty* | three pounds three | thirty-three pounds
+
+## 2b Practise saying the prices on the menu.
+FROM: speaking
+HELP: Narxlarni so'z bilan yozing. Ikki usul ham to'g'ri: six pounds fifty yoki six fifty.
+EXAMPLE: £7.10 → seven pounds ten, or seven ten
+_ 1 £6.85 → [six pounds eighty-five/six eighty-five]
+_ 2 £3.20 → [three pounds twenty/three twenty]
+_ 3 £2.95 → [two pounds ninety-five/two ninety-five]
+_ 4 £1.50 → [one pound fifty/one fifty]
+
+## 3 Read the conversation between two people ordering food in the café. What do they order?
+FROM: listening
+HELP: Suhbatni tez o'qing. Bo'sh joylarni hozir to'ldirmang. Ular nimani buyurtma qilishdi?
+TEXT: At Soul Café
+"""
+Waitress: Hello. …
+Jamie: Yes. Could I have a cheeseburger, please?
+Waitress: Sure. …
+Jamie: Yes, please.
+Waitress: And what can I get you?
+Becky: What's the chicken club sandwich?
+Waitress: It's got bacon, tomato, chicken and mayonnaise.
+Becky: Great! I think I'll have that, please.
+Waitress: OK, so that's one cheeseburger and chips and one chicken club sandwich. …
+Jamie: Yes, I'll have a milkshake, please.
+Becky: And I'd like a lemonade.
+Waitress: …
+Becky: Regular, please.
+Waitress: …
+Jamie: Here you are.
+Waitress: Thanks. … I'll bring your food and drinks to your table in a minute. …
+"""
+? 1 What do Jamie and Becky order? Choose all. | a cheeseburger* | chips* | a chicken club sandwich* | a milkshake* | a lemonade* | fish and chips | ice cream | a Greek salad
+
+## 4a Complete the dialogue with sentences 1–8. There are eight sentences but only seven spaces.
+HELP: Har bir bo'sh joyga ro'yxatdan mos gapni tanlang. Bitta gap ortiqcha.
+CHOOSE: Regular or large? | Are you ready to order? | Enjoy your meal! | That's £18.80 in total. | Would you like a dessert? | Here's your change. | Can I get you anything to drink? | Would you like chips with that?
+_ Waitress: Hello. [Are you ready to order?]
+| Jamie: Yes. Could I have a cheeseburger, please?
+_ Waitress: Sure. [Would you like chips with that?]
+| Jamie: Yes, please.
+| Waitress: And what can I get you?
+| Becky: What's the chicken club sandwich?
+| Waitress: It's got bacon, tomato, chicken and mayonnaise.
+| Becky: Great! I think I'll have that, please.
+_ Waitress: OK, so that's one cheeseburger and chips and one chicken club sandwich. [Can I get you anything to drink?]
+| Jamie: Yes, I'll have a milkshake, please.
+| Becky: And I'd like a lemonade.
+_ Waitress: [Regular or large?]
+| Becky: Regular, please.
+_ Waitress: [That's £18.80 in total.]
+| Jamie: Here you are.
+_ Waitress: Thanks. [Here's your change.] I'll bring your food and drinks to your table in a minute. [Enjoy your meal!]
+
+## 4b Look at the menu again and check the total.
+FROM: listening
+SEE: 1
+? 1 Cheeseburger £7.10 + chips £1.80 + chicken club sandwich £4.75 + milkshake £2.95 + regular lemonade £2.20. Is the total £18.80? | Yes* | No
+
+## 5 Practise the completed dialogue in 4a.
+FROM: speaking
+HELP: 4a dagi suhbatni qayta yozing, lekin ovqat va ichimliklarni menyudan boshqasiga almashtiring.
+KIND: dialogue
+MIN: 40
+MAX: 150
+PROMPT: Write the dialogue in 4a again, but change the food and drinks. Use the menu.
+
+## Exam success. In this type of exercise, why is it a good idea to read the complete dialogue first before you try to put the sentences in position?
+? 1 Why? | It helps you understand the general situation.* | It's faster. | You don't need to read the sentences.
+
+## 6 Complete the useful expressions in the Speaking bank. Use the dialogue if necessary.
+HELP: 4a dagi suhbatdan foydalanib bo'sh joylarni to'ldiring.
+| **The waiter/waitress**
+| Can I help you?
+_ Are you [ready] to order?
+| What can I get you?/What would you like?
+| Would you like (a salad) with that?
+_ Can I [get] you anything to drink?
+_ Enjoy your [meal]!
+_ That's £17.95 in [total].
+_ [Here's/Here is] your change.
+| **The customer**
+_ Could I [have] a cheeseburger, please?
+_ I think I ['ll/will/ll] have the sandwich.
+_ I'd [like] an apple juice.
+| Have you got any (lemonade)?
+| How much is that?/Can we have the bill?
+
+## 7 Practice makes perfect. Prepare a dialogue to order food. Use the menu in 1 and the Speaking bank to help you.
+FROM: speaking
+HELP: Ofitsiant va ikki mijoz o'rtasidagi suhbat yozing. Menyu va Speaking bankdan foydalaning.
+SEE: 1
+KIND: dialogue
+MIN: 60
+MAX: 200
+PROMPT: Write a dialogue in a café between a waiter/waitress and two customers.
+
+[writing 23] Developing writing: An invitation · 1a–3b
+
+## 1a Talk about what you can see in the photos.
+FROM: photo
+HELP: Ikki rasm ta'rifini o'qing. Qaysi bayramga borishni xohlaysiz? Inglizcha yozing.
+TEXT: The photos
+"""
+Photo 1: Some friends are sitting on the grass in a park. They're eating sandwiches and crisps, and there's a ball next to them.
+Photo 2: Some teenagers are at a party in a new house. There are pizzas on the table and they're laughing.
+"""
+> Which celebration would you like to go to? Why?
+
+## 1b Read the invitations. Match two of the invitations to the photos.
+HELP: Uchta taklifnomani o'qing. Ikkitasi rasmlarga mos keladi, bittasi ortiqcha.
+TEXT: Invitations a, b and c
+"""
+# a
+Hi Sam,
+It's my final exam on Saturday and I'm inviting some friends to go out and celebrate. Would you like to come? We're meeting at Fosters, the fast-food restaurant on Green Street, at seven o'clock. We're having dinner there and then we're going to the cinema to see a film. Please come!
+Let me know if you can make it.
+Best wishes,
+Max
+# b
+Hi Emma,
+We're finally in our new house and we're having a party here to celebrate. It's next Friday. Can you come? And can you bring some food – pizzas, sandwiches or something? The party's starting at seven o'clock but you can come when you like.
+See you there!
+Alice
+# c
+Dear Alfie,
+The summer holidays are here! To celebrate, I'm inviting everyone to a picnic in the park on Wednesday afternoon. I've got some food – pizzas, sandwiches, crisps and things like that. But please bring your own soft drinks. Oh, and bring a ball. We can play football. We're starting the picnic at one o'clock. Don't be late!
+Hope you can come.
+Cheers,
+Dan
+"""
+= Photo 1 (picnic in the park) => invitation c
+= Photo 2 (party in a new house) => invitation b
+EXTRA: invitation a
+
+## 1c Read the invitations again. Answer the questions for each invitation.
+SEE: 1b
+? a 1 Who makes the invitation? | Max* | Alice | Dan
+? a 2 Why do they make the invitation? | It's their final exam on Saturday.* | They've got a new house. | The summer holidays are here.
+? a 3 How do they want to celebrate? | dinner and then the cinema* | a party at home | a picnic
+? a 4 Where should the person go? | Fosters, on Green Street* | Alice's new house | the park
+? a 5 What day/time should they go? | at seven o'clock* | next Friday, from seven o'clock | Wednesday at one o'clock
+? a 6 What should they bring? | nothing* | some food | soft drinks and a ball
+? b 1 Who makes the invitation? | Max | Alice* | Dan
+? b 2 Why do they make the invitation? | It's their final exam. | They've got a new house.* | The summer holidays are here.
+? b 3 How do they want to celebrate? | dinner and then the cinema | a party at home* | a picnic
+? b 4 Where should the person go? | Fosters, on Green Street | Alice's new house* | the park
+? b 5 What day/time should they go? | at seven o'clock on Saturday | next Friday, from seven o'clock* | Wednesday at one o'clock
+? b 6 What should they bring? | nothing | some food* | soft drinks and a ball
+? c 1 Who makes the invitation? | Max | Alice | Dan*
+? c 2 Why do they make the invitation? | It's their final exam. | They've got a new house. | The summer holidays are here.*
+? c 3 How do they want to celebrate? | dinner and then the cinema | a party at home | a picnic*
+? c 4 Where should the person go? | Fosters, on Green Street | Alice's new house | the park*
+? c 5 What day/time should they go? | at seven o'clock on Saturday | next Friday, from seven o'clock | Wednesday at one o'clock*
+? c 6 What should they bring? | nothing | some food | soft drinks and a ball*
+
+## Exam success. When you write to a friend in English, should you use contractions or not?
+? 1 When you write to a friend, should you use contractions (I'm, it's, don't)? | Yes* | No
+? 2 Is it important to write texts in the correct style? | Yes* | No
+
+## 2 Look at the invitations again and complete the useful expressions in the Writing bank.
+HELP: Taklifnomalardan mos so'zni topib yozing.
+_ I'm [inviting] (some friends) to (go out/a picnic).
+| It's starting at (one o'clock).
+| We're meeting at (the park) at (seven o'clock).
+_ Would you [like] to come?
+| Can you come?/Please come!
+_ Let me [know] if you can/can't [make] it.
+_ [Hope] you can come.
+_ Please [bring] (your own soft drinks).
+_ Can you [bring] (some food)?
+| See you there!
+_ [Don't/Do not] be late!
+
+## 3a Write an invitation. Use the invitations in 1b as a model. Use the Writing bank for reference.
+HELP: Do'stingizni bayramga taklif qiling. Pastdagi beshta ma'lumotning hammasini yozing.
+TEXT: Practice makes perfect
+"""
+You are in the UK. Invite a friend to a celebration that you are planning. Include all the important information below.
+- what you want to celebrate
+- how you want to celebrate
+- where you should meet
+- what day/time you should meet
+- what people should bring
+"""
+KIND: invitation
+MIN: 50
+MAX: 120
+PROMPT: Write an invitation to a friend.
+
+## 3b Give your invitation to another student. Can they answer all the questions in 1c for your invitation?
+FROM: speaking
+HELP: Taklifnomangizni o'zingiz tekshiring: 1c dagi savollarning qaysilariga javob bor?
+ANSWER: free many
+? 1 My invitation says … | who is inviting | why | how we celebrate | where to meet | what day and time | what to bring
+
+
+=====
+
+TYPE: classwork
+LEVEL: A2
+BOOK: Gateway A2
+UNIT: 6
+PAGE: 88–89
+LESSON: 8
+TITLE: Language checkpoint: Unit 6
+
+[review 40] Grammar reference and revision
+
+## Grammar reference.
+TEXT: Grammar reference
+"""
+# Countable and uncountable nouns
+- We can count apples, bananas, eggs, burgers, chips and so there is a singular and a plural form. They are **countable** nouns.
+- We cannot count some things and so we do not usually use a plural form. For example, milk, water, bread, salt, cheese. They are **uncountable** nouns.
+# some, any, a/an
+- We use **some** with uncountable nouns and with plural countable nouns, in affirmative sentences. We've got some water. I've got some apples.
+- We use **any** with uncountable nouns and with plural countable nouns, in negative sentences and questions. I haven't got any milk. He hasn't got any apples. Have you got any orange juice? Are there any bananas?
+- We use **a/an** with singular countable nouns in affirmative and negative sentences and in questions. **An** goes before a vowel sound. I haven't got a burger. He's got an egg. Have you got an MP3 player?
+# a lot of, much, many
+- We use **much**, **many**, **a lot (of)** to talk about big quantities.
+- We often use **much** in negative sentences and questions, with uncountable nouns. I haven't got much lemonade. Have you got much water?
+- We often use **many** in negative sentences and questions, with plural countable nouns. I haven't got many chips. Have you got many eggs?
+- We use **a lot of** in affirmative and negative sentences and in questions, with countable and uncountable nouns. I've got a lot of apples. I haven't got a lot of tomatoes. Have you got a lot of water?
+- We use **of** when **a lot** comes before a noun. But when there is no noun after **a lot** we do not use **of**. I've got a lot of bananas. Are there any bananas? Yes, there are a lot.
+# should/shouldn't
+Affirmative | You should eat fruit and vegetables.
+Negative | You shouldn't eat a lot of cakes and chocolate.
+Question | Should I eat fish?
+Short answers | Yes, you should. / No, you shouldn't.
+- We use **should** to talk about things that it is a good idea to do. You should drink milk because it's good for you.
+- We use **shouldn't** to talk about things that it is not a good idea to do. You shouldn't eat a lot of sugar because it's bad for your teeth.
+# Vocabulary
+- **Food and drink:** apple · banana · beans · biscuit · bread · burger · butter · cake · cheese · chicken · chips · coffee · soft drink/fizzy drink · egg · fish · grape · ice cream · lemon · lemonade · meat · melon · milk · milkshake · nuts · orange juice · pizza · rice · salad · salt · strawberry · sugar · tea · tomato · water · yoghurt
+- **Containers:** bottle · can · carton · cup · glass · packet · slice
+"""
+
+## 1 Grammar revision. Are these words countable (C) or uncountable (U)?
+? 1 bread | C | U*
+? 2 salt | C | U*
+? 3 sugar | C | U*
+? 4 biscuit | C* | U
+? 5 rice | C | U*
+? 6 cheese | C | U*
+? 7 burger | C* | U
+? 8 milk | C | U*
+
+## 2 Read about the picture. Complete the sentences with is, isn't, are, aren't and some, any, a/an.
+FROM: photo
+TEXT: The picture
+"""
+On the table there's a loaf of bread, a jug of milk and some red apples. That's all. There's nothing else on the table.
+"""
+_ 1 There [is some/'s some] bread.
+_ 2 There [aren't any/are not any] bananas.
+_ 3 There [isn't an/is not an] egg.
+_ 4 There [are some] apples.
+_ 5 There [isn't any/is not any] water.
+_ 6 There [is some/'s some] milk.
+
+## 3 Choose the correct alternative. If both alternatives are correct, choose both.
+ANSWER: many
+? 1 There are ___ biscuits in the packet. | a lot of* | much
+? 2 There isn't ___ milk in the fridge. | much* | many
+? 3 Is there ___ water in the bottle? | a lot of* | much*
+? 4 Have you got ___ tomatoes? | many* | much
+? 5 There's ___ rice. | a lot of* | many
+
+## 4 Write complete sentences giving good advice. Use should or shouldn't.
+HELP: Butun gapni yozing: should yoki shouldn't qo'shing.
+_ 1 You/write carefully in exams. → [You should write carefully in exams.]
+_ 2 Young children/watch very violent films. → [Young children shouldn't watch very violent films.]
+_ 3 You/look before you cross the road. → [You should look before you cross the road.]
+_ 4 People/help their friends. → [People should help their friends.]
+_ 5 You/talk when the teacher is talking. → [You shouldn't talk when the teacher is talking.]
+_ 6 Everyone/eat a balanced diet. → [Everyone should eat a balanced diet.]
+_ 7 You/speak on your mobile phone in the cinema. → [You shouldn't speak on your mobile phone in the cinema.]
+
+[review 5] Vocabulary revision
+
+## 1 Food and drink 1. Complete the sentences with some of the words in the box.
+CHOOSE: bread | chips | eggs | ice cream | juice | meat | milk | tomatoes
+_ 1 We get [milk] from cows.
+_ 2 You make [chips] from potatoes.
+_ 3 You need [meat/bread] to make a burger.
+_ 4 You can make [juice] from oranges.
+_ 5 Chickens give us [eggs].
+_ 6 I like [ice cream] in the summer as it's cold.
+
+## 2 Food and drink 2. Read the descriptions and write the names of the food and drinks.
+FROM: photo
+_ 1 A cold, sweet drink made from lemons, sugar and water. [lemonade]
+_ 2 A cold drink made from milk and ice cream, here with a straw. [milkshake]
+_ 3 Small white grains in a bowl, with chopsticks. [rice]
+_ 4 A round Italian dish with cheese and tomato on top. [pizza]
+_ 5 A bowl of green leaves, tomatoes and cucumber. [salad]
+_ 6 Small purple fruit in a bunch. [grapes/grape]
+
+## 3 Containers. Read the descriptions and name the food and drinks and their containers.
+FROM: photo
+_ a (a triangle cut from a round Italian dish) a [slice] of [pizza]
+_ b (you can see through it; the drink has no colour) a [glass] of [water]
+_ c (a long paper bag of small, sweet, dry cakes) a [packet] of [biscuits]
+_ d (small and hot, with a handle; a black drink) a [cup] of [coffee/tea]
+_ e (a box made of thick paper, with a straw) a [carton] of [juice/orange juice/apple juice]
+_ f (small, red and made of metal) a [can] of [fizzy drink/soft drink/cola/lemonade]
+
+
+=====
+
+TYPE: classwork
+LEVEL: A2
+BOOK: Gateway A2
+UNIT: 5–6
+PAGE: 90–91
+LESSON: 9
+TITLE: Gateway to exams: Units 5–6
+
+[exam 25] Reading · Listening
+
+## Tip for reading exams.
+TEXT: Tip for reading exams
+"""
+In matching activities, remember …
+First, read all parts of the text. Then, read the pieces of information you need to find. Try to find the places in the text where the information is. Read them again slowly.
+"""
+
+## 1 Look at the two people in the photos. Do you know who they are? What do you think they have in common? Make a list of ideas.
+FROM: photo
+TEXT: The photos
+"""
+Photo 1: Oprah Winfrey, a famous American TV presenter.
+Photo 2: Angelina Jolie, a famous American actress.
+"""
+> What do you think they have in common? Make a list of ideas.
+
+## 2 Read the text. Does it talk about any of your ideas in 1?
+TEXT: Rich, famous and generous
+"""
+They're rich and famous. Oprah Winfrey and Angelina Jolie also give money to help others.
+
+Oprah Winfrey is one of the most famous TV presenters in the world. She was also an actress in the film The Colour Purple. Now, she's an important and successful businesswoman too. She became the first ever African-American billionaire. But her life as a child was difficult and she knew all about being poor. Perhaps that's why she helps people with her money. For example, she gave money to help the victims of Hurricane Katrina in New Orleans and she went there to help them in person. In 2007, she began a school in South Africa to help poor girls to get a good education. She even has her own charity organisation, Oprah's Angel Network.
+
+Angelina Jolie is one of the most famous actresses in the world and she uses her money and fame to help other people. For example, she does a lot of work for an organisation called UNHCR. This organisation helps refugees – people who have to leave their homes and live in camps. She often visits these places to help the people there. But she uses her own money to pay for her trips and she doesn't sleep in five-star hotels. She works and lives in the same conditions as the people who work for UNHCR. In 2012, the UNHCR named her Special Envoy because of all the good work she did. She was the first person to ever take this job. Angelina helps other charities too, such as the Malala Fund. This was started by a fifteen-year-old girl called Malala Yousafzai. It helps young girls in Afghanistan and Pakistan go to school instead of work. Thanks to all her charity work, Jolie was the first person to win the Citizen of the World award.
+"""
+ANSWER: free
+? 1 Does the text talk about any of your ideas? | Yes, a lot of them | Some of them | No, none of them
+
+## 3 Read the text again. Are the sentences about Oprah Winfrey (OW), Angelina Jolie (AJ), or both (B)?
+SEE: 2
+HELP: Har bir gap kim haqida: Oprah (OW), Angelina (AJ) yoki ikkalasi (B)?
+? 1 She received an award for her charity work. | OW | AJ* | B
+? 2 She started her own organisation to help others. | OW* | AJ | B
+? 3 She does two or three different jobs. | OW | AJ | B*
+? 4 She visits people who need help. | OW | AJ | B*
+? 5 She had problems when she was young. | OW* | AJ | B
+? 6 She doesn't want special conditions when she goes to help other people. | OW | AJ* | B
+? 7 She went from having no money to having a lot of money. | OW* | AJ | B
+
+## Tip for listening exams.
+TEXT: Tip for listening exams
+"""
+In activities where you complete notes, remember …
+Be careful with the spelling of simple words. If not, you could lose marks.
+"""
+
+## 4 What do you know about Walt Disney and his cartoons or films?
+FROM: speaking
+> Write what you know about Walt Disney and his cartoons or films.
+
+## 5 Read a TV quiz and complete the notes.
+FROM: listening
+HELP: Viktorinani o'qing va eslatmalarni to'ldiring. So'zlarni to'g'ri yozing: imlo muhim.
+TEXT: TV quiz: Who knows?
+"""
+Host: Welcome to Who Knows? Tonight's subject is Walt Disney. Are you ready, Tom? First question: which famous character did Walt Disney create in 1934?
+Tom: Mickey Mouse?
+Host: No, sorry. Mickey was in 1928. In 1934 it was Donald Duck.
+Tom: Oh, of course!
+Host: What did Walt Disney study after school?
+Tom: Art. He went to an art school in Chicago.
+Host: Correct. Which film did he make in 1940? It has got a lot of classical music in it.
+Tom: That's Fantasia.
+Host: Yes! How many Oscars did Walt Disney win?
+Tom: Twelve?
+Host: No. He won twenty-two Oscars. Nobody has won more. It's a record!
+Host: Where did he build the original Disneyland?
+Tom: In Florida.
+Host: No, that's Disney World. The first Disneyland was in California, in 1955.
+Host: How old was he when he died?
+Tom: He was sixty-five.
+Host: Right. And Snow White and the Seven Dwarfs?
+Tom: Snow White was the first ever full-length cartoon film.
+Host: Correct. Last question: how many fingers did Mickey Mouse have?
+Tom: Three fingers and a thumb on each hand!
+"""
+_ a Walt Disney created the famous character [Donald Duck] in 1934.
+_ b After school, Walt Disney studied [art].
+_ c Walt Disney made the film Fantasia in [1940].
+_ d Walt Disney won [22 Oscars/twenty-two Oscars/22/twenty-two] – a record!
+_ e Walt Disney built the original Disneyland in [California].
+_ f He was [65/sixty-five] years old when he died.
+_ g Walt Disney's Snow White was the first ever [full-length cartoon film/full-length cartoon/cartoon film].
+_ h Mickey Mouse had [three fingers/3 fingers] and a thumb on each hand!
+
+[exam 20] Use of English · Writing · Can-do check
+
+## Tip for Use of English.
+TEXT: Tip for Use of English
+"""
+In activities where you must put sentences in a dialogue, remember …
+First, read the complete dialogue. This helps you to understand the general situation.
+"""
+
+## 6 What does Helen say to Daniel? Complete the dialogue with sentences A–H. There are two extra sentences.
+HELP: Avval butun suhbatni o'qing. Keyin har bir bo'sh joyga mos gapni tanlang. Ikki gap ortiqcha.
+CHOOSE: A Why don't we go there next year with two or three of our friends? | B No, my dad hates flying. | C I know. I love staying in campsites. | D We can stay on campsites. | E No, we didn't eat paella. | F Mostly sightseeing because there are some beautiful cities there. And we went to lots of cafés and restaurants. | G My family and I went to the south of Spain. | H You should. There are a lot of things to see and do.
+| Daniel: Where did you go for your holidays last year?
+!_ Helen: 1 [G My family and I went to the south of Spain.]
+| Daniel: Did you go by plane?
+_ Helen: 2 [B No, my dad hates flying.]
+| Daniel: What did you do when you got there?
+_ Helen: 3 [F Mostly sightseeing because there are some beautiful cities there. And we went to lots of cafés and restaurants.]
+| Daniel: Spanish food is great. I'd love to go one day!
+_ Helen: 4 [H You should. There are a lot of things to see and do.]
+| Daniel: I also want to go to Italy one year.
+_ Helen: 5 [A Why don't we go there next year with two or three of our friends?]
+| Daniel: That's a good idea. My older brother went last year and he had a great time.
+_ Helen: 6 [D We can stay on campsites.]
+| Daniel: Yes, hotels are very expensive. But first we have to speak to our parents!
+
+## 7 Practise the completed dialogue in 6.
+FROM: speaking
+HELP: O'tgan ta'tilingiz haqida 6-mashqqa o'xshash qisqa suhbat yozing.
+KIND: dialogue
+MIN: 30
+MAX: 120
+PROMPT: Write a short dialogue like the one in 6 about your last holiday.
+
+## Tip for writing exams.
+TEXT: Tip for writing exams
+"""
+In writing exams, remember …
+When you write to a friend, you should use contractions and short, direct sentences. In informal invitations, use informal expressions like Hi Pete, Can you come?, Let me know if you can make it., etc.
+"""
+
+## 8 Read this invitation and answer the questions.
+TEXT: An invitation
+"""
+Dear Mr Franklin,
+On Saturday morning, a friend is arriving from the US. To celebrate this, my parents and I have decided to have a barbecue in our garden. We are inviting you to come to this barbecue. The barbecue starts at six o'clock in the evening. We are asking guests to bring drinks, but it is not necessary to bring food.
+Please inform me if you can come.
+Jonathan Smith
+"""
+? 1 Who makes the invitation? | Mr Franklin | Jonathan Smith* | Jonathan's friend from the US
+? 2 Why do they make it? | A friend is arriving from the US.* | It's Jonathan's birthday. | They've got a new garden.
+? 3 What is the invitation for? | a party at a restaurant | a barbecue* | a picnic in the park
+? 4 Where should the person go? | to Jonathan's garden* | to the airport | to a café
+? 5 What day/time should they go? | Saturday at six o'clock in the evening* | Saturday morning | Sunday at six o'clock
+? 6 What should they bring? | food | drinks* | nothing
+? 7 Is the invitation formal or informal? | formal* | informal
+> 8 Why is it formal or informal? Give one example from the invitation.
+
+## 9 Write an informal invitation to a friend. Use the information in 8 as a model for the information you need to include.
+HELP: Do'stingizga norasmiy taklifnoma yozing: qisqartmalar va qisqa gaplardan foydalaning.
+KIND: invitation
+MIN: 50
+MAX: 120
+PROMPT: Write an informal invitation to a friend.
+
+## 'Can do' progress check. How well can you do these things in English now? Give yourself a mark from 1 to 4.
+HELP: O'zingizga baho qo'ying: 1 – juda yaxshi, 2 – ancha yaxshi, 3 – biroz qiynalaman, 4 – qila olmayman. Bu baho hisoblanmaydi.
+ANSWER: free
+? a I can talk about the past using the past simple negative and question forms, and the past continuous. | 1 | 2 | 3 | 4
+? b I can talk about different jobs and places of work. | 1 | 2 | 3 | 4
+? c I can understand simple written and spoken texts about culture and writers. | 1 | 2 | 3 | 4
+? d I can talk about past events. | 1 | 2 | 3 | 4
+? e I can write short stories. | 1 | 2 | 3 | 4
+? f I can talk about quantities with some, any, a/an, a lot of, much, many. | 1 | 2 | 3 | 4
+? g I can talk about good or bad ideas using should/shouldn't. | 1 | 2 | 3 | 4
+? h I can name different food and drink. | 1 | 2 | 3 | 4
+? i I can order food and drink in a café or restaurant. | 1 | 2 | 3 | 4
+? j I can write a short invitation to a celebration. | 1 | 2 | 3 | 4
+
+## 2 Now decide what you need to do to improve.
+ANSWER: free many
+? 1 What will you do? | Look again at my book/notes. | Do more practice exercises. | Ask for help.
+> 2 Other:

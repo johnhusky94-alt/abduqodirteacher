@@ -1,0 +1,1236 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Qal'a O'yini V2</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=swap">
+<style>
+/* Layout: one column on phones (village scrolls sideways), two columns on PC (village left, panels right). Single committed night-violet game look, like the vocab games. */
+:root{
+  --ground:#140D33;          /* page: deep ink violet, same family as the arcade's ink */
+  --ground-2:#1E1548;
+  --glass:rgba(255,255,255,.08);
+  --glass-2:rgba(255,255,255,.14);
+  --line:rgba(255,255,255,.12);
+  --fg:#FFFFFF;
+  --sub:rgba(255,255,255,.66);
+  --gold:#F5B700; --gold-ink:#2B1700;
+  --crystal:#B99BFF; --crystal-deep:#6A3DF0;
+  --ok:#138A3D; --ok-text:#5BE08A;   /* green: done / correct only */
+  --err:#E5483C;                    /* badge dot only */
+  --display:ui-rounded,"SF Pro Rounded","Nunito","Varela Round",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --body:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{background:var(--ground);color:var(--fg)}
+body{font-family:var(--body);font-size:15px;line-height:1.45;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:1180px;margin:0 auto;padding-block:14px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:14px}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:-.01em}
+h1{font-size:28px;font-weight:900}
+h2{font-size:19px;font-weight:900}
+h3{font-size:16px;font-weight:800}
+p{margin:0}
+.sub{color:var(--sub)}
+.small{font-size:13px}
+.num{font-variant-numeric:tabular-nums}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0}
+button:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--crystal);outline-offset:2px;border-radius:12px}
+button:disabled{cursor:not-allowed;opacity:.45}
+svg.i{width:18px;height:18px;flex:none;vertical-align:-4px}
+
+/* top bar */
+.top{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px}
+.top>h1{grid-area:1/1}
+#sndBtn{grid-area:1/2}
+.res{grid-area:2/1/3/3;display:grid;grid-template-columns:minmax(0,1.8fr) repeat(3,minmax(0,1fr));gap:6px}
+.chip{display:flex;align-items:center;justify-content:center;gap:6px;background:var(--glass);border-radius:999px;padding:7px 10px;font-weight:800;font-family:var(--display);min-width:0;white-space:nowrap}
+.chip .bar{width:54px;display:none}
+@media (min-width:560px){.chip .bar{display:block}}
+@media (max-width:420px){.chip{font-size:14px;padding:6px 6px;gap:4px}.chip svg.i{width:16px!important;height:16px!important}.chip .cap{display:none}}
+@media (min-width:900px){.top{grid-template-columns:auto minmax(0,1fr) auto}.res{grid-area:1/2;display:flex;justify-content:flex-end}#sndBtn{grid-area:1/3}}
+.iconbtn{width:38px;height:38px;border-radius:50%;background:var(--glass);display:grid;place-items:center}
+.bar{height:6px;border-radius:9px;background:rgba(255,255,255,.14);overflow:hidden}
+.bar>i{display:block;height:100%;border-radius:9px;background:var(--gold);transition:width .3s}
+.bar.big{height:12px}
+.bar.cr>i{background:var(--crystal)}
+.bar.ok>i{background:var(--ok-text)}
+
+.seg{display:flex;background:var(--glass);border-radius:999px;padding:4px;gap:2px}
+.seg button{flex:1;min-width:0;padding:9px 4px;border-radius:999px;font-weight:800;font-family:var(--display);font-size:14px;line-height:1.2;color:var(--sub);overflow-wrap:anywhere}
+@media (max-width:420px){.seg button{font-size:12.5px;padding:9px 2px}}
+.seg button[aria-pressed="true"]{background:#fff;color:var(--ground)}
+
+.lock{display:flex;gap:10px;align-items:center;background:#fff;color:var(--ground);border-radius:20px;padding:12px 14px}
+.lock b{font-family:var(--display)}
+.lock .dot{width:10px;height:10px;border-radius:50%;background:var(--err);flex:none}
+
+.layout{display:grid;gap:14px}
+@media (min-width:1000px){.layout{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);align-items:start}}
+.col{display:flex;flex-direction:column;gap:12px;min-width:0}
+
+/* village */
+.scene{border-radius:24px;overflow-x:auto;overflow-y:hidden;background:#7FC3FF;scrollbar-width:thin;position:relative}
+.scene canvas{display:block}
+.hint{font-size:12px;color:var(--sub);text-align:center}
+@media (min-width:760px){.hint{display:none}}
+
+.card{background:var(--glass);border-radius:22px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.blist{display:grid;gap:10px}
+@media (min-width:560px){.blist{grid-template-columns:1fr 1fr}}
+.bcard{display:flex;gap:12px;align-items:center;text-align:left;background:var(--glass);border-radius:20px;padding:10px 12px 10px 10px;min-width:0}
+.bcard:hover{background:var(--glass-2)}
+.bcard img{width:64px;height:56px;object-fit:contain;flex:none;border-radius:12px;background:rgba(255,255,255,.06)}
+.bcard .t{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.bcard .row1,.row1{display:flex;justify-content:space-between;gap:4px 6px;align-items:center;flex-wrap:wrap;min-width:0}
+.row1 h3{min-width:0;overflow-wrap:anywhere}
+.pill{font-size:12px;font-weight:800;border-radius:999px;padding:2px 9px;background:var(--glass-2);white-space:nowrap;font-family:var(--display)}
+.pill.gold{background:var(--gold);color:var(--gold-ink)}
+.pill.cr{background:var(--crystal);color:#1A0E45}
+.pill.ok{background:var(--ok);color:#fff}
+.state{font-size:12.5px;color:var(--sub)}
+.state b{color:var(--fg)}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:13px 20px;font-weight:900;font-family:var(--display);font-size:16px;background:#fff;color:var(--ground)}
+.btn.gold{background:var(--gold);color:var(--gold-ink)}
+.btn.cr{background:var(--crystal);color:#1A0E45}
+.btn.soft{background:var(--glass-2);color:var(--fg)}
+.btn.sm{padding:8px 14px;font-size:14px}
+.btn.wide{width:100%}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+
+/* sheet */
+.veil{position:fixed;inset:0;background:rgba(8,4,26,.6);z-index:40;display:flex;align-items:flex-end;justify-content:center}
+@media (min-width:760px){.veil{align-items:center}}
+.sheet{background:var(--ground-2);width:100%;max-width:560px;max-height:92vh;overflow:auto;border-radius:28px 28px 0 0;padding:18px max(16px,env(safe-area-inset-right,0px)) calc(18px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:14px}
+@media (min-width:760px){.sheet{border-radius:28px}}
+.sheet .head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.cmp{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px}
+.cmp figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:4px;background:rgba(255,255,255,.06);border-radius:18px;padding:8px}
+.cmp img{width:100%;max-width:200px;height:auto}
+.cmp figcaption{font-size:12.5px;font-weight:800;font-family:var(--display)}
+.arrow{font-size:22px;color:var(--sub)}
+.looks{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.looks figure{margin:0;flex:none;width:78px;text-align:center;font-size:11px;color:var(--sub);border-radius:14px;padding:4px;background:rgba(255,255,255,.04)}
+.looks figure.on{background:#fff;color:var(--ground);font-weight:800}
+.looks img{width:70px;height:60px;object-fit:contain}
+.kv{display:flex;justify-content:space-between;gap:4px 12px;font-size:14px;flex-wrap:wrap}
+.kv>b{margin-left:auto;text-align:right;min-width:0;overflow-wrap:anywhere}
+.kv span:first-child{color:var(--sub)}
+.note{font-size:13px;color:var(--sub);background:rgba(255,255,255,.05);border-radius:14px;padding:10px 12px}
+
+/* troops */
+.tcard{display:grid;grid-template-columns:84px minmax(0,1fr);gap:12px;align-items:start}
+.tcard img{width:84px;height:84px;border-radius:16px;background:rgba(255,255,255,.06);display:block}
+.tcard>button{width:84px}
+.roles{display:flex;gap:6px;flex-wrap:wrap}
+.count{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.count .btn{margin-left:auto;white-space:nowrap;flex:none}
+.count button:not(.btn){width:36px;height:36px;border-radius:50%;background:var(--glass-2);font-weight:900;font-size:20px;font-family:var(--display)}
+.count b{min-width:28px;text-align:center;font-family:var(--display);font-size:20px}
+.lvls{display:flex;gap:6px}
+.lvls img{width:46px;height:46px;border-radius:12px;background:rgba(255,255,255,.05);opacity:.5}
+.lvls img.on{opacity:1;background:#fff}
+
+/* battle */
+.bhud{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.stars{display:flex;gap:4px}
+.stars svg{width:26px;height:26px}
+.bscene{border-radius:24px;overflow:hidden;align-self:center;width:100%;max-width:440px;background:#5FAE5F}
+.bscene canvas{display:block;width:100%;height:auto}
+.result{display:flex;flex-direction:column;gap:12px;align-items:center;text-align:center}
+.result .stars svg{width:44px;height:44px}
+.target{display:grid;grid-template-columns:96px minmax(0,1fr);gap:12px;align-items:center}
+.target img{width:96px;height:66px;border-radius:14px;object-fit:cover;background:#7FC3FF}
+
+/* showcase */
+.lvpick{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.lvpick input{flex:1;min-width:140px;accent-color:#F5B700;height:28px}
+.pvname{font-family:var(--display);font-size:17px;min-width:9.5em}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.tile{margin:0;background:rgba(255,255,255,.05);border-radius:18px;padding:6px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.tile canvas{width:100%;aspect-ratio:7/6;border-radius:13px;display:block}
+.tile figcaption{display:flex;flex-direction:column;gap:2px;padding:0 4px 4px;min-width:0}
+.tile figcaption b{font-family:var(--display);font-size:13.5px;overflow-wrap:anywhere}
+.tile figcaption span{font-size:12px;color:var(--sub);overflow-wrap:anywhere}
+.showhead{display:flex;flex-direction:column;gap:4px}
+/* demo panel */
+details.demo{background:rgba(255,255,255,.04);border:1px dashed var(--line);border-radius:20px;padding:12px 14px}
+details.demo summary{cursor:pointer;font-weight:800;font-family:var(--display)}
+details.demo .btns{margin-top:10px}
+
+/* Doni */
+.doni{position:fixed;left:0;right:0;margin:0 auto;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:60;display:flex;align-items:flex-end;gap:10px;width:fit-content;max-width:min(460px,calc(100% - 32px));cursor:pointer;animation:pop .45s cubic-bezier(.2,1.4,.4,1)}
+.doni .bub{flex:1;min-width:0}
+.doni .bub{background:#fff;color:var(--ground);border-radius:20px 20px 20px 6px;padding:12px 14px;font-weight:700;font-size:14.5px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.doni .bub small{display:block;color:#6B6585;font-weight:600;margin-top:4px}
+.doni svg{width:70px;height:78px;flex:none;animation:bob 1.6s ease-in-out infinite}
+@keyframes pop{from{transform:translateY(130%)}to{transform:translateY(0)}}
+@keyframes bob{50%{transform:translateY(-4px)}}
+.toast{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top,0px));transform:translateX(-50%);background:#fff;color:var(--ground);padding:10px 16px;border-radius:999px;font-weight:800;z-index:70;font-family:var(--display);box-shadow:0 8px 24px rgba(0,0,0,.3);max-width:calc(100% - 32px);text-align:center}
+@media (prefers-reduced-motion:reduce){.doni,.doni svg{animation:none}.bar>i{transition:none}}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="coin" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#F5B700"/><circle cx="12" cy="12" r="6.5" fill="none" stroke="#B07F00" stroke-width="2"/><path d="M10 9h4M10 15h4" stroke="#B07F00" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="gem" viewBox="0 0 24 24"><path d="M6 3h12l4 6-10 13L2 9z" fill="#B99BFF"/><path d="M2 9h20M8.5 3 12 9l3.5-6M12 9v13" stroke="#6A3DF0" stroke-width="1.4" fill="none"/></symbol>
+  <symbol id="hammer" viewBox="0 0 24 24"><path d="M14 4l6 6-2.5 2.5-6-6z" fill="#F5B700"/><path d="M12.5 8.5 3.5 17.5a2 2 0 0 0 3 3l9-9" fill="none" stroke="#D9B48A" stroke-width="3" stroke-linecap="round"/></symbol>
+  <symbol id="sword" viewBox="0 0 24 24"><path d="M19 3l2 2-11 11-2-2z" fill="#E8E3FA"/><path d="M6 14l4 4M5 19l3-3" stroke="#F5B700" stroke-width="2.4" stroke-linecap="round"/></symbol>
+  <symbol id="star" viewBox="0 0 24 24"><path d="M12 2.5l2.9 6 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.2 1.3-6.6L2.5 9.3l6.6-.8z"/></symbol>
+  <symbol id="snd" viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></symbol>
+  <symbol id="mute" viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16 9l6 6M22 9l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+</svg>
+
+<div class="wrap" id="root">
+  <div class="top">
+    <h1>Qal'a</h1>
+    <div class="res" id="res"></div>
+    <button class="iconbtn" id="sndBtn" aria-label="Ovoz"><svg class="i"><use href="#snd"/></svg></button>
+  </div>
+  <div id="lockBox"></div>
+  <div class="seg" role="group" aria-label="Bo'lim" id="tabs">
+    <button data-tab="village" aria-pressed="true">Qishloq</button>
+    <button data-tab="army" aria-pressed="false">Qo'shin</button>
+    <button data-tab="battle" aria-pressed="false">Jang</button>
+    <button data-tab="shop" aria-pressed="false">Do'kon</button>
+    <button data-tab="show" aria-pressed="false">Hammasi</button>
+  </div>
+  <div id="view"></div>
+  <details class="demo" id="demo">
+    <summary>Sinov paneli (faqat demo uchun)</summary>
+    <p class="small sub" style="margin-top:6px">Haqiqiy saytda oltin faqat uy vazifasi, sinf ishi va lug'at o'yinlaridan keladi. Bu tugmalar shuni sinab ko'rish uchun.</p>
+    <div class="btns">
+      <button class="btn soft sm" data-demo="hw">+120 · Uy vazifasi</button>
+      <button class="btn soft sm" data-demo="cw">+120 · Sinf ishi</button>
+      <button class="btn soft sm" data-demo="vg">+25 · Lug'at o'yini</button>
+      <button class="btn soft sm" data-demo="cr">+10 kristall</button>
+    </div>
+    <div class="btns">
+      <button class="btn soft sm" data-demo="raided">Qishlog'im bosib olindi</button>
+      <button class="btn soft sm" data-demo="unlock">Tiklanishni tugatish</button>
+      <button class="btn soft sm" data-demo="day">Yangi kun (3 hujum)</button>
+      <button class="btn soft sm" data-demo="reset">Boshidan boshlash</button>
+    </div>
+    <p class="small sub" style="margin-top:10px">Vaqt tezligi (qurilishni tez ko'rish uchun):</p>
+    <div class="seg" style="margin-top:6px" id="speedSeg">
+      <button data-speed="1" aria-pressed="true">1× (haqiqiy)</button>
+      <button data-speed="60" aria-pressed="false">1 soat = 1 daq</button>
+      <button data-speed="3600" aria-pressed="false">1 soat = 1 s</button>
+    </div>
+  </div>
+</div>
+<div id="sheetHost"></div>
+<div id="doniHost"></div>
+<div id="toastHost"></div>
+
+<script>
+"use strict";
+/* ═════════ utils ═════════ */
+const $ = (s, r = document) => r.querySelector(s);
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const fmt = (n) => Math.round(n).toLocaleString("ru-RU").replace(/ /g, " ");
+function rng(seed) { let a = seed >>> 0; return () => { a |= 0; a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+function dur(ms) {
+  const s = Math.max(0, Math.ceil(ms / 1000)), d = Math.floor(s / 86400), h = Math.floor((s % 86400) / 3600), m = Math.floor((s % 3600) / 60), x = s % 60;
+  return d ? `${d} kun ${h} soat` : h ? `${h} soat ${m} daq` : m ? `${m} daq ${x} s` : `${x} s`;
+}
+const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
+const todayStr = () => { const d = new Date(); return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`; };
+const coinI = (s = 16) => `<svg class="i" style="width:${s}px;height:${s}px"><use href="#coin"/></svg>`;
+const gemI = (s = 16) => `<svg class="i" style="width:${s}px;height:${s}px"><use href="#gem"/></svg>`;
+const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ═════════ sound (code only) ═════════ */
+let AC = null;
+function snd(kind) {
+  if (!S || !S.sound) return;
+  try {
+    AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+    const t0 = AC.currentTime;
+    const tone = (f, at, len, type = "sine", vol = 0.12) => { const o = AC.createOscillator(), g = AC.createGain(); o.type = type; o.frequency.value = f; g.gain.setValueAtTime(vol, t0 + at); g.gain.exponentialRampToValueAtTime(0.001, t0 + at + len); o.connect(g).connect(AC.destination); o.start(t0 + at); o.stop(t0 + at + len + 0.02); };
+    if (kind === "coin") { tone(988, 0, 0.08); tone(1319, 0.07, 0.14); }
+    else if (kind === "done") { [523, 659, 784, 1047].forEach((f, i) => tone(f, i * 0.09, 0.22, "triangle")); }
+    else if (kind === "tap") tone(660, 0, 0.05, "triangle", 0.06);
+    else if (kind === "hit") tone(140 + Math.random() * 40, 0, 0.07, "square", 0.03);
+    else if (kind === "win") { [392, 523, 659, 784, 1047].forEach((f, i) => tone(f, i * 0.12, 0.3, "triangle")); }
+    else if (kind === "calm") { tone(330, 0, 0.25, "sine", 0.08); tone(392, 0.18, 0.3, "sine", 0.08); }
+    else if (kind === "gem") { tone(1568, 0, 0.1, "sine", 0.09); tone(2093, 0.08, 0.2, "sine", 0.09); }
+  } catch (e) {}
+}
+
+/* ═════════ rules (would live in the database in the real site) ═════════ */
+const MATS = [
+  { k: "wood", n: "Yog'och", c: "#A8743F", d: "#6E4524", r: "#D9B45A", t: "#6E4524" },
+  { k: "stone", n: "Tosh", c: "#A9B1BC", d: "#6F7884", r: "#4E5A6B", t: "#8B95A3" },
+  { k: "brick", n: "G'isht", c: "#C0533A", d: "#7E2F20", r: "#E8913F", t: "#F3D3B5" },
+  { k: "iron", n: "Temir", c: "#4B5B7A", d: "#2C3650", r: "#8EA6D4", t: "#D3DCEC" },
+  { k: "marble", n: "Marmar", c: "#F2EFE8", d: "#C9C2B3", r: "#1FA39A", t: "#F5B700" },
+  { k: "emerald", n: "Zumrad", c: "#1E9E62", d: "#0E5E3A", r: "#F5B700", t: "#BFF5D6" },
+  { k: "obsidian", n: "Obsidian", c: "#2A2238", d: "#15101E", r: "#3E2F58", t: "#FF6B2C" },
+  { k: "ice", n: "Muz", c: "#A8E6FF", d: "#4FA8D6", r: "#FFFFFF", t: "#E9FBFF" },
+  { k: "amethyst", n: "Ametist", c: "#8B5CF6", d: "#5428B8", r: "#FF7AC8", t: "#F3E8FF" },
+  { k: "gold", n: "Oltin", c: "#F5C542", d: "#B8860B", r: "#C8102E", t: "#FFF3B0" },
+];
+const mat = (l) => MATS[clamp(l, 1, 10) - 1];
+const BKEYS = ["castle", "wall", "tower", "barracks", "storage"];
+const B = {
+  castle: { n: "Qal'a", d: "Qishloq markazi. Boshqa binolarning eng yuqori darajasini belgilaydi.", base: 1500, h: 2.0 },
+  wall: { n: "Devor", d: "Yerdagi askarlarni to'xtatadi. Uchuvchi askarlar devordan oshib o'tadi.", base: 400, h: 1.0 },
+  tower: { n: "Minoralar", d: "Ikkala minora yerdagi va havodagi askarlarga o'q otadi.", base: 600, h: 1.2 },
+  barracks: { n: "Kazarma", d: "Qo'shin joyini oshiradi, yangi askar turlarini ochadi va askarlarni kuchaytiradi.", base: 700, h: 1.2 },
+  storage: { n: "Ombor", d: "Qancha oltin saqlay olishingizni belgilaydi.", base: 500, h: 1.0 },
+};
+const cost = (k, l) => Math.round(B[k].base * Math.pow(1.75, l - 1) / 50) * 50;      // cost to go from l to l+1
+const hours = (k, l) => Math.round(B[k].h * Math.pow(2.1, l - 1) * 10) / 10;       // same build times as today
+const CAPS = [1000, 1600, 2500, 4000, 6000, 9000, 13000, 19000, 27000, 38000];
+const goldCap = (l) => CAPS[clamp(l, 1, 10) - 1];
+const armyCap = (l) => 8 + 4 * (l - 1);
+const maxLv = (k, s) => (k === "castle" ? 10 : Math.min(10, s.b.castle));
+const sHP = { castle: 1100, tower: 380, barracks: 320, storage: 320, hut: 140, seg: 260 };
+const BAL = { hpG: 1.4, defG: 1.4, barG: 1.25, tG: 1.45, tw: 30, cs: 22, time: 60, k: [0.26, 0.44, 1.05, 0.85, 0.81, 1.43, 1.15, 1.18, 1.03, 0.99] };   // k: per-level calibration from the battle simulator   // growth per level: building health, defence damage, barracks troop boost, troop level
+const hpOf = (k, l) => Math.round(sHP[k] * Math.pow(BAL.hpG, l - 1) * BAL.k[clamp(l, 1, 10) - 1]);
+const towerDmg = (l) => Math.round(BAL.tw * Math.pow(BAL.defG, l - 1) * Math.sqrt(BAL.k[clamp(l, 1, 10) - 1]));
+
+const TKEYS = ["sword", "archer", "brute", "bird", "giant"];
+const T = {
+  sword: { n: "Qilichboz", role: "Yaqin jang", d: "Eng yaqin binoga hujum qiladi. Arzon joy, chidamli.", sp: 1, open: 1, hp: 60, dmg: 9, rate: 1.0, range: 14, spd: 32, g2: 1200, c3: 20 },
+  archer: { n: "Kamonchi", role: "Uzoqdan otadi", d: "Devor ortidagi binolarni ham uzoqdan uradi, lekin tez yiqiladi.", sp: 1, open: 2, hp: 34, dmg: 8, rate: 1.0, range: 72, spd: 30, g2: 1500, c3: 25 },
+  brute: { n: "Buqa", role: "Minoralarni nishonga oladi", d: "Avval minoralarga boradi. Juda baquvvat, ko'p o'qqa chidaydi.", sp: 3, open: 3, hp: 230, dmg: 14, rate: 1.2, range: 16, spd: 22, g2: 2200, c3: 35 },
+  bird: { n: "Burgut", role: "Uchadi", d: "Kulba va devor ustidan uchib o'tadi. Uni faqat minora va qal'a ura oladi.", sp: 3, open: 4, hp: 90, dmg: 16, rate: 1.1, range: 20, spd: 38, air: 1, g2: 2600, c3: 45 },
+  giant: { n: "Gigant", role: "Devor buzadi", d: "Devorga to'rt barobar kuchli zarba beradi. Sekin yuradi.", sp: 5, open: 5, hp: 300, dmg: 30, rate: 1.6, range: 18, spd: 16, g2: 3000, c3: 60 },
+};
+const TLV = ["Oddiy", "Po'lat", "Oltin"];
+const tMul = (lv) => Math.pow(BAL.tG, lv - 1);
+const bMul = (l) => Math.pow(BAL.barG, l - 1);         // every barracks level makes all troops stronger
+const troopHours = (lv) => (lv === 1 ? 6 : 24);
+const troopNeedBarracks = (lv) => (lv === 1 ? 3 : 6);          // barracks level needed to upgrade to lv+1
+const BUILDER_PRICE = { 2: 10, 3: 30 };
+const RECOVER_MS = 5 * 60 * 1000;                               // always 5 real minutes
+const ATTACKS_PER_DAY = 3;
+
+const CLASSMATES = [
+  { id: 1, name: "Malika R.", b: { castle: 3, wall: 3, tower: 2, barracks: 3, storage: 3 }, builders: 2, tl: 6 },
+  { id: 2, name: "Javohir T.", b: { castle: 2, wall: 2, tower: 2, barracks: 2, storage: 2 }, builders: 1, tl: 5 },
+  { id: 3, name: "Sevara A.", b: { castle: 4, wall: 3, tower: 4, barracks: 3, storage: 4 }, builders: 2, tl: 7 },
+  { id: 4, name: "Bekzod N.", b: { castle: 2, wall: 1, tower: 1, barracks: 2, storage: 1 }, builders: 1, tl: 5 },
+  { id: 5, name: "Dilnoza K.", b: { castle: 3, wall: 2, tower: 3, barracks: 2, storage: 2 }, builders: 1, tl: 5 },
+  { id: 6, name: "Aziz M.", b: { castle: 5, wall: 5, tower: 4, barracks: 5, storage: 4 }, builders: 3, tl: 9 },
+  { id: 7, name: "Nodira S.", b: { castle: 3, wall: 3, tower: 3, barracks: 3, storage: 3 }, builders: 2, tl: 6 },
+];
+const power = (b, builders, tl) => b.castle * 4 + b.wall * 2 + b.tower * 2 + b.barracks + b.storage + builders * 2 + tl;
+const myPower = () => power(S.b, S.builders, TKEYS.reduce((a, k) => a + S.tr[k].lv, 0));
+
+/* ═════════ state ═════════ */
+const KEY = "qala-v2-demo-1";
+function fresh() {
+  return {
+    gold: 850, cr: 6, b: { castle: 2, wall: 1, tower: 2, barracks: 2, storage: 1 },
+    fund: { castle: 0, wall: 0, tower: 0, barracks: 0, storage: 0 }, jobs: [], wait: [], builders: 1,
+    tr: Object.fromEntries(TKEYS.map((k) => [k, { lv: 1, fund: 0 }])), tjob: null, twait: [],
+    army: { sword: 6, archer: 3, brute: 0, bird: 0, giant: 0 },
+    att: { day: todayStr(), n: 0 }, lock: 0, rec: {}, vt: 0, sound: true, speed: 1, tab: "village", seen: {},
+  };
+}
+let S = null;
+try { S = JSON.parse(store.get(KEY) || "null"); } catch (e) { S = null; }
+if (!S || !S.b) S = fresh();
+let lastReal = Date.now();
+const save = () => store.set(KEY, JSON.stringify(S));
+const locked = () => S.lock > Date.now();
+function newDayCheck() { if (S.att.day !== todayStr()) S.att = { day: todayStr(), n: 0 }; }
+
+/* ═════════ drawing helpers ═════════ */
+function rr(c, x, y, w, h, r) { r = Math.min(r, w / 2, h / 2); c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); }
+function line(c, a, b, x, y) { c.beginPath(); c.moveTo(a, b); c.lineTo(x, y); c.stroke(); }
+function tex(c, m, x, y, w, h) {
+  c.save(); c.beginPath(); c.rect(x, y, w, h); c.clip();
+  c.strokeStyle = m.d; c.fillStyle = m.d; c.lineWidth = 1.2;
+  switch (m.k) {
+    case "wood": for (let i = x + 7; i < x + w; i += 8) line(c, i, y, i, y + h); c.globalAlpha = .35; for (let i = x + 3; i < x + w; i += 19) { c.beginPath(); c.arc(i, y + h * .55, 1.6, 0, 7); c.fill(); } break;
+    case "stone": for (let j = 0, yy = y + 11; yy < y + h; yy += 11, j++) { line(c, x, yy, x + w, yy); for (let xx = x + (j % 2) * 10; xx < x + w; xx += 20) line(c, xx, yy - 11, xx, yy); } break;
+    case "brick": c.globalAlpha = .8; for (let j = 0, yy = y + 6; yy < y + h + 6; yy += 6, j++) { line(c, x, yy, x + w, yy); for (let xx = x + (j % 2) * 6; xx < x + w; xx += 12) line(c, xx, yy - 6, xx, yy); } break;
+    case "iron": for (let yy = y + 14; yy < y + h; yy += 14) { line(c, x, yy, x + w, yy); c.fillStyle = m.t; for (let xx = x + 5; xx < x + w; xx += 11) { c.beginPath(); c.arc(xx, yy - 3, 1.3, 0, 7); c.fill(); } } break;
+    case "marble": c.globalAlpha = .55; for (let xx = x + 6; xx < x + w; xx += 12) line(c, xx, y, xx, y + h); c.globalAlpha = .25; c.strokeStyle = "#8C8577"; c.beginPath(); c.moveTo(x, y + h * .3); c.bezierCurveTo(x + w * .3, y + h * .1, x + w * .5, y + h * .6, x + w, y + h * .45); c.stroke(); break;
+    case "emerald": c.globalAlpha = .35; c.strokeStyle = m.t; for (let xx = x - h; xx < x + w; xx += 16) { line(c, xx, y + h, xx + h, y); } c.strokeStyle = m.d; c.globalAlpha = .5; for (let xx = x; xx < x + w + h; xx += 16) line(c, xx, y + h, xx - h, y); break;
+    case "obsidian": c.strokeStyle = m.t; c.lineWidth = 1.6; c.shadowColor = m.t; c.shadowBlur = 6; for (let i = 0; i < Math.max(2, w / 30); i++) { const sx = x + 8 + i * 30 % (w - 8); c.beginPath(); c.moveTo(sx, y + h); c.lineTo(sx + 5, y + h * .7); c.lineTo(sx - 3, y + h * .45); c.lineTo(sx + 4, y + h * .2); c.stroke(); } break;
+    case "ice": c.strokeStyle = "rgba(255,255,255,.75)"; c.lineWidth = 3; for (let xx = x - h; xx < x + w; xx += 22) line(c, xx, y + h, xx + h * .6, y); c.lineWidth = 1; c.strokeStyle = m.d; c.globalAlpha = .4; for (let yy = y + 12; yy < y + h; yy += 12) line(c, x, yy, x + w, yy); break;
+    case "amethyst": c.fillStyle = m.t; c.globalAlpha = .25; for (let xx = x; xx < x + w; xx += 14) { c.beginPath(); c.moveTo(xx, y + h); c.lineTo(xx + 7, y + h - 16 - (xx * 7 % 9)); c.lineTo(xx + 14, y + h); c.fill(); } c.strokeStyle = m.d; c.globalAlpha = .5; for (let yy = y + 13; yy < y + h; yy += 13) line(c, x, yy, x + w, yy); break;
+    case "gold": c.fillStyle = "rgba(255,255,255,.35)"; c.fillRect(x, y + h * .18, w, 4); c.fillRect(x, y + h * .62, w, 2); c.fillStyle = "#C8102E"; for (let xx = x + 10; xx < x + w - 4; xx += 22) { c.beginPath(); c.arc(xx, y + h * .4, 2.4, 0, 7); c.fill(); } break;
+  }
+  c.restore();
+}
+function glow(c, m, l, x, y, w, h, t) {          // level effects on top of the shape
+  if (m.k === "obsidian") { c.save(); c.fillStyle = m.t; c.shadowColor = m.t; c.shadowBlur = 10; c.globalAlpha = .7 + .3 * Math.sin(t * 3); c.fillRect(x, y + h - 3, w, 3); c.restore(); }
+  if (m.k === "ice") { c.save(); c.fillStyle = "#fff"; for (let i = 0; i < 4; i++) { const a = (Math.sin(t * 2 + i * 1.7) + 1) / 2; c.globalAlpha = a; const sx = x + (i * 37 % w), sy = y + (i * 23 % h); c.beginPath(); c.moveTo(sx, sy - 4); c.lineTo(sx + 1, sy - 1); c.lineTo(sx + 4, sy); c.lineTo(sx + 1, sy + 1); c.lineTo(sx, sy + 4); c.lineTo(sx - 1, sy + 1); c.lineTo(sx - 4, sy); c.lineTo(sx - 1, sy - 1); c.fill(); } c.restore(); }
+  if (m.k === "amethyst") { c.save(); for (let i = 0; i < 3; i++) { const a = t * 1.4 + i * 2.1; c.fillStyle = "#FF7AC8"; c.shadowColor = "#FF7AC8"; c.shadowBlur = 8; c.beginPath(); c.arc(x + w / 2 + Math.cos(a) * (w * .55), y + 8 + Math.sin(a) * 8, 3, 0, 7); c.fill(); } c.restore(); }
+  if (m.k === "gold") { c.save(); c.globalAlpha = .25 + .15 * Math.sin(t * 2.5); c.fillStyle = "#FFF3B0"; const sx = x + ((t * 40) % (w + 30)) - 15; c.beginPath(); c.moveTo(sx, y); c.lineTo(sx + 10, y); c.lineTo(sx - 4, y + h); c.lineTo(sx - 14, y + h); c.fill(); c.restore(); }
+}
+function merlons(c, m, x, y, w, size = 9) {
+  c.fillStyle = m.c; const n = Math.max(2, Math.floor(w / (size * 1.7)));
+  const step = (w - size) / (n - 1);
+  for (let i = 0; i < n; i++) { c.fillRect(x + i * step, y - size, size, size); c.strokeStyle = "rgba(0,0,0,.22)"; c.lineWidth = 1; c.strokeRect(x + i * step + .5, y - size + .5, size - 1, size - 1); }
+}
+function stakes(c, m, x, y, w, h) {             // wooden palisade top
+  c.fillStyle = m.c; c.strokeStyle = m.d; c.lineWidth = 1;
+  for (let xx = x; xx < x + w - 1; xx += 7) { c.beginPath(); c.moveTo(xx, y + h); c.lineTo(xx, y + 5); c.lineTo(xx + 3.5, y - 1); c.lineTo(xx + 7, y + 5); c.lineTo(xx + 7, y + h); c.closePath(); c.fill(); c.stroke(); }
+}
+function cone(c, cx, by, w, h, col, dark) { c.fillStyle = col; c.beginPath(); c.moveTo(cx - w / 2, by); c.lineTo(cx, by - h); c.lineTo(cx + w / 2, by); c.closePath(); c.fill(); c.fillStyle = dark || "rgba(0,0,0,.18)"; c.beginPath(); c.moveTo(cx, by - h); c.lineTo(cx + w / 2, by); c.lineTo(cx, by); c.closePath(); c.fill(); }
+function dome(c, cx, by, w, col) { c.fillStyle = col; c.beginPath(); c.moveTo(cx - w / 2, by); c.bezierCurveTo(cx - w / 2, by - w * .75, cx + w / 2, by - w * .75, cx + w / 2, by); c.closePath(); c.fill(); c.fillStyle = "rgba(255,255,255,.25)"; c.beginPath(); c.ellipse(cx - w * .15, by - w * .35, w * .1, w * .18, -.4, 0, 7); c.fill(); }
+function flag(c, x, y, col, t, h = 22) { c.strokeStyle = "#4A3020"; c.lineWidth = 2; line(c, x, y, x, y - h); const w = Math.sin(t * 4 + x) * 2; c.fillStyle = col; c.beginPath(); c.moveTo(x, y - h); c.quadraticCurveTo(x + 9, y - h + 1 + w, x + 17, y - h + 3 + w); c.lineTo(x, y - h + 10); c.closePath(); c.fill(); }
+function archDoor(c, x, by, w, h, col = "#2A1A10") { c.fillStyle = col; c.beginPath(); c.moveTo(x - w / 2, by); c.lineTo(x - w / 2, by - h + w / 2); c.arc(x, by - h + w / 2, w / 2, Math.PI, 0); c.lineTo(x + w / 2, by); c.closePath(); c.fill(); }
+function win(c, x, y, lit, t) { c.fillStyle = lit ? `rgba(255,214,107,${.75 + .25 * Math.sin(t * 2 + x)})` : "#2B2440"; rr(c, x - 3, y - 6, 6, 9, 3); c.fill(); }
+function block(c, m, x, y, w, h) { c.fillStyle = m.c; c.fillRect(x, y, w, h); tex(c, m, x, y, w, h); c.strokeStyle = "rgba(0,0,0,.28)"; c.lineWidth = 1.2; c.strokeRect(x + .5, y + .5, w - 1, h - 1); c.fillStyle = "rgba(0,0,0,.12)"; c.fillRect(x + w * .72, y, w * .28, h); }
+
+/* ═════════ buildings: origin = bottom centre ═════════ */
+function drawCastle(c, l, t, o = {}) {
+  const m = mat(l), w = 104 + l * 5, h = 62 + l * 5, lit = l >= 5;
+  let top = -h;
+  if (l >= 4) for (const sx of [-1, 1]) {                       // side turrets
+    const tw = 24, th = h + 26, tx = sx * (w / 2 + 2) - tw / 2;
+    block(c, m, tx, -th, tw, th);
+    if (m.k === "wood") stakes(c, m, tx, -th - 8, tw, 8); else merlons(c, m, tx - 2, -th, tw + 4, 7);
+    if (l >= 6) dome(c, tx + tw / 2, -th - (m.k === "wood" ? 8 : 7), tw + 6, m.r); else cone(c, tx + tw / 2, -th - 7, tw + 8, 26, m.r);
+    win(c, tx + tw / 2, -th + 22, lit, t);
+  }
+  block(c, m, -w / 2, -h, w, h);
+  if (m.k === "wood") stakes(c, m, -w / 2, -h - 9, w, 9); else merlons(c, m, -w / 2, -h, w);
+  if (l >= 3) {                                                   // upper keep
+    const uw = w * .52, uh = 28 + l * 3, uy = -h - (m.k === "wood" ? 9 : 9) - uh;
+    block(c, m, -uw / 2, uy, uw, uh);
+    if (m.k !== "wood") merlons(c, m, -uw / 2, uy, uw, 8);
+    for (const xx of [-uw / 4, uw / 4]) win(c, xx, uy + uh * .55, lit, t);
+    top = uy - 8;
+    if (l === 6 || l >= 9) { dome(c, 0, top + 8, uw * .8, m.r); top -= uw * .6; }
+    else { cone(c, 0, top + 8, uw + 10, 34 + l * 2, m.r); top -= 26 + l * 2; }
+  } else if (l === 1) { c.fillStyle = m.r; c.beginPath(); c.moveTo(-w / 2 - 8, -h - 6); c.lineTo(0, -h - 46); c.lineTo(w / 2 + 8, -h - 6); c.closePath(); c.fill(); c.strokeStyle = "#B08A3A"; c.lineWidth = 1; for (let i = -3; i <= 3; i++) line(c, i * 12, -h - 8, i * 4, -h - 40); top = -h - 46; }
+  else { cone(c, 0, -h - 9, w * .45, 40, m.r); top = -h - 49; }
+  if (m.t && l >= 4) { c.fillStyle = m.t; c.fillRect(-w / 2, -h + 2, w, 3); }
+  archDoor(c, 0, 0, 26, 36);
+  if (l >= 2) { c.strokeStyle = "rgba(255,255,255,.18)"; c.lineWidth = 1.5; for (let i = -9; i <= 9; i += 6) line(c, i, -1, i, -26); }
+  for (const xx of [-w / 3, w / 3]) win(c, xx, -h * .55, lit, t);
+  flag(c, 0, top, o.enemy ? "#E5483C" : l >= 10 ? "#F5B700" : "#1E74E8", t);
+  if (l >= 10) { c.fillStyle = "#F5B700"; c.beginPath(); c.moveTo(-10, top - 30); c.lineTo(-10, top - 40); c.lineTo(-5, top - 34); c.lineTo(0, top - 42); c.lineTo(5, top - 34); c.lineTo(10, top - 40); c.lineTo(10, top - 30); c.closePath(); c.fill(); }
+  glow(c, m, l, -w / 2, -h, w, h, t);
+  return { w: w + (l >= 4 ? 52 : 0), h: -top + 34 };
+}
+function drawTower(c, l, t) {
+  const m = mat(l);
+  if (l === 1) {                                                  // wooden watchtower on stilts
+    c.strokeStyle = m.d; c.lineWidth = 5; line(c, -15, 0, -11, -66); line(c, 15, 0, 11, -66);
+    c.lineWidth = 2.5; line(c, -14, -20, 13, -44); line(c, 14, -20, -13, -44);
+    block(c, m, -22, -84, 44, 18); stakes(c, m, -22, -92, 44, 8);
+    c.fillStyle = m.r; c.beginPath(); c.moveTo(-27, -98); c.lineTo(0, -122); c.lineTo(27, -98); c.closePath(); c.fill();
+    drawArcherHead(c, 0, -96, t); return { w: 56, h: 128 };
+  }
+  const w = 32 + l * 1.5, h = 78 + l * 6;
+  block(c, m, -w / 2, -h, w, h);
+  block(c, m, -w / 2 - 6, -h - 10, w + 12, 12);
+  if (m.k !== "wood") merlons(c, m, -w / 2 - 6, -h - 10, w + 12, 7);
+  drawArcherHead(c, 0, -h - 12, t);
+  let top;
+  if (l === 6 || l >= 9) { dome(c, 0, -h - 22, w + 4, m.r); top = -h - 22 - (w + 4) * .6; }
+  else { cone(c, 0, -h - 22, w + 16, 30 + l * 2, m.r); top = -h - 52 - l * 2; }
+  if (l >= 5) { c.fillStyle = m.t; c.fillRect(-w / 2, -h * .5, w, 3); }
+  c.fillStyle = "#2B2440"; rr(c, -3, -h * .7, 6, 14, 3); c.fill(); rr(c, -3, -h * .35, 6, 14, 3); c.fill();
+  glow(c, m, l, -w / 2, -h, w, h, t);
+  return { w: w + 20, h: -top + 4 };
+}
+function drawArcherHead(c, x, y, t) {   // a little archer peeking over the parapet
+  c.fillStyle = "#2E1B70"; c.beginPath(); c.arc(x, y - 3, 7, Math.PI, 0); c.fill();
+  c.fillStyle = "#fff"; c.beginPath(); c.arc(x - 2.4, y - 4, 1.8, 0, 7); c.arc(x + 2.4, y - 4, 1.8, 0, 7); c.fill();
+}
+function drawBarracks(c, l, t) {
+  const m = mat(l);
+  if (l === 1) {                                                  // canvas tent
+    c.fillStyle = "#C9A26B"; c.beginPath(); c.moveTo(-50, 0); c.lineTo(0, -60); c.lineTo(50, 0); c.closePath(); c.fill();
+    c.fillStyle = "#A7814E"; for (let i = -40; i < 40; i += 16) { c.beginPath(); c.moveTo(i, 0); c.lineTo(i * .25, -50); c.lineTo(i * .25 + 3, -50); c.lineTo(i + 8, 0); c.fill(); }
+    c.fillStyle = "#2A1A10"; c.beginPath(); c.moveTo(-10, 0); c.lineTo(0, -28); c.lineTo(10, 0); c.fill();
+    flag(c, 0, -60, "#D92F7A", t, 18); drawDummy(c, 62); return { w: 140, h: 86 };
+  }
+  const w = 98 + l * 2, h = 40 + l * 2.5;
+  block(c, m, -w / 2, -h, w, h);
+  c.fillStyle = m.r; c.beginPath(); c.moveTo(-w / 2 - 8, -h); c.lineTo(0, -h - 34 - l); c.lineTo(w / 2 + 8, -h); c.closePath(); c.fill();
+  c.fillStyle = "rgba(0,0,0,.15)"; c.beginPath(); c.moveTo(0, -h - 34 - l); c.lineTo(w / 2 + 8, -h); c.lineTo(0, -h); c.fill();
+  // crossed swords emblem
+  c.save(); c.translate(0, -h - 14); c.strokeStyle = l >= 6 ? "#F5B700" : "#E8E3FA"; c.lineWidth = 3; c.lineCap = "round"; line(c, -9, 7, 9, -9); line(c, 9, 7, -9, -9); c.restore();
+  archDoor(c, 0, 0, 22, 28);
+  for (const xx of [-w / 3, w / 3]) win(c, xx, -h * .5, l >= 5, t);
+  if (m.t && l >= 4) { c.fillStyle = m.t; c.fillRect(-w / 2, -h, w, 3); }
+  glow(c, m, l, -w / 2, -h, w, h, t);
+  drawDummy(c, w / 2 + 14);
+  return { w: w + 44, h: h + 40 + l };
+}
+function drawDummy(c, x) { c.strokeStyle = "#6E4524"; c.lineWidth = 3; line(c, x, 0, x, -28); line(c, x - 9, -20, x + 9, -20); c.fillStyle = "#E0C27A"; c.beginPath(); c.arc(x, -31, 6, 0, 7); c.fill(); }
+function drawStorage(c, l, t, fill = .5) {
+  const m = mat(l);
+  if (l === 1) {
+    block(c, m, -40, -44, 80, 44);
+    c.fillStyle = m.r; c.beginPath(); c.moveTo(-48, -44); c.lineTo(0, -66); c.lineTo(48, -44); c.closePath(); c.fill();
+    c.fillStyle = "#2A1A10"; c.fillRect(-11, -26, 22, 26);
+  } else {
+    const w = 82 + l * 2, h = 46 + l * 2.5;
+    block(c, m, -w / 2, -h, w, h);
+    c.fillStyle = m.r; rr(c, -w / 2 - 6, -h - 12, w + 12, 14, 6); c.fill();
+    c.fillStyle = m.c; c.beginPath(); c.moveTo(-w * .3, -h - 12); c.quadraticCurveTo(0, -h - 40 - l, w * .3, -h - 12); c.fill();
+    c.fillStyle = "#F5B700"; c.beginPath(); c.arc(0, -h - 20, 9, 0, 7); c.fill(); c.strokeStyle = "#B07F00"; c.lineWidth = 2; c.beginPath(); c.arc(0, -h - 20, 5.5, 0, 7); c.stroke();
+    c.fillStyle = "#2B2440"; rr(c, -14, -30, 28, 30, 6); c.fill(); c.strokeStyle = "#8A8FA3"; c.lineWidth = 2; c.beginPath(); c.arc(0, -16, 6, 0, 7); c.stroke();
+    if (m.t && l >= 4) { c.fillStyle = m.t; c.fillRect(-w / 2, -h + 4, w, 3); }
+    glow(c, m, l, -w / 2, -h, w, h, t);
+  }
+  // gold pile shows how full the storage is
+  const n = Math.round(clamp(fill, 0, 1) * 9);
+  for (let i = 0; i < n; i++) { const px = 44 + (i % 4) * 7 - (i >= 4 ? -3 : 0) - (i >= 7 ? -3 : 0), py = -4 - Math.floor(i / 4) * 5; c.fillStyle = "#F5B700"; c.beginPath(); c.ellipse(px, py, 5, 3, 0, 0, 7); c.fill(); c.strokeStyle = "#B07F00"; c.lineWidth = 1; c.stroke(); }
+  return { w: 130, h: l === 1 ? 72 : 96 + l * 3 };
+}
+function drawWall(c, l, x1, x2, gy, s, t, broken) {
+  const m = mat(l), H = (18 + l * 2.4) * s;
+  if (broken) { c.fillStyle = m.d; for (let x = x1; x < x2 - 4; x += 9 * s) { c.beginPath(); c.moveTo(x, gy); c.lineTo(x + 4 * s, gy - 5 * s - (x * 13 % 4)); c.lineTo(x + 9 * s, gy); c.fill(); } return; }
+  if (m.k === "wood") { c.save(); c.translate(x1, gy - H); c.scale(1, 1); stakes(c, m, 0, 0, x2 - x1, H); c.restore(); c.fillStyle = m.d; c.fillRect(x1, gy - H * .45, x2 - x1, 3 * s); return; }
+  c.fillStyle = m.c; c.fillRect(x1, gy - H, x2 - x1, H); tex(c, m, x1, gy - H, x2 - x1, H);
+  c.fillStyle = "rgba(0,0,0,.18)"; c.fillRect(x1, gy - 3 * s, x2 - x1, 3 * s);
+  const mz = 8 * s; c.fillStyle = m.c; for (let x = x1; x < x2 - mz; x += mz * 1.8) { c.fillRect(x, gy - H - mz, mz, mz); c.strokeStyle = "rgba(0,0,0,.2)"; c.lineWidth = 1; c.strokeRect(x + .5, gy - H - mz + .5, mz - 1, mz - 1); }
+  if (l >= 4 && m.t) { c.fillStyle = m.t; c.fillRect(x1, gy - H, x2 - x1, 2.5 * s); }
+  glow(c, m, l, x1, gy - H, x2 - x1, H, t);
+}
+function drawHut(c, t, o = {}) {
+  if (o.empty) { c.save(); c.setLineDash([5, 4]); c.strokeStyle = "rgba(255,255,255,.75)"; c.lineWidth = 2; rr(c, -28, -30, 56, 30, 10); c.stroke(); c.restore(); c.fillStyle = "rgba(255,255,255,.85)"; c.fillRect(-8, -16, 16, 3); c.fillRect(-1.5, -23, 3, 17); return { w: 60, h: 36 }; }
+  c.fillStyle = "#B07A43"; c.fillRect(-24, -30, 48, 30); c.strokeStyle = "#6E4524"; c.lineWidth = 1.2; for (let x = -18; x < 24; x += 8) line(c, x, -30, x, 0);
+  c.fillStyle = "#F5B700"; c.beginPath(); c.moveTo(-30, -28); c.lineTo(0, -52); c.lineTo(30, -28); c.closePath(); c.fill();
+  c.fillStyle = "#C98F00"; c.beginPath(); c.moveTo(0, -52); c.lineTo(30, -28); c.lineTo(0, -28); c.fill();
+  c.fillStyle = "#2A1A10"; rr(c, -7, -20, 14, 20, 6); c.fill();
+  c.save(); c.translate(15, -40); c.rotate(-.6); c.fillStyle = "#8A8FA3"; c.fillRect(-5, -3, 10, 5); c.fillStyle = "#D9B48A"; c.fillRect(-1, 2, 2, 8); c.restore();
+  return { w: 62, h: 56 };
+}
+function drawBuilder(c, x, y, R, t, mode, dir) {
+  const walk = mode === "walk", work = mode === "work";
+  const w = walk ? Math.sin(t * 12) : 0;
+  c.save(); c.translate(x, y);
+  c.fillStyle = "rgba(0,0,0,.22)"; c.beginPath(); c.ellipse(0, 0, R * .9, R * .28, 0, 0, 7); c.fill();
+  c.fillStyle = "#8A4A00"; rr(c, -R * .45, -R * .4 - (w > 0 ? w * R * .12 : 0), R * .3, R * .42, R * .12); c.fill(); rr(c, R * .15, -R * .4 + (w < 0 ? w * R * .12 : 0), R * .3, R * .42, R * .12); c.fill();
+  c.translate(0, -Math.abs(w) * R * .08);
+  const cy = -R * 1.05;
+  c.fillStyle = "#FF8A1E"; c.beginPath(); c.ellipse(0, cy, R * .8, R * .76, 0, 0, 7); c.fill();
+  c.fillStyle = "#2B1700"; c.fillRect(-R * .8, cy + R * .25, R * 1.6, R * .14);        // tool belt
+  c.fillStyle = "#F5B700"; c.beginPath(); c.ellipse(0, cy - R * .32, R * .78, R * .55, 0, Math.PI, 0); c.fill(); c.fillRect(-R * .95, cy - R * .36, R * 1.9, R * .12);
+  c.fillStyle = "#fff"; const ex = (dir || 0) * R * .08; c.beginPath(); c.arc(-R * .27 + ex, cy + R * .02, R * .17, 0, 7); c.arc(R * .27 + ex, cy + R * .02, R * .17, 0, 7); c.fill();
+  c.fillStyle = "#1C1C1E"; c.beginPath(); c.arc(-R * .25 + ex * 1.6, cy + R * .04, R * .08, 0, 7); c.arc(R * .29 + ex * 1.6, cy + R * .04, R * .08, 0, 7); c.fill();
+  // hammer
+  c.save(); c.translate(R * .75, cy + R * .1); c.rotate(work ? -1.2 + Math.abs(Math.sin(t * 7)) * 1.6 : .3);
+  c.fillStyle = "#D9B48A"; c.fillRect(-R * .06, -R * .9, R * .12, R * .9); c.fillStyle = "#8A8FA3"; c.fillRect(-R * .28, -R * 1.05, R * .56, R * .24); c.restore();
+  c.restore();
+  if (work && Math.sin(t * 7) > .95) { c.fillStyle = "#FFE08A"; for (let i = 0; i < 4; i++) { c.beginPath(); c.arc(x + R * 1.3 + i * 2, y - R * 2 - i * 3, 1.5, 0, 7); c.fill(); } }
+}
+
+/* troops: level 1 = the vocab-game look (violet), 2 = steel, 3 = gold */
+const TP = [
+  { body: "#2E1B70", dark: "#1A0E45", acc: "#CBC3EC", metal: "#E8E3FA" },
+  { body: "#0E7C86", dark: "#06484F", acc: "#D5E6EC", metal: "#BFD0DA" },
+  { body: "#B3261E", dark: "#6B100B", acc: "#F5B700", metal: "#FFE08A" },
+];
+function eyes(c, y, dx, r, ox, oy) { c.fillStyle = "#fff"; c.beginPath(); c.arc(-dx, y, r, 0, 7); c.arc(dx, y, r, 0, 7); c.fill(); c.fillStyle = "#130A2E"; c.beginPath(); c.arc(-dx + ox, y + oy, r * .5, 0, 7); c.arc(dx + ox, y + oy, r * .5, 0, 7); c.fill(); }
+function drawTroop(c, type, lv, x, y, R, t, o = {}) {
+  const P = TP[clamp(lv, 1, 3) - 1], ph = o.phase || 0, moving = o.moving !== false;
+  const w = moving ? Math.sin(t * 9 + ph) : 0, air = type === "bird", big = type === "giant" ? 1.35 : type === "brute" ? 1.15 : 1;
+  R *= big;
+  c.save(); c.translate(x, y);
+  c.fillStyle = "rgba(8,3,26,.32)"; c.beginPath(); c.ellipse(0, 0, R * .9, R * .26, 0, 0, 7); c.fill();
+  if (air) c.translate(0, -R * 1.6 - Math.sin(t * 3 + ph) * R * .15);
+  if (!air) { c.fillStyle = P.dark; rr(c, -R * .44, -R * .42 - (w > 0 ? w * R * .1 : 0), R * .3, R * .44, R * .13); c.fill(); rr(c, R * .14, -R * .42 + (w < 0 ? w * R * .1 : 0), R * .3, R * .44, R * .13); c.fill(); c.translate(0, -Math.abs(w) * R * .07); }
+  const cy = -R * 1.05;
+  if (o.flash) c.globalAlpha = .55;
+  if (air) {                                                       // wings
+    const f = Math.sin(t * 14 + ph) * .5;
+    c.fillStyle = P.acc; for (const s of [-1, 1]) { c.save(); c.translate(s * R * .55, cy - R * .1); c.rotate(s * (-.4 + f)); c.beginPath(); c.ellipse(s * R * .55, 0, R * .7, R * .26, 0, 0, 7); c.fill(); c.restore(); }
+  }
+  if (type === "sword") { c.strokeStyle = "#8A6A4A"; c.lineWidth = Math.max(2, R * .11); c.lineCap = "round"; line(c, R * .78, -R * .25, R * .78, -R * 2.2); c.fillStyle = P.metal; c.beginPath(); c.moveTo(R * .78, -R * 2.55); c.lineTo(R * .62, -R * 2.15); c.lineTo(R * .94, -R * 2.15); c.closePath(); c.fill(); }
+  if (type === "giant") { c.save(); c.strokeStyle = "#7A5636"; c.lineCap = "round"; c.lineWidth = R * .3; line(c, R * .8, cy + R * .25, R * 1.2, cy - R * 1.0); c.fillStyle = "#7A5636"; c.beginPath(); c.arc(R * 1.22, cy - R * 1.05, R * .3, 0, 7); c.fill(); c.restore(); }
+  c.fillStyle = P.body; c.beginPath(); c.ellipse(0, cy, R * (type === "brute" ? .95 : .8), R * .76, 0, 0, 7); c.fill();
+  if (type === "sword") { c.fillStyle = P.acc; c.beginPath(); c.ellipse(0, cy - R * .18, R * .84, R * .62, 0, Math.PI, 0); c.fill(); c.fillRect(-R * .88, cy - R * .2, R * 1.76, R * .13); c.fillStyle = "#F5B700"; rr(c, -R * .1, cy - R * .95, R * .2, R * .3, R * .08); c.fill(); }
+  if (type === "archer") { c.fillStyle = P.acc; c.beginPath(); c.moveTo(-R * .85, cy - R * .05); c.quadraticCurveTo(0, cy - R * 1.5, R * .85, cy - R * .05); c.quadraticCurveTo(0, cy - R * .55, -R * .85, cy - R * .05); c.fill(); c.strokeStyle = "#5B3E26"; c.lineWidth = Math.max(2, R * .12); c.beginPath(); c.arc(R * .55, cy, R * .7, -1.1, 1.1); c.stroke(); c.strokeStyle = "rgba(255,255,255,.85)"; c.lineWidth = 1; line(c, R * .55 + Math.cos(-1.1) * R * .7, cy + Math.sin(-1.1) * R * .7, R * .55 + Math.cos(1.1) * R * .7, cy + Math.sin(1.1) * R * .7); }
+  if (type === "brute") { c.strokeStyle = P.acc; c.lineCap = "round"; c.lineWidth = R * .22; c.beginPath(); c.moveTo(-R * .5, cy - R * .55); c.quadraticCurveTo(-R * 1.05, cy - R * .75, -R * .95, cy - R * 1.35); c.stroke(); c.beginPath(); c.moveTo(R * .5, cy - R * .55); c.quadraticCurveTo(R * 1.05, cy - R * .75, R * .95, cy - R * 1.35); c.stroke(); c.fillStyle = P.dark; c.fillRect(-R * .9, cy + R * .35, R * 1.8, R * .16); c.fillStyle = "#F5B700"; rr(c, -R * .13, cy + R * .32, R * .26, R * .22, R * .05); c.fill(); }
+  if (type === "bird") { c.fillStyle = "#F5B700"; c.beginPath(); c.moveTo(-R * .12, cy + R * .2); c.lineTo(0, cy + R * .5); c.lineTo(R * .12, cy + R * .2); c.fill(); c.fillStyle = P.acc; c.beginPath(); c.moveTo(-R * .3, cy - R * .7); c.lineTo(0, cy - R * 1.05); c.lineTo(R * .3, cy - R * .7); c.fill(); }
+  if (type === "giant") { c.fillStyle = P.dark; c.fillRect(-R * .55, cy - R * .38, R * 1.1, R * .14); c.fillStyle = P.acc; c.fillRect(-R * .8, cy + R * .3, R * 1.6, R * .14); }
+  eyes(c, cy + (type === "sword" ? R * .1 : 0), R * .27, R * .16, (o.dir || 0) * R * .06, -R * .03);
+  if (lv >= 2) { c.strokeStyle = P.metal; c.lineWidth = Math.max(1.5, R * .1); c.beginPath(); c.ellipse(0, cy + R * .45, R * .7, R * .22, 0, .2, Math.PI - .2); c.stroke(); }
+  if (lv >= 3) { c.fillStyle = "#F5B700"; c.beginPath(); const cyT = cy - R * (type === "brute" ? .9 : 1.05); c.moveTo(-R * .3, cyT); c.lineTo(-R * .3, cyT - R * .3); c.lineTo(-R * .15, cyT - R * .15); c.lineTo(0, cyT - R * .38); c.lineTo(R * .15, cyT - R * .15); c.lineTo(R * .3, cyT - R * .3); c.lineTo(R * .3, cyT); c.closePath(); c.fill(); }
+  c.restore();
+}
+
+/* ═════════ thumbnails (cached images of any building / troop at any level) ═════════ */
+const TH = {};
+const scratch = document.createElement("canvas").getContext("2d");
+function drawKind(c, kind, l, t, extra) {
+  if (kind === "castle") return drawCastle(c, l, t, extra);
+  if (kind === "tower") return drawTower(c, l, t);
+  if (kind === "barracks") return drawBarracks(c, l, t);
+  if (kind === "storage") return drawStorage(c, l, t, extra && extra.fill != null ? extra.fill : .45);
+  if (kind === "hut") return drawHut(c, t, extra);
+  if (kind === "wall") { drawWall(c, l, -60, 60, 0, 1.25, t); return { w: 130, h: 60 }; }
+}
+function thumb(kind, l, W = 160, H = 130) {
+  const key = kind + l + "x" + W;
+  if (TH[key]) return TH[key];
+  const d = drawKind(scratch, kind, l, 0);
+  const cv = document.createElement("canvas"), dpr = 2; cv.width = W * dpr; cv.height = H * dpr;
+  const c = cv.getContext("2d"); c.scale(dpr, dpr);
+  const s = Math.min((W - 12) / d.w, (H - 10) / d.h, 1.4);
+  c.translate(W / 2, H - 6); c.scale(s, s); drawKind(c, kind, l, 0);
+  return (TH[key] = cv.toDataURL());
+}
+function troopThumb(type, lv, S2 = 84) {
+  const key = "t" + type + lv + S2; if (TH[key]) return TH[key];
+  const cv = document.createElement("canvas"), dpr = 2; cv.width = S2 * dpr; cv.height = S2 * dpr;
+  const c = cv.getContext("2d"); c.scale(dpr, dpr);
+  const R = S2 * (type === "bird" ? .2 : type === "giant" ? .2 : .26);
+  drawTroop(c, type, lv, S2 / 2 - (type === "giant" ? 6 : 0), S2 * (type === "bird" ? .95 : .88), R, 0, { moving: false });
+  return (TH[key] = cv.toDataURL());
+}
+
+/* ═════════ village scene ═════════ */
+const VW = 1000, VH = 420;
+const POS = { barracks: { x: 330, gy: 212 }, castle: { x: 500, gy: 205 }, storage: { x: 672, gy: 212 }, tower: [{ x: 228, gy: 262 }, { x: 772, gy: 262 }] };
+const WALL = { y: 300, x1: 168, x2: 832, gate: [474, 526] };
+const HUTS = [{ x: 92, gy: 352 }, { x: 908, gy: 352 }, { x: 300, gy: 380 }];
+const GATE_OUT = { x: 500, y: 332 }, GATE_IN = { x: 500, y: 284 };
+let vc = null, vctx = null, vscale = 1, hits = [];
+const builders = [];          // visual builders {x,y,path,mode,job}
+function hutSpot(i) { return { x: HUTS[i].x + 28, y: HUTS[i].gy + 4 }; }
+function doorOf(k) { if (k === "tower") return { x: POS.tower[0].x + 30, y: POS.tower[0].gy + 8 }; if (k === "wall") return { x: 400, y: WALL.y - 8 }; const p = POS[k]; return { x: p.x + 46, y: p.gy + 10 }; }
+function syncBuilders() {
+  while (builders.length < S.builders) { const sp = hutSpot(builders.length); builders.push({ x: sp.x, y: sp.y, path: [], mode: "home", dir: 0 }); }
+  S.jobs.forEach((j) => { const b = builders[j.bi]; if (b && b.job !== j.k) { b.job = j.k; const d = doorOf(j.k); b.path = routeTo(b, d); b.mode = "walk"; } });
+  builders.forEach((b, i) => { if (b.job && !S.jobs.find((j) => j.bi === i)) { b.job = null; b.path = routeTo(b, hutSpot(i)); b.mode = "walk"; } });
+}
+function routeTo(b, d) {
+  const outside = (p) => p.y > WALL.y + 4;
+  const pts = [];
+  if (outside(b) && !outside(d)) pts.push(GATE_OUT, GATE_IN);
+  else if (!outside(b) && outside(d)) pts.push(GATE_IN, GATE_OUT);
+  pts.push(d); return pts.map((p) => ({ x: p.x, y: p.y }));
+}
+function stepBuilders(dt) {
+  builders.forEach((b) => {
+    if (!b.path.length) { b.mode = b.job ? "work" : "home"; return; }
+    const p = b.path[0], dx = p.x - b.x, dy = p.y - b.y, d = Math.hypot(dx, dy), sp = 95 * dt;
+    b.dir = Math.sign(dx);
+    if (d <= sp) { b.x = p.x; b.y = p.y; b.path.shift(); } else { b.x += dx / d * sp; b.y += dy / d * sp; }
+    b.mode = "walk";
+  });
+}
+function sizeVillage() {
+  const box = $("#scene"); if (!box) return;
+  const cw = box.clientWidth, s = Math.max(cw / VW, 300 / VH), dpr = Math.min(2, devicePixelRatio || 1);
+  vscale = s; vc.style.width = VW * s + "px"; vc.style.height = VH * s + "px"; vc.width = VW * s * dpr; vc.height = VH * s * dpr;
+  vctx = vc.getContext("2d"); vctx.setTransform(s * dpr, 0, 0, s * dpr, 0, 0);
+  box.scrollLeft = VSCROLL == null ? (VW * s - cw) / 2 : VSCROLL;
+  box.onscroll = () => (VSCROLL = box.scrollLeft);
+}
+let VSCROLL = null;
+function sizeScene(box, cv, keep) {
+  const cw = box.clientWidth, sc = Math.max(cw / VW, 300 / VH), dpr = Math.min(2, devicePixelRatio || 1);
+  cv.style.width = VW * sc + "px"; cv.style.height = VH * sc + "px"; cv.width = VW * sc * dpr; cv.height = VH * sc * dpr;
+  const c = cv.getContext("2d"); c.setTransform(sc * dpr, 0, 0, sc * dpr, 0, 0);
+  box.scrollLeft = keep == null ? (VW * sc - cw) / 2 : keep;
+  return c;
+}
+function drawVillage(t, V) {
+  const c = V.c; if (!c) return; const H = [];
+  const sky = c.createLinearGradient(0, 0, 0, 200); sky.addColorStop(0, "#5FA8F0"); sky.addColorStop(1, "#BFE3FF"); c.fillStyle = sky; c.fillRect(0, 0, VW, VH);
+  c.fillStyle = "#FFF6C9"; c.beginPath(); c.arc(860, 56, 24, 0, 7); c.fill();
+  c.fillStyle = "rgba(255,255,255,.85)"; [[150, 60], [420, 40], [700, 80]].forEach(([x, y], i) => { const dx = ((t * 6 + i * 200) % 1200) - 100; c.beginPath(); c.ellipse(x + dx * .3, y, 34, 11, 0, 0, 7); c.ellipse(x + 20 + dx * .3, y - 7, 20, 10, 0, 0, 7); c.fill(); });
+  c.fillStyle = "#7DC47A"; c.beginPath(); c.moveTo(0, 150); c.quadraticCurveTo(250, 105, 500, 140); c.quadraticCurveTo(760, 172, 1000, 128); c.lineTo(1000, VH); c.lineTo(0, VH); c.fill();
+  c.fillStyle = "#62B05F"; c.fillRect(0, 175, VW, VH - 175);
+  c.fillStyle = "#58A456"; c.fillRect(0, 320, VW, VH - 320);
+  // path from gate
+  c.fillStyle = "#D8B77A"; c.beginPath(); c.moveTo(470, 300); c.lineTo(530, 300); c.lineTo(560, VH); c.lineTo(440, VH); c.fill();
+  c.beginPath(); c.moveTo(470, 330); c.quadraticCurveTo(300, 345, 110, 360); c.lineTo(110, 372); c.quadraticCurveTo(300, 357, 470, 346); c.fill();
+  c.beginPath(); c.moveTo(530, 330); c.quadraticCurveTo(700, 345, 890, 360); c.lineTo(890, 372); c.quadraticCurveTo(700, 357, 530, 346); c.fill();
+  // trees
+  [[40, 190, 1], [960, 200, 1.1], [120, 230, .8], [880, 236, .85], [30, 330, 1.2], [975, 330, 1.1]].forEach(([x, y, s]) => { c.fillStyle = "#6E4524"; c.fillRect(x - 3 * s, y - 22 * s, 6 * s, 22 * s); c.fillStyle = "#2E8B4A"; c.beginPath(); c.arc(x, y - 30 * s, 18 * s, 0, 7); c.fill(); c.fillStyle = "#3BA55A"; c.beginPath(); c.arc(x - 5 * s, y - 35 * s, 10 * s, 0, 7); c.fill(); });
+  const items = [];
+  BKEYS.forEach((k) => {
+    if (k === "wall") return;
+    const places = k === "tower" ? POS.tower : [POS[k]];
+    places.forEach((p) => items.push({ y: p.gy, f: () => { c.save(); c.translate(p.x, p.gy); const d = drawKind(c, k, V.b[k], t, { fill: V.fill }); c.restore(); H.push({ k, x: p.x - d.w / 2, y: p.gy - d.h, w: d.w, h: d.h + 6 }); if (V.badges) badge(c, k, p.x, p.gy - d.h - 6, t); } }));
+  });
+  items.push({ y: WALL.y, f: () => {
+    drawWall(c, V.b.wall, WALL.x1, WALL.gate[0], WALL.y, 1, t); drawWall(c, V.b.wall, WALL.gate[1], WALL.x2, WALL.y, 1, t);
+    const m = mat(V.b.wall), ph = 30 + V.b.wall * 2.4; [WALL.x1, WALL.gate[0], WALL.gate[1], WALL.x2].forEach((x, i) => { c.fillStyle = m.c; c.fillRect(x - (i % 3 ? 7 : 9), WALL.y - ph - 6, i % 3 ? 14 : 18, ph + 6); c.fillStyle = "rgba(0,0,0,.2)"; c.fillRect(x + 3, WALL.y - ph - 6, 4, ph + 6); });
+    H.push({ k: "wall", x: WALL.x1, y: WALL.y - 40, w: WALL.x2 - WALL.x1, h: 44 }); if (V.badges) badge(c, "wall", 360, WALL.y - 44, t);
+  } });
+  HUTS.forEach((h, i) => items.push({ y: h.gy, f: () => { c.save(); c.translate(h.x, h.gy); const d = drawHut(c, t, { empty: i >= V.nb }); c.restore(); H.push({ k: i >= V.nb ? "plot" : "hut", i, x: h.x - 32, y: h.gy - d.h, w: 64, h: d.h + 6 }); } }));
+  V.bl.forEach((b) => items.push({ y: b.y + .5, f: () => drawBuilder(c, b.x, b.y, 9, t, b.mode, b.dir) }));
+  items.sort((a, b) => a.y - b.y).forEach((it) => it.f());
+  if (V.main) hits = H;
+}
+function badge(c, k, x, y, t) {        // small status pill above a building
+  const job = S.jobs.find((j) => j.k === k), wait = S.wait.includes(k);
+  let txt = null, col = "#fff", ink = "#140D33";
+  if (job) { txt = dur((job.end - S.vt) / 1); }
+  else if (wait) { txt = "Quruvchi kutilmoqda"; }
+  else if (S.fund[k] > 0) { txt = Math.floor(100 * S.fund[k] / cost(k, S.b[k])) + "%"; col = "#F5B700"; ink = "#2B1700"; }
+  if (!txt) return;
+  c.font = "800 12px ui-rounded, Nunito, system-ui, sans-serif"; const w = c.measureText(txt).width + 18;
+  c.fillStyle = col; rr(c, x - w / 2, y - 20, w, 20, 10); c.fill(); c.fillStyle = ink; c.textAlign = "center"; c.textBaseline = "middle"; c.fillText(txt, x, y - 10);
+  if (job) { const p = clamp((S.vt - job.start) / (job.end - job.start), 0, 1); c.fillStyle = "rgba(0,0,0,.15)"; rr(c, x - w / 2 + 6, y - 4, w - 12, 3, 2); c.fill(); c.fillStyle = "#3CC46A"; rr(c, x - w / 2 + 6, y - 4, (w - 12) * p, 3, 2); c.fill(); }
+}
+
+/* ═════════ game logic ═════════ */
+function addGold(n, why) {
+  const cap = goldCap(S.b.storage), add = Math.max(0, Math.min(n, cap - S.gold));
+  S.gold += add; snd("coin");
+  toast(add < n ? `${why}: +${add} oltin (ombor to'ldi, ${n - add} sig'madi)` : `${why}: +${add} oltin`);
+  save(); render();
+}
+function freeBuilder() { for (let i = 0; i < S.builders; i++) if (!S.jobs.find((j) => j.bi === i)) return i; return -1; }
+function tryStart() {
+  let i;
+  while (S.wait.length && (i = freeBuilder()) >= 0) { const k = S.wait.shift(); const ms = hours(k, S.b[k]) * 3600e3; S.jobs.push({ k, bi: i, start: S.vt, end: S.vt + ms }); }
+  if (!S.tjob && S.twait.length) { const k = S.twait.shift(); S.tjob = { k, start: S.vt, end: S.vt + troopHours(S.tr[k].lv) * 3600e3 }; }
+  syncBuilders();
+}
+function deposit(k, amount) {
+  if (locked()) return toast("Qishloq tiklanmoqda. 5 daqiqadan keyin urinib ko'ring.");
+  const need = cost(k, S.b[k]) - S.fund[k], n = Math.min(amount, need, S.gold);
+  if (n <= 0) return;
+  S.gold -= n; S.fund[k] += n; snd("coin");
+  if (S.fund[k] >= cost(k, S.b[k])) { S.fund[k] = 0; S.wait.push(k); tryStart(); snd("done"); }
+  save(); render(); refreshSheet();
+}
+function depositTroop(k, amount) {
+  if (locked()) return toast("Qishloq tiklanmoqda. 5 daqiqadan keyin urinib ko'ring.");
+  const tr = S.tr[k], gem = tr.lv === 2, total = gem ? T[k].c3 : T[k].g2, need = total - tr.fund;
+  const n = Math.min(amount, need, gem ? S.cr : S.gold); if (n <= 0) return;
+  if (gem) S.cr -= n; else S.gold -= n;
+  tr.fund += n; snd(gem ? "gem" : "coin");
+  if (tr.fund >= total) { tr.fund = 0; S.twait.push(k); tryStart(); snd("done"); }
+  save(); render(); refreshSheet();
+}
+function tickJobs() {
+  let changed = false;
+  S.jobs.slice().forEach((j) => { if (S.vt >= j.end) { S.jobs = S.jobs.filter((x) => x !== j); S.b[j.k]++; changed = true; const m = mat(S.b[j.k]); doni("party", `${B[j.k].n} ${S.b[j.k]}-darajaga chiqdi: endi ${m.n.toLowerCase()}dan!`, "Quruvchi kulbasiga qaytmoqda."); } });
+  if (S.tjob && S.vt >= S.tjob.end) { const k = S.tjob.k; S.tr[k].lv++; S.tjob = null; changed = true; doni("proud", `${T[k].n} endi ${TLV[S.tr[k].lv - 1].toLowerCase()} askar (${S.tr[k].lv}-daraja).`, "Yangi ko'rinish va kuchliroq zarba."); }
+  if (changed) { tryStart(); save(); render(); refreshSheet(); }
+}
+const armyUsed = () => TKEYS.reduce((a, k) => a + S.army[k] * T[k].sp, 0);
+
+/* ═════════ UI ═════════ */
+function renderRes() {
+  newDayCheck();
+  const cap = goldCap(S.b.storage), free = S.builders - S.jobs.length;
+  $("#res").innerHTML = `
+    <div class="chip" title="Oltin">${coinI(20)}<span class="num">${fmt(S.gold)}</span><span class="small sub num cap">/ ${fmt(cap)}</span><span class="bar"><i style="width:${100 * S.gold / cap}%"></i></span></div>
+    <div class="chip" title="Kristall">${gemI(20)}<span class="num">${S.cr}</span></div>
+    <div class="chip" title="Bo'sh quruvchilar"><svg class="i"><use href="#hammer"/></svg><span class="num">${free}/${S.builders}</span></div>
+    <div class="chip" title="Bugungi hujumlar"><svg class="i"><use href="#sword"/></svg><span class="num">${ATTACKS_PER_DAY - S.att.n}/${ATTACKS_PER_DAY}</span></div>`;
+  $("#sndBtn").innerHTML = `<svg class="i"><use href="#${S.sound ? "snd" : "mute"}"/></svg>`;
+  $("#lockBox").innerHTML = locked() ? `<div class="lock"><span class="dot"></span><div class="small"><b>Qishlog'ingiz to'liq bosib olindi. Tiklanmoqda: <span data-live="lock"></span></b><br>Bu vaqtda hujum, oltin solish va do'kon yopiq. Quruvchilar ishlashda davom etadi.</div></div>` : "";
+}
+let BATTLE = null;
+function render() {
+  renderRes();
+  document.querySelectorAll("#tabs button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.tab === S.tab)));
+  const v = $("#view");
+  if (BATTLE) { v.innerHTML = vBattle(); mountBattle(); return; }
+  if (S.tab === "village") v.innerHTML = vVillage();
+  if (S.tab === "army") v.innerHTML = vArmy();
+  if (S.tab === "battle") v.innerHTML = vTargets();
+  if (S.tab === "shop") v.innerHTML = vShop();
+  if (S.tab === "show") v.innerHTML = vShow();
+  if (S.tab === "village") mountVillage();
+  if (S.tab === "show") mountShow();
+}
+function bState(k) {
+  const job = S.jobs.find((j) => j.k === k), l = S.b[k], c = cost(k, l);
+  if (job) return `<span class="state"><b>${l + 1}-darajaga qurilmoqda</b> · qoldi <span data-live="job:${k}"></span></span><span class="bar ok"><i data-live="jobbar:${k}" style="width:0%"></i></span>`;
+  if (S.wait.includes(k)) return `<span class="state"><b>To'lov tayyor.</b> Bo'sh quruvchi kutilmoqda.</span>`;
+  if (l >= maxLv(k, S)) return `<span class="state">${k === "castle" ? "Eng yuqori daraja" : `Avval qal'ani ${l + 1}-darajaga ko'taring`}</span>`;
+  return `<span class="state">${coinI(13)} <b class="num">${fmt(S.fund[k])}</b> / ${fmt(c)} solingan</span><span class="bar"><i style="width:${100 * S.fund[k] / c}%"></i></span>`;
+}
+function vVillage() {
+  return `<div class="layout"><div class="col">
+      <div class="scene" id="scene"><canvas id="vc" aria-label="Qishlog'ingiz. Binoga bosib, uni ko'taring."></canvas></div>
+      <p class="hint">← Qishloqni surib ko'ring →  ·  Binoga bosing</p>
+    </div><div class="col">
+      <div class="card"><h2>Binolar</h2>
+      <p class="small sub">Oltinni bo'lib-bo'lib soling. To'lov 100% bo'lganda quruvchi borib qurishni boshlaydi.</p>
+      <div class="blist">${BKEYS.map((k) => `<button class="bcard" data-open="${k}"><img alt="" src="${thumb(k, S.b[k])}"><span class="t"><span class="row1"><h3>${B[k].n}</h3><span class="pill">${S.b[k]} · ${mat(S.b[k]).n}</span></span>${bState(k)}</span></button>`).join("")}</div>
+      </div></div></div>`;
+}
+function mountVillage() {
+  vc = $("#vc"); sizeVillage();
+  vc.onclick = (e) => {
+    const r = vc.getBoundingClientRect(), x = (e.clientX - r.left) / vscale, y = (e.clientY - r.top) / vscale;
+    const h = hits.slice().reverse().find((h) => x >= h.x && x <= h.x + h.w && y >= h.y && y <= h.y + h.h);
+    if (!h) return; snd("tap");
+    if (h.k === "plot" || h.k === "hut") { S.tab = "shop"; render(); return; }
+    openSheet(h.k);
+  };
+}
+
+/* building sheet */
+let SHEET = null;
+function openSheet(k) { SHEET = { kind: "b", k }; refreshSheet(); }
+function openTroop(k) { SHEET = { kind: "t", k }; refreshSheet(); }
+function closeSheet() { SHEET = null; $("#sheetHost").innerHTML = ""; }
+function effectText(k, l) {
+  if (k === "castle") return `Boshqa binolar ${l + 1}-darajagacha ko'tarila oladi`;
+  if (k === "wall") return `Devor mustahkamligi ${fmt(hpOf("seg", l))} → ${fmt(hpOf("seg", l + 1))}`;
+  if (k === "tower") return `Minora zarbasi ${towerDmg(l)} → ${towerDmg(l + 1)}`;
+  if (k === "barracks") { const nt = TKEYS.find((x) => T[x].open === l + 1); return `Qo'shin joyi ${armyCap(l)} → ${armyCap(l + 1)}${nt ? ` · yangi askar: ${T[nt].n}` : ""}`; }
+  if (k === "storage") return `Ombor sig'imi ${fmt(goldCap(l))} → ${fmt(goldCap(l + 1))} oltin`;
+}
+function refreshSheet() {
+  if (!SHEET) return;
+  const host = $("#sheetHost");
+  const keepScroll = host.querySelector(".sheet") ? host.querySelector(".sheet").scrollTop : 0;
+  host.innerHTML = `<div class="veil" data-close="1"><div class="sheet" role="dialog" aria-modal="true">${SHEET.kind === "b" ? sheetB(SHEET.k) : sheetT(SHEET.k)}</div></div>`;
+  host.querySelector(".sheet").scrollTop = keepScroll;
+}
+function sheetB(k) {
+  const l = S.b[k], c = cost(k, l), job = S.jobs.find((j) => j.k === k), atMax = l >= maxLv(k, S), f = S.fund[k], need = c - f;
+  const canPay = !job && !S.wait.includes(k) && !atMax && !locked() && S.gold > 0;
+  let action = "";
+  if (job) action = `<div class="note"><b>${l + 1}-darajaga qurilmoqda.</b> Qoldi: <span data-live="job:${k}"></span><span class="bar ok" style="margin-top:8px"><i data-live="jobbar:${k}"></i></span></div>`;
+  else if (S.wait.includes(k)) action = `<div class="note"><b>To'lov 100%.</b> Hamma quruvchi band. Biri bo'shashi bilan qurish o'zi boshlanadi.</div>`;
+  else if (atMax) action = `<div class="note">${k === "castle" ? "Bu eng yuqori daraja." : `${B[k].n}ni ko'tarish uchun avval qal'ani ${l + 1}-darajaga ko'taring.`}</div>`;
+  else action = `
+    <div class="stack" style="display:flex;flex-direction:column;gap:8px">
+      <div class="kv"><span>To'lov</span><b class="num">${fmt(f)} / ${fmt(c)} oltin · ${Math.floor(100 * f / c)}%</b></div>
+      <span class="bar big"><i style="width:${100 * f / c}%"></i></span>
+      <div class="kv"><span>Qurish vaqti</span><b>${dur(hours(k, l) * 3600e3)}</b></div>
+      <p class="small sub">Vaqt to'lov 100% bo'lgandan keyin boshlanadi.</p>
+    </div>
+    <button class="btn gold wide" data-pay="${k}" ${canPay ? "" : "disabled"}>${coinI(20)} Oltin solish (+${fmt(Math.min(S.gold, need))})</button>
+    ${canPay && S.gold > 1 && need > 1 ? `<button class="btn soft sm" style="align-self:center" data-payhalf="${k}">Yarmini solish (+${fmt(Math.min(Math.floor(S.gold / 2), need))})</button>` : ""}
+    ${locked() ? `<p class="small sub" style="text-align:center">Qishloq tiklanmoqda, hozir oltin solib bo'lmaydi.</p>` : S.gold === 0 ? `<p class="small sub" style="text-align:center">Oltin yo'q. Uy vazifasi va lug'at o'yinlari oltin beradi.</p>` : ""}`;
+  return `<div class="head"><h2>${B[k].n}</h2><button class="iconbtn" data-close="1" aria-label="Yopish">✕</button></div>
+    <p class="small sub">${B[k].d}</p>
+    <div class="cmp"><figure><img alt="" src="${thumb(k, l, 200, 160)}"><figcaption>${l}-daraja · ${mat(l).n}</figcaption></figure>
+      <span class="arrow">→</span>
+      ${l < 10 ? `<figure><img alt="" src="${thumb(k, l + 1, 200, 160)}"><figcaption>${l + 1}-daraja · ${mat(l + 1).n}</figcaption></figure>` : `<figure><figcaption>Eng yuqori</figcaption></figure>`}</div>
+    ${l < 10 && !atMax ? `<div class="kv"><span>Keyingi daraja</span><b style="text-align:right">${effectText(k, l)}</b></div>` : ""}
+    ${action}
+    <div><p class="small sub" style="margin-bottom:6px">Barcha ko'rinishlar</p><div class="looks">${Array.from({ length: 10 }, (_, i) => `<figure class="${i + 1 === l ? "on" : ""}"><img alt="" src="${thumb(k, i + 1, 120, 100)}">${i + 1} · ${MATS[i].n}</figure>`).join("")}</div></div>`;
+}
+
+/* army */
+function vArmy() {
+  const used = armyUsed(), cap = armyCap(S.b.barracks);
+  return `<div class="card"><div class="kv" style="font-size:15px"><b>Qo'shin joyi</b><b class="num">${used} / ${cap}</b></div><span class="bar big cr"><i style="width:${100 * used / cap}%"></i></span>
+    <p class="small sub">Askarlar jangda o'lmaydi va pul turmaydi: har jangdan keyin qaytib keladi. Joy kazarma darajasiga bog'liq. Askarni kuchaytirish uchun unga bosing.</p></div>
+    <div class="blist" style="margin-top:12px">${TKEYS.map((k) => {
+      const t = T[k], tr = S.tr[k], lockedT = S.b.barracks < t.open, n = S.army[k], tj = S.tjob && S.tjob.k === k;
+      return `<div class="card" style="${lockedT ? "opacity:.55" : ""}"><div class="tcard"><button data-topen="${k}" aria-label="${t.n} haqida"><img alt="" src="${troopThumb(k, tr.lv)}"></button>
+        <div style="display:flex;flex-direction:column;gap:6px;min-width:0"><div class="row1"><h3>${t.n}</h3><span class="pill">${tr.lv} · ${TLV[tr.lv - 1]}</span></div>
+        <div class="roles"><span class="pill">${t.role}</span><span class="pill">Joy ${t.sp}</span></div>
+        ${lockedT ? `<span class="state">Kazarma ${t.open}-darajada ochiladi</span>` : `<div class="count"><button data-army="${k}|-1" ${n ? "" : "disabled"} aria-label="Kamaytirish">−</button><b class="num">${n}</b><button data-army="${k}|1" ${used + t.sp > cap ? "disabled" : ""} aria-label="Ko'paytirish">+</button>
+          <button class="btn soft sm" data-topen="${k}">${tj ? "Kuchaymoqda…" : "Kuchaytirish"}</button></div>`}
+        </div></div></div>`; }).join("")}</div>`;
+}
+function sheetT(k) {
+  const t = T[k], tr = S.tr[k], gem = tr.lv === 2, total = gem ? t.c3 : t.g2, f = tr.fund, tj = S.tjob && S.tjob.k === k, waiting = S.twait.includes(k);
+  const needB = troopNeedBarracks(tr.lv), haveB = S.b.barracks >= needB, lockedT = S.b.barracks < t.open;
+  const m = tMul(tr.lv), m2 = tMul(tr.lv + 1), bal = gem ? S.cr : S.gold;
+  let action;
+  if (lockedT) action = `<div class="note">Kazarma ${t.open}-darajada ochiladi.</div>`;
+  else if (tr.lv >= 3) action = `<div class="note">Eng yuqori daraja.</div>`;
+  else if (tj) action = `<div class="note"><b>${tr.lv + 1}-darajaga kuchaymoqda.</b> Qoldi: <span data-live="tjob"></span><span class="bar ok" style="margin-top:8px"><i data-live="tjobbar"></i></span></div>`;
+  else if (waiting) action = `<div class="note"><b>To'lov 100%.</b> Kazarma boshqa askarni kuchaytirmoqda. Navbatda.</div>`;
+  else if (!haveB) action = `<div class="note">Bu darajaga chiqarish uchun kazarma ${needB}-darajada bo'lishi kerak.</div>`;
+  else {
+    const can = !locked() && bal > 0;
+    action = `<div style="display:flex;flex-direction:column;gap:8px"><div class="kv"><span>To'lov</span><b class="num">${fmt(f)} / ${fmt(total)} ${gem ? "kristall" : "oltin"} · ${Math.floor(100 * f / total)}%</b></div>
+      <span class="bar big ${gem ? "cr" : ""}"><i style="width:${100 * f / total}%"></i></span>
+      <div class="kv"><span>Kuchaytirish vaqti</span><b>${dur(troopHours(tr.lv) * 3600e3)}</b></div>
+      ${gem ? `<p class="small sub">3-daraja faqat kristall bilan. Kristall faqat jangdagi g'alabadan keladi.</p>` : ""}</div>
+      <button class="btn ${gem ? "cr" : "gold"} wide" data-tpay="${k}" ${can ? "" : "disabled"}>${gem ? gemI(20) : coinI(20)} ${gem ? "Kristall" : "Oltin"} solish (+${fmt(Math.min(bal, total - f))})</button>`;
+  }
+  return `<div class="head"><h2>${t.n}</h2><button class="iconbtn" data-close="1" aria-label="Yopish">✕</button></div>
+    <div class="roles"><span class="pill">${t.role}</span>${t.air ? `<span class="pill">Havoda</span>` : `<span class="pill">Yerda</span>`}<span class="pill">Joy ${t.sp}</span></div>
+    <p class="small sub">${t.d}</p>
+    <div class="cmp"><figure><img alt="" src="${troopThumb(k, tr.lv, 150)}"><figcaption>${tr.lv} · ${TLV[tr.lv - 1]}</figcaption></figure><span class="arrow">→</span>
+      ${tr.lv < 3 ? `<figure><img alt="" src="${troopThumb(k, tr.lv + 1, 150)}"><figcaption>${tr.lv + 1} · ${TLV[tr.lv]}</figcaption></figure>` : `<figure><figcaption>Eng yuqori</figcaption></figure>`}</div>
+    <div class="kv"><span>Jon</span><b class="num">${Math.round(t.hp * m)}${tr.lv < 3 ? ` → ${Math.round(t.hp * m2)}` : ""}</b></div>
+    <div class="kv"><span>Zarba</span><b class="num">${Math.round(t.dmg * m)}${tr.lv < 3 ? ` → ${Math.round(t.dmg * m2)}` : ""}</b></div>
+    ${action}`;
+}
+
+/* targets */
+function targetList() {
+  const mine = S.b.castle;
+  let list = CLASSMATES.filter((e) => e.b.castle === mine || e.b.castle === mine + 1), nearest = false;
+  if (!list.length) { const d = Math.min(...CLASSMATES.map((e) => Math.abs(e.b.castle - mine))); list = CLASSMATES.filter((e) => Math.abs(e.b.castle - mine) === d); nearest = true; }
+  return { list: list.sort((x, y) => x.b.castle - y.b.castle), nearest };
+}
+function vTargets() {
+  newDayCheck();
+  const left = ATTACKS_PER_DAY - S.att.n, used = armyUsed(), { list, nearest } = targetList();
+  const other = CLASSMATES.length - list.length;
+  return `<div class="card"><div class="kv" style="font-size:15px"><b>Sizning qal'angiz</b><b class="num">${S.b.castle}-daraja</b></div>
+      <p class="small sub">Hujum o'z darajangizdagi yoki bir daraja yuqori qishloqlarga. Bunday qishloq bo'lmasa, eng yaqin darajadagilar chiqadi. Kuniga ${ATTACKS_PER_DAY} ta hujum. Hech narsa o'g'irlanmaydi: har yulduz = 1 kristall. 100% bosib olingan qishloq 5 daqiqa tiklanadi.</p>
+      <div class="kv"><span>Bugun qolgan hujumlar</span><b class="num">${left} / ${ATTACKS_PER_DAY}</b></div></div>
+    ${nearest ? `<div class="note" style="margin-top:12px">Sinfda ${S.b.castle}-darajadagi qishloq yo'q, shuning uchun eng yaqin darajadagilar ko'rsatilmoqda.</div>` : ""}
+    ${used ? "" : `<div class="note" style="margin-top:12px">Qo'shiningiz bo'sh. "Qo'shin" bo'limida askar qo'shing.</div>`}
+    <div class="blist" style="margin-top:12px">${list.map((e) => {
+      const rec = (S.rec[e.id] || 0) > Date.now(), ok = left > 0 && used > 0 && !rec && !locked();
+      const tag = e.b.castle === S.b.castle ? "Teng daraja" : e.b.castle > S.b.castle ? "Bir daraja yuqori" : "Pastroq daraja";
+      return `<div class="card"><div class="target"><img alt="" src="${miniVillage(e)}"><div style="display:flex;flex-direction:column;gap:4px;min-width:0"><h3>${esc(e.name)}</h3>
+        <span class="small sub">Qal'a ${e.b.castle} · Devor ${e.b.wall} · Minora ${e.b.tower}</span><span><span class="pill">${tag}</span></span>
+        ${rec ? `<span class="state">Tiklanmoqda: <b data-live="rec:${e.id}"></b></span>` : ""}</div></div>
+        <button class="btn ${ok ? "" : "soft"} sm" data-attack="${e.id}" ${ok ? "" : "disabled"}>Hujum qilish</button></div>`; }).join("")}</div>
+    ${other ? `<p class="small sub" style="margin-top:10px">Yana ${other} ta sinfdosh boshqa darajada.</p>` : ""}
+    ${locked() ? `<p class="small sub" style="margin-top:6px">Qishlog'ingiz tiklanayotganda hujum qilib bo'lmaydi.</p>` : ""}`;
+}
+function miniVillage(e) {
+  const key = "mv" + e.id; if (TH[key]) return TH[key];
+  const cv = document.createElement("canvas"); cv.width = 192; cv.height = 132; const c = cv.getContext("2d"); c.scale(2, 2);
+  c.fillStyle = "#8FCBFF"; c.fillRect(0, 0, 96, 66); c.fillStyle = "#62B05F"; c.fillRect(0, 44, 96, 22);
+  c.save(); c.translate(48, 52); c.scale(.28, .28); drawCastle(c, e.b.castle, 0, { enemy: 1 }); c.restore();
+  c.save(); c.translate(14, 56); c.scale(.25, .25); drawTower(c, e.b.tower, 0); c.restore();
+  c.save(); c.translate(82, 56); c.scale(.25, .25); drawTower(c, e.b.tower, 0); c.restore();
+  drawWall(c, e.b.wall, 4, 92, 62, .35, 0);
+  return (TH[key] = cv.toDataURL());
+}
+
+/* shop */
+function vShop() {
+  const next = S.builders + 1, price = BUILDER_PRICE[next];
+  return `<div class="card"><h2>Quruvchilar</h2>
+      <p class="small sub">Ko'proq quruvchi bir vaqtda ko'proq bino qurishini anglatadi. Ko'pi bilan 3 ta. Faqat kristall bilan sotib olinadi.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">${[1, 2, 3].map((n) => `<div class="card" style="flex:1;min-width:120px;align-items:center;text-align:center;background:${n <= S.builders ? "rgba(19,138,61,.35)" : "var(--glass)"}">
+        <img alt="" src="${thumb("hut", 1, 100, 80)}" style="width:80px;height:64px;object-fit:contain"><b>${n}-quruvchi</b>
+        <span class="small">${n === 1 ? "Boshidan bor" : n <= S.builders ? "Sizda bor" : `${gemI(14)} ${BUILDER_PRICE[n]} kristall`}</span></div>`).join("")}</div>
+      ${price ? `<button class="btn cr wide" data-buy="builder" ${S.cr >= price && !locked() ? "" : "disabled"}>${gemI(20)} ${next}-quruvchini olish · ${price} kristall</button>
+        ${S.cr < price ? `<p class="small sub" style="text-align:center">Yana ${price - S.cr} kristall kerak. Har g'alabadagi yulduz = 1 kristall.</p>` : ""}` : `<p class="small sub">Sizda hamma 3 quruvchi bor.</p>`}
+    </div>
+    <div class="card" style="margin-top:12px"><h2>Oltin qayerdan keladi</h2>
+      <div class="kv"><span>Uy vazifasi</span><b>har to'g'ri javob +5, tugatish +120</b></div>
+      <div class="kv"><span>Sinf ishi</span><b>har to'g'ri javob +5, tugatish +120</b></div>
+      <div class="kv"><span>Erkin mashq</span><b>har to'g'ri javob +1</b></div>
+      <div class="kv"><span>Kuboklarni sotish</span><b>katta 250, kichik 40</b></div>
+      <div class="kv"><span>Lug'at o'yinlari</span><b>o'yin uchun 25 gacha</b></div>
+      <p class="small sub">Kristall faqat jangdagi g'alabadan: 1, 2 yoki 3 yulduz = 1, 2 yoki 3 kristall.</p></div>`;
+}
+
+/* ═════════ showcase: every level, every look ═════════ */
+const PV = { l: 1, tl: 1, c: null, scroll: null, tiles: [] };
+const pbuilders = [0, 1, 2].map((i) => { const sp = hutSpot(i); return { x: sp.x, y: sp.y, path: [], mode: "home", dir: 0, job: null, wait: 1 + i * 1.3 }; });
+function stepPreviewBuilders(dt) {
+  pbuilders.forEach((b, i) => {
+    if (b.path.length) {
+      const p = b.path[0], dx = p.x - b.x, dy = p.y - b.y, d = Math.hypot(dx, dy), sp = 95 * dt;
+      b.dir = Math.sign(dx); b.mode = "walk";
+      if (d <= sp) { b.x = p.x; b.y = p.y; b.path.shift(); if (!b.path.length) { b.mode = b.job ? "work" : "home"; b.wait = b.job ? 3.5 : 1.5; } } else { b.x += dx / d * sp; b.y += dy / d * sp; }
+      return;
+    }
+    b.wait -= dt; if (b.wait > 0) return;
+    if (b.job) { b.job = null; b.path = routeTo(b, hutSpot(i)); }
+    else { const k = ["castle", "barracks", "storage", "tower", "wall"][(i * 2 + Math.floor(performance.now() / 4000)) % 5]; b.job = k; const d = doorOf(k); b.path = routeTo(b, { x: d.x + (i - 1) * 16, y: d.y }); }
+  });
+}
+function tileInfo(k, lv) {
+  const eff = { castle: lv === 1 ? "Boshlang'ich qal'a" : `Boshqa binolar ${lv}-darajagacha`, wall: `Jon ${fmt(hpOf("seg", lv))}`, tower: `Zarba ${towerDmg(lv)} · Jon ${fmt(hpOf("tower", lv))}`, barracks: `Qo'shin joyi ${armyCap(lv)}`, storage: `Sig'im ${fmt(goldCap(lv))} oltin` }[k];
+  const price = lv === 1 ? "Boshidan bor" : `${fmt(cost(k, lv - 1))} oltin · ${dur(hours(k, lv - 1) * 3600e3)}`;
+  return `<span>${eff}</span><span>${price}</span>`;
+}
+function troopInfo(k, lv) {
+  const t = T[k], m = tMul(lv);
+  const price = lv === 1 ? `Kazarma ${t.open}-darajada ochiladi` : lv === 2 ? `${fmt(t.g2)} oltin · ${dur(troopHours(1) * 3600e3)}` : `${t.c3} kristall · ${dur(troopHours(2) * 3600e3)}`;
+  return `<span>${t.role}</span><span>Jon ${Math.round(t.hp * m)} · Zarba ${Math.round(t.dmg * m)}</span><span>${price}</span>`;
+}
+function vShow() {
+  const l = PV.l, lv10 = Array.from({ length: 10 }, (_, i) => i + 1);
+  const bTiles = (k) => `<div class="card"><div class="showhead"><h2>${B[k].n}</h2><p class="small sub">${B[k].d} Har daraja: narxi va qurish vaqti shu darajaga chiqish uchun.</p></div>
+    <div class="tiles">${lv10.map((lv) => `<figure class="tile"><canvas data-sk="${k}" data-sl="${lv}" aria-label="${B[k].n} ${lv}-daraja"></canvas><figcaption><b>${lv}-daraja · ${MATS[lv - 1].n}</b>${tileInfo(k, lv)}</figcaption></figure>`).join("")}</div></div>`;
+  return `<div class="card"><div class="showhead"><h2>Butun qishloq</h2><p class="small sub">Hamma binolar bir xil darajada. Darajani o'zgartirib, qishloq qanday o'zgarishini ko'ring. 3 ta quruvchi aylanib yuradi.</p></div>
+      <div class="lvpick"><button class="iconbtn" data-pv="-1" aria-label="Pastroq daraja">−</button>
+        <input type="range" id="pvLv" min="1" max="10" step="1" value="${l}" aria-label="Daraja">
+        <button class="iconbtn" data-pv="1" aria-label="Yuqoriroq daraja">+</button>
+        <b class="pvname" id="pvName">${l}-daraja · ${mat(l).n}</b></div>
+      <div class="scene" id="pscene"><canvas id="pc" aria-label="Namuna qishloq"></canvas></div>
+      <p class="hint">← Qishloqni surib ko'ring →</p>
+      <div class="showhead"><h3>Shu qishloqqa jang</h3><p class="small sub">Shu darajadagi oddiy qo'shin hujum qiladi. Hujum soni sanalmaydi, kristall berilmaydi. Askar darajasini tanlang.</p></div>
+      <div class="seg" id="ptl">${[1, 2, 3].map((n) => `<button data-ptl="${n}" aria-pressed="${PV.tl === n}">${n} · ${TLV[n - 1]}</button>`).join("")}</div>
+      <button class="btn wide" data-pbattle="1">Jangni ko'rish</button></div>
+    ${BKEYS.map(bTiles).join("")}
+    <div class="card"><div class="showhead"><h2>Quruvchi kulbasi va quruvchi</h2><p class="small sub">Kulba bitta ko'rinishda. Jangda devordan oldingi birinchi to'siq. Quruvchi yuradi, ishlaydi va kulbasiga qaytadi.</p></div>
+      <div class="tiles"><figure class="tile"><canvas data-sk="hut" data-sl="1" aria-label="Kulba"></canvas><figcaption><b>Kulba</b><span>Jon ${fmt(hpOf("hut", 1))}</span><span>2-quruvchi ${BUILDER_PRICE[2]} · 3-quruvchi ${BUILDER_PRICE[3]} kristall</span></figcaption></figure>
+        <figure class="tile"><canvas data-sk="bwalk" data-sl="1" aria-label="Yurayotgan quruvchi"></canvas><figcaption><b>Quruvchi yo'lda</b><span>Binoga boradi va qaytadi</span></figcaption></figure>
+        <figure class="tile"><canvas data-sk="bwork" data-sl="1" aria-label="Ishlayotgan quruvchi"></canvas><figcaption><b>Quruvchi ishlamoqda</b><span>Bolg'a bilan quradi</span></figcaption></figure></div></div>
+    <div class="card"><div class="showhead"><h2>Askarlar</h2><p class="small sub">1-daraja lug'at o'yinlaridagi ko'rinish, 2 po'lat, 3 oltin. 3-daraja faqat kristall bilan.</p></div>
+      <div class="tiles">${TKEYS.map((k) => [1, 2, 3].map((lv) => `<figure class="tile"><canvas data-tk="${k}" data-sl="${lv}" aria-label="${T[k].n} ${lv}-daraja"></canvas><figcaption><b>${T[k].n} · ${lv} · ${TLV[lv - 1]}</b>${troopInfo(k, lv)}</figcaption></figure>`).join("")).join("")}</div></div>`;
+}
+let tileObs = null;
+function mountShow() {
+  const box = $("#pscene"), cv = $("#pc");
+  PV.c = sizeScene(box, cv, PV.scroll); box.onscroll = () => (PV.scroll = box.scrollLeft);
+  const dpr = Math.min(2, devicePixelRatio || 1);
+  if (tileObs) tileObs.disconnect();
+  tileObs = "IntersectionObserver" in window ? new IntersectionObserver((es) => es.forEach((e) => { const o = PV.tiles.find((x) => x.cv === e.target); if (o) o.vis = e.isIntersecting; })) : null;
+  PV.tiles = [...document.querySelectorAll("canvas[data-sk],canvas[data-tk]")].map((cv2) => {
+    const r = cv2.getBoundingClientRect(), w = r.width || 150, h = r.height || 128;
+    cv2.width = w * dpr; cv2.height = h * dpr;
+    const o = { cv: cv2, c: cv2.getContext("2d"), w, h, dpr, sk: cv2.dataset.sk, tk: cv2.dataset.tk, l: Number(cv2.dataset.sl), vis: !tileObs };
+    if (o.sk && !["wall", "hut", "bwalk", "bwork"].includes(o.sk)) o.d = drawKind(scratch, o.sk, o.l, 0, {});
+    if (tileObs) tileObs.observe(cv2);
+    return o;
+  });
+  PV.tiles.forEach((o) => drawTile(o, 0));
+  const inp = $("#pvLv"); inp.oninput = () => setPV(Number(inp.value));
+}
+function setPV(l) { PV.l = clamp(l, 1, 10); const inp = $("#pvLv"); if (inp) inp.value = PV.l; const n = $("#pvName"); if (n) n.textContent = `${PV.l}-daraja · ${mat(PV.l).n}`; }
+function drawTile(o, t) {
+  const c = o.c, w = o.w, h = o.h; c.setTransform(o.dpr, 0, 0, o.dpr, 0, 0);
+  const g = c.createLinearGradient(0, 0, 0, h); g.addColorStop(0, "#6FB4F5"); g.addColorStop(1, "#CFEAFF"); c.fillStyle = g; c.fillRect(0, 0, w, h);
+  c.fillStyle = "#62B05F"; c.fillRect(0, h - 16, w, 16);
+  if (o.tk) { const R = h * .15; drawTroop(c, o.tk, o.l, w / 2 - (o.tk === "giant" ? 6 : 0), h - 9, R, t, { phase: o.l }); return; }
+  if (o.sk === "wall") { drawWall(c, o.l, 10, w - 10, h - 12, Math.min(1.6, (h - 30) / (40 + o.l * 2.4)), t); return; }
+  if (o.sk === "hut") { c.save(); c.translate(w * .42, h - 12); c.scale(1.25, 1.25); drawHut(c, t); c.restore(); drawBuilder(c, w * .78, h - 10, 10, t, "home", -1); return; }
+  if (o.sk === "bwalk") { const x = w / 2 + Math.sin(t * .9) * w * .3; drawBuilder(c, x, h - 10, 14, t, "walk", Math.sign(Math.cos(t * .9))); return; }
+  if (o.sk === "bwork") { c.save(); c.translate(w * .3, h - 12); c.scale(.55, .55); drawStorage(c, 2, t, 0); c.restore(); drawBuilder(c, w * .72, h - 10, 14, t, "work", -1); return; }
+  const s2 = Math.min((w - 14) / o.d.w, (h - 22) / o.d.h, 1.3);
+  c.save(); c.translate(w / 2 - (o.sk === "barracks" ? 10 * s2 : o.sk === "storage" ? 12 * s2 : 0), h - 12); c.scale(s2, s2); drawKind(c, o.sk, o.l, t, { fill: .7 }); c.restore();
+}
+
+/* ═════════ battle: vertical 2D lane, fully automatic, deterministic from a seed ═════════ */
+const BW = 360, BH = 600, WY = 372, BS = .5;
+const BPOS = { castle: [180, 150], barracks: [72, 228], storage: [288, 228], tower: [[92, 312], [268, 312]], huts: [[60, 462], [180, 470], [300, 462]] };
+const SEGS = [[16, 98], [98, 180], [180, 262], [262, 344]];
+function makeBattle(e, army, trLv, seed, myBarracks = 1) {
+  const R = rng(seed), st = [];
+  const add = (kind, l, x, y, extra = {}) => { const d = drawKind(scratch, kind, l, 0, {}) || { w: 40, h: 40 }; st.push(Object.assign({ kind, l, x, y, hp: hpOf(kind === "hut" ? "hut" : kind, l), alive: true, w: d.w * (kind === "hut" ? .62 : BS), h: d.h * (kind === "hut" ? .62 : BS) }, extra)); };
+  add("castle", e.b.castle, ...BPOS.castle, { def: { dmg: Math.round(BAL.cs * Math.pow(BAL.defG, e.b.castle - 1) * Math.sqrt(BAL.k[e.b.castle - 1])), rate: 1, range: 95, cd: 0 } });
+  add("barracks", e.b.barracks, ...BPOS.barracks); add("storage", e.b.storage, ...BPOS.storage);
+  BPOS.tower.forEach((p) => add("tower", e.b.tower, p[0], p[1], { def: { dmg: towerDmg(e.b.tower), rate: .9, range: 118, cd: 0 } }));
+  BPOS.huts.slice(0, e.builders).forEach((p) => add("hut", e.b.castle, p[0], p[1]));   // hut strength follows the castle level
+  st.forEach((s) => { s.max = s.hp; s.rad = Math.max(10, s.w * .42); });
+  SEGS.forEach(([a, b]) => st.push({ kind: "seg", wall: true, l: e.b.wall, x1: a, x2: b, x: (a + b) / 2, y: WY, hp: hpOf("seg", e.b.wall), max: hpOf("seg", e.b.wall), alive: true, rad: 4 }));
+  const order = ["giant", "brute", "sword", "bird", "archer"], units = [];
+  let i = 0; const n = order.reduce((a, k) => a + (army[k] || 0), 0);
+  order.forEach((k) => { for (let j = 0; j < (army[k] || 0); j++) { const lv = trLv[k], t = T[k], m = tMul(lv) * bMul(myBarracks); const lane = (i + .5) / Math.max(1, n); units.push({ k, lv, x: 36 + lane * 288 + (R() - .5) * 16, y: 570 + R() * 16, hp: t.hp * m, max: t.hp * m, dmg: t.dmg * m, rate: t.rate, range: t.range, spd: t.spd * (.92 + R() * .16), air: !!t.air, cd: R() * .5, at: i * .14, on: false, alive: true, ph: R() * 6, tg: null, dir: 0, moving: true, flash: 0 }); i++; } });
+  return { e, st, units, shots: [], booms: [], t: 0, done: false, R, seed };
+}
+const nonWall = (B2) => B2.st.filter((s) => !s.wall);
+function pct(B2) { const a = nonWall(B2); return Math.round(100 * a.filter((s) => !s.alive).length / a.length); }
+function stars(B2) { const p = pct(B2), castleDown = !B2.st[0].alive; return p >= 100 ? 3 : (p >= 50 ? 1 : 0) + (castleDown ? 1 : 0); }
+function aimOf(s, u) { return s.wall ? { x: clamp(u.x, s.x1 + 4, s.x2 - 4), y: s.y } : { x: s.x, y: s.y - s.h * .3 }; }
+function segAt(B2, x) { return B2.st.find((s) => s.wall && x >= s.x1 && x < s.x2); }
+function nearest(list, u) { let best = null, bd = 1e9; list.forEach((s) => { const p = aimOf(s, u), d = Math.hypot(p.x - u.x, p.y - u.y); if (d < bd) { bd = d; best = s; } }); return best; }
+function pick(B2, u) {
+  const A = B2.st.filter((s) => s.alive && !s.wall); if (!A.length) return null;
+  const towers = A.filter((s) => s.kind === "tower");
+  if (u.k === "brute" && towers.length) return nearest(towers, u);
+  if (u.k === "bird") { const air = A.filter((s) => s.kind !== "hut"); if (towers.length) return nearest(towers, u); return nearest(air.length ? air : A, u); }
+  if (u.k === "giant" && u.y > WY) { const segs = B2.st.filter((s) => s.wall && s.alive); if (segs.length) return nearest(segs, u); }
+  return nearest(A, u);
+}
+function hitS(B2, s, dmg) { if (!s.alive) return; s.hp -= dmg; s.flash = .12; if (s.hp <= 0) { s.hp = 0; s.alive = false; B2.booms.push({ x: s.x, y: s.y - (s.wall ? 8 : s.h * .3), t: 0 }); } }
+function stepBattle(B2, dt) {
+  if (B2.done) return;
+  B2.t += dt;
+  B2.units.forEach((u) => {
+    if (!u.alive) return;
+    if (!u.on) { if (B2.t >= u.at) u.on = true; else return; }
+    u.flash = Math.max(0, u.flash - dt); u.cd -= dt;
+    if (!u.tg || !u.tg.alive) u.tg = pick(B2, u);
+    if (!u.tg) { u.moving = false; return; }
+    const p = aimOf(u.tg, u), dx = p.x - u.x, dy = p.y - u.y, d = Math.hypot(dx, dy), reach = u.range + u.tg.rad;
+    if (d > reach) {
+      u.moving = true; u.dir = Math.sign(dx) * .8;
+      let nx = u.x + dx / d * u.spd * dt, ny = u.y + dy / d * u.spd * dt;
+      if (!u.air && u.y > WY + 10 && ny <= WY + 10) { const sg = segAt(B2, nx); if (sg && sg.alive) { u.tg = sg; ny = WY + 10; } }
+      u.x = nx; u.y = ny;
+    } else {
+      u.moving = false;
+      if (u.cd <= 0) { u.cd = u.rate; const dmg = u.dmg * (u.k === "giant" && u.tg.wall ? 4 : 1); hitS(B2, u.tg, dmg);
+        if (u.range > 30 || u.air) B2.shots.push({ x1: u.x, y1: u.y - (u.air ? 34 : 14), x2: p.x, y2: p.y, t: 0, kind: u.air ? "air" : "arrow" }); }
+    }
+  });
+  B2.st.forEach((s) => {
+    s.flash = Math.max(0, (s.flash || 0) - dt);
+    if (!s.def || !s.alive) return; s.def.cd -= dt; if (s.def.cd > 0) return;
+    let best = null, bd = 1e9; const sy = s.y - s.h * .8;
+    B2.units.forEach((u) => { if (!u.alive || !u.on) return; const uy = u.y - (u.air ? 30 : 8), d = Math.hypot(u.x - s.x, uy - sy); if (d < s.def.range && d < bd) { bd = d; best = u; } });
+    if (best) { s.def.cd = s.def.rate; best.hp -= s.def.dmg; best.flash = .12; B2.shots.push({ x1: s.x, y1: sy, x2: best.x, y2: best.y - (best.air ? 30 : 10), t: 0, kind: "def" }); if (best.hp <= 0) { best.alive = false; B2.booms.push({ x: best.x, y: best.y - 6, t: 0, small: 1 }); } }
+  });
+  B2.shots.forEach((s) => (s.t += dt)); B2.shots = B2.shots.filter((s) => s.t < .25);
+  B2.booms.forEach((b) => (b.t += dt)); B2.booms = B2.booms.filter((b) => b.t < .7);
+  const allOn = B2.units.every((u) => u.on), anyAlive = B2.units.some((u) => u.alive);
+  if (pct(B2) >= 100 || B2.t >= BAL.time || (allOn && !anyAlive)) B2.done = true;
+}
+function drawBattle(c, B2, t) {
+  c.fillStyle = "#6DBA67"; c.fillRect(0, 0, BW, BH);
+  c.fillStyle = "#62B05F"; c.fillRect(0, 0, BW, 120);
+  c.fillStyle = "#D8B77A"; c.beginPath(); c.moveTo(160, 160); c.lineTo(200, 160); c.lineTo(230, BH); c.lineTo(130, BH); c.fill();
+  c.fillStyle = "rgba(255,255,255,.14)"; for (let x = 0; x < BW; x += 24) c.fillRect(x, 540, 12, 60);
+  c.fillStyle = "rgba(20,13,51,.35)"; c.fillRect(0, 538, BW, 2);
+  const items = [];
+  B2.st.forEach((s) => {
+    if (s.wall) { items.push({ y: s.y, f: () => drawWall(c, s.l, s.x1, s.x2, s.y, .55, t, !s.alive) }); return; }
+    items.push({ y: s.y, f: () => {
+      if (!s.alive) { c.fillStyle = "#6F6A7E"; for (let i = 0; i < 6; i++) { c.beginPath(); c.ellipse(s.x - 14 + i * 6, s.y - 2 - (i % 2) * 3, 7, 4, 0, 0, 7); c.fill(); } return; }
+      c.save(); c.translate(s.x, s.y); const sc = s.kind === "hut" ? .62 : BS; c.scale(sc, sc); if (s.flash > 0) c.globalAlpha = .7; drawKind(c, s.kind, s.l, t, { enemy: 1, fill: .5 }); c.restore();
+      if (s.hp < s.max) { const w = 34; c.fillStyle = "rgba(0,0,0,.4)"; rr(c, s.x - w / 2, s.y - s.h - 8, w, 5, 2); c.fill(); c.fillStyle = "#fff"; rr(c, s.x - w / 2, s.y - s.h - 8, w * s.hp / s.max, 5, 2); c.fill(); }
+    } });
+  });
+  B2.units.forEach((u) => { if (!u.on || !u.alive) return; items.push({ y: u.y + (u.air ? 400 : 0), f: () => drawTroop(c, u.k, u.lv, u.x, u.y, 7, t, { phase: u.ph, dir: u.dir, moving: u.moving, flash: u.flash > 0 }) }); });
+  items.sort((a, b) => a.y - b.y).forEach((i) => i.f());
+  B2.shots.forEach((s) => { const k = s.t / .25, x = s.x1 + (s.x2 - s.x1) * k, y = s.y1 + (s.y2 - s.y1) * k - Math.sin(k * Math.PI) * 14; c.strokeStyle = s.kind === "def" ? "#FFE08A" : "#fff"; c.lineWidth = 2; c.lineCap = "round"; const ang = Math.atan2(s.y2 - s.y1, s.x2 - s.x1); line(c, x, y, x - Math.cos(ang) * 7, y - Math.sin(ang) * 7); });
+  B2.booms.forEach((b) => { const k = b.t / .7; c.globalAlpha = 1 - k; c.fillStyle = b.small ? "#CBC3EC" : "#9A93AE"; for (let i = 0; i < 5; i++) { const a = i * 1.26; c.beginPath(); c.arc(b.x + Math.cos(a) * k * (b.small ? 10 : 22), b.y + Math.sin(a) * k * (b.small ? 8 : 14) - k * 10, (b.small ? 3 : 7) * (1 - k * .5), 0, 7); c.fill(); } c.globalAlpha = 1; });
+}
+function startAttack(id) {
+  newDayCheck();
+  const e = CLASSMATES.find((x) => x.id === id);
+  if (!e || locked() || S.att.n >= ATTACKS_PER_DAY || !armyUsed()) return;
+  S.att.n++; save();
+  const lv = Object.fromEntries(TKEYS.map((k) => [k, S.tr[k].lv]));
+  BATTLE = { sim: makeBattle(e, S.army, lv, (Date.now() & 0xffffff) ^ id, S.b.barracks), speed: 1, paid: false, acc: 0 };
+  render(); window.scrollTo({ top: 0, behavior: REDUCED ? "auto" : "smooth" });
+}
+function typicalArmy(L) {
+  const cap = armyCap(L), a = { sword: 0, archer: 0, brute: 0, bird: 0, giant: 0 }; let used = 0;
+  [["giant", L >= 5 ? 1 + Math.floor((L - 5) / 2) : 0], ["brute", L >= 3 ? 2 + Math.floor((L - 3) / 3) : 0], ["bird", L >= 4 ? 2 + Math.floor((L - 4) / 3) : 0]]
+    .forEach(([k, n]) => { for (let i = 0; i < n; i++) if (used + T[k].sp <= cap) { a[k]++; used += T[k].sp; } });
+  while (used < cap) { const k = a.sword <= a.archer * 2 ? "sword" : "archer"; a[k]++; used++; }
+  return a;
+}
+function startShowBattle() {
+  const L = PV.l, e = { id: 0, name: `${L}-daraja namuna`, b: { castle: L, wall: L, tower: L, barracks: L, storage: L }, builders: Math.min(3, 1 + Math.floor(L / 4)), tl: 0 };
+  const lv = Object.fromEntries(TKEYS.map((k) => [k, PV.tl]));
+  BATTLE = { sim: makeBattle(e, typicalArmy(L), lv, Date.now() & 0xffffff, L), speed: 1, paid: false, acc: 0, show: true };
+  render(); window.scrollTo({ top: 0, behavior: REDUCED ? "auto" : "smooth" });
+}
+function vBattle() {
+  const B2 = BATTLE.sim, done = B2.done, st = stars(B2);
+  const starRow = (n, big) => `<div class="stars" aria-label="${n} yulduz">${[1, 2, 3].map((i) => `<svg style="color:${i <= n ? "#F5B700" : "rgba(255,255,255,.2)"}${big ? ";width:44px;height:44px" : ""}"><use href="#star" fill="currentColor"/></svg>`).join("")}</div>`;
+  if (done) {
+    const full = pct(B2) >= 100;
+    return `<div class="card result"><h2>${st ? "G'alaba!" : "Bu safar yetmadi"}</h2>${starRow(st, true)}
+      <p><b class="num">${pct(B2)}%</b> bosib olindi · ${esc(B2.e.name)}</p>
+      ${BATTLE.show ? `<p class="sub">Bu namuna jang: hujum sanalmadi, kristall berilmadi.</p>` : st ? `<p style="display:flex;align-items:center;gap:6px;font-weight:800;font-family:var(--display);font-size:18px">${gemI(22)} +${st} kristall</p>` : `<p class="sub">Kristall yo'q, lekin hech narsa yo'qotmadingiz. Askarlaringiz sog'-salomat qaytdi.</p>`}
+      <p class="small sub">Hech narsa o'g'irlanmaydi.${full ? ` ${esc(B2.e.name)}ning qishlog'i endi 5 daqiqa tiklanadi.` : ""}</p>
+      <p class="small sub">1 yulduz: 50% · 2 yulduz: qal'a buzilsa · 3 yulduz: 100%</p>
+      <button class="btn wide" data-bend="1">${BATTLE.show ? "Ko'rinishlarga qaytish" : "Qishloqqa qaytish"}</button></div>`;
+  }
+  return `<div class="card"><div class="bhud"><div><h3>${esc(B2.e.name)}ning qishlog'i</h3><span class="small sub"><span data-live="bt">0</span> s · <b data-live="bp">0%</b> bosib olindi</span></div><div data-live="bs">${starRow(0)}</div></div></div>
+    <div class="bscene" style="margin-top:12px"><canvas id="bc" aria-label="Jang"></canvas></div>
+    <div class="btns" style="justify-content:center;margin-top:12px"><button class="btn soft sm" data-bspeed="1">${BATTLE.speed === 1 ? "Tezlashtirish ×2" : "Oddiy tezlik"}</button><button class="btn soft sm" data-bstop="1">Jangni tugatish</button></div>
+    <p class="small sub" style="text-align:center;margin-top:8px">Askarlar o'zi boradi: avval kulbalar, keyin devor, minoralar va qal'a. Uchuvchilar devordan oshib o'tadi.</p>`;
+}
+let bctx = null;
+function mountBattle() {
+  const cv = $("#bc"); if (!cv) { bctx = null; return; }
+  const dpr = Math.min(2, devicePixelRatio || 1); cv.width = BW * dpr; cv.height = BH * dpr; bctx = cv.getContext("2d"); bctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+function finishBattle() {
+  const B2 = BATTLE.sim; if (BATTLE.paid) return; BATTLE.paid = true;
+  const st = stars(B2);
+  if (BATTLE.show) { snd(st ? "win" : "calm"); return; }
+  if (st) { S.cr += st; snd("win"); } else snd("calm");
+  if (pct(B2) >= 100) S.rec[B2.e.id] = Date.now() + RECOVER_MS;
+  if (st === 3 && !S.seen.star3) { S.seen.star3 = 1; setTimeout(() => doni("proud", `Uch yulduz! ${B2.e.name}ning hamma binosini buzdingiz.`, `+3 kristall. 2-quruvchi ${BUILDER_PRICE[2]} kristall turadi.`), 600); }
+  else if (!st) setTimeout(() => doni("calm", "Minoralar kuchli chiqdi.", "Buqa avval minoraga boradi, Gigant devorni tez buzadi. Qo'shinni almashtirib ko'ring."), 500);
+  save();
+}
+
+/* ═════════ Doni (same mascot as the vocab games) ═════════ */
+let doniQ = [], doniOn = false, doniLast = 0;
+function doni(mood, text, small) { doniQ.push({ mood, text, small }); if (!doniOn) nextDoni(); }
+function nextDoni() {
+  const d = doniQ.shift(); if (!d) { doniOn = false; $("#doniHost").innerHTML = ""; return; }
+  doniOn = true; snd(d.mood === "calm" ? "calm" : "done");
+  const mouth = d.mood === "calm" ? `<path d="M30 52 q5 3 10 0" stroke="#1C1C1E" stroke-width="2.6" fill="none" stroke-linecap="round"/>` : `<path d="M28 50 q7 9 14 0" stroke="#1C1C1E" stroke-width="2.6" fill="#E5483C" stroke-linecap="round"/>`;
+  const leaves = Math.min(3, 1 + Math.floor((S.b.castle - 1) / 3));
+  $("#doniHost").innerHTML = `<div class="doni" role="status" data-doni="1"><svg viewBox="0 0 70 78" aria-hidden="true">
+      <path d="M35 22 q2 -8 0 -14" stroke="#2FA35A" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      <ellipse cx="42" cy="9" rx="7" ry="3.5" fill="#3CC46A" transform="rotate(-25 42 9)"/>${leaves > 1 ? `<ellipse cx="28" cy="11" rx="6.5" ry="3.2" fill="#3CC46A" transform="rotate(25 28 11)"/>` : ""}${leaves > 2 ? `<ellipse cx="35" cy="4" rx="5" ry="2.6" fill="#3CC46A"/>` : ""}
+      <circle cx="35" cy="46" r="26" fill="#fff"/><ellipse cx="21" cy="50" rx="5" ry="3" fill="#FF9EC0"/><ellipse cx="49" cy="50" rx="5" ry="3" fill="#FF9EC0"/>
+      <circle cx="27" cy="43" r="3" fill="#1C1C1E"/><circle cx="43" cy="43" r="3" fill="#1C1C1E"/>${mouth}</svg>
+    <div class="bub">${esc(d.text)}${d.small ? `<small>${esc(d.small)}</small>` : ""}</div></div>`;
+  clearTimeout(nextDoni.tm); nextDoni.tm = setTimeout(nextDoni, 5200);
+}
+function toast(t) { $("#toastHost").innerHTML = `<div class="toast" role="status">${esc(t)}</div>`; clearTimeout(toast.tm); toast.tm = setTimeout(() => ($("#toastHost").innerHTML = ""), 2600); }
+
+/* ═════════ events ═════════ */
+document.addEventListener("click", (e) => {
+  const el = e.target.closest("[data-pv],[data-ptl],[data-pbattle],[data-tab],[data-open],[data-close],[data-pay],[data-payhalf],[data-topen],[data-tpay],[data-army],[data-attack],[data-bend],[data-bspeed],[data-bstop],[data-buy],[data-demo],[data-speed],[data-doni]");
+  if (!el) return;
+  const d = el.dataset;
+  if (d.close && (e.target === el || el.tagName === "BUTTON")) return closeSheet();
+  if (d.close) return;
+  if (d.doni) { clearTimeout(nextDoni.tm); return nextDoni(); }
+  snd("tap");
+  if (d.tab) { if (BATTLE) return; S.tab = d.tab; save(); render(); if (d.tab === "show") window.scrollTo({ top: 0 }); }
+  else if (d.pv) setPV(PV.l + Number(d.pv));
+  else if (d.ptl) { PV.tl = Number(d.ptl); document.querySelectorAll("#ptl button").forEach((b) => b.setAttribute("aria-pressed", String(b === el))); }
+  else if (d.pbattle) startShowBattle();
+  else if (d.open) openSheet(d.open);
+  else if (d.pay) deposit(d.pay, S.gold);
+  else if (d.payhalf) deposit(d.payhalf, Math.max(1, Math.floor(S.gold / 2)));
+  else if (d.topen) openTroop(d.topen);
+  else if (d.tpay) depositTroop(d.tpay, Infinity);
+  else if (d.army) { const [k, n] = d.army.split("|"); const nv = S.army[k] + Number(n); if (nv < 0 || armyUsed() + Number(n) * T[k].sp > armyCap(S.b.barracks)) return; S.army[k] = nv; save(); render(); }
+  else if (d.attack) startAttack(Number(d.attack));
+  else if (d.bspeed) { BATTLE.speed = BATTLE.speed === 1 ? 2 : 1; el.textContent = BATTLE.speed === 1 ? "Tezlashtirish ×2" : "Oddiy tezlik"; }
+  else if (d.bstop) { BATTLE.sim.done = true; finishBattle(); render(); }
+  else if (d.bend) { const back = BATTLE.show ? "show" : "battle"; BATTLE = null; S.tab = back; render(); }
+  else if (d.buy) { const p = BUILDER_PRICE[S.builders + 1]; if (!p || S.cr < p || locked()) return; S.cr -= p; S.builders++; snd("gem"); syncBuilders(); tryStart(); save(); render(); doni("party", `${S.builders}-quruvchi keldi! Endi ${S.builders} ta binoni bir vaqtda qurish mumkin.`, "Uning kulbasi devor tashqarisida, birinchi to'siq bo'ladi."); }
+  else if (d.speed) { S.speed = Number(d.speed); document.querySelectorAll("#speedSeg button").forEach((b) => b.setAttribute("aria-pressed", String(b === el))); save(); }
+  else if (d.demo) {
+    const k = d.demo;
+    if (k === "hw") addGold(120, "Uy vazifasi tugadi");
+    if (k === "cw") addGold(120, "Sinf ishi tugadi");
+    if (k === "vg") addGold(25, "Lug'at o'yini");
+    if (k === "cr") { S.cr += 10; snd("gem"); save(); render(); }
+    if (k === "raided") { S.lock = Date.now() + RECOVER_MS; save(); render(); refreshSheet(); toast("Kimdir qishlog'ingizni 100% bosib oldi. 5 daqiqa tiklanadi."); }
+    if (k === "unlock") { S.lock = 0; save(); render(); refreshSheet(); }
+    if (k === "day") { S.att = { day: todayStr(), n: 0 }; S.rec = {}; save(); render(); }
+    if (k === "reset") { const snd0 = S.sound; S = fresh(); S.sound = snd0; builders.length = 0; BATTLE = null; closeSheet(); syncBuilders(); save(); render(); }
+  }
+});
+$("#sndBtn").addEventListener("click", () => { S.sound = !S.sound; save(); renderRes(); });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape" && SHEET) closeSheet(); });
+addEventListener("resize", () => { VSCROLL = null; PV.scroll = null; if (BATTLE) return; if (vc && S.tab === "village") sizeVillage(); if (S.tab === "show") mountShow(); });
+
+/* ═════════ main loop ═════════ */
+let lastT = performance.now(), liveAcc = 0;
+function loop(now) {
+  const dt = Math.min(.1, (now - lastT) / 1000); lastT = now;
+  const real = Date.now(); S.vt += (real - lastReal) * S.speed; lastReal = real;
+  tickJobs(); stepBuilders(dt);
+  const t = REDUCED ? 0 : now / 1000;
+  if (!BATTLE && S.tab === "village" && vctx && document.body.contains(vc)) drawVillage(t, { c: vctx, b: S.b, nb: S.builders, bl: builders, fill: S.gold / goldCap(S.b.storage), badges: true, main: true });
+  if (!BATTLE && S.tab === "show" && PV.c) { stepPreviewBuilders(dt); const L = PV.l; drawVillage(t, { c: PV.c, b: { castle: L, wall: L, tower: L, barracks: L, storage: L }, nb: 3, bl: pbuilders, fill: .8 }); PV.tiles.forEach((o) => o.vis && drawTile(o, t)); }
+  if (BATTLE && bctx) {
+    const B2 = BATTLE.sim;
+    if (!B2.done) { BATTLE.acc += dt * BATTLE.speed; while (BATTLE.acc >= 1 / 30 && !B2.done) { stepBattle(B2, 1 / 30); BATTLE.acc -= 1 / 30; } }
+    drawBattle(bctx, B2, now / 1000);
+    if (B2.done && !BATTLE.paid) { finishBattle(); setTimeout(render, 700); }
+  }
+  liveAcc += dt; if (liveAcc > .25) { liveAcc = 0; live(); }
+  requestAnimationFrame(loop);
+}
+function live() {
+  document.querySelectorAll("[data-live]").forEach((el) => {
+    const k = el.dataset.live;
+    if (k === "lock") { el.textContent = dur(S.lock - Date.now()); if (!locked()) render(); }
+    else if (k.startsWith("job:") || k.startsWith("jobbar:")) { const j = S.jobs.find((x) => x.k === k.split(":")[1]); if (!j) return; if (k.startsWith("job:")) el.textContent = dur(j.end - S.vt); else el.style.width = clamp(100 * (S.vt - j.start) / (j.end - j.start), 0, 100) + "%"; }
+    else if (k === "tjob" && S.tjob) el.textContent = dur(S.tjob.end - S.vt);
+    else if (k === "tjobbar" && S.tjob) el.style.width = clamp(100 * (S.vt - S.tjob.start) / (S.tjob.end - S.tjob.start), 0, 100) + "%";
+    else if (k.startsWith("rec:")) { const u = S.rec[k.split(":")[1]] || 0; el.textContent = dur(u - Date.now()); if (u <= Date.now()) render(); }
+    else if (BATTLE && k === "bt") el.textContent = Math.floor(BATTLE.sim.t);
+    else if (BATTLE && k === "bp") el.textContent = pct(BATTLE.sim) + "%";
+    else if (BATTLE && k === "bs") { const n = stars(BATTLE.sim); if (el.dataset.n !== String(n)) { el.dataset.n = n; el.innerHTML = `<div class="stars">${[1, 2, 3].map((i) => `<svg style="color:${i <= n ? "#F5B700" : "rgba(255,255,255,.2)"}"><use href="#star" fill="currentColor"/></svg>`).join("")}</div>`; } }
+  });
+}
+
+/* boot */
+document.querySelectorAll("#speedSeg button").forEach((b) => b.setAttribute("aria-pressed", String(Number(b.dataset.speed) === S.speed)));
+syncBuilders(); builders.forEach((b, i) => { const j = S.jobs.find((x) => x.bi === i); if (j) { const d = doorOf(j.k); b.x = d.x; b.y = d.y; b.path = []; } });
+tryStart(); render(); requestAnimationFrame(loop);
+if (!S.seen.hello) { S.seen.hello = 1; save(); setTimeout(() => doni("happy", "Bu sizning qishlog'ingiz. Binoga bosib, oltinni bo'lib-bo'lib soling.", "To'lov 100% bo'lganda quruvchi borib quradi."), 900); }
+</script>
+
+</body></html>

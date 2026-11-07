@@ -1,0 +1,35 @@
+#pack u12 | Present Perfect vs Past Simple
+#lesson target=4
+
+#rule pp.form | have/has + V3 | tense: Present Perfect | uz: have/has + feʼlning 3-shakli (V3). since / for bilan: oʻtmishda boshlangan, hozir ham davom etyapti.
+#rule pp.life | ever / never + have/has + V3 | tense: Present Perfect | uz: Hayotdagi tajriba: ever / never + have/has + V3. Aniq vaqt aytilmaydi.
+#rule ps.time | V2 + finished time | tense: Past Simple | uz: Tugagan vaqt (yesterday, last, ago, in 2023) → Past Simple (V2). Bunday vaqt bilan have/has ishlatilmaydi.
+#confuse pp.form ps.time
+#confuse pp.life ps.time
+
+#tl span-now | started in the past, still true now
+#tl life | some time in your life, up to now
+#tl dot | one finished moment in the past
+
+// Present Perfect: since / for
+i1 pp.form | We {have lived ~lived ~live ~are living (live)} in Tashkent since 2019. | uz: Biz 2019-yildan beri Toshkentda yashaymiz. | sit: They moved to Tashkent in 2019. They still live there. | q: Do they live in Tashkent now? = Yes ~No ~We don't know | tl: span-now | from: We live in Tashkent. | ctx: home | fb: "since 2019": oʻtmishda boshlangan, hozir ham davom etyapti → have + V3: have lived.
+i2 pp.form | My brother {has worked ~have worked ~worked ~is working (work)} at the bank since March. | uz: Akam martdan beri bankda ishlaydi. | sit: He started at the bank in March. He works there now. | q: Does he work at the bank now? = Yes ~No ~We don't know | tl: span-now | from: My brother works at the bank. | ctx: work | fb: "My brother" = he → has. "since March" → has + V3: has worked.
+i3 pp.form | She {has known ~have known ~knew ~is knowing (know)} Madina since primary school. | uz: U Madinani boshlangʻich maktabdan beri taniydi. | q: Does she know Madina now? = Yes ~No ~We don't know | tl: span-now | ctx: school | fb: "She" → has. know → known (V3). "is knowing" boʻlmaydi: know davomli shaklda ishlatilmaydi.
+i12 pp.form | I {have had|'ve had ~had ~has had ~am having (have)} this phone since my birthday. | uz: Bu telefon menda tugʻilgan kunimdan beri bor. | q: Do I have the phone now? = Yes ~No ~We don't know | tl: span-now | ctx: home | fb: "since my birthday" va telefon hali ham bor → have + V3: have had.
+
+// Present Perfect: life experience
+i4 pp.life | {Have you ever been ~Did you ever be ~Have you ever go ~Are you ever been (you, ever, be)} to Samarkand? | uz: Hech Samarqandda boʻlganmisiz? | q: The question is about… = your whole life ~last summer ~tomorrow | tl: life | ctx: travel | fb: Hayotdagi tajriba haqida savol: Have + you + ever + V3 (been).
+i5 pp.life | I {have never eaten ~have never ate ~has never eaten ~am never eaten (never, eat)} sushi. | uz: Men hech qachon sushi yemaganman. | sit: Someone offers you sushi. You don't know the taste. | q: Has this person tried sushi? = No ~Yes ~We don't know | tl: life | ctx: food | fb: I → have. eat → eaten (V3). "ate" bu V2, bu yerda boʻlmaydi.
+i6 pp.life | My grandmother {has never flown ~have never flown ~has never flew ~has never fly (never, fly)} in a plane. | uz: Buvim hech qachon samolyotda uchmaganlar. | q: Has she ever been in a plane? = No ~Yes ~We don't know | tl: life | ctx: family | fb: grandmother = she → has. fly → flown (V3).
+i10 pp.life | We {have been ~were ~has been ~have went (be)} to Bukhara three times. | uz: Biz Buxoroda uch marta boʻlganmiz. | sit: Talking about their whole life. | pair: bux | q: Do we know when the trips were? = No ~Yes, last year ~Yes, in May | tl: life | ctx: travel | fb: Necha marta (three times), vaqt aytilmagan → have + V3: have been.
+
+// Past Simple: finished time
+i7 ps.time | I {saw ~have seen ~see ~was see (see)} Aziz yesterday. | uz: Men kecha Azizni koʻrdim. | sit: You met Aziz in the street. That was yesterday. | q: Is "yesterday" finished time? = Yes ~No ~We don't know | tl: dot | from: I see Aziz every day. | ctx: friends | fb: "yesterday" tugagan vaqt → Past Simple: saw. "have seen yesterday" boʻlmaydi.
+i8 ps.time | We {visited ~have visited ~visit ~were visit (visit)} Bukhara last summer. | uz: Biz oʻtgan yozda Buxoroga sayohat qildik. | sit: Talking about one trip, last summer. | pair: bux | q: Is the trip finished? = Yes ~No ~We don't know | tl: dot | ctx: travel | fb: "last summer" tugagan vaqt → Past Simple: visited.
+i9 ps.time | She {finished ~has finished ~finish ~was finish (finish)} her homework two hours ago. | uz: U uy vazifasini ikki soat oldin tugatdi. | q: When did she finish? = Two hours ago ~She is still doing it ~We don't know | tl: dot | ctx: school | fb: "ago" tugagan vaqtni bildiradi → Past Simple: finished.
+i11 ps.time | They {moved ~have moved ~move ~was moved (move)} to a new flat in 2023. | uz: Ular 2023-yilda yangi kvartiraga koʻchishdi. | q: Is 2023 finished? = Yes ~No ~We don't know | tl: dot | ctx: home | fb: "in 2023" tugagan yil → Past Simple: moved.
+
+// Longer items
+x1 pp.form text | Aziza {has lived ~lived ~live (live)} in Tashkent since 2020. She {has studied ~studied ~study (study)} English since 2023. Last month she {passed ~has passed ~pass (pass) #ps.time} her first exam. | fb: since → Present Perfect. "Last month" tugagan vaqt → Past Simple.
+d1 pp.life dialog | A: {Have you ever tried ~Did you ever tried ~Have you ever try (you, ever, try)} plov in Samarkand? // B: Yes! I {tried ~have tried ~try (try) #ps.time} it last year. // A: Lucky you. I {have never tried ~has never tried ~have never try (never, try)} it. | fb: Tajriba → have + V3. "last year" → Past Simple.
+c1 pp.life chain | A: Have you ever been to Khiva? B: Yes, I {have ~did ~was ~am}. >> A: When {did you go ~have you gone ~do you went ~you went (go) #ps.time} there? >> B: I {went ~have gone ~go ~was go (go) #ps.time} there in 2023. | fb: "Have you…?" → "Yes, I have". "When…?" va "in 2023" → Past Simple.
