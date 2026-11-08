@@ -4125,14 +4125,16 @@ const App = (() => {
     if (T.offset && ctx.mode !== 'login') h += `<div class="banner c">⏱ Test clock: the site thinks it is ${enWhen(T.now())}${ctx.mode === 'teacher' ? '<button data-act="clkreset">Real time</button>' : ''}</div>`;
     b.innerHTML = h;
   }
+  let lastLogin = '';
   function login() {
-    const st = ctx.role === 'student';
     return `<div class="login-wrap"><div class="login-art"><span class="blob" style="width:340px;height:340px;background:#FFD23F;opacity:.25;right:-90px;top:-80px"></span><span class="blob" style="width:220px;height:220px;background:#FF8A1E;opacity:.35;left:-60px;bottom:40px"></span>
       <div class="logo">A</div><h1>Ingliz tili</h1><p>Uy vazifalari, sinf ishi, so'zlar, o'yinlar va qal'a — hammasi bir joyda.</p></div>
-      <div class="login-card"><h2>Kirish</h2><div class="segb" role="group" aria-label="Kim sifatida"><button type="button" class="${st ? 'on' : ''}" data-act="role" data-k="student">O'quvchi</button><button type="button" class="${st ? '' : 'on'}" data-act="role" data-k="teacher">O'qituvchi</button></div>
-      <label>Login<input class="input" id="lg-login" autocomplete="username" autocapitalize="off" spellcheck="false" required></label><label>Parol<input class="input" id="lg-pass" type="password" autocomplete="current-password" required></label>
+      <div class="login-card"><h2>Kirish</h2>
+      <label>Login<input class="input" id="lg-login" autocomplete="username" autocapitalize="off" autocorrect="off" spellcheck="false" value="${esc(lastLogin)}" required></label>
+      <label>Parol<input class="input" id="lg-pass" type="password" autocomplete="current-password" autocapitalize="off" autocorrect="off" spellcheck="false" required></label>
+      <label class="small" style="display:flex;gap:8px;align-items:center;font-weight:600;cursor:pointer"><input type="checkbox" id="lg-show" style="width:18px;height:18px;margin:0"> Parolni ko'rsatish</label>
       <div class="lgerr" role="alert">${esc(ctx.err)}</div><button class="btn lgbtn" type="button" data-act="login">Kirish</button>
-      <p class="small" style="margin:0;opacity:.8">${st ? "Login va parolni o'qituvchingiz beradi." : 'Teachers and the admin log in here.'}</p>
+      <p class="small" style="margin:0;opacity:.8">O'quvchilar ham, o'qituvchilar ham shu yerdan kiradi. Login va parolni o'qituvchingiz beradi.</p>
       </div></div>`;
   }
   /* login with the school's real accounts (checked on the server), then load the database */
@@ -4140,17 +4142,20 @@ const App = (() => {
   async function doLogin() {
     if (logging) return;
     const l = ($('#lg-login').value || '').trim().toLowerCase(), p = $('#lg-pass').value || '';
-    if (!l || !p) { ctx.err = ctx.role === 'student' ? "Login va parolni yozing" : 'Write your login and password'; return render(); }
+    lastLogin = l;
+    if (!l || !p) { ctx.err = "Login va parolni yozing."; render(); return focusLogin(); }
     logging = true; const btn = $('.lgbtn'); if (btn) { btn.disabled = true; btn.textContent = '…'; }
     try {
       const r = await Net.login(l, p);
-      if (r.error) { ctx.err = r.error === 'LOCKED' ? "Ko'p marta xato kiritildi. 2 daqiqadan keyin urinib ko'ring." : (ctx.role === 'student' ? "Login yoki parol noto'g'ri" : 'Wrong login or password'); logging = false; return render(); }
+      if (r.error) { ctx.err = r.error === 'LOCKED' ? "Ko'p marta xato kiritildi. 2 daqiqadan keyin urinib ko'ring." : "Login yoki parol noto'g'ri. Kichik harflar bilan, bo'sh joysiz yozing. Esingizda bo'lmasa, o'qituvchingizdan so'rang."; logging = false; render(); return focusLogin(); }
       const me = await Net.boot();
       if (!me) { ctx.err = "Bu hisob yopilgan · this account is closed"; logging = false; return render(); }
       enter(me);
-    } catch (e) { ctx.err = "Internet bilan muammo. Qayta urinib ko'ring."; render(); }
+    } catch (e) { ctx.err = "Internet bilan muammo. Internetni tekshirib, qayta urinib ko'ring."; render(); }
     logging = false;
   }
+  // after an error the login stays filled in and the cursor goes to the password
+  function focusLogin() { const pw = $('#lg-pass'), lg = $('#lg-login'); if (lg && lg.value && pw) pw.focus(); else if (lg) lg.focus(); }
   function enter(me) {
     if (me.role === 'teacher') { Object.assign(ctx, { mode: 'teacher', tid: me.id, sid: null, err: '' }); Tea.V.tab = 'results'; }
     else { Object.assign(ctx, { mode: 'student', sid: me.id, tid: null, err: '' }); Stu.V.tab = 'home'; }
@@ -4169,7 +4174,7 @@ const App = (() => {
   // shared
   H.mbg = (d, el, e) => { if (e.target === el) mclose(); };
   H.mclose = mclose; H.home = () => { Run.close(); render(); };
-  H.logout = logout; H.login = () => doLogin(); H.asback = back; H.role = d => { ctx.role = d.k; ctx.err = ''; render(); };
+  H.logout = logout; H.login = () => doLogin(); H.asback = back; 
   H.toast = d => toast(d.t); H.say = d => Speech.say(d.t);
   H.snd = () => { Snd.toggle(); render(); }; H.donitgl = () => { try { localStorage.setItem('doni', Doni.enabled() ? '0' : '1'); } catch (e) {} render(); };
   H.ovclose = () => Play.closeOv();
@@ -4376,6 +4381,7 @@ const App = (() => {
   }
   document.addEventListener('input', onInput);
   document.addEventListener('change', e => {
+    if (e.target.id === 'lg-show') { const pw = $('#lg-pass'); if (pw) pw.type = e.target.checked ? 'text' : 'password'; return; }
     const el = e.target, d = el.dataset;
     if (d.actChg === 'gsel') { const c = gcur(); if (c) { c.resp.values = c.resp.values || []; c.resp.values[+d.g] = el.value; } return; }
     if (d.chg) return teacherChange(el, d);

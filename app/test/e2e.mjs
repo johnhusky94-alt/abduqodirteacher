@@ -2,6 +2,18 @@ import { launch } from './cdp.mjs';
 const B = await launch(); const out = [];
 const ok = (c, m) => { out.push((c ? 'PASS ' : 'FAIL ') + m); };
 try {
+  // 0. login page: no student/teacher toggle; a wrong password keeps the login and shows a clear message
+  let p0 = await B.page(); await p0.go('http://localhost:8787/');
+  ok(await p0.ev(`!document.querySelector('[data-act=role]')`), 'no student/teacher toggle on the login page');
+  await p0.ev(`document.querySelector('#lg-login').value='Ali '; document.querySelector('#lg-pass').value='wrong'; document.querySelector('[data-act=login]').click()`);
+  await p0.until(`/noto'g'ri/.test(document.querySelector('.lgerr').textContent)`);
+  ok(await p0.ev(`document.querySelector('#lg-login').value === 'ali' && document.activeElement.id === 'lg-pass'`), 'after a wrong password the login stays and the cursor is on the password');
+  await p0.ev(`const c = document.querySelector('#lg-show'); c.checked = true; c.dispatchEvent(new Event('change', { bubbles: true })); true`);
+  ok(await p0.ev(`document.querySelector('#lg-pass').type === 'text'`), 'show-password works');
+  // the teacher logs in from the same (student-default) page
+  await p0.ev(`document.querySelector('#lg-login').value='abduqodir'; document.querySelector('#lg-pass').value='tpass'; document.querySelector('[data-act=login]').click()`);
+  await p0.until(`App.ctx.mode === 'teacher'`); ok(true, 'teacher logs in from the same page');
+  await p0.ev(`Net.logout(); localStorage.clear(); true`); p0.close();
   // 1. student logs in with the old site's account
   let p = await B.page(); await p.go('http://localhost:8787/');
   await p.ev(`document.querySelector('#lg-login').value='ali'; document.querySelector('#lg-pass').value='1111'; document.querySelector('[data-act=login]').click()`);
@@ -25,7 +37,6 @@ try {
 
   // 2. teacher: change a password, add a student, assign-free check
   p = await B.page(); await p.go('http://localhost:8787/'); await p.ev(`localStorage.clear(); true`); await p.go('http://localhost:8787/');
-  await p.ev(`document.querySelector('[data-k=teacher]').click()`); await p.sleep(200);
   await p.ev(`document.querySelector('#lg-login').value='abduqodir'; document.querySelector('#lg-pass').value='tpass'; document.querySelector('[data-act=login]').click()`);
   await p.until(`App.ctx.mode === 'teacher'`);
   ok(await p.ev(`Store.db.students.length === 3 && Store.db.teachers.length === 1`), 'teacher sees 3 students and 1 teacher');
