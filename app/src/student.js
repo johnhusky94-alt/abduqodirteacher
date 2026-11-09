@@ -5,7 +5,7 @@
 const Stu = (() => {
   const SC = { home: ['#2340E0', '#FFD23F'], results: ['#0D7F72', '#FF9F1C'], words: ['#1E74E8', '#B8F53B'], practice: ['#5B2BD9', '#B8F53B'], games: ['#D4246F', '#5CE1F0'], castle: ['#1B1150', '#FFC93C'], leader: ['#1F2A8C', '#FF8A1E'], trophies: ['#7A1FA2', '#FFC93C'], profile: ['#C93B26', '#8BF0D6'] };
   const TABS = [['home', 'Asosiy', 'home'], ['words', "So'zlarim", 'book'], ['results', 'Natijalar', 'results'], ['practice', 'Erkin mashq', 'practice'], ['games', "O'yinlar", 'games'], ['castle', "Qal'a", 'castle'], ['leader', 'Reyting', 'leader'], ['trophies', 'Kuboklar', 'trophy'], ['profile', 'Profil', 'profile']];
-  const OPEN_IN_LESSON = ['home', 'leader', 'words'];
+  const OPEN_IN_LESSON = ['home', 'leader', 'words', 'profile'];
   const V = { tab: 'home', view: null, rmode: 'hw', lb: 'class', wf: 'past', wq: '', pr: null };
   let S = null;
   const me = () => S;
@@ -40,7 +40,7 @@ const Stu = (() => {
       if (c.taught === S.group) body = `<div class="card big-note"><div style="font-size:40px">👩‍🏫</div><h2>Bugun o'qituvchi siz bilan bevosita dars o'tadi</h2><p>Qurilma kerak emas. Uy vazifasi oxirgi darsdan keyin shu yerda ochiladi.</p></div>`;
       else if (cw) { const plan = School.workSections(cw.P); body = `<div class="tiles"><button class="tile" style="background:#12B39A;color:#0C2340" data-act="openwork" data-id="${cw.id}" data-live="1"><span class="t-kind">Sinf ishi · hozir</span><div><h3>${L.L.n}-dars</h3><div class="t-list">${plan.map(x => `${esc(Code.PARTS[x.s.kind].uz)} · ${x.s.min} daq`).join('<br>')}</div></div><span class="t-time">${L.L.start}–${L.L.end}</span></button></div>`; }
       else body = `<div class="card big-note"><div style="font-size:40px">📘</div><h2>Bu dars uchun sinf ishi hali qo'yilmagan</h2><p>O'qituvchini tinglang.</p></div>`;
-      return top(`Salom, ${esc(first)}!`, date + ' · hozir dars') + `<p class="muted" style="margin:0 4px 14px">Dars vaqtida faqat sinf ishi, So'zlarim va Reyting ochiq. Uy vazifalari dars tugagach ochiladi.</p>` + body
+      return top(`Salom, ${esc(first)}!`, date + ' · hozir dars') + `<p class="muted" style="margin:0 4px 14px">Dars vaqtida faqat sinf ishi, So'zlarim, Reyting va Profil ochiq. Uy vazifalari dars tugagach ochiladi.</p>` + body
         + (testTiles.length ? `<h2 class="sec-title">Testlar</h2><div class="tiles">${testTiles.join('')}</div>` : '') + weekWordsCard();
     }
     const hws = insts.filter(i => i.type === 'homework'), stHw = i => School.state(S, i, now);

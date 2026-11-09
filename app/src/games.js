@@ -48,7 +48,7 @@ const Play = (() => {
       const o = { key: g.key, title: g.title, tier: g.tier, play: g.play, uz: UZ[g.key] || '', open: false, why: '', short: '' };
       if (g.play === 'class') { o.why = "Bu o'yinni o'qituvchi darsda butun sinf bilan ochadi"; o.short = 'Darsda'; return o; }
       if (!g.ok) { o.why = "Hozirgi so'zlaringizda bu o'yin uchun kerakli ma'lumot yo'q (gaplar, qarama-qarshi ma'nolar yoki guruhlar)"; o.short = "Ma'lumot yo'q"; return o; }
-      if (BLOCK_GAMES.has(g.key) ? ready.length >= 1 && g.ok : ready.length >= MIN[g.key]) { o.open = true; return o; }
+      if (BLOCK_GAMES.has(g.key) ? fit.length >= 1 : fit.length >= MIN[g.key]) { o.open = true; return o; } /* games open without waiting for word stages */
       if (rareOK && !rareGiven && g.play === 'solo' && fit.length >= MIN[g.key]) { rareGiven = true; o.open = true; o.rare = true; return o; }
       const left = MIN[g.key] - ready.length;
       o.why = `Yana ${left} ta so'zni “${Vocab.STAGES[need].uz}” bosqichiga yetkazing`; o.short = `Yana ${left} so'z`;

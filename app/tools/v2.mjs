@@ -6,7 +6,7 @@ const ctx = { console, setTimeout, clearTimeout, setInterval: () => 0, addEventL
   localStorage: { getItem: () => null, setItem() {}, removeItem() {} }, document: el(), navigator: {}, location: { href: '' }, fetch: async () => ({}) };
 ctx.window = ctx; ctx.self = ctx; vm.createContext(ctx);
 const run = (f, extra = '') => vm.runInContext(readFileSync(R + f, 'utf8') + extra, ctx, { filename: f });
-run('vendor/grammar-engine.js');
+run('vendor/grammar-engine.js'); run('vendor/wc.js', '\n;globalThis.WC=typeof WC!=="undefined"?WC:globalThis.WC;');
 run('src/core.js', '\n;globalThis.T=T;globalThis.N=N;globalThis.Store=Store;');
 run('src/code.js', '\n;globalThis.Code=Code;');
 export const { Code, T } = ctx;
