@@ -405,7 +405,7 @@ ${w.text}
   function parseFb(txt) {
     const out = [], errs = []; let cur = null;
     String(txt).replace(/\r/g, '').split('\n').forEach((raw, i) => { const l = raw.trim(); if (!l) return; let m;
-      if ((m = l.match(/^#{2,3}\s*(W-\d+)/i))) { cur = { id: m[1].toUpperCase(), score: null, good: '', fix: [], next: '', words: [] }; out.push(cur); return; }
+      if ((m = l.match(/^#{2,3}\s*(W-[A-Z0-9]+)/i))) { cur = { id: m[1].toUpperCase(), score: null, good: '', fix: [], next: '', words: [] }; out.push(cur); return; }
       if (!cur) return;
       if ((m = l.match(/^SCORE:\s*(\d+)/i))) { cur.score = clamp(+m[1], 0, 10); return; }
       if ((m = l.match(/^GOOD:\s*(.*)$/i))) { cur.good = N.uzFix(m[1]); return; }
