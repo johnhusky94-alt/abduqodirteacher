@@ -79,7 +79,7 @@ const Net = (() => {
     const ev = Q.ev.slice(0, 400), ops = Q.ops.slice(0, 200), castles = Object.assign({}, Q.castles);
     try {
       const r = await rpc('v2_sync', { p_token: token, p_events: ev, p_ops: ops, p_castles: castles });
-      const evIds = new Set(ev.map(e => e.id)); Q.ev = Q.ev.filter(e => !evIds.has(e.id));
+      const evIds = new Set(ev.map(e => e.id)); Q.ev = Q.ev.filter(e => !evIds.has(e.id)); ev.forEach(e => { if (!rawIds.has(e.id)) sent.set(e.id, e); });
       Q.ops = Q.ops.filter(o => !ops.includes(o));
       Object.keys(castles).forEach(k => { if (Q.castles[k] === castles[k]) delete Q.castles[k]; });
       saveQ(); backoff = 0; setOffline(false);
@@ -105,15 +105,29 @@ const Net = (() => {
     if (!r || r.error) return { error: r ? r.error : 'BAD_LOGIN' };
     token = r.token; ls.set(TOK, token); return { ok: true };
   }
+  /* answers come in pages (net: v2_events_page); "raw" keeps them between refreshes, "cursor" is the last one loaded */
+  let raw = [], rawIds = new Set(), cursor = 0;
+  const sent = new Map();   // sent by this browser but not loaded back yet
+  const isAuth = e => e && (e.message === 'AUTH' || e.message === 'REMOVED');
+  function addRaw(evs) { evs.forEach(e => { if (!rawIds.has(e.id)) { rawIds.add(e.id); raw.push(e); known.add(e.id); sent.delete(e.id); } }); }
+  async function pages(progress) {
+    for (let more = true; more;) {
+      const p = await rpc('v2_events_page', { p_token: token, p_after: cursor, p_limit: 5000 });
+      addRaw(p.events || []); cursor = p.last || cursor; more = !!p.more;
+      if (progress) progress(raw.length);
+    }
+  }
   function apply(r) {
     me = r.me; since = r.since;
     const db = r.db;
     db.settings = db.settings || {}; db.plans = db.plans || {}; db.overrides = db.overrides || {}; db.accept = db.accept || {};
-    db.reports = db.reports || []; db.writings = db.writings || []; db.events = db.events || [];
-    // keep what this browser made but has not sent yet
-    const have = new Set(db.events.map(e => e.id));
-    Q.ev.forEach(e => { if (!have.has(e.id)) db.events.push(e); });
-    db.events.sort((a, b) => a.ts - b.ts);
+    db.reports = db.reports || []; db.writings = db.writings || [];
+    if (!r.paged) addRaw(db.events || []);
+    // loaded answers + daily totals + what this browser made but has not got back from the server yet
+    const evs = raw.concat(r.achsums || []), have = new Set(evs.map(e => e.id));
+    sent.forEach((e, id) => { if (!have.has(id)) { evs.push(e); have.add(id); } });
+    Q.ev.forEach(e => { if (!have.has(e.id)) { evs.push(e); have.add(e.id); } });
+    db.events = evs.sort((a, b) => a.ts - b.ts);
     const castles = r.castles || {}; Object.entries(Q.castles).forEach(([k, v]) => { castles[k] = v; });
     Q.ops.forEach(o => { const c = o.coll, k = KIND[c];
       if (k === 'arr') { const a = db[c] || (db[c] = []); const i = a.findIndex(x => x.id === o.id); if (o.data === null) { if (i >= 0) a.splice(i, 1); } else { const x = JSON.parse(JSON.stringify(o.data)); if ('pass' in x) x.pass = ''; if (i >= 0) a[i] = x; else a.push(x); } }
@@ -124,10 +138,16 @@ const Net = (() => {
     takeSnap(db);
     return me;
   }
-  async function boot() {
+  /* null = not logged in (bad token or closed account); a thrown error = internet or server trouble (stay logged in) */
+  async function boot(progress) {
     if (!token) return null;
-    try { const r = await rpc('v2_boot', { p_token: token }); if (!r || r.error) { forget(); return null; } apply(r); if (pendingCount()) schedule(500); return me; }
-    catch (e) { if (e.net) throw e; forget(); return null; }
+    raw = []; rawIds = new Set(); cursor = 0;
+    try {
+      const r = await rpc('v2_boot', { p_token: token });
+      if (!r || r.error) { forget(); return null; }
+      if (r.paged) await pages(progress);
+      apply(r); if (pendingCount()) schedule(500); return me;
+    } catch (e) { if (isAuth(e)) { forget(); return null; } throw e; }
   }
   let lastRefresh = 0;
   async function refresh(force) {
@@ -135,25 +155,19 @@ const Net = (() => {
     if (!force && Date.now() - lastRefresh < 60000) return false;
     lastRefresh = Date.now();
     collect();
-    try { const r = await rpc('v2_boot', { p_token: token }); if (!r || r.error) { expired(); return false; } if (Store.sandbox) return false; apply(r); return true; }
-    catch (e) { if (!e.net) expired(); return false; }
+    try {
+      const r = await rpc('v2_boot', { p_token: token }); if (!r || r.error) { expired(); return false; }
+      if (r.paged) await pages();
+      if (Store.sandbox) return false; apply(r); return true;
+    } catch (e) { if (isAuth(e)) expired(); return false; }   // a slow server just waits for the next refresh
   }
   function forget() { token = null; me = null; ls.del(TOK); ls.del('at_session'); }
   function expired() { forget(); if (typeof App !== 'undefined') { App.ctx.err = 'Iltimos, qaytadan kiring · please log in again'; App.toLogin(); } }
   async function logout() { const t = token; forget(); Q = { ev: [], ops: [], castles: {} }; saveQ(); if (t) rpc('logout', { p_token: t }).catch(() => {}); }
 
-  /* older answers of one student, for teacher pages that look back further than the loaded weeks */
-  async function older(sid) {
-    if (!since) return 0;
-    const evs = await rpc('v2_events_of', { p_token: token, p_sid: sid, p_before: since });
-    const have = new Set(Store.db.events.map(e => e.id)); let n = 0;
-    (evs || []).forEach(e => { if (!have.has(e.id)) { Store.db.events.push(e); known.add(e.id); n++; } });
-    Store.db.events.sort((a, b) => a.ts - b.ts); Store._cache = {}; return n;
-  }
-
   // send before the page closes; check for new work when the student comes back to the tab
   addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') { collect(); flush(); } });
   addEventListener('online', () => schedule(200));
 
-  return { login, boot, refresh, logout, changed, castle, flush, older, pending: pendingCount, me: () => me, hasToken: () => !!token, get since() { return since; } };
+  return { login, boot, refresh, logout, changed, castle, flush, pending: pendingCount, me: () => me, hasToken: () => !!token, get since() { return since; } };
 })();

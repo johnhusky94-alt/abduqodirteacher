@@ -117,7 +117,7 @@ const School = (() => {
 
   /* ---------------- achko and gold ---------------- */
   /* achko lives on events: ach:true events count +1 if right, −1 if wrong, 0 for "Bilmayman" */
-  function achOf(e) { if (!e.ach || e.rapid) return 0; if (e.kind === 'ans') { const r = ansRight(e); return r.right - r.wrong; } if (e.kind === 'game') return e.achko || 0; const ok = Store.okOf(e); if (e.idk) return -1; return ok === true ? 1 : ok === false ? -1 : 0; }
+  function achOf(e) { if (!e.ach || e.rapid) return 0; if (e.kind === 'achsum') return e.n || 0; if (e.kind === 'ans') { const r = ansRight(e); return r.right - r.wrong; } if (e.kind === 'game') return e.achko || 0; const ok = Store.okOf(e); if (e.idk) return -1; return ok === true ? 1 : ok === false ? -1 : 0; }
   function achko(sid, from = -Infinity, to = Infinity) { return sum(Store.events(sid).filter(e => e.ach && e.ts >= from && e.ts < to).map(achOf)); }
   const weekAchko = (sid, monday) => achko(sid, monday, T.addWeeks(monday, 1));
   /* gold is the castle's wallet; earning writes into the castle state (capped by the storage, as in the castle plan) */

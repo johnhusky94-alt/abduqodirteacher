@@ -57,11 +57,23 @@ const App = (() => {
     try {
       const r = await Net.login(l, p);
       if (r.error) { ctx.err = r.error === 'LOCKED' ? "Ko'p marta xato kiritildi. 2 daqiqadan keyin urinib ko'ring." : "Login yoki parol noto'g'ri. Kichik harflar bilan, bo'sh joysiz yozing. Esingizda bo'lmasa, o'qituvchingizdan so'rang."; logging = false; render(); return focusLogin(); }
-      const me = await Net.boot();
-      if (!me) { ctx.err = "Bu hisob yopilgan · this account is closed"; logging = false; return render(); }
-      enter(me);
-    } catch (e) { ctx.err = "Internet bilan muammo. Internetni tekshirib, qayta urinib ko'ring."; render(); }
+    } catch (e) { ctx.err = "Internet bilan muammo. Internetni tekshirib, qayta urinib ko'ring."; logging = false; return render(); }
     logging = false;
+    load();   // the password was right: from here on, trouble is the internet or the server, never the account
+  }
+  /* load the data after login or on opening the page; shows progress, and a retry button instead of logging out */
+  function loading(n) { $('#main').innerHTML = `<div class="card" style="max-width:420px;margin:40px auto;text-align:center"><p class="muted" style="margin:0">Yuklanmoqda…${n ? ' ' + n.toLocaleString('ru-RU') + ' ta javob' : ''}</p></div>`; }
+  async function load() {
+    loading(0);
+    try {
+      const me = await Net.boot(n => loading(n));
+      if (me) return enter(me);
+      ctx.err = "Kirish muddati tugagan. Qaytadan kiring."; return render();
+    } catch (e) {
+      $('#main').innerHTML = `<div class="card" style="max-width:440px;margin:40px auto;text-align:center;display:flex;flex-direction:column;gap:12px"><h2 style="margin:0">Yuklab bo'lmadi</h2>
+        <p class="muted" style="margin:0">${e.net ? "Internet bilan muammo. Internetni tekshiring." : "Server hozir band. Bir oz kutib, qayta urinib ko'ring."} Hisobingiz joyida, qaytadan kirish shart emas.</p>
+        <button class="btn" data-act="retryboot">Qayta urinish</button><button class="btn ghost" data-act="logout">Boshqa hisob bilan kirish</button></div>`;
+    }
   }
   // after an error the login stays filled in and the cursor goes to the password
   function focusLogin() { const pw = $('#lg-pass'), lg = $('#lg-login'); if (lg && lg.value && pw) pw.focus(); else if (lg) lg.focus(); }
@@ -83,7 +95,7 @@ const App = (() => {
   // shared
   H.mbg = (d, el, e) => { if (e.target === el) mclose(); };
   H.mclose = mclose; H.home = () => { Run.close(); render(); };
-  H.logout = logout; H.login = () => doLogin(); H.asback = back; 
+  H.logout = logout; H.retryboot = () => load(); H.login = () => doLogin(); H.asback = back; 
   H.toast = d => toast(d.t); H.say = d => Speech.say(d.t);
   H.snd = () => { Snd.toggle(); render(); }; H.donitgl = () => { try { localStorage.setItem('doni', Doni.enabled() ? '0' : '1'); } catch (e) {} render(); };
   H.ovclose = () => Play.closeOv();
@@ -362,10 +374,7 @@ const App = (() => {
   async function start() {
     T.offset = 0;
     if (!Net.hasToken()) return render();
-    $('#main').innerHTML = '<div class="card" style="max-width:420px;margin:40px auto;text-align:center"><p class="muted">Yuklanmoqda…</p></div>';
-    try { const me = await Net.boot(); if (me) return enter(me); }
-    catch (e) { ctx.err = "Internet bilan muammo. Sahifani yangilang."; }
-    render();
+    load();
   }
   return { ctx, render, theme, modal, start, toLogin, me: S };
 })();
