@@ -101,7 +101,7 @@ const App = (() => {
   H.ovclose = () => Play.closeOv();
   H.clkreset = () => { T.offset = 0; Store.db.settings.clock = 0; Store.save(); render(); };
   // student navigation
-  H.sttab = d => { const L = Stu.lessonNow(); if (L && !Stu.OPEN_IN_LESSON.includes(d.k)) return toast("Dars vaqtida faqat Asosiy, So'zlarim, Reyting va Profil ochiq"); Run.close(); Stu.V.tab = d.k; Stu.V.view = null; Stu.V.pr = null; window.scrollTo(0, 0); render(); };
+  H.sttab = d => { const L = Stu.lessonNow(); if (L && !Stu.OPEN_IN_LESSON.includes(d.k)) return toast("Dars vaqtida faqat Asosiy, So'zlarim, O'yinlar, Qal'a, Reyting va Profil ochiq"); Run.close(); Stu.V.tab = d.k; Stu.V.view = null; Stu.V.pr = null; window.scrollTo(0, 0); render(); };
   H.stold = () => { Stu.V.view = 'old'; render(); }; H.stback = () => { Stu.V.view = null; render(); };
   H.wf = d => { Stu.V.wf = d.k; render(); }; H.wordopen = d => { Stu.V.view = { word: d.w }; window.scrollTo(0, 0); render(); };
   H.rmode = d => { if (ctx.mode === 'student' || ctx.as && ctx.as.type === 'student') Stu.V.rmode = d.k; else { Tea.V.r.mode = d.k; Tea.V.r.lessons = null; } render(); };

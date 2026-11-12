@@ -3132,7 +3132,7 @@ const Run = (() => {
 const Stu = (() => {
   const SC = { home: ['#2340E0', '#FFD23F'], results: ['#0D7F72', '#FF9F1C'], words: ['#1E74E8', '#B8F53B'], practice: ['#5B2BD9', '#B8F53B'], games: ['#D4246F', '#5CE1F0'], castle: ['#1B1150', '#FFC93C'], leader: ['#1F2A8C', '#FF8A1E'], trophies: ['#7A1FA2', '#FFC93C'], profile: ['#C93B26', '#8BF0D6'] };
   const TABS = [['home', 'Asosiy', 'home'], ['words', "So'zlarim", 'book'], ['results', 'Natijalar', 'results'], ['practice', 'Erkin mashq', 'practice'], ['games', "O'yinlar", 'games'], ['castle', "Qal'a", 'castle'], ['leader', 'Reyting', 'leader'], ['trophies', 'Kuboklar', 'trophy'], ['profile', 'Profil', 'profile']];
-  const OPEN_IN_LESSON = ['home', 'leader', 'words', 'profile'];
+  const OPEN_IN_LESSON = ['home', 'leader', 'words', 'profile', 'games', 'castle'];
   const V = { tab: 'home', view: null, rmode: 'hw', lb: 'class', wf: 'past', wq: '', pr: null };
   let S = null;
   const me = () => S;
@@ -3167,7 +3167,7 @@ const Stu = (() => {
       if (c.taught === S.group) body = `<div class="card big-note"><div style="font-size:40px">👩‍🏫</div><h2>Bugun o'qituvchi siz bilan bevosita dars o'tadi</h2><p>Qurilma kerak emas. Uy vazifasi oxirgi darsdan keyin shu yerda ochiladi.</p></div>`;
       else if (cw) { const plan = School.workSections(cw.P); body = `<div class="tiles"><button class="tile" style="background:#12B39A;color:#0C2340" data-act="openwork" data-id="${cw.id}" data-live="1"><span class="t-kind">Sinf ishi · hozir</span><div><h3>${L.L.n}-dars</h3><div class="t-list">${plan.map(x => `${esc(Code.PARTS[x.s.kind].uz)} · ${x.s.min} daq`).join('<br>')}</div></div><span class="t-time">${L.L.start}–${L.L.end}</span></button></div>`; }
       else body = `<div class="card big-note"><div style="font-size:40px">📘</div><h2>Bu dars uchun sinf ishi hali qo'yilmagan</h2><p>O'qituvchini tinglang.</p></div>`;
-      return top(`Salom, ${esc(first)}!`, date + ' · hozir dars') + `<p class="muted" style="margin:0 4px 14px">Dars vaqtida faqat sinf ishi, So'zlarim, Reyting va Profil ochiq. Uy vazifalari dars tugagach ochiladi.</p>` + body
+      return top(`Salom, ${esc(first)}!`, date + ' · hozir dars') + `<p class="muted" style="margin:0 4px 14px">Dars vaqtida sinf ishi, So'zlarim, O'yinlar, Qal'a, Reyting va Profil ochiq. Uy vazifalari dars tugagach ochiladi.</p>` + body
         + (testTiles.length ? `<h2 class="sec-title">Testlar</h2><div class="tiles">${testTiles.join('')}</div>` : '') + weekWordsCard();
     }
     const hws = insts.filter(i => i.type === 'homework'), stHw = i => School.state(S, i, now);
@@ -3556,6 +3556,7 @@ new MutationObserver(function(){try{var d=JSON.parse(el.textContent);parent.post
     return Store.db.students.filter(x => x.cls === s.cls && x.id !== s.id).map((x, i) => { const c = School.castle(x.id); const tl = Object.values(c.tr || {}).reduce((a, t) => a + (t.lv || 1), 0) || 5;
       return { id: i + 1, sid: x.id, name: x.name.split(' ')[0] + ' ' + (x.name.split(' ')[1] || '').slice(0, 1) + '.', b: Object.assign({ castle: 1, wall: 1, tower: 1, barracks: 1, storage: 1 }, c.b), builders: c.builders || 1, tl }; });
   }
+  window.__inLesson = () => { try { return !!Stu.lessonNow(); } catch (e) { return false; } };
   function castleDoc(s, key) {
     let h = window.__CASTLE_SRC;
     const mates = classmates(s); CRUN = { s, key, mates };
@@ -3563,10 +3564,28 @@ new MutationObserver(function(){try{var d=JSON.parse(el.textContent);parent.post
     sub('const KEY = "qala-v2-demo-1";', 'const KEY = window.__CASTLE.key;');
     sub(/const CLASSMATES = \[[\s\S]*?\n\];/, 'const CLASSMATES = window.__CASTLE.classmates;');
     sub('gold: 850, cr: 6, b: { castle: 2, wall: 1, tower: 2, barracks: 2, storage: 1 }', 'gold: 0, cr: 0, b: { castle: 1, wall: 1, tower: 1, barracks: 1, storage: 1 }');
-    sub('if (!S || !S.b) S = fresh();', 'if (!S || !S.b) S = fresh(); S.speed = 1; if (S.tab === "show") S.tab = "village";');
+    // the site holds the castle state and hands it in every time (it is the copy that goes to the server)
+    sub('try { S = JSON.parse(store.get(KEY) || "null"); } catch (e) { S = null; }', 'S = window.__CASTLE.state || null; if (!S || !S.b) { try { S = JSON.parse(store.get(KEY) || "null"); } catch (e) { S = null; } }');
+    // build and troop timers run on the real clock: an upgrade paid to 100% keeps building while the castle or the site is closed
+    sub('if (!S || !S.b) S = fresh();', `if (!S || !S.b) S = fresh(); S.speed = 1; if (S.tab === "show") S.tab = "village";
+if (!(S.vt > 1e12)) { const d = Date.now() - (S.vt || 0); (S.jobs || []).forEach(j => { j.start += d; j.end += d; }); if (S.tjob) { S.tjob.start += d; S.tjob.end += d; } }
+S.vt = Date.now();
+(function catchUp() { const now = Date.now(); for (let g = 0; g < 200; g++) {
+  const due = S.jobs.filter(j => j.end <= now).sort((a, b) => a.end - b.end)[0], t = S.tjob && S.tjob.end <= now ? S.tjob : null;
+  if (!due && !t) break;
+  if (due && (!t || due.end <= t.end)) { S.jobs = S.jobs.filter(x => x !== due); S.b[due.k]++; S.done = (S.done || []).concat(due.k);
+    let i; while (S.wait.length && (i = freeBuilder()) >= 0) { const k = S.wait.shift(); S.jobs.push({ k, bi: i, start: due.end, end: due.end + hours(k, S.b[k]) * 3600e3 }); } }
+  else { S.tr[t.k].lv++; S.tjob = null; if (S.twait.length) { const k = S.twait.shift(); S.tjob = { k, start: t.end, end: t.end + troopHours(S.tr[k].lv) * 3600e3 }; } } } })();`);
+    sub('const real = Date.now(); S.vt += (real - lastReal) * S.speed; lastReal = real;', 'const real = Date.now(); S.vt = real; lastReal = real;');
+    sub('if (!S.seen.hello) {', `save(); if (S.done && S.done.length) { const L = [...new Set(S.done)]; S.done = []; save(); setTimeout(() => doni("party", L.map(k => B[k].n).join(", ") + ": qurilish tugadi!", "Siz yo'qligingizda ham quruvchilar ishlashda davom etdi."), 900); } else if (!S.seen.hello) {`);
+    // in lesson time the castle opens, but attacking classmates does not
+    sub('function startAttack(id) {', `const inLesson = () => { try { return !!parent.__inLesson(); } catch (e) { return false; } };
+function startAttack(id) { if (inLesson()) { toast("Dars vaqtida hujum qilib bo'lmaydi. Darsdan keyin urinib ko'ring."); render(); return; }`);
+    sub('ok = left > 0 && used > 0 && !rec && !locked();', 'ok = left > 0 && used > 0 && !rec && !locked() && !inLesson();');
+    sub('${used ? "" :', '${inLesson() ? `<div class="note" style="margin-top:12px">Hozir dars vaqti: hujum qilib bo\'lmaydi. Qishloqni qurish va qo\'shinni kuchaytirish mumkin.</div>` : ""}\n    ${used ? "" :');
     sub('if (pct(B2) >= 100) S.rec[B2.e.id] = Date.now() + RECOVER_MS;', 'if (pct(B2) >= 100) { S.rec[B2.e.id] = Date.now() + RECOVER_MS; try { parent.postMessage({ castle: 1, type: "raid", id: B2.e.id, stars: st }, "*"); } catch (e) {} }');
-    sub('const save = () => store.set(KEY, JSON.stringify(S));', 'const save = () => { store.set(KEY, JSON.stringify(S)); try { parent.postMessage({ castle: 1, type: "save" }, "*"); } catch (e) {} };');
-    const boot = `<script>window.__CASTLE=${json({ key, classmates: mates.map(m => ({ id: m.id, name: m.name, b: m.b, builders: m.builders, tl: m.tl })) })}<\/script><style>#demo,[data-tab="show"]{display:none!important}</style>`;
+    sub('const save = () => store.set(KEY, JSON.stringify(S));', 'const save = () => { store.set(KEY, JSON.stringify(S)); try { parent.postMessage({ castle: 1, type: "save", state: JSON.parse(JSON.stringify(S)) }, "*"); } catch (e) {} };');
+    const boot = `<script>window.__CASTLE=${json({ key, state: Store.sandbox ? (Store._castleSandbox[s.id] || School.castle(s.id)) : School.castle(s.id), classmates: mates.map(m => ({ id: m.id, name: m.name, b: m.b, builders: m.builders, tl: m.tl })) })}<\/script><style>#demo,[data-tab="show"]{display:none!important}</style>`;
     return h.replace('<head>', '<head>' + boot);
   }
   function openCastle(s) {
@@ -3580,7 +3599,7 @@ new MutationObserver(function(){try{var d=JSON.parse(el.textContent);parent.post
   }
   function castlePull() { if (!CRUN || Store.sandbox) return; try { const st = JSON.parse(localStorage.getItem(CRUN.key) || 'null'); if (st && st.b) Store.castleSet(CRUN.s.id, st); } catch (e) {} }
   function castleMsg(m) {
-    if (m.type === 'save') return castlePull();
+    if (m.type === 'save') { if (m.state && m.state.b) { if (Store.sandbox) Store._castleSandbox[CRUN.s.id] = m.state; else Store.castleSet(CRUN.s.id, m.state); return; } return castlePull(); }
     if (m.type === 'raid') { const v = CRUN.mates.find(x => x.id === m.id); if (!v || Store.sandbox) return; const c = School.castle(v.sid); c.lock = Date.now() + 5 * 60 * 1000; Store.castleSet(v.sid, c); Store.ev(CRUN.s.id, 'raid', { victim: v.sid, stars: m.stars }); }
   }
   function castleClosed() {
@@ -4206,7 +4225,7 @@ const App = (() => {
   H.ovclose = () => Play.closeOv();
   H.clkreset = () => { T.offset = 0; Store.db.settings.clock = 0; Store.save(); render(); };
   // student navigation
-  H.sttab = d => { const L = Stu.lessonNow(); if (L && !Stu.OPEN_IN_LESSON.includes(d.k)) return toast("Dars vaqtida faqat Asosiy, So'zlarim, Reyting va Profil ochiq"); Run.close(); Stu.V.tab = d.k; Stu.V.view = null; Stu.V.pr = null; window.scrollTo(0, 0); render(); };
+  H.sttab = d => { const L = Stu.lessonNow(); if (L && !Stu.OPEN_IN_LESSON.includes(d.k)) return toast("Dars vaqtida faqat Asosiy, So'zlarim, O'yinlar, Qal'a, Reyting va Profil ochiq"); Run.close(); Stu.V.tab = d.k; Stu.V.view = null; Stu.V.pr = null; window.scrollTo(0, 0); render(); };
   H.stold = () => { Stu.V.view = 'old'; render(); }; H.stback = () => { Stu.V.view = null; render(); };
   H.wf = d => { Stu.V.wf = d.k; render(); }; H.wordopen = d => { Stu.V.view = { word: d.w }; window.scrollTo(0, 0); render(); };
   H.rmode = d => { if (ctx.mode === 'student' || ctx.as && ctx.as.type === 'student') Stu.V.rmode = d.k; else { Tea.V.r.mode = d.k; Tea.V.r.lessons = null; } render(); };
