@@ -222,8 +222,7 @@ const Code = (() => {
       const miss = HW_ORDER.filter(k => !seen[k]); if (miss.length) W(1, `Missing homework parts: ${miss.join(', ')}. Students see only the parts you write.`);
     }
     if (t === 'classwork') {
-      work.forEach(s => { if (!CW_KINDS.includes(s.kind)) E(s.line, `[${s.kind}] can't be a classwork section.`); if (!s.min) E(s.line, `[${s.kind}] in classwork needs its minutes, e.g. [${s.kind} 15]`); });
-      const tot = sum(work.map(s => s.min || 0)); if (tot > 45) W(work[0] ? work[0].line : 1, `Sections add up to ${tot} minutes. They must fit the lesson length (checked when you assign).`);
+      work.forEach(s => { if (!CW_KINDS.includes(s.kind)) E(s.line, `[${s.kind}] can't be a classwork section.`); });   // minutes after a section name ([reading 15]) are allowed but no longer used: classwork has no timer
     }
     if (t === 'task') {
       work.forEach(s => { if (!['reading', 'writing'].includes(s.kind)) E(s.line, `A task can only have [reading] and [writing] sections, not [${s.kind}]`); });

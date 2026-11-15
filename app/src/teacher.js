@@ -174,7 +174,7 @@ const Tea = (() => {
         const L = ls[+P.meta.lesson - 1]; if (!L) { rows.push([c.name, gs, `No lesson ${P.meta.lesson}: this class has ${ls.length} lessons a week`, true]); block = `Lesson ${P.meta.lesson} does not exist in ${c.name}`; return; }
         if (t === 'homework') { const w = School.hwWindow(c, L, A.week); rows.push([c.name, gs, `Lesson ${L.n} (${L.day} ${L.start}). Opens ${enWhen(w.open)} · due ${enWhen(w.close)}`]); }
         else { const len = School.lessonLen(L), tot = sum(School.workSections(P).map(x => x.s.min || 0)); const taught = gs.filter(g => g === c.taught);
-          rows.push([c.name, gs, `Lesson ${L.n}: ${L.day} ${L.start}–${L.end} (${len} min). Sections ${tot} min${tot > len ? ` · TOO LONG by ${tot - len} min` : tot < len ? ` · ${len - tot} min left for games` : ''}${taught.length ? ` · ${taught.join(', ')} is taught directly here and gets no classwork` : ''}`, tot > len]);
+          rows.push([c.name, gs, `Lesson ${L.n}: ${L.day} ${L.start}–${L.end} (${len} min). ${School.workSections(P).length} sections${taught.length ? ` · ${taught.join(', ')} is taught directly here and gets no classwork` : ''}`, false]);
           if (tot > len) block = `Sections (${tot} min) are longer than lesson ${L.n} in ${c.name} (${len} min)`; }
       } else if (t === 'weekly') { if (!ls.length) return; const last = ls[ls.length - 1]; rows.push([c.name, gs, `Opens ${enWhen(T.at(A.week, last.di, last.end))} · closes ${enWhen(T.at(T.addWeeks(A.week, 1), ls[0].di, ls[0].start))} · ${P.meta.time} min timer · one attempt`]); }
       else if (t === 'test') rows.push([c.name, gs, `Open now until ${enWhen(now + (+P.meta.open) * 6e4)} · timer ${P.meta.time || P.meta.open} min · can be redone, best counts`]);
@@ -214,10 +214,10 @@ BOOK: / UNIT: / PAGE: (optional)
 SECTIONS
 Homework parts, each at most once, in any order (the site shows them in this order):
 [warmup] [grammar] [reading] [vocabulary] [writing] [practice] [review]
-Classwork sections need their minutes and must fit the lesson: [vocabulary 10] [reading 15] [grammar 12] [listening 8] [speaking 8] [writing 10] [lifeskills 10] [review 5] [exam 10]
+Classwork sections (no timer; students do them one after another in the lesson): [vocabulary] [reading] [grammar] [listening] [speaking] [writing] [lifeskills] [review] [exam]
 Task: only [reading] (with TEXT:) and [writing].
 [words] (any type except tests): the lesson's word cards for So'zlarim and the word games.
-A line after [section] can be its title: [reading 15] A day in Tashkent
+A line after [section] can be its title: [reading] A day in Tashkent
 
 THE MEANING OF A LINE DEPENDS ON ITS SECTION
 1) Inside [words]: word cards

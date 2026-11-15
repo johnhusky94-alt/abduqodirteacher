@@ -241,7 +241,7 @@ const School = (() => {
     { k: 'pdays', n: 'Mustaqil', d: 'Erkin mashq qilingan kunlar', stat: 'pdays', tiers: [[5, 's'], [20, 'b'], [60, 'l']] },
     { k: 'fixed', n: 'Xato ustida ishlash', d: "Oldin xato qilib, Erkin mashqda to'g'ri topilgan savollar", stat: 'fixed', tiers: [[25, 's'], [100, 'b'], [300, 'l']] },
     { k: 'writes', n: 'Yozuvchi', d: "So'z chegarasida yozib yuborilgan matnlar", stat: 'writes', tiers: [[5, 's'], [25, 'b'], [60, 'l']] },
-    { k: 'cws', n: 'Sinfda faol', d: "Vaqtidan oldin tugatilgan sinf ishi bo'limlari", stat: 'cws', tiers: [[20, 's'], [100, 'b'], [300, 'l']] },
+    { k: 'cws', n: 'Sinfda faol', d: "Dars vaqtida tugatilgan sinf ishi bo'limlari", stat: 'cws', tiers: [[20, 's'], [100, 'b'], [300, 'l']] },
     { k: 'week', n: 'Benuqson hafta', d: "Bir haftadagi barcha uy vazifalari 85% dan yuqori", stat: 'week', tiers: [[1, 'b'], [4, 'l']] },
     { k: 'record', n: 'Shaxsiy rekord', d: "Haftalik achkoda o'z rekordingizni yangilash", stat: 'record', every: 1, size: 's' },
   ];

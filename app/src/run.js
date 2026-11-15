@@ -34,7 +34,7 @@ const Run = (() => {
       Store.ev(s.id, 'att', { work: inst.id, att: n, endsAt }); att = n;
     }
     const a = Store.events(s.id).find(e => e.kind === 'att' && e.work === inst.id && e.att === att);
-    R = { s, inst, P: inst.P, att, first: att === 1, part: null, ans: {}, eng: null, endsAt: a && a.endsAt, lessonLive: !!opts.live, view: inst.type === 'test' || inst.type === 'weekly' ? 'test' : inst.type === 'classwork' ? 'cw' : 'wallet' };
+    R = { s, inst, P: inst.P, att, first: att === 1, part: null, ans: {}, eng: null, endsAt: a && a.endsAt, lessonLive: !!opts.live, view: inst.type === 'test' || inst.type === 'weekly' ? 'test' : 'wallet' };   // classwork works like homework: no timed sections
     restore();
     if (R.view === 'test') R.part = 'all';
     return true;
@@ -248,7 +248,7 @@ const Run = (() => {
   }
   function partSummary(s) {
     const n = s.ex.length, eng = s.gpack ? 'moslashuvchan grammatika' : School.HAS_VOCAB_ENGINE(R.P, s) && (s.cards.length || s.kind !== 'vocabulary') ? "so'z mashqlari" : '';
-    const w = s.ex.find(e => e.write); return [eng, n ? `${n} ta mashq` : '', w ? `${w.write.min}–${w.write.max} so'z` : '', s.min ? `${s.min} daq` : ''].filter(Boolean).join(' · ');
+    const w = s.ex.find(e => e.write); return [eng, n ? `${n} ta mashq` : '', w ? `${w.write.min}–${w.write.max} so'z` : ''].filter(Boolean).join(' · ');
   }
   function partView(si) {
     const s = R.P.sections[si], p = partColor(s.kind), dk = p.t !== '#fff';
@@ -258,12 +258,12 @@ const Run = (() => {
     else body = `<div class="list">${s.ex.map((_, ei) => exHTML(si, ei)).join('')}</div>` + partFinish(si);
     const back = R.view === 'part' && R.inst.type !== 'classwork' ? '<button class="backbtn" data-act="towallet">← Bo\'limlar</button>' : '';
     return `${back ? `<div class="row sp" style="margin-bottom:12px">${back}${Stu.pills()}</div>` : ''}
-      <section class="part-run ${dk ? 'dkp' : ''}" style="--rc:${p.c};--rt:${p.t}"><div class="prhead"><h2>${esc(s.title && R.inst.type !== 'homework' ? s.title : p.uz)}</h2><span>${s.min ? '⏱ ' + s.min + ' daqiqa · ' : ''}${esc(p.uz)}</span></div>
+      <section class="part-run ${dk ? 'dkp' : ''}" style="--rc:${p.c};--rt:${p.t}"><div class="prhead"><h2>${esc(s.title && R.inst.type !== 'homework' ? s.title : p.uz)}</h2><span>${esc(p.uz)}</span></div>
       ${s.help ? `<p class="notep" style="margin:-6px 4px 12px">${esc(s.help)}</p>` : ''}${body}</section>`;
   }
   function partFinish(si) {
     const s = R.P.sections[si]; const left = s.ex.filter((ex, ei) => !A(si + '.' + ei).done).length;
-    if (partDone(si)) return `<div class="row" style="margin-top:14px"><span class="result">Bo'lim tugagan ✓</span>${R.inst.type === 'classwork' ? (R.lessonLive && T.now() < R.inst.close ? '' : '<button class="main" data-act="cwnext">Keyingi bo\'lim</button>') : '<button class="main" data-act="towallet">Bo\'limlarga qaytish</button>'}</div>`;
+    if (partDone(si)) return `<div class="row" style="margin-top:14px"><span class="result">Bo'lim tugagan ✓</span><button class="main" data-act="towallet">Bo'limlarga qaytish</button></div>`;
     return `<div class="row" style="margin-top:16px"><button class="main" data-act="partdone" data-si="${si}" ${left ? 'disabled' : ''}>Bo'limni tugatish</button>${left ? `<span class="notep">Yana ${left} ta mashq qoldi</span>` : ''}</div>`;
   }
   function completePart(si) {
@@ -271,10 +271,11 @@ const Run = (() => {
     const s = R.P.sections[si];
     // unchecked exercises are checked as they are (an empty answer counts as wrong, never right)
     s.ex.forEach((ex, ei) => { const k = si + '.' + ei, a = A(k); if (!a.done && kindsOf(ex).graded) exCheck(k, true); });
-    let early = false; if (R.inst.type === 'classwork' && R.lessonLive) { const end = cwSecEnd(si); early = T.now() < end; Store.ev(sid(), 'secdone', { work: R.inst.id, att: R.att, part: si, early }); }
+    // a classwork section finished during the lesson counts for the "Sinfda faol" trophy
+    const inClass = R.inst.type === 'classwork' && T.now() >= R.inst.open && T.now() < R.inst.close; if (inClass) Store.ev(sid(), 'secdone', { work: R.inst.id, att: R.att, part: si, early: true });
     Store.ev(sid(), 'part', { work: R.inst.id, att: R.att, part: si });
     const S = secs(); const allDone = S.every(x => School.partsDone(sid(), R.inst.id, R.att).has(x.si));
-    if (allDone) finishWork(); else { Doni.leaves = leaves(); Doni.show('party', "Bo'lim tugadi!", early ? "Vaqtidan oldin tugatdingiz" : `${S.length - School.partsDone(sid(), R.inst.id, R.att).size} ta bo'lim qoldi`); }
+    if (allDone) finishWork(); else { Doni.leaves = leaves(); Doni.show('party', "Bo'lim tugadi!", `${S.length - School.partsDone(sid(), R.inst.id, R.att).size} ta bo'lim qoldi`); }
   }
   function finishWork() {
     if (School.finished(sid(), R.inst.id, R.att)) return;
@@ -287,7 +288,7 @@ const Run = (() => {
   }
   const leaves = () => { const k = Object.values(School.vstate(R.s).words).filter(w => w.stage === 5).length; return k >= 14 ? 3 : k >= 6 ? 2 : 1; };
 
-  /* ---------- classwork in lesson time: timed sections ---------- */
+  /* ---------- (no longer used since 16 Nov: classwork opens like homework, without timed sections) ---------- */
   function cwStart() { const L = R.inst.L; return T.at(R.inst.w.week, L.di, L.start); }
   function cwSecEnd(si) { const S = secs(); let acc = 0; for (const x of S) { acc += x.s.min || 0; if (x.si === si) break; } return cwStart() + acc * 6e4; }
   function cwActive() { const S = secs(), now = T.now(); let acc = 0; for (const x of S) { const st = cwStart() + acc * 6e4; acc += x.s.min || 0; if (now < cwStart() + acc * 6e4 && now >= st) return x.si; } return null; }
