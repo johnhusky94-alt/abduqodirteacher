@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Builds the whole site into ONE file: dist/index.html"""
-import json, pathlib
+import json, pathlib, hashlib
 R = pathlib.Path(__file__).parent
 S, V = R / 'src', R / 'vendor'
 rd = lambda p: p.read_text(encoding='utf-8')
@@ -10,6 +10,8 @@ def js_data(name, obj):
     return f'window.{name}={s};'
 order = ['core', 'net', 'code', 'vocab', 'school', 'gui', 'run', 'student', 'games', 'teacher', 'main']
 app = '\n'.join(f'/* ===== {n}.js ===== */\n' + rd(S / f'{n}.js') for n in order)
+# the build id: open pages compare it with version.txt and update themselves (old tabs never keep old code for days)
+BUILD = hashlib.sha1((app + rd(S / 'style.css') + ''.join(rd(p) for p in sorted(V.iterdir()) if p.is_file())).encode()).hexdigest()[:12]
 for n in order:
     assert '</script' not in rd(S / f'{n}.js'), n
 html = f'''<!doctype html>
@@ -45,6 +47,7 @@ html = f'''<!doctype html>
 {js_data('__UNIT6', rd(V / 'unit6.txt'))}
 {js_data('__U12', rd(V / 'u12.gpack'))}
 </script>
+<script>window.__BUILD = '{BUILD}';</script>
 <script>
 "use strict";
 {app}
@@ -55,4 +58,5 @@ html = f'''<!doctype html>
 # the site is served by GitHub Pages from the repository root
 out = R.parent / 'index.html'
 out.write_text(html, encoding='utf-8')
+(R.parent / 'version.txt').write_text(BUILD + '\n', encoding='utf-8')
 print(out, round(len(html.encode()) / 1024), 'KB')

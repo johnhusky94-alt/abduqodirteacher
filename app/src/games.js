@@ -40,16 +40,20 @@ const Play = (() => {
   function playsSince(s) { const E = Store.events(s.id); let n = 0; for (let i = E.length - 1; i >= 0; i--) { const e = E[i]; if (e.kind === 'game') { if (e.rare) break; n++; } } return n; }
 
   /* the list the student sees */
-  function list(s) {
-    const H = hub(s), vs = School.vstate(s), av = WC.availability(H), rareOK = playsSince(s) >= 3;
+  /* the words of one lesson of one week (the bars on the O'yinlar page) */
+  function lessonCards(s, week, n) { const W = School.wordWeeks(s).find(x => x.week === week); const L = W && W.lessons.find(x => x.n === n); return L ? L.cards : []; }
+  function list(s, cards, weeks) {
+    const H = cards ? hub(s, cards, weeks) : hub(s), vs = School.vstate(s), av = WC.availability(H), rareOK = playsSince(s) >= 3;
     let rareGiven = false;
     return av.map(g => {
       const f = FITS[g.key], fit = H.cards.filter(c => !f || f(c)), need = needStage(g.tier), ready = BLOCK_GAMES.has(g.key) ? fit.filter(c => stageOf(vs, c.id) >= 1) : fit.filter(c => stageOf(vs, c.id) >= need);
       const o = { key: g.key, title: g.title, tier: g.tier, play: g.play, uz: UZ[g.key] || '', open: false, why: '', short: '' };
       if (g.play === 'class') { o.why = "Bu o'yinni o'qituvchi darsda butun sinf bilan ochadi"; o.short = 'Darsda'; return o; }
+      if (cards && !g.ok) { o.why = "Bu darsning so'zlarida bu o'yin uchun kerakli ma'lumot yo'q (gaplar, qarama-qarshi ma'nolar yoki guruhlar). Boshqa darsni tanlang"; o.short = "Ma'lumot yo'q"; return o; }
       if (!g.ok) { o.why = "Hozirgi so'zlaringizda bu o'yin uchun kerakli ma'lumot yo'q (gaplar, qarama-qarshi ma'nolar yoki guruhlar)"; o.short = "Ma'lumot yo'q"; return o; }
       if (BLOCK_GAMES.has(g.key) ? fit.length >= 1 : fit.length >= MIN[g.key]) { o.open = true; return o; } /* games open without waiting for word stages */
       if (rareOK && !rareGiven && g.play === 'solo' && fit.length >= MIN[g.key]) { rareGiven = true; o.open = true; o.rare = true; return o; }
+      if (cards) { o.why = `Bu darsda ${fit.length} ta mos so'z bor, bu o'yinga kamida ${MIN[g.key]} ta kerak. Boshqa darsni tanlang`; o.short = `Kamida ${MIN[g.key]} so'z`; return o; }
       const left = MIN[g.key] - ready.length;
       o.why = `Yana ${left} ta so'zni “${Vocab.STAGES[need].uz}” bosqichiga yetkazing`; o.short = `Yana ${left} so'z`;
       return o;
@@ -88,7 +92,7 @@ new MutationObserver(function(){try{var d=JSON.parse(el.textContent);parent.post
   let RUN = null;
   function launch(s, key, opts = {}) {
     const g = WC.GAMES.find(x => x.key === key); if (!g) return;
-    const H = opts.cards ? hub(s, opts.cards) : hub(s), vs = School.vstate(s), f = FITS[key];
+    const H = opts.cards ? hub(s, opts.cards, opts.weeks) : hub(s), vs = School.vstate(s), f = FITS[key];
     const fit = H.cards.filter(c => !f || f(c)); let ids;
     if (opts.preview) ids = null;
     else if (opts.rare) ids = new Set(fit.slice().sort((a, b) => stageOf(vs, b.id) - stageOf(vs, a.id)).slice(0, Math.max(MIN[key], 10)).map(c => c.id));
@@ -202,5 +206,5 @@ function startAttack(id) { if (inLesson()) { toast("Dars vaqtida hujum qilib bo'
       <rect x="80" y="${h - 90}" width="60" height="120" rx="6" fill="#8B6CF0"/>${[0, 1, 2].map(i => `<rect x="${82 + i * 20}" y="${h - 102}" width="14" height="14" fill="#8B6CF0"/>`).join('')}
       <path d="M96 ${h + 30} v-34 a14 14 0 0 1 28 0 v34z" fill="#140D33"/>${[...Array(flags)].map((_, i) => `<path d="M${60 + i * 34} ${h - 64} v-26" stroke="#FFC93C" stroke-width="3"/><path d="M${60 + i * 34} ${h - 90} l18 6 -18 6z" fill="#FFC93C"/>`).join('')}</svg>`;
   }
-  return { list, launch, closeOv, classGame, openCastle, castleSvg, hub, MIN, UZ, overlay };
+  return { lessonCards, list, launch, closeOv, classGame, openCastle, castleSvg, hub, MIN, UZ, overlay };
 })();

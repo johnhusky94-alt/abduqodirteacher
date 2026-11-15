@@ -243,7 +243,7 @@ const Run = (() => {
     const sc = fin ? School.attemptScore(sid(), R.inst.id, R.att) : null;
     return `<div class="row sp" style="margin-bottom:12px"><button class="backbtn" data-act="runclose">← Orqaga</button>${Stu.pills()}</div>
       <h1 style="font-size:30px;margin:4px 0">${esc(hwTitle())}</h1><p class="muted" style="margin:0 0 14px">${esc(R.P.meta.title || '')} · ${S.length} bo'lim${R.att > 1 ? ` · ${R.att}-urinish (qayta ishlash, achko yo'q)` : ''}</p>
-      ${fin ? `<div class="card big-note" style="background:#138A3D;color:#fff;margin-bottom:14px"><div style="font-size:40px">🎉</div><h2>Tugadi!</h2><p>${sc && sc.pct != null ? `Natija: ${sc.pct}% · ${School.markOf(sc.pct)} baho. ` : ''}Bir hafta ichida qayta ishlashingiz mumkin, eng yaxshi natija hisoblanadi.</p><button class="wbtn" data-act="redowork">Qayta ishlash</button></div>` : ''}
+      ${fin ? `<div class="card big-note" style="background:#138A3D;color:#fff;margin-bottom:14px"><div style="font-size:40px">🎉</div><h2>Tugadi!</h2><p>${sc && sc.pct != null ? `Natija: ${sc.pct}% · ${School.markOf(sc.pct)} baho. ` : ''}Bir hafta ichida qayta ishlashingiz mumkin, eng yaxshi natija hisoblanadi.</p><button class="wbtn" data-act="redowork">Qayta ishlash</button></div>${Stu.sendBar(true)}` : ''}
       <div class="wallet">${cards}</div>`;
   }
   function partSummary(s) {
@@ -282,6 +282,7 @@ const Run = (() => {
     const firstFin = Store.events(sid()).filter(e => e.kind === 'fin' && e.work === R.inst.id).length === 1;
     if (firstFin && (R.inst.type === 'homework' || R.inst.type === 'classwork')) School.addGold(sid(), 120, 'finish');
     const sc = School.attemptScore(sid(), R.inst.id, R.att);
+    Net.sendNow().then(() => { if (typeof App !== 'undefined') App.render(); });   // send at once; the bar shows when it has arrived
     Doni.leaves = leaves(); Doni.show('party', R.inst.type === 'homework' ? 'Uy vazifasi tugadi!' : 'Ish tugadi!', sc && sc.pct != null ? `${sc.right}/${sc.total} to'g'ri${firstFin && (R.inst.type === 'homework' || R.inst.type === 'classwork') ? ' · +120 oltin' : ''}` : '', true);
   }
   const leaves = () => { const k = Object.values(School.vstate(R.s).words).filter(w => w.stage === 5).length; return k >= 14 ? 3 : k >= 6 ? 2 : 1; };
@@ -327,7 +328,7 @@ const Run = (() => {
   function testView() {
     const S = secs(), fin = School.finished(sid(), R.inst.id, R.att); R.finished = fin;
     if (fin) { const sc = School.attemptScore(sid(), R.inst.id, R.att); const pct = sc.pct || 0, k = School.markOf(pct);
-      return `<button class="backbtn" data-act="runclose">← Orqaga</button><div class="card big-note" style="margin-top:12px"><span class="pill" style="margin-bottom:12px">${R.inst.type === 'weekly' ? "Natija saqlandi · qayta topshirib bo'lmaydi" : 'Eng yaxshi natija hisoblanadi · qayta ishlash mumkin'}</span><div style="display:flex;justify-content:center;margin:8px 0">${ring(pct)}</div><h2>Test tugadi</h2><p>${sc.right}/${sc.total} to'g'ri · ${pct}% · ${k} baho. O'qituvchi natijangizni ko'radi.</p>${R.inst.type === 'test' && T.now() < R.inst.close ? '<button class="btn" data-act="redowork">Qayta ishlash</button>' : ''}</div>`; }
+      return `<button class="backbtn" data-act="runclose">← Orqaga</button><div class="card big-note" style="margin-top:12px"><span class="pill" style="margin-bottom:12px">${R.inst.type === 'weekly' ? "Natija saqlandi · qayta topshirib bo'lmaydi" : 'Eng yaxshi natija hisoblanadi · qayta ishlash mumkin'}</span><div style="display:flex;justify-content:center;margin:8px 0">${ring(pct)}</div><h2>Test tugadi</h2><p>${sc.right}/${sc.total} to'g'ri · ${pct}% · ${k} baho. O'qituvchi natijangizni ko'radi.</p>${R.inst.type === 'test' && T.now() < R.inst.close ? '<button class="btn" data-act="redowork">Qayta ishlash</button>' : ''}</div>${Stu.sendBar(true)}`; }
     const left = R.endsAt ? (R.endsAt - T.now()) / 1000 : null;
     return `<div class="row sp" style="margin-bottom:12px"><button class="backbtn" data-act="testend">Testni yakunlash</button><span class="pill" style="background:var(--ac);color:var(--act)">${R.inst.type === 'weekly' ? "1 marta · " : ''}⏱ <span data-clk="test">${left != null ? mmss(left) : '—'}</span></span></div>
       <h1 style="font-size:28px;margin:4px 0 14px">${esc(R.P.meta.title || 'Test')}</h1>
@@ -339,6 +340,7 @@ const Run = (() => {
     secs().forEach(({ s, si }) => s.ex.forEach((ex, ei) => { const k = si + '.' + ei, a = A(k); if (kindsOf(ex).graded && !a.checked) { const res = gradeEx(ex, a.v); Store.ev(sid(), 'ans', { work: R.inst.id, att: R.att, key: k, right: res.right, wrong: res.wrong, total: res.total, graded: true, inputs: Object.assign({}, a.v), detail: res.items, ach: false }); a.checked = true; a.done = true; a.res = res; } }));
     secs().forEach(({ si }) => { if (!partDone(si)) Store.ev(sid(), 'part', { work: R.inst.id, att: R.att, part: si }); });
     Store.ev(sid(), 'fin', { work: R.inst.id, att: R.att, auto: !!auto }); R.finished = true;
+    Net.sendNow().then(() => { if (typeof App !== 'undefined') App.render(); });
     if (auto) toast('Vaqt tugadi · test yakunlandi');
   }
   function ring(p, cls = '') { const r = 36, C = 2 * Math.PI * r, k = School.markOf(p), col = ['', '#FF6B57', '#FF8A1E', '#F5B700', '#2E46E8', '#138A3D'][k];

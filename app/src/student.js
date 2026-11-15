@@ -23,7 +23,18 @@ const Stu = (() => {
     S = s; Doni.leaves = (() => { const k = Object.values(School.vstate(S).words).filter(w => w.stage === 5).length; return k >= 14 ? 3 : k >= 6 ? 2 : 1; })();
     const L = lessonNow(); if (L && !OPEN_IN_LESSON.includes(V.tab) && !Run.R) V.tab = 'home';
     theme(); $('#side').innerHTML = nav();
-    if (Run.R) return Run.render();
+    if (Run.R) return Run.render();        // a finished work shows its own send bar
+    return sendBar() + pageBody();
+  }
+  /* answers not yet on the server: a bar with a "Yuborish" button that waits for the server to confirm.
+     done = this work is finished: then also say when everything has arrived */
+  function sendBar(done) {
+    if (Store.sandbox || !Net.me()) return '';
+    const st = Net.status();
+    if (st.pending) return `<div class="sendbar warn" data-sendbar="${done ? 1 : 0}"><div><b>${st.sending ? 'Yuborilmoqda…' : `${st.pending} ta javob hali o'qituvchiga yetib bormadi`}</b><span>${st.offline ? "Internet sekin yoki yo'q. Javoblaringiz telefonda saqlangan, yo'qolmaydi." : "Tugatgan ishingiz o'qituvchiga borishi uchun Yuborish tugmasini bosing."}</span></div><button class="btn" data-act="netsend">${st.sending ? 'Qayta yuborish' : 'Yuborish'}</button></div>`;
+    return done ? `<div class="sendbar ok" data-sendbar="1"><b>✓ O'qituvchiga yuborildi</b><span>Barcha javoblaringiz serverda saqlandi.</span></div>` : `<div data-sendbar="0" hidden></div>`;
+  }
+  function pageBody() {
     if (V.view === 'old') return oldPage();
     if (V.view && V.view.word) return wordPage(V.view.word);
     return ({ home, results, words, practice, games, castle, leader, trophies, profile })[V.tab]();
@@ -193,7 +204,8 @@ const Stu = (() => {
     if (c.voc) return head + Stu.vocCard(c.voc, P.fb, (P.n || 0) + 1);
     const { it, ex } = c.ex; const f = P.fb, green = f && f.ok;
     let body = '';
-    if (it.type === 'choice') body = `<div class="qtext mid">${Run.inl(it.stem)}</div><div class="opts2">${it.opts.map((o, j) => `<button class="opt2 ${f && o.ok === 2 ? 'sel' : ''} ${f && (c.v.c || [])[0] === j && o.ok !== 2 ? 'miss' : ''}" data-act="prpick" data-j="${j}" ${f ? 'disabled' : ''}>${Run.inl(o.t)}</button>`).join('')}</div>`;
+    if (it.type === 'choice') { const multi = Code.isMulti(it, ex), pick = c.v.c || [];   // "Choose TWO": pick several, then check
+      body = `<div class="qtext mid">${Run.inl(it.stem)}${multi && !f ? ' <span class="small" style="opacity:.8">· bir nechtasini tanlang</span>' : ''}</div><div class="opts2">${it.opts.map((o, j) => `<button class="opt2 ${f ? (o.ok ? 'sel' : '') : multi && pick.includes(j) ? 'sel' : ''} ${f && pick.includes(j) && !o.ok ? 'miss' : ''}" data-act="${multi ? 'prtog' : 'prpick'}" data-j="${j}" ${f ? 'disabled' : ''}>${Run.inl(o.t)}</button>`).join('')}</div>${multi && !f ? `<div class="row" style="margin-top:12px"><button class="btn" data-act="prmulti" ${pick.length ? '' : 'disabled'}>Tekshirish</button></div>` : ''}`; }
     else { let g = 0; body = `<div class="qtext mid" style="line-height:1.8">${it.segs.map(s => s.gap ? (() => { const k = g++; const parts = N.hyphenParts(s.gap[0]); return f ? `<span class="gapbox filled">${esc(s.gap[0])}</span>` : parts ? `<span class="hy">${parts.map((p, i) => `${i ? '<span class="hyd">-</span>' : ''}<input class="gap" data-prg="${k}" data-seg="${i}" style="width:${p.length + 2}ch" autocomplete="off" autocapitalize="off" spellcheck="false">`).join('')}</span>` : ex.choose ? `<select class="gap" data-prg="${k}"><option value="">—</option>${ex.choose.map(o => `<option>${esc(o)}</option>`).join('')}</select>` : `<input class="gap" data-prg="${k}" style="width:${Math.max(5, s.gap[0].length + 2)}ch" autocomplete="off" autocapitalize="off" spellcheck="false">`; })() : Run.inl(s.t)).join('')}</div>`; }
     const passage = ex.texts.length && ex.texts[0].body.length < 900 ? `<details class="see"><summary>Matnni ko'rish</summary><div class="passage">${Run.rich(ex.texts[0].body)}</div></details>` : '';
     return head + `<div class="qs" style="background:${green ? '#138A3D' : '#5B2BD9'}"><div class="top"><span>${esc(c.ex.inst.P.meta.title || '')}</span>${c.fix ? '<span class="badge">Oldin xato qilgansiz · yana urinib ko\'ring</span>' : ''}</div><div class="ask">${esc(ex.instr || '')}</div>${passage}${body}
@@ -204,7 +216,7 @@ const Stu = (() => {
     const P = V.pr, c = P.cur; if (!c || P.fb) return;
     if (c.voc) return;
     const { it, ex } = c.ex; let ok;
-    if (resp.idk) ok = false; else if (it.type === 'choice') { c.v.c = [resp.j]; ok = Code.gradeItem(it, [resp.j], Object.assign({}, ex, { answer: 'one' })).ok; }
+    if (resp.idk) ok = false; else if (it.type === 'choice') { c.v.c = resp.sel || [resp.j]; ok = Code.gradeItem(it, c.v.c, ex).ok; }
     else { const r = Code.gradeItem(it, resp.vals, ex); ok = r.ok === true; }
     Store.ev(S.id, 'prac', { ref: c.ex.ref, ok, idk: !!resp.idk, fix: c.fix, ach: true });
     if (ok) { School.addGold(S.id, 1, 'practice'); Snd.ok(); if (c.fix) Doni.show('proud', 'Eski xatoni tuzatdingiz!', 'Bu savol endi kamroq qaytadi'); } else Snd.no();
@@ -224,9 +236,21 @@ const Stu = (() => {
   function vtype(answer, given) { const parts = N.hyphenParts(answer); if (parts) return `<div class="hyrow">${parts.map((p, i) => `${i ? '<span class="hyd">-</span>' : ''}<input class="tin" data-vt="${i}" style="max-width:${p.length + 3}ch" autocomplete="off" autocapitalize="off" spellcheck="false">`).join('')}</div>`; return `<input class="tin" data-vt="0" placeholder="${esc((given || '') + '…')}" autocomplete="off" autocapitalize="off" spellcheck="false">`; }
 
   /* ---------------- O'yinlar ---------------- */
+  /* the lesson whose words the games use: one bar per English lesson of the week, one chosen at a time */
+  function gameLesson() {
+    const c = School.cls(S.cls), ls = c ? School.lessonsOf(c) : [], now = T.now();
+    if (V.gw == null) {   // first visit: the latest lesson that already has words (this week, else last week)
+      for (const wk of [T.weekStart(now), T.addWeeks(T.weekStart(now), -1)]) { const got = ls.filter(L => Play.lessonCards(S, wk, L.n).length); if (got.length) { const started = got.filter(L => T.at(wk, L.di, L.start) <= now); V.gw = wk; V.gn = (started[started.length - 1] || got[0]).n; break; } }
+      if (V.gw == null) { V.gw = T.weekStart(now); V.gn = 1; }
+    }
+    return { ls, week: V.gw, n: V.gn, cards: Play.lessonCards(S, V.gw, V.gn) };
+  }
   function games() {
-    const list = Play.list(S);
-    return top("So'z o'yinlari", "O'yinni siz tanlaysiz, so'zlarni tizim tanlaydi. To'g'ri javob +1 achko, xato −1.")
+    const G = gameLesson(), list = Play.list(S, G.cards, [G.week]), thisWk = T.weekStart();
+    const wkName = G.week === thisWk ? 'Shu hafta' : G.week === T.addWeeks(thisWk, -1) ? "O'tgan hafta" : `${T.date(G.week).getDate()}-${UZM[T.date(G.week).getMonth()]} haftasi`;
+    const bars = `<div class="card" style="margin-bottom:14px"><div class="row sp" style="margin-bottom:10px"><b>Qaysi darsning so'zlari?</b><span class="row" style="gap:6px"><button class="mini" data-act="gwk" data-d="-1" aria-label="Oldingi hafta">←</button><span class="small">${wkName}</span><button class="mini" data-act="gwk" data-d="1" ${G.week >= thisWk ? 'disabled' : ''} aria-label="Keyingi hafta">→</button></span></div>
+      <div class="lbars">${G.ls.map(L => { const k = Play.lessonCards(S, G.week, L.n).length; return `<button class="lbar ${L.n === G.n ? 'on' : ''}" data-act="gles" data-n="${L.n}" ${k ? '' : 'disabled'}><b>${L.n}-dars</b><small>${UZD[L.day].slice(0, 3)} · ${k ? k + " so'z" : "so'z yo'q"}</small></button>`; }).join('') || '<span class="small muted">Dars jadvali yo\'q</span>'}</div></div>`;
+    return top("So'z o'yinlari", `O'yinlar tanlangan darsning so'zlari bilan o'ynaladi: ${G.n}-dars, ${G.cards.length} ta so'z. To'g'ri javob +1 achko, xato −1.`) + bars
       + `<div class="tiles small">${list.map(g => { const TC = { 1: ['#5CE1F0', '#14163D'], 2: ['#FFD23F', '#14163D'], 3: ['#B8F53B', '#14163D'], 4: ['#FF9F1C', '#2B1700'] }[g.tier]; const [c, t] = g.open ? TC : ['rgba(0,0,0,.25)', '#fff'];
         return `<button class="tile" style="background:${c};color:${t}" data-act="${g.open ? 'game' : 'toast'}" data-k="${g.key}" data-rare="${g.rare ? 1 : ''}" data-t="${esc(g.why)}"><span class="t-kind">${g.rare ? '✨ Noyob raund · 1 marta' : g.open ? (g.play === 'solo' ? 'Yakka' : g.play === 'class' ? 'Butun sinf' : "Kompyuter raqiblar bilan") : '🔒 Yopiq'}</span><div><h3>${esc(g.title)}</h3><div class="t-list">${esc(g.uz)}</div></div><span class="t-time">${g.open ? 'Ochiq · ' + g.tier + '-daraja' : esc(g.short)}</span></button>`; }).join('')}</div>
       <p class="small" style="margin-top:14px;opacity:.85">Oltin: har o'yindan 25 tagacha, kuniga 150 tagacha. Bugun: ${School.goldToday(S.id, 'game')} / 150.</p>`;
@@ -281,5 +305,5 @@ const Stu = (() => {
     trophy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4a3 3 0 0 0 3 4M17 6h3a3 3 0 0 1-3 4M12 14v4M8 20h8"/></svg>',
     profile: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>',
   };
-  return { V, page, pills, me, prAnswer, practiceRun, vocCard, chart, ICON, trophySVG, OPEN_IN_LESSON, lessonNow };
+  return { sendBar, V, page, pills, me, prAnswer, practiceRun, vocCard, chart, ICON, trophySVG, OPEN_IN_LESSON, lessonNow };
 })();

@@ -3,7 +3,8 @@
 --     v2_boot also sends works of the groups in the student's 'move' events (the page decides what still shows);
 --   * lesson plans can be shared by every class ('*|week|n'); students now get the plans' words (only the words)
 --     so the plan words reach So'zlarim, as the plan page always said;
---   * a teacher who is not the admin cannot change their own password, and changes only their own classes.
+--   * a teacher who is not the admin cannot change their own password, and changes only their own classes;
+--   * castle saves from an old copy of the site (virtual clock, before 12 Nov) no longer overwrite a real-clock castle.
 -- Only these two functions are replaced; no table changes, no data changes.
 
 create or replace function public.v2_boot(p_token text, p_days int default 42) returns json
@@ -192,6 +193,10 @@ begin
        where sid = k and coalesce((state->>'lock')::bigint, 0) < coalesce((st->>'lock')::bigint, 0);
       continue;
     end if;
+    -- an old copy of the site (a tab open since before 12 Nov) counts castle time only while the castle is open
+    -- (vt is not a real clock time): it must not overwrite a castle the current site has already saved
+    if coalesce((st->>'vt')::numeric, 0) < 1e12 and exists (select 1 from public.v2_castle
+         where sid = k and coalesce((state->>'vt')::numeric, 0) >= 1e12) then continue; end if;
     -- the owner's own save never clears a rest a classmate's raid has just set
     insert into public.v2_castle (sid, state) values (k, st)
       on conflict (sid) do update set

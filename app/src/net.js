@@ -14,12 +14,18 @@ const Net = (() => {
   let token = ls.get(TOK);
   if (!token) { try { const old = JSON.parse(ls.get('at_session') || 'null'); if (old && old.token) token = old.token; } catch (e) {} }   // still logged in on the old site
   let me = null, since = null, timer = null, busy = false, backoff = 0, offline = false;
+  let batch = 150;                       // smaller pieces after a failure, so a slow connection still gets them through
+  const ST = { sending: false, lastOk: 0, lastFail: 0 };
+  const listeners = new Set(); const emit = () => listeners.forEach(f => { try { f(); } catch (e) {} });
 
-  async function rpc(fn, args) {
-    let r;
-    try { r = await fetch(`${SB_URL}/rest/v1/rpc/${fn}`, { method: 'POST', headers: { apikey: SB_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(args || {}) }); }
+  /* every call has a time limit: on a slow or stuck connection a request that never answers must not block sending for ever */
+  let inflight = null;   // the sending request now running (the Yuborish button can cut a stuck one short)
+  async function rpc(fn, args, ms = 45000) {
+    let r, text; const ac = typeof AbortController !== 'undefined' ? new AbortController() : null; const to = ac ? setTimeout(() => ac.abort(), ms) : 0;
+    if (fn === 'v2_sync' && ac) inflight = { ac, t: Date.now() };
+    try { r = await fetch(`${SB_URL}/rest/v1/rpc/${fn}`, { method: 'POST', headers: { apikey: SB_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(args || {}), signal: ac ? ac.signal : undefined }); text = await r.text(); }
     catch (e) { const err = new Error('NET'); err.net = true; throw err; }
-    const text = await r.text(); let data = null; try { data = text ? JSON.parse(text) : null; } catch (e) { data = null; }
+    finally { clearTimeout(to); if (inflight && inflight.ac === ac) inflight = null; } let data = null; try { data = text ? JSON.parse(text) : null; } catch (e) { data = null; }
     if (!r.ok) { const err = new Error((data && data.message) || 'HTTP ' + r.status); err.status = r.status; throw err; }
     return data;
   }
@@ -75,29 +81,42 @@ const Net = (() => {
   const ERR = { LOGIN_TAKEN: 'This login is already used', LOGIN_FORMAT: 'A login is 3–30 small letters, digits, dots or _', PASSWORD: 'A new account needs a password', NAME: 'A name is needed', SELF: 'You cannot remove your own account', FORBIDDEN: 'Not allowed' };
   async function flush() {
     if (busy || !token || !me) return; if (!pendingCount()) { setOffline(false); return; }
-    busy = true;
-    const ev = Q.ev.slice(0, 400), ops = Q.ops.slice(0, 200), castles = Object.assign({}, Q.castles);
+    busy = true; ST.sending = true; emit();
+    const ev = Q.ev.slice(0, batch), ops = Q.ops.slice(0, Math.max(10, batch >> 1)), castles = Object.assign({}, Q.castles);
     try {
-      const r = await rpc('v2_sync', { p_token: token, p_events: ev, p_ops: ops, p_castles: castles });
+      const r = await rpc('v2_sync', { p_token: token, p_events: ev, p_ops: ops, p_castles: castles }, 20000 + Math.min(batch, 400) * 50);   // 20–40 s
+      batch = Math.min(400, batch * 2); ST.lastOk = Date.now(); ST.sending = false;
       const evIds = new Set(ev.map(e => e.id)); Q.ev = Q.ev.filter(e => !evIds.has(e.id)); ev.forEach(e => { if (!rawIds.has(e.id)) sent.set(e.id, e); });
       Q.ops = Q.ops.filter(o => !ops.includes(o));
       Object.keys(castles).forEach(k => { if (Q.castles[k] === castles[k]) delete Q.castles[k]; });
       saveQ(); backoff = 0; setOffline(false);
       if (r && r.errors && r.errors.length) {
         const m = r.errors.map(e => ERR[e.error] || e.error).filter((x, i, a) => a.indexOf(x) === i).join(' · ');
-        toast(m); busy = false;
+        toast(m); busy = false; emit();
         if (await refresh(true) && typeof App !== 'undefined' && !Run.R) App.render();   // show what the server really has
         return;
       }
     } catch (e) {
-      if (e.message === 'AUTH' || e.message === 'REMOVED') { busy = false; return expired(); }
-      backoff = Math.min(60000, (backoff || 2500) * 2); setOffline(true);
-      busy = false; return schedule(backoff);
+      ST.sending = false; ST.lastFail = Date.now();
+      if (e.message === 'AUTH' || e.message === 'REMOVED') { busy = false; emit(); return expired(); }
+      batch = Math.max(20, batch >> 2); backoff = Math.min(30000, (backoff || 2000) * 2); setOffline(true);
+      busy = false; emit(); return schedule(backoff);
     }
-    busy = false;
+    busy = false; emit();
     if (pendingCount()) schedule(300);
   }
-  function setOffline(v) { if (offline === v) return; offline = v; const b = document.getElementById('netbar'); if (b) b.hidden = !v; }
+  /* the student's "Yuborish" button: send everything now and say whether the server got it all */
+  async function sendNow(maxMs = 120000) {
+    collect(); backoff = 0; const t0 = Date.now();
+    while (pendingCount() && Date.now() - t0 < maxMs) {
+      if (busy) { if (inflight && Date.now() - inflight.t > 4000) inflight.ac.abort(); await new Promise(r => setTimeout(r, 300)); continue; }
+      clearTimeout(timer); const fails = ST.lastFail; await flush();
+      if (ST.lastFail !== fails) { if (!navigator.onLine) break; await new Promise(r => setTimeout(r, 1500)); }
+    }
+    if (pendingCount()) schedule(backoff || 5000);
+    return { ok: !pendingCount(), left: pendingCount() };
+  }
+  function setOffline(v) { if (offline === v) return; offline = v; const b = document.getElementById('netbar'); if (b) b.hidden = !v; emit(); }
 
   /* ---------- login, boot, refresh ---------- */
   async function login(l, p) {
@@ -169,5 +188,5 @@ const Net = (() => {
   addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') { collect(); flush(); } });
   addEventListener('online', () => schedule(200));
 
-  return { login, boot, refresh, logout, changed, castle, flush, pending: pendingCount, me: () => me, hasToken: () => !!token, get since() { return since; } };
+  return { sendNow, status: () => Object.assign({ pending: pendingCount(), offline }, ST), onChange: f => listeners.add(f), login, boot, refresh, logout, changed, castle, flush, pending: pendingCount, me: () => me, hasToken: () => !!token, get since() { return since; } };
 })();

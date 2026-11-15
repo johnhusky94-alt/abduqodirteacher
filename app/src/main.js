@@ -107,7 +107,9 @@ const App = (() => {
   H.rmode = d => { if (ctx.mode === 'student' || ctx.as && ctx.as.type === 'student') Stu.V.rmode = d.k; else { Tea.V.r.mode = d.k; Tea.V.r.lessons = null; } render(); };
   H.lb = d => { Stu.V.lb = d.k; render(); };
   H.sell = d => { const s = S(), t = School.trophies(s).find(x => x.id === d.id); if (!t || t.sold) return; const p = School.TSIZE[t.size].p; Store.ev(s.id, 'sell', { tid: t.id, price: p }); School.addGold(s.id, p, 'sell'); Snd.win(); toast(`Kubok sotildi: +${p} oltin`); render(); };
-  H.game = d => Play.launch(S(), d.k, { rare: !!d.rare });
+  H.game = d => { const V = Stu.V; Play.launch(S(), d.k, { rare: !!d.rare, cards: Play.lessonCards(S(), V.gw, V.gn), weeks: [V.gw] }); };
+  H.gles = d => { Stu.V.gn = +d.n; render(); };
+  H.gwk = d => { const V = Stu.V, c = School.cls(S().cls); V.gw = T.addWeeks(V.gw, +d.d); const ls = c ? School.lessonsOf(c) : []; const got = ls.filter(L => Play.lessonCards(S(), V.gw, L.n).length); if (!got.some(L => L.n === V.gn)) V.gn = got.length ? got[got.length - 1].n : 1; render(); };
   H.castle = () => Play.openCastle(S());
   // student: opening works
   H.openwork = d => {
@@ -166,7 +168,13 @@ const App = (() => {
   ['gopt', 'gtok', 'gml', 'gmr', 'gslot', 'gchip', 'gtin', 'gtout', 'grw', 'grwtap', 'gfixtap', 'gbin', 'gpair', 'gchain'].forEach(k => H[k] = d => { const c = gcur(); if (!c || c.fb) return; Snd.tap(); if (GUI.act(c.q, c, d) === 'submit') Run.gSubmit(GUI.response(c.q, c)); render(); });
   // Erkin mashq
   H.prstart = () => { Stu.V.pr = { n: 0 }; render(); }; H.prstop = () => { Stu.V.pr = null; render(); };
+  // "Yuborish": send everything now and wait until the server confirms
+  H.netsend = async () => { const r = await Net.sendNow(); toast(r.ok ? "✓ Yuborildi: o'qituvchi javoblaringizni ko'radi" : `Yuborilmadi (${r.left} ta qoldi). Internetni tekshirib, yana Yuborish ni bosing.`); render(); };
+  // the send bars follow the sending without redrawing the page (so typing is never interrupted)
+  Net.onChange(() => { if (ctx.mode !== 'student') return; $$('[data-sendbar]').forEach(el => { const h = Stu.sendBar(el.dataset.sendbar === '1'); if (h) el.outerHTML = h; }); });
   H.prpick = d => { Stu.prAnswer({ j: +d.j }); render(); };
+  H.prtog = d => { const c = Stu.V.pr && Stu.V.pr.cur; if (!c || Stu.V.pr.fb) return; const cur = c.v.c || [], j = +d.j; c.v.c = cur.includes(j) ? cur.filter(x => x !== j) : [...cur, j]; Snd.tap(); render(); };
+  H.prmulti = () => { const c = Stu.V.pr && Stu.V.pr.cur; if (!c || !(c.v.c || []).length) return; Stu.prAnswer({ sel: c.v.c.slice() }); render(); };
   H.pridk = () => { Stu.prAnswer({ idk: true }); render(); };
   H.prcheck = () => { const vals = []; $$('[data-prg]').forEach(el => { const k = +el.dataset.prg; vals[k] = el.dataset.seg != null ? (vals[k] ? vals[k] + '-' : '') + el.value.trim() : el.value; }); if (!vals.some(v => v && v.replace(/-/g, '').trim())) return toast('Javobni yozing'); Stu.prAnswer({ vals }); render(); };
   H.prnext = () => { const P = Stu.V.pr; P.cur = null; P.fb = null; render(); };
@@ -356,9 +364,21 @@ const App = (() => {
     if (s) { const L = Stu.lessonNow(); x += L ? 'L' + L.L.n + L.week : '-'; if (Run.R && Run.R.view === 'cw' && Run.R.lessonLive) x += ':' + Run.cwActive() + (T.now() < Run.R.inst.close); if (Run.R && Run.R.endsAt && !Run.R.finished) x += ':' + (T.now() >= Run.R.endsAt); }
     return x;
   }
+  /* a new version was published (version.txt differs from this page's build): send what is waiting, then reload
+     the page when nobody is in the middle of something. Phones keep tabs open for days; old code must not stay. */
+  let newBuild = false;
+  async function checkBuild() {
+    if (!window.__BUILD || location.protocol === 'file:' || newBuild) return tryReload();
+    try { const r = await fetch('version.txt?t=' + Date.now(), { cache: 'no-store' }); if (!r.ok) return; const v = (await r.text()).trim(); if (/^[0-9a-f]{12}$/.test(v) && v !== window.__BUILD) newBuild = true; } catch (e) { return; }
+    tryReload();
+  }
+  const busyNow = () => !!Run.R || !$('#ov').hidden || !!$('#modal').innerHTML || !!(document.activeElement && /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName));
+  async function tryReload() { if (!newBuild || busyNow()) return; try { await Net.sendNow(15000); } catch (e) {} if (!busyNow()) location.reload(); }
+  setInterval(checkBuild, 5 * 60e3); setTimeout(checkBuild, 20000);
+  addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') checkBuild(); });
   let tickN = 0;
   setInterval(() => {
-    tickN++;
+    tickN++; if (newBuild && tickN % 15 === 0) tryReload();
     if (ctx.mode === 'login') return;
     const now = T.now(), r = Run.R;
     $$('[data-clk]').forEach(el => { const k = el.dataset.clk; let ms = 0;

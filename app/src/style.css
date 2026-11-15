@@ -354,3 +354,16 @@ body.login main{padding:0}
   .part-run{padding:12px;border-radius:22px}.ex{padding:14px 12px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* answers waiting to reach the server: the student sends them with one button */
+.sendbar{display:flex;align-items:center;justify-content:space-between;gap:14px;border-radius:18px;padding:14px 16px;margin:0 0 14px;font-size:15px}
+.sendbar>div,.sendbar{flex-wrap:wrap}.sendbar span{display:block;opacity:.85;font-size:14px;margin-top:2px}
+.sendbar.warn{background:#FFE7A8;color:#4A3200}.sendbar.warn .btn{background:#4A3200;color:#fff;flex:none}
+.sendbar.ok{background:#DDF5E4;color:#0D5A26;display:block}
+
+/* O'yinlar: one bar per lesson of the week */
+.lbars{display:grid;grid-template-columns:repeat(auto-fit,minmax(92px,1fr));gap:8px}
+.lbar{display:flex;flex-direction:column;align-items:flex-start;gap:2px;border:2px solid rgba(0,0,0,.08);background:rgba(0,0,0,.04);color:inherit;border-radius:14px;padding:10px 12px;font:inherit;cursor:pointer;text-align:left}
+.lbar b{font-size:17px}.lbar small{opacity:.75;font-size:12px}
+.lbar.on{background:#2E46E8;border-color:#2E46E8;color:#fff}
+.lbar:disabled{opacity:.4;cursor:default}

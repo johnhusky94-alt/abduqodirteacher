@@ -257,13 +257,22 @@ const Code = (() => {
   }
 
   /* grading of one book item. resp: choice → [indexes]; gap → [strings]; match → right text. ok: true | false | null (no answer) */
-  function isMulti(it, ex) { if (ex && ex.answer.endsWith('many')) return true; return it.opts.filter(o => o.ok === 2).length > 1 || it.opts.some(o => o.ok === 1); }
+  /* several right options (*): the student picks several only when the question asks for several ("Choose TWO", "Which TWO…",
+     "Choose all", ANSWER: many). Otherwise each * (and each ~) is one acceptable answer and any one of them is right,
+     e.g. "Is there ___ water? | a lot of* | much*". */
+  const ASKS_MANY = /\b(choose|select|pick|tick|circle|mark|find|name|give)\s+(the\s+)?(two|three|four|five|2|3|4|5|all|both|several)\b|\bwhich\s+(two|three|four|five)\b|\b(ikkita|uchta|to'rtta|barchasini|hammasini)\b/i;
+  const asksMany = t => ASKS_MANY.test(t || '') || /\b(TWO|THREE|FOUR|FIVE)\b/.test(t || '');   // capitals only: "Which TWO"
+  function isMulti(it, ex) {
+    if (ex && ex.answer.endsWith('many')) return true;
+    if (it.opts.filter(o => o.ok === 2).length < 2) return false;
+    return asksMany(it.stem) || asksMany(ex && ex.instr);
+  }
   function prevOf(segs, k) { let g = -1; for (let i = 0; i < segs.length; i++) { if (segs[i].gap) { g++; if (g === k) { const p = segs[i - 1]; if (!p || !/\s$/.test(p.t)) return null; return p.t.trim().split(/\s+/).slice(-3).join(' '); } } } return null; }
   function gradeItem(it, resp, ex) {
     if (it.type === 'choice') {
       const sel = resp || []; if (!sel.length) return { ok: null };
       const need = it.opts.map((o, i) => o.ok === 2 ? i : -1).filter(i => i >= 0), may = it.opts.map((o, i) => o.ok ? i : -1).filter(i => i >= 0);
-      if (!isMulti(it, ex)) return { ok: need.includes(sel[0]) };
+      if (!isMulti(it, ex)) return { ok: may.includes(sel[0]) };
       return { ok: need.every(i => sel.includes(i)) && sel.every(i => may.includes(i)) };
     }
     if (it.type === 'gap') {
