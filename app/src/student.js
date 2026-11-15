@@ -24,7 +24,20 @@ const Stu = (() => {
     const L = lessonNow(); if (L && !OPEN_IN_LESSON.includes(V.tab) && !Run.R) V.tab = 'home';
     theme(); $('#side').innerHTML = nav();
     if (Run.R) return Run.render();        // a finished work shows its own send bar
-    return sendBar() + pageBody();
+    return sendBar() + (teacherView() && V.tab === 'home' && !V.view ? allWorks() : '') + pageBody();
+  }
+  /* a teacher looking at a student's page: every work of every week opens, whatever its time window */
+  const teacherView = () => typeof App !== 'undefined' && App.ctx.as && App.ctx.as.type === 'student';
+  function allWorks() {
+    const now = T.now(), insts = School.instances(S, now), TN = { homework: 'Homework', classwork: 'Classwork', weekly: 'Weekly test', test: 'Test', task: 'Task' };
+    const weekOf = i => i.w.week || T.weekStart(i.open || i.w.sentAt || now), byWk = {};
+    insts.forEach(i => (byWk[weekOf(i)] = byWk[weekOf(i)] || []).push(i));
+    const weeks = Object.keys(byWk).map(Number).sort((a, b) => b - a), thisWk = T.weekStart(now);
+    const row = i => { const b = School.best(S.id, i.id), started = School.attempts(S.id, i.id).length, st = School.state(S, i, now);
+      const when = now < i.open ? 'opens ' + enWhen(i.open) : now < i.close ? 'open now' : 'closed for the student';
+      return `<div class="row sp" style="padding:8px 0;border-top:1px solid rgba(0,0,0,.07)"><span><span class="tag">${TN[i.type] || i.type}</span> <b>${esc(i.P.meta.title || '')}</b>${i.L ? ` <span class="small muted">· lesson ${i.L.n} (${i.L.day})</span>` : ''}<br><span class="small muted">${when} · ${b != null ? 'done: ' + b + '%' : started ? 'started' : st === 'gone' || now >= i.close ? 'not done' : 'not started'}</span></span><button class="btn sm" data-act="openwork" data-id="${i.id}">${b != null || started ? 'See answers' : 'Open'}</button></div>`; };
+    return `<div class="card tvcard" style="margin-bottom:16px"><h3 style="margin:0">All works · teacher view</h3><p class="small muted" style="margin:4px 0 8px">Every week's work for ${esc(S.name)} (${esc(S.group)}). Here they open whatever their time; nothing you do is saved.</p>
+      ${weeks.length ? weeks.map(wk => `<details ${wk === thisWk || wk === weeks[0] ? 'open' : ''} style="margin-top:6px"><summary style="cursor:pointer;font-weight:700;padding:6px 0">${wk === thisWk ? 'This week' : wk === T.addWeeks(thisWk, -1) ? 'Last week' : wk > thisWk ? 'Week of ' + enWhen(wk).split(',')[0] + ' (coming)' : 'Week of ' + enWhen(wk).split(',')[0]} · ${byWk[wk].length}</summary>${byWk[wk].sort((a, b) => a.open - b.open).map(row).join('')}</details>`).join('') : '<p class="small muted">No works yet.</p>'}</div>`;
   }
   /* answers not yet on the server: a bar with a "Yuborish" button that waits for the server to confirm.
      done = this work is finished: then also say when everything has arrived */

@@ -115,6 +115,8 @@ const App = (() => {
   H.openwork = d => {
     const s = S(), inst = School.instances(s).find(i => i.id === d.id); if (!inst) return;
     const st = School.state(s, inst), now = T.now(), L = Stu.lessonNow();
+    // the teacher viewing a student opens any work, before, during or after its time (test mode: nothing is saved)
+    if (ctx.as && ctx.as.type === 'student') { const live = inst.type === 'classwork' && now >= inst.open && now < inst.close; if (Run.open(s, inst, { live })) { window.scrollTo(0, 0); render(); } return; }
     if (st === 'locked' || now < inst.open) return toast(inst.type === 'homework' ? `Bugungi oxirgi darsdan keyin ochiladi (${T.hm(inst.open)})` : `${uzWhen(inst.open)} da ochiladi`);
     const live = inst.type === 'classwork' && now >= inst.open && now < inst.close;
     if (L && !live && inst.type !== 'test' && inst.type !== 'weekly') return toast('Dars vaqtida faqat shu darsning sinf ishi ochiq');

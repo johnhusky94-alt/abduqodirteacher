@@ -367,3 +367,9 @@ body.login main{padding:0}
 .lbar b{font-size:17px}.lbar small{opacity:.75;font-size:12px}
 .lbar.on{background:#2E46E8;border-color:#2E46E8;color:#fff}
 .lbar:disabled{opacity:.4;cursor:default}
+
+/* teacher viewing a student: the all-weeks list keeps its own readable colours on any student theme */
+.tvcard{background:#fff!important;color:#1C1C1E!important}.tvcard *{color:#1C1C1E}
+.tvcard .small,.tvcard .muted{color:#5E5E68!important;opacity:1}
+.tvcard .tag{background:#E8ECFF!important;color:#2340E0!important}
+.tvcard .btn{color:inherit}
