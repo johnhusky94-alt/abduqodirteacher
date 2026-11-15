@@ -373,3 +373,9 @@ body.login main{padding:0}
 .tvcard .small,.tvcard .muted{color:#5E5E68!important;opacity:1}
 .tvcard .tag{background:#E8ECFF!important;color:#2340E0!important}
 .tvcard .btn{color:inherit}
+
+/* Settings → Students / Teachers: the table keeps readable columns and scrolls sideways on phones */
+.edtable{width:100%;min-width:760px}
+.edtable input.input{min-width:120px}
+.edtable select.input{min-width:96px;padding-right:28px}
+.edtable td{white-space:nowrap}

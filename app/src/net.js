@@ -188,5 +188,14 @@ const Net = (() => {
   addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') { collect(); flush(); } });
   addEventListener('online', () => schedule(200));
 
-  return { sendNow, status: () => Object.assign({ pending: pendingCount(), offline }, ST), onChange: f => listeners.add(f), login, boot, refresh, logout, changed, castle, flush, pending: pendingCount, me: () => me, hasToken: () => !!token, get since() { return since; } };
+  /* "waiting": answers that have not reached the server for a while (or no internet). A fresh answer normally
+     arrives within a second, so the student is only told after 8 seconds. */
+  let pendingSince = 0, waitTimer = 0;
+  function status() {
+    const n = pendingCount();
+    if (!n) pendingSince = 0; else if (!pendingSince) { pendingSince = Date.now(); clearTimeout(waitTimer); waitTimer = setTimeout(emit, 8200); }
+    const waiting = !!n && (offline || Date.now() - pendingSince > 8000 || ST.lastFail > pendingSince);
+    return Object.assign({ pending: n, offline, waiting }, ST);
+  }
+  return { sendNow, status, onChange: f => listeners.add(f), login, boot, refresh, logout, changed, castle, flush, pending: pendingCount, me: () => me, hasToken: () => !!token, get since() { return since; } };
 })();

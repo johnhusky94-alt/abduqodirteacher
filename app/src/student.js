@@ -44,7 +44,8 @@ const Stu = (() => {
   function sendBar(done) {
     if (Store.sandbox || !Net.me()) return '';
     const st = Net.status();
-    if (st.pending) return `<div class="sendbar warn" data-sendbar="${done ? 1 : 0}"><div><b>${st.sending ? 'Yuborilmoqda…' : `${st.pending} ta javob hali o'qituvchiga yetib bormadi`}</b><span>${st.offline ? "Internet sekin yoki yo'q. Javoblaringiz telefonda saqlangan, yo'qolmaydi." : "Tugatgan ishingiz o'qituvchiga borishi uchun Yuborish tugmasini bosing."}</span></div><button class="btn" data-act="netsend">${st.sending ? 'Qayta yuborish' : 'Yuborish'}</button></div>`;
+    if (st.pending && !st.waiting && done) return `<div class="sendbar ok" data-sendbar="1" style="background:#EEF1FF;color:#2340E0"><b>Yuborilmoqda…</b></div>`;
+    if (st.waiting) return `<div class="sendbar warn" data-sendbar="${done ? 1 : 0}"><div><b>${st.sending ? 'Yuborilmoqda…' : `${st.pending} ta javob hali o'qituvchiga yetib bormadi`}</b><span>${st.offline ? "Internet sekin yoki yo'q. Javoblaringiz telefonda saqlangan, yo'qolmaydi." : "Tugatgan ishingiz o'qituvchiga borishi uchun Yuborish tugmasini bosing."}</span></div><button class="btn" data-act="netsend">${st.sending ? 'Qayta yuborish' : 'Yuborish'}</button></div>`;
     return done ? `<div class="sendbar ok" data-sendbar="1"><b>✓ O'qituvchiga yuborildi</b><span>Barcha javoblaringiz serverda saqlandi.</span></div>` : `<div data-sendbar="0" hidden></div>`;
   }
   function pageBody() {
