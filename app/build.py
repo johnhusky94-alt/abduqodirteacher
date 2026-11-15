@@ -40,6 +40,7 @@ html = f'''<!doctype html>
 </script>
 <script>
 {js_data('__ARCADE', json.loads(rd(V / 'arcade-bundle.json')))}
+{js_data('__HY', {'js': rd(V / 'hy.js'), 'css': rd(V / 'hy.css')})}
 {js_data('__CASTLE_SRC', rd(V / 'castle.html'))}
 {js_data('__UNIT6', rd(V / 'unit6.txt'))}
 {js_data('__U12', rd(V / 'u12.gpack'))}

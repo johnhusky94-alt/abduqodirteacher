@@ -1,0 +1,7 @@
+.hybox{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:4px;flex:1 1 auto;min-width:0;cursor:text;padding:2px 0}
+.hybox[hidden]{display:none!important}
+.hyc{display:inline-flex;align-items:center;justify-content:center;min-height:2.2em;padding:0 6px;font-size:var(--hyfs,18px);font-weight:700;letter-spacing:.04em;background:var(--hybg,#fff);color:var(--hyfg,#111);border:2px solid currentColor;border-color:color-mix(in srgb,var(--hyfg,#111) 25%,transparent);border-radius:var(--hyr,10px)}
+.hyc.on{border-color:#2E46E8;box-shadow:0 0 0 3px rgba(46,70,232,.25)}
+.hyd{font-weight:800;font-size:var(--hyfs,18px);color:var(--hyfg,#111)}
+.hybox.off{opacity:.55}
+input.hyhid{position:absolute!important;left:0;top:0;width:1px!important;height:1px!important;opacity:0!important;padding:0!important;border:0!important;pointer-events:none}

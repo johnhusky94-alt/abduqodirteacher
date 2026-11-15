@@ -58,7 +58,9 @@ const Play = (() => {
 
   /* building the game page (same as the arcade hub) */
   const json = o => JSON.stringify(o).replace(/</g, '\\u003c');
-  const HEAD = '<!doctype html><html lang="uz"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">';
+  const HEAD = '<!doctype html><html lang="uz"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">' +
+    // hyphen boxes: a hyphenated answer (brother-in-law) shows its hyphens; the student types only the letters
+    `<style>${window.__HY.css}</style><script>${window.__HY.js}<\/script>`;
   function kitDoc(key, wg) {
     const g = B().kit[key]; const css = (g.include || []).map(i => B().inc[i]).join('') + g.css;
     const parts = { TITLE: g.title, BASE_CSS: B().baseCss, GAME_CSS: css, HUD: g.hud, MAIN: g.main, START_EXTRA: g.start, BASE_JS: B().baseJs, GAME_JS: g.js };
