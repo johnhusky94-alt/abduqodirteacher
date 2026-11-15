@@ -82,7 +82,7 @@ const Tea = (() => {
   }
   /* question by question across the class (tests) */
   function analysis(c, w) {
-    if (!w) return ''; const P = School.parsed(w), ss = db().students.filter(s => s.cls === c.id && (w.groups || []).includes(s.group));
+    if (!w) return ''; const P = School.parsed(w), ss = db().students.filter(s => s.cls === c.id && ((w.groups || []).includes(s.group) || School.instances(s).some(i => i.id === w.id)));
     const rows = [];
     School.workSections(P).forEach(({ s: sec, si }) => sec.ex.forEach((ex, ei) => ex.items.forEach((it, ii) => {
       if (it.example || !['choice', 'gap', 'match'].includes(it.type)) return;
@@ -327,26 +327,29 @@ KIND: paragraph
   /* ================= LESSON PLANS ================= */
   function plans() {
     const P = V.p, c = pickCls(P.cls); P.cls = c.id; if (P.week == null) P.week = T.weekStart();
-    const ls = School.lessonsOf(c); if (P.n > ls.length) P.n = 1; const key = `${c.id}|${P.week}|${P.n}`, plan = (db().plans || {})[key];
-    let h = head('Lesson plans', 'One plan per lesson per class. The [words] of a plan appear in the students’ So‘zlarim for that week.', `<button class="btn" data-act="ppaste">Paste plan code</button>`);
+    const ls = School.lessonsOf(c); if (P.n > ls.length) P.n = 1; const found = School.planOf(c.id, P.week, P.n), plan = found && found.plan;
+    let h = head('Lesson plans', 'One plan per lesson, shared by all your classes (a class can have its own instead). The [words] of a plan appear in the students’ So‘zlarim for that week.', `<button class="btn" data-act="ppaste">Paste plan code</button>`);
     h += `<div class="card" style="margin-bottom:16px"><div class="row sp"><div class="chips">${myClasses().map(x => chip(x.id === c.id, 'pcls', `data-id="${x.id}"`, esc(x.name))).join('')}</div>${wkNav('pweek', P.week)}</div>
-      <div class="chips" style="margin-top:12px">${ls.map(L => chip(L.n === P.n, 'pn', `data-n="${L.n}"`, `${(db().plans || {})[`${c.id}|${P.week}|${L.n}`] ? '✓ ' : ''}Lesson ${L.n} · ${L.day} ${L.start}`)).join('')}</div></div>`;
+      <div class="chips" style="margin-top:12px">${ls.map(L => chip(L.n === P.n, 'pn', `data-n="${L.n}"`, `${School.planOf(c.id, P.week, L.n) ? '✓ ' : ''}Lesson ${L.n} · ${L.day} ${L.start}`)).join('')}</div></div>`;
     if (P.paste != null && P.pasting) {
       const res = Code.parsePlans(P.paste, ls.length);
       h += `<div class="card" style="margin-bottom:16px"><h3>Paste plan code for ${esc(c.name)} · ${weekLabel(P.week)}</h3><textarea class="input code" rows="12" data-inp="ppaste" style="margin-top:10px" placeholder="LESSON: 3&#10;TITLE: …&#10;GOAL: …&#10;[steps]&#10;…&#10;[words]&#10;every day = har kuni">${esc(P.paste)}</textarea>
-        ${P.paste.trim() ? (res.errors.length ? res.errors.map(e => `<div class="err"><b>error</b>${esc(e)}</div>`).join('') : `<div class="okline">✓ ${res.plans.length} plan${res.plans.length > 1 ? 's' : ''}: ${res.plans.map(p => 'lesson ' + p.n + (db().plans[`${c.id}|${P.week}|${p.n}`] ? ' (replaces the old plan)' : '')).join(', ')}</div>`) : ''}
+        ${P.paste.trim() ? (res.errors.length ? res.errors.map(e => `<div class="err"><b>error</b>${esc(e)}</div>`).join('') : `<div class="okline">✓ ${res.plans.length} plan${res.plans.length > 1 ? 's' : ''}: ${res.plans.map(p => 'lesson ' + p.n + (School.planOf(c.id, P.week, p.n) ? ' (replaces the old plan)' : '')).join(', ')}</div>`) : ''}
         <div class="row" style="margin-top:10px"><button class="btn" data-act="psave-paste" ${res.errors.length || !res.plans.length ? 'disabled' : ''}>Save plans</button><button class="btn ghost" data-act="pcancel">Cancel</button></div></div>`;
     }
     if (P.edit) { const p = plan || { title: '', goal: '', steps: [], words: [] };
-      h += `<div class="card"><h3>Lesson ${P.n} · ${esc(c.name)}</h3><div class="grid2" style="margin-top:10px"><label><p class="label">Title</p><input class="input" id="pl-title" value="${esc(p.title)}"></label><label><p class="label">Goal</p><input class="input" id="pl-goal" value="${esc(p.goal)}"></label></div>
+      h += `<div class="card"><h3>Lesson ${P.n} · ${weekLabel(P.week)}</h3>
+        <label class="row" style="margin-top:8px;gap:8px"><input type="checkbox" id="pl-shared" ${!found || found.shared ? 'checked' : ''}> <span>Use this plan for every class (lesson ${P.n})${found && !found.shared ? ` · now only for ${esc(c.name)}` : ''}</span></label><div class="grid2" style="margin-top:10px"><label><p class="label">Title</p><input class="input" id="pl-title" value="${esc(p.title)}"></label><label><p class="label">Goal</p><input class="input" id="pl-goal" value="${esc(p.goal)}"></label></div>
         <div class="grid2" style="margin-top:12px"><label><p class="label">Steps (one per line)</p><textarea class="input" rows="8" id="pl-steps">${esc(p.steps.join('\n'))}</textarea></label><label><p class="label">Words (word = translation)</p><textarea class="input code" rows="8" id="pl-words">${esc(p.words.map(w => w[0] + ' = ' + w[1]).join('\n'))}</textarea></label></div>
         <div class="row" style="margin-top:12px"><button class="btn" data-act="psave">Save</button><button class="btn ghost" data-act="pcancel">Cancel</button>${plan ? '<button class="btn ghost" data-act="pdel">Delete plan</button>' : ''}</div></div>`; }
-    else if (plan) h += `<div class="card"><div class="row sp"><div><p class="label">Lesson ${P.n} · ${esc(c.name)} · ${weekLabel(P.week)}</p><h2>${esc(plan.title)}</h2></div><button class="btn ghost sm" data-act="pedit">Edit</button></div>${plan.goal ? `<p style="font-size:16px"><b>Goal:</b> ${esc(plan.goal)}</p>` : ''}
+    else if (plan) h += `<div class="card"><div class="row sp"><div><p class="label">Lesson ${P.n} · ${weekLabel(P.week)} · ${found.shared ? 'every class' : 'only ' + esc(c.name)}</p><h2>${esc(plan.title)}</h2></div><button class="btn ghost sm" data-act="pedit">Edit</button></div>${plan.goal ? `<p style="font-size:16px"><b>Goal:</b> ${esc(plan.goal)}</p>` : ''}
         ${plan.steps.length ? `<ol style="line-height:1.8">${plan.steps.map(s => `<li>${esc(s)}</li>`).join('')}</ol>` : ''}${plan.words.length ? `<p class="label" style="margin-top:12px">Words</p><div class="row">${plan.words.map(w => `<span class="tag" style="font-size:13px"><b>${esc(w[0])}</b> ${esc(w[1])}</span>`).join('')}</div>` : ''}</div>`;
     else h += `<div class="card" style="text-align:center;padding:30px"><p class="muted">No plan for lesson ${P.n} yet.</p><div class="row" style="justify-content:center"><button class="btn" data-act="pedit">Write a plan</button><button class="btn ghost" data-act="ppaste">Paste plan code</button></div></div>`;
-    // the works of this lesson, for reference
-    const ws = db().works.filter(w => w.week === P.week && +w.lesson === P.n && w.groups.some(g => groupsOf(c).includes(g)));
-    if (ws.length) h += `<p class="small muted" style="margin-top:12px">Also for this lesson: ${ws.map(w => `${w.type} “${esc(School.parsed(w).meta.title)}” (${w.groups.join(', ')})`).join(' · ')}</p>`;
+    // the homework and classwork of this lesson, linked to their results
+    const ws = db().works.filter(w => w.week === P.week && +w.lesson === P.n && (w.groups || []).some(g => groupsOf(c).includes(g))).sort((a, b) => a.type.localeCompare(b.type));
+    h += `<div class="card" style="margin-top:16px"><div class="row sp"><h3 style="margin:0">Work for this lesson · ${esc(c.name)}</h3><button class="btn ghost sm" data-act="ttab" data-k="assign">Assign</button></div>${ws.length
+      ? ws.map(w => `<div class="row sp" style="margin-top:10px"><span><span class="tag" style="background:${PC.results[w.type] || '#555'};color:#fff">${w.type === 'homework' ? 'Homework' : 'Classwork'}</span> <b>${esc(School.parsed(w).meta.title || '')}</b> <span class="small muted">${esc(w.groups.join(', '))}</span></span><button class="btn ghost sm" data-act="plres" data-k="${w.type}">Results</button></div>`).join('')
+      : `<p class="small muted" style="margin-bottom:0">No homework or classwork sent for lesson ${P.n} this week yet.</p>`}</div>`;
     return h;
   }
 
@@ -470,8 +473,17 @@ ${w.text}
       <p class="label" style="margin-top:18px">Timetable · ${ls.length} English lessons a week (numbered in order)</p>
       <div class="scrollx"><table><tbody>${DAYS.map(d => { const L2 = (c.sched[d] || []); return `<tr><td style="width:110px"><b>${DAYFULL[d]}</b></td><td>${L2.map((t, i) => `<span class="row" style="display:inline-flex;gap:4px;margin:3px 10px 3px 0;flex-wrap:nowrap"><input class="input" type="time" style="width:110px" data-chg="ltime" data-d="${d}" data-i="${i}" data-w="0" value="${t[0]}">–<input class="input" type="time" style="width:110px" data-chg="ltime" data-d="${d}" data-i="${i}" data-w="1" value="${t[1]}"><button class="btn ghost sm" data-act="ldel" data-d="${d}" data-i="${i}" aria-label="Remove lesson">×</button></span>`).join('')}<button class="btn ghost sm" data-act="ladd" data-d="${d}">+ lesson</button></td></tr>`; }).join('')}</tbody></table></div>
       <p class="small muted">Lesson numbers: ${ls.map(L => `${L.n} = ${L.day} ${L.start}`).join(' · ') || 'none'}. Changing the timetable moves the opening times of work already sent.</p>
-      ${isAdmin() ? `<button class="btn ghost sm" data-act="cdel" ${db().students.some(s => s.cls === c.id) ? 'disabled title="Move or remove its students first"' : ''}>Delete class</button>` : ''}</div>`;
+      ${isAdmin() ? `<button class="btn ghost sm" data-act="cdel" ${db().students.some(s => s.cls === c.id) ? 'disabled title="Move or remove its students first"' : ''}>Delete class</button>` : ''}</div>` + daysOffCard();
     return h;
+  }
+  /* days off for the whole school: no lessons, homework moves to the next real English day */
+  function daysOffCard() {
+    const L = (db().settings.daysOff || []).slice().sort(), today = T.iso();
+    const fmt = iso => { const [y, m, d] = iso.split('-').map(Number); const dt = new Date(y, m - 1, d); return `${['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][dt.getDay()]} ${d} ${ENM[m - 1]} ${y}`; };
+    return `<div class="card" style="margin-top:16px"><h3 style="margin-top:0">Days off</h3>
+      <p class="small muted" style="margin-top:4px">Holidays and cancelled school days, for every class. On a day off there are no lessons: homework from that day opens after the next real English day, and homework due that day is due on the next real English day.</p>
+      <div class="chips" style="margin:10px 0">${L.length ? L.map(x => `<span class="tag" style="font-size:14px;padding:6px 12px;${x < today ? 'opacity:.55' : ''}">${fmt(x)} <button class="btn ghost sm" data-act="doffdel" data-d="${x}" aria-label="Remove day off" style="padding:0 6px;min-height:0">×</button></span>`).join('') : '<span class="small muted">No days off.</span>'}</div>
+      <div class="row"><input class="input" type="date" id="doff" style="max-width:200px" value="${today}"><button class="btn sm" data-act="doffadd">Add day off</button></div></div>`;
   }
   function sStudents() {
     const L = myClasses(), f = V.st.scls; const list = db().students.filter(s => L.some(c => c.id === s.cls) && (!f || s.cls === f)).sort((a, b) => (a.cls + a.name).localeCompare(b.cls + b.name));
@@ -489,7 +501,7 @@ ${w.text}
       <tr><td><input class="input" id="nt-name" placeholder="New teacher"></td><td><input class="input" id="nt-login" placeholder="login"></td><td><input class="input" id="nt-pass" placeholder="password"></td><td></td><td><button class="btn sm" data-act="tadd">Add</button></td></tr></tbody></table></div><p class="small muted">Give a teacher a class in “Classes & timetable”. Opening a teacher's account is real: changes are saved.</p>`;
   }
   function sGroups() { return `<div class="card"><p class="small muted" style="margin-top:0">A group is an English level. Work is sent to groups; one group spans many classes.</p><div class="row">${db().groups.map(g => { const used = db().students.some(s => s.group === g); return `<span class="tag" style="font-size:14px;padding:6px 12px">${esc(g)} <button data-act="gdel" data-g="${esc(g)}" ${used ? 'disabled title="Students are in this group"' : ''} aria-label="Remove">×</button></span>`; }).join('')}</div><div class="row" style="margin-top:12px"><input class="input" id="ng" placeholder="e.g. B2" style="max-width:160px"><button class="btn sm" data-act="gadd">Add group</button></div></div>`; }
-  function sAccount() { return `<div class="card" style="max-width:520px"><label><p class="label">Name</p><input class="input" data-chg="mename" value="${esc(U.name)}"></label><label><p class="label" style="margin-top:12px">Login</p><input class="input" data-chg="melogin" value="${esc(U.login)}"></label><label><p class="label" style="margin-top:12px">Password</p><input class="input" data-chg="mepass" value="" placeholder="Type a new password" autocomplete="new-password"></label><p class="small muted">Passwords are stored encrypted, so they are never shown. Type a new one to change it. Students can never change their own login or password; you set them in Students.</p>${App.ctx.as ? '' : '<button class="btn ghost" data-act="logout">Log out</button>'}</div>`; }
+  function sAccount() { return `<div class="card" style="max-width:520px"><label><p class="label">Name</p><input class="input" data-chg="mename" value="${esc(U.name)}"></label><label><p class="label" style="margin-top:12px">Login</p><input class="input" data-chg="melogin" value="${esc(U.login)}"></label>${isAdmin() ? `<label><p class="label" style="margin-top:12px">Password</p><input class="input" data-chg="mepass" value="" placeholder="Type a new password" autocomplete="new-password"></label><p class="small muted">Passwords are stored encrypted, so they are never shown. Type a new one to change it. Students can never change their own login or password; you set them in Students.</p>` : `<p class="small muted" style="margin-top:12px">Your password is set by the admin. Ask the admin if you need a new one. Students can never change their own login or password; you set them in Students.</p>`}${App.ctx.as ? '' : '<button class="btn ghost" data-act="logout">Log out</button>'}</div>`; }
   function sClock() { const on = T.offset !== 0; const d = T.date(); const v = `${T.iso()}T${T.hm()}`;
     return `<div class="card" style="max-width:620px"><p style="margin-top:0">Pretend the site is at another date and time, to try lesson time, homework opening, deadlines and the weekly test. It changes the clock only in this browser, for you; students always see real time.</p><p><b>Site time now:</b> ${enWhen(T.now())}${on ? ' <span class="tag" style="background:#FFE1DC;color:#B3261E">test clock on</span>' : ''}</p>
       <div class="row"><input class="input" type="datetime-local" id="clk" value="${v}" style="max-width:260px"><button class="btn" data-act="clkset">Set</button><button class="btn ghost" data-act="clkreset" ${on ? '' : 'disabled'}>Back to real time</button></div>

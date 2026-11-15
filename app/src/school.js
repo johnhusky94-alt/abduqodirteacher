@@ -15,18 +15,32 @@ const School = (() => {
     return out;
   }
   const lessonLen = L => T.mins(L.end) - T.mins(L.start);
-  /* homework of lesson L in week W: opens when that day's last lesson ends; due at the start of the last lesson of the next English day */
+  /* days off (holidays, cancelled school days): Settings → Classes & timetable. A day off has no lessons. */
+  const daysOff = () => new Set((db().settings && db().settings.daysOff) || []);
+  const isOff = (week, di, off = daysOff()) => off.has(T.iso(T.at(week, di, '12:00')));
+  /* the first English day of class c at (week, di) or later (after = strictly later) that is not a day off */
+  function realDay(c, week, di, after) {
+    const ds = [...new Set(lessonsOf(c).map(x => x.di))].sort((a, b) => a - b), off = daysOff(); if (!ds.length) return null;
+    for (let w = week, k = 0; k < 30; k++, w = T.addWeeks(w, 1)) for (const d of ds) {
+      if (k === 0 && (after ? d <= di : d < di)) continue;
+      if (!isOff(w, d, off)) return { week: w, di: d };
+    }
+    return null;
+  }
+  const dayLessons = (c, di) => lessonsOf(c).filter(x => x.di === di);
+  /* homework of lesson L in week W: opens when that day's last lesson ends; due at the start of the last lesson of the next English day.
+     Days off are skipped: homework of a cancelled day opens after the next real English day, and is due on the real day after that. */
   function hwWindow(c, L, week) {
-    const ls = lessonsOf(c), today = ls.filter(x => x.day === L.day);
-    const open = T.at(week, L.di, today[today.length - 1].end);
-    let next = ls.find(x => x.di > L.di), w2 = week; if (!next) { next = ls[0]; w2 = T.addWeeks(week, 1); }
-    const nd = ls.filter(x => x.day === next.day);
-    return { open, close: T.at(w2, next.di, nd[nd.length - 1].start) };
+    const o = realDay(c, week, L.di, false), n = o && realDay(c, o.week, o.di, true);
+    if (!o || !n) { const today = dayLessons(c, L.di); return { open: T.at(week, L.di, today[today.length - 1].end), close: T.at(T.addWeeks(week, 1), L.di, today[today.length - 1].start) }; }
+    const od = dayLessons(c, o.di), nd = dayLessons(c, n.di);
+    return { open: T.at(o.week, o.di, od[od.length - 1].end), close: T.at(n.week, n.di, nd[nd.length - 1].start), moved: o.week !== week || o.di !== L.di };
   }
   /* the lesson happening now for a class (lesson time locks homework and opens classwork) */
   function lessonNow(c, now = T.now()) {
     const wk = T.weekStart(now);
-    for (const L of lessonsOf(c)) { const s = T.at(wk, L.di, L.start), e = T.at(wk, L.di, L.end); if (now >= s && now < e) return { L, start: s, end: e, week: wk }; }
+    const off = daysOff();
+    for (const L of lessonsOf(c)) { if (isOff(wk, L.di, off)) continue; const s = T.at(wk, L.di, L.start), e = T.at(wk, L.di, L.end); if (now >= s && now < e) return { L, start: s, end: e, week: wk }; }
     return null;
   }
 
@@ -43,27 +57,54 @@ const School = (() => {
     return PC[w.id].P;
   }
   const work = id => db().works.find(w => w.id === id);
+  /* lesson plans: one shared plan per lesson ('*|week|n') for every class; a class can still have its own ('cid|week|n'), which wins */
+  const planKey = (cid, week, n) => `${cid}|${week}|${n}`;
+  function planOf(cid, week, n) { const P = db().plans || {}, own = P[planKey(cid, week, n)]; return own ? { plan: own, key: planKey(cid, week, n), shared: false } : P[planKey('*', week, n)] ? { plan: P[planKey('*', week, n)], key: planKey('*', week, n), shared: true } : null; }
 
+  /* the student's class and group over time. A teacher moving a student writes a 'move' event:
+     work that already opened in the old group stays (and counts); the new group's work comes from the move on. */
+  function periods(s) {
+    const mv = Store.events(s.id).filter(e => e.kind === 'move' && e.from).sort(by('ts'));
+    const out = []; let from = -Infinity;
+    mv.forEach(e => { out.push({ cls: e.from.cls, group: e.from.group, from, to: e.ts }); from = e.ts; });
+    out.push({ cls: s.cls, group: s.group, from, to: Infinity });
+    return out;
+  }
   /* every work this student gets, with its time window */
   function instances(s, now = T.now()) {
     if (!s) return [];
     return Store.memo('inst:' + s.id + ':' + Math.floor(now / 6e4), () => {
-      const c = cls(s.cls); if (!c) return [];
+      const seen = new Set(), all = [];
+      periods(s).reverse().forEach(pd => {   // the current class and group first
+        const c = cls(pd.cls); if (!c) return;
+        instancesIn(s, c, pd.group).forEach(i => {
+          if (seen.has(i.id)) return;
+          if (pd.to !== Infinity && !(i.open < pd.to)) return;               // old group: only work that had opened before the move
+          if (pd.from !== -Infinity && i.open < pd.from && !periodsHad(s, i.w, pd.from)) return;   // new group: from the move on
+          seen.add(i.id); i.grp = pd.group; all.push(i);
+        });
+      });
+      return all.sort((a, b) => a.open - b.open);
+    });
+  }
+  const periodsHad = (s, w, t) => periods(s).some(p => p.from < t && (w.groups || []).includes(p.group));
+  function instancesIn(s, c, group) {
+    {
       const ls = lessonsOf(c), out = [];
-      db().works.filter(w => (w.groups || []).includes(s.group)).forEach(w => {
+      db().works.filter(w => (w.groups || []).includes(group)).forEach(w => {
         const P = parsed(w); const t = w.type; const inst = { w, P, type: t, id: w.id };
         if (t === 'homework' || t === 'classwork') {
           const L = ls[(+w.lesson || 0) - 1]; if (!L) return; inst.L = L; inst.week = w.week;
           if (t === 'homework') { const win = hwWindow(c, L, w.week); inst.open = win.open; inst.close = win.close; }
-          else { if (c.taught === s.group) return; inst.open = T.at(w.week, L.di, L.start); inst.close = T.at(w.week, L.di, L.end); }
+          else { if (c.taught === group) return; inst.open = T.at(w.week, L.di, L.start); inst.close = T.at(w.week, L.di, L.end); }
         } else if (t === 'test') { inst.open = w.sentAt; inst.close = w.sentAt + (+P.meta.open || 0) * 6e4; inst.timer = +(P.meta.time || P.meta.open) || 0; }
-        else if (t === 'weekly') { if (!ls.length) return; const last = ls[ls.length - 1]; inst.open = T.at(w.week, last.di, last.end); inst.close = T.at(T.addWeeks(w.week, 1), ls[0].di, ls[0].start); inst.timer = +P.meta.time || 0; }
+        else if (t === 'weekly') { if (!ls.length) return; const last = ls[ls.length - 1]; inst.open = T.at(w.week, last.di, last.end); const nx = realDay(c, T.addWeeks(w.week, 1), 0, false); const first = nx ? dayLessons(c, nx.di)[0] : ls[0]; inst.close = T.at(nx ? nx.week : T.addWeeks(w.week, 1), first.di, first.start); inst.timer = +P.meta.time || 0; }
         else if (t === 'task') { inst.open = w.sentAt; inst.close = w.sentAt + (+P.meta.due || 0) * T.DAY; }
         inst.late = inst.close + 3 * T.DAY; inst.old = inst.close + 7 * T.DAY;
         out.push(inst);
       });
-      return out.sort((a, b) => a.open - b.open);
-    });
+      return out;
+    }
   }
 
   /* ---------------- attempts and scores ---------------- */
@@ -83,10 +124,16 @@ const School = (() => {
       s.ex.forEach((ex, ei) => { const pts = Code.points(ex); if (!pts) return; t += pts; const first = ev.find(e => e.kind === 'ans' && e.key === si + '.' + ei); if (first) r += ansRight(first).right; });
       const eng = ev.filter(e => (e.kind === 'vocab' || e.kind === 'g') && e.part === si && !e.rapid);
       if ((HAS_VOCAB_ENGINE(P, s) && (s.cards.length || eng.length)) || s.gpack) { const okN = eng.filter(e => Store.okOf(e) === true).length; r += okN; t += Math.max(eng.length, s.gpack ? 5 : Math.min(4, Math.max(1, s.cards.length))); }
+      if (P.type === 'homework') s.ex.forEach((ex, ei) => { const W = markedWriting(sid, wid, si + '.' + ei); if (W) { r += W.fb.score; t += 10; } });
       parts[si] = { right: r, total: t };
       right += r; total += t;
     });
     return { right, total, pct: total ? Math.round(right / total * 100) : null, parts };
+  }
+  /* the teacher's mark (out of 10) of a homework writing: counts in the homework % once it is marked */
+  function markedWriting(sid, wid, key) {
+    let b = null; (db().writings || []).forEach(x => { if (x.sid === sid && x.key === key && x.task && x.task.work === wid && x.fb && x.fb.score != null && (!b || x.ts > b.ts)) b = x; });
+    return b;
   }
   const HAS_VOCAB_ENGINE = (P, s) => P.type === 'homework' && ['vocabulary', 'warmup', 'review'].includes(s.kind);
   function best(sid, wid) {
@@ -143,7 +190,8 @@ const School = (() => {
       const c = cls(s.cls); if (!c) return [];
       const weeks = {};
       const put = (week, n, card, src) => { const W = weeks[week] || (weeks[week] = {}); const L = W[n] || (W[n] = {}); const prev = L[card.id]; if (!prev || richness(card) > richness(prev)) L[card.id] = Object.assign({}, card, { src }); };
-      Object.entries(db().plans || {}).forEach(([k, p]) => { const [cid, wk, n] = k.split('|'); if (cid !== c.id) return; (p.words || []).forEach(([w, uz, g]) => g && g !== s.group ? null : put(+wk, +n, { id: Code.idOf(w), w, p: 'other', en: '', uz, d: uz, sentences: [], ant: '', syn: '', confuse: [], sp: [], alt: [], diff: 1, s: '', f: w }, 'plan')); });
+      const pl = {}; Object.entries(db().plans || {}).forEach(([k, p]) => { const [cid, wk, n] = k.split('|'); if (cid !== c.id && cid !== '*') return; const kk = wk + '|' + n; if (!pl[kk] || cid !== '*') pl[kk] = [wk, n, p]; });
+      Object.values(pl).forEach(([wk, n, p]) => { (p.words || []).forEach(([w, uz, g]) => g && g !== s.group ? null : put(+wk, +n, { id: Code.idOf(w), w, p: 'other', en: '', uz, d: uz, sentences: [], ant: '', syn: '', confuse: [], sp: [], alt: [], diff: 1, s: '', f: w }, 'plan')); });
       db().works.filter(w => (w.groups || []).includes(s.group) && (w.type === 'homework' || w.type === 'classwork') && w.week).forEach(w => {
         if (w.type === 'classwork' && c.taught === s.group) { /* taught group still learns the lesson's words */ }
         const P = parsed(w); P.words.forEach(cd => put(w.week, +w.lesson || 0, cd, w.type));
@@ -231,6 +279,6 @@ const School = (() => {
     return out;
   }
 
-  return { stu, cls, markOf, lessonsOf, lessonLen, hwWindow, lessonNow, parsed, work, instances, attempts, finished, partsDone, curAttempt, attemptScore, best, result, state, workSections,
+  return { planOf, planKey, daysOff, isOff, realDay, periods, markedWriting, stu, cls, markOf, lessonsOf, lessonLen, hwWindow, lessonNow, parsed, work, instances, attempts, finished, partsDone, curAttempt, attemptScore, best, result, state, workSections,
     achOf, achko, weekAchko, gold, addGold, goldToday, castle, castleFresh, CAPS, wordWeeks, allCards, vstate, allBlocks, practiceItems, wrongCounts, TSIZE, TFAM, stats, trophies, ansRight, HAS_VOCAB_ENGINE };
 })();

@@ -2377,18 +2377,32 @@ const School = (() => {
     return out;
   }
   const lessonLen = L => T.mins(L.end) - T.mins(L.start);
-  /* homework of lesson L in week W: opens when that day's last lesson ends; due at the start of the last lesson of the next English day */
+  /* days off (holidays, cancelled school days): Settings → Classes & timetable. A day off has no lessons. */
+  const daysOff = () => new Set((db().settings && db().settings.daysOff) || []);
+  const isOff = (week, di, off = daysOff()) => off.has(T.iso(T.at(week, di, '12:00')));
+  /* the first English day of class c at (week, di) or later (after = strictly later) that is not a day off */
+  function realDay(c, week, di, after) {
+    const ds = [...new Set(lessonsOf(c).map(x => x.di))].sort((a, b) => a - b), off = daysOff(); if (!ds.length) return null;
+    for (let w = week, k = 0; k < 30; k++, w = T.addWeeks(w, 1)) for (const d of ds) {
+      if (k === 0 && (after ? d <= di : d < di)) continue;
+      if (!isOff(w, d, off)) return { week: w, di: d };
+    }
+    return null;
+  }
+  const dayLessons = (c, di) => lessonsOf(c).filter(x => x.di === di);
+  /* homework of lesson L in week W: opens when that day's last lesson ends; due at the start of the last lesson of the next English day.
+     Days off are skipped: homework of a cancelled day opens after the next real English day, and is due on the real day after that. */
   function hwWindow(c, L, week) {
-    const ls = lessonsOf(c), today = ls.filter(x => x.day === L.day);
-    const open = T.at(week, L.di, today[today.length - 1].end);
-    let next = ls.find(x => x.di > L.di), w2 = week; if (!next) { next = ls[0]; w2 = T.addWeeks(week, 1); }
-    const nd = ls.filter(x => x.day === next.day);
-    return { open, close: T.at(w2, next.di, nd[nd.length - 1].start) };
+    const o = realDay(c, week, L.di, false), n = o && realDay(c, o.week, o.di, true);
+    if (!o || !n) { const today = dayLessons(c, L.di); return { open: T.at(week, L.di, today[today.length - 1].end), close: T.at(T.addWeeks(week, 1), L.di, today[today.length - 1].start) }; }
+    const od = dayLessons(c, o.di), nd = dayLessons(c, n.di);
+    return { open: T.at(o.week, o.di, od[od.length - 1].end), close: T.at(n.week, n.di, nd[nd.length - 1].start), moved: o.week !== week || o.di !== L.di };
   }
   /* the lesson happening now for a class (lesson time locks homework and opens classwork) */
   function lessonNow(c, now = T.now()) {
     const wk = T.weekStart(now);
-    for (const L of lessonsOf(c)) { const s = T.at(wk, L.di, L.start), e = T.at(wk, L.di, L.end); if (now >= s && now < e) return { L, start: s, end: e, week: wk }; }
+    const off = daysOff();
+    for (const L of lessonsOf(c)) { if (isOff(wk, L.di, off)) continue; const s = T.at(wk, L.di, L.start), e = T.at(wk, L.di, L.end); if (now >= s && now < e) return { L, start: s, end: e, week: wk }; }
     return null;
   }
 
@@ -2405,27 +2419,54 @@ const School = (() => {
     return PC[w.id].P;
   }
   const work = id => db().works.find(w => w.id === id);
+  /* lesson plans: one shared plan per lesson ('*|week|n') for every class; a class can still have its own ('cid|week|n'), which wins */
+  const planKey = (cid, week, n) => `${cid}|${week}|${n}`;
+  function planOf(cid, week, n) { const P = db().plans || {}, own = P[planKey(cid, week, n)]; return own ? { plan: own, key: planKey(cid, week, n), shared: false } : P[planKey('*', week, n)] ? { plan: P[planKey('*', week, n)], key: planKey('*', week, n), shared: true } : null; }
 
+  /* the student's class and group over time. A teacher moving a student writes a 'move' event:
+     work that already opened in the old group stays (and counts); the new group's work comes from the move on. */
+  function periods(s) {
+    const mv = Store.events(s.id).filter(e => e.kind === 'move' && e.from).sort(by('ts'));
+    const out = []; let from = -Infinity;
+    mv.forEach(e => { out.push({ cls: e.from.cls, group: e.from.group, from, to: e.ts }); from = e.ts; });
+    out.push({ cls: s.cls, group: s.group, from, to: Infinity });
+    return out;
+  }
   /* every work this student gets, with its time window */
   function instances(s, now = T.now()) {
     if (!s) return [];
     return Store.memo('inst:' + s.id + ':' + Math.floor(now / 6e4), () => {
-      const c = cls(s.cls); if (!c) return [];
+      const seen = new Set(), all = [];
+      periods(s).reverse().forEach(pd => {   // the current class and group first
+        const c = cls(pd.cls); if (!c) return;
+        instancesIn(s, c, pd.group).forEach(i => {
+          if (seen.has(i.id)) return;
+          if (pd.to !== Infinity && !(i.open < pd.to)) return;               // old group: only work that had opened before the move
+          if (pd.from !== -Infinity && i.open < pd.from && !periodsHad(s, i.w, pd.from)) return;   // new group: from the move on
+          seen.add(i.id); i.grp = pd.group; all.push(i);
+        });
+      });
+      return all.sort((a, b) => a.open - b.open);
+    });
+  }
+  const periodsHad = (s, w, t) => periods(s).some(p => p.from < t && (w.groups || []).includes(p.group));
+  function instancesIn(s, c, group) {
+    {
       const ls = lessonsOf(c), out = [];
-      db().works.filter(w => (w.groups || []).includes(s.group)).forEach(w => {
+      db().works.filter(w => (w.groups || []).includes(group)).forEach(w => {
         const P = parsed(w); const t = w.type; const inst = { w, P, type: t, id: w.id };
         if (t === 'homework' || t === 'classwork') {
           const L = ls[(+w.lesson || 0) - 1]; if (!L) return; inst.L = L; inst.week = w.week;
           if (t === 'homework') { const win = hwWindow(c, L, w.week); inst.open = win.open; inst.close = win.close; }
-          else { if (c.taught === s.group) return; inst.open = T.at(w.week, L.di, L.start); inst.close = T.at(w.week, L.di, L.end); }
+          else { if (c.taught === group) return; inst.open = T.at(w.week, L.di, L.start); inst.close = T.at(w.week, L.di, L.end); }
         } else if (t === 'test') { inst.open = w.sentAt; inst.close = w.sentAt + (+P.meta.open || 0) * 6e4; inst.timer = +(P.meta.time || P.meta.open) || 0; }
-        else if (t === 'weekly') { if (!ls.length) return; const last = ls[ls.length - 1]; inst.open = T.at(w.week, last.di, last.end); inst.close = T.at(T.addWeeks(w.week, 1), ls[0].di, ls[0].start); inst.timer = +P.meta.time || 0; }
+        else if (t === 'weekly') { if (!ls.length) return; const last = ls[ls.length - 1]; inst.open = T.at(w.week, last.di, last.end); const nx = realDay(c, T.addWeeks(w.week, 1), 0, false); const first = nx ? dayLessons(c, nx.di)[0] : ls[0]; inst.close = T.at(nx ? nx.week : T.addWeeks(w.week, 1), first.di, first.start); inst.timer = +P.meta.time || 0; }
         else if (t === 'task') { inst.open = w.sentAt; inst.close = w.sentAt + (+P.meta.due || 0) * T.DAY; }
         inst.late = inst.close + 3 * T.DAY; inst.old = inst.close + 7 * T.DAY;
         out.push(inst);
       });
-      return out.sort((a, b) => a.open - b.open);
-    });
+      return out;
+    }
   }
 
   /* ---------------- attempts and scores ---------------- */
@@ -2445,10 +2486,16 @@ const School = (() => {
       s.ex.forEach((ex, ei) => { const pts = Code.points(ex); if (!pts) return; t += pts; const first = ev.find(e => e.kind === 'ans' && e.key === si + '.' + ei); if (first) r += ansRight(first).right; });
       const eng = ev.filter(e => (e.kind === 'vocab' || e.kind === 'g') && e.part === si && !e.rapid);
       if ((HAS_VOCAB_ENGINE(P, s) && (s.cards.length || eng.length)) || s.gpack) { const okN = eng.filter(e => Store.okOf(e) === true).length; r += okN; t += Math.max(eng.length, s.gpack ? 5 : Math.min(4, Math.max(1, s.cards.length))); }
+      if (P.type === 'homework') s.ex.forEach((ex, ei) => { const W = markedWriting(sid, wid, si + '.' + ei); if (W) { r += W.fb.score; t += 10; } });
       parts[si] = { right: r, total: t };
       right += r; total += t;
     });
     return { right, total, pct: total ? Math.round(right / total * 100) : null, parts };
+  }
+  /* the teacher's mark (out of 10) of a homework writing: counts in the homework % once it is marked */
+  function markedWriting(sid, wid, key) {
+    let b = null; (db().writings || []).forEach(x => { if (x.sid === sid && x.key === key && x.task && x.task.work === wid && x.fb && x.fb.score != null && (!b || x.ts > b.ts)) b = x; });
+    return b;
   }
   const HAS_VOCAB_ENGINE = (P, s) => P.type === 'homework' && ['vocabulary', 'warmup', 'review'].includes(s.kind);
   function best(sid, wid) {
@@ -2505,7 +2552,8 @@ const School = (() => {
       const c = cls(s.cls); if (!c) return [];
       const weeks = {};
       const put = (week, n, card, src) => { const W = weeks[week] || (weeks[week] = {}); const L = W[n] || (W[n] = {}); const prev = L[card.id]; if (!prev || richness(card) > richness(prev)) L[card.id] = Object.assign({}, card, { src }); };
-      Object.entries(db().plans || {}).forEach(([k, p]) => { const [cid, wk, n] = k.split('|'); if (cid !== c.id) return; (p.words || []).forEach(([w, uz, g]) => g && g !== s.group ? null : put(+wk, +n, { id: Code.idOf(w), w, p: 'other', en: '', uz, d: uz, sentences: [], ant: '', syn: '', confuse: [], sp: [], alt: [], diff: 1, s: '', f: w }, 'plan')); });
+      const pl = {}; Object.entries(db().plans || {}).forEach(([k, p]) => { const [cid, wk, n] = k.split('|'); if (cid !== c.id && cid !== '*') return; const kk = wk + '|' + n; if (!pl[kk] || cid !== '*') pl[kk] = [wk, n, p]; });
+      Object.values(pl).forEach(([wk, n, p]) => { (p.words || []).forEach(([w, uz, g]) => g && g !== s.group ? null : put(+wk, +n, { id: Code.idOf(w), w, p: 'other', en: '', uz, d: uz, sentences: [], ant: '', syn: '', confuse: [], sp: [], alt: [], diff: 1, s: '', f: w }, 'plan')); });
       db().works.filter(w => (w.groups || []).includes(s.group) && (w.type === 'homework' || w.type === 'classwork') && w.week).forEach(w => {
         if (w.type === 'classwork' && c.taught === s.group) { /* taught group still learns the lesson's words */ }
         const P = parsed(w); P.words.forEach(cd => put(w.week, +w.lesson || 0, cd, w.type));
@@ -2593,7 +2641,7 @@ const School = (() => {
     return out;
   }
 
-  return { stu, cls, markOf, lessonsOf, lessonLen, hwWindow, lessonNow, parsed, work, instances, attempts, finished, partsDone, curAttempt, attemptScore, best, result, state, workSections,
+  return { planOf, planKey, daysOff, isOff, realDay, periods, markedWriting, stu, cls, markOf, lessonsOf, lessonLen, hwWindow, lessonNow, parsed, work, instances, attempts, finished, partsDone, curAttempt, attemptScore, best, result, state, workSections,
     achOf, achko, weekAchko, gold, addGold, goldToday, castle, castleFresh, CAPS, wordWeeks, allCards, vstate, allBlocks, practiceItems, wrongCounts, TSIZE, TFAM, stats, trophies, ansRight, HAS_VOCAB_ENGINE };
 })();
 
@@ -3705,7 +3753,7 @@ const Tea = (() => {
   }
   /* question by question across the class (tests) */
   function analysis(c, w) {
-    if (!w) return ''; const P = School.parsed(w), ss = db().students.filter(s => s.cls === c.id && (w.groups || []).includes(s.group));
+    if (!w) return ''; const P = School.parsed(w), ss = db().students.filter(s => s.cls === c.id && ((w.groups || []).includes(s.group) || School.instances(s).some(i => i.id === w.id)));
     const rows = [];
     School.workSections(P).forEach(({ s: sec, si }) => sec.ex.forEach((ex, ei) => ex.items.forEach((it, ii) => {
       if (it.example || !['choice', 'gap', 'match'].includes(it.type)) return;
@@ -3950,26 +3998,29 @@ KIND: paragraph
   /* ================= LESSON PLANS ================= */
   function plans() {
     const P = V.p, c = pickCls(P.cls); P.cls = c.id; if (P.week == null) P.week = T.weekStart();
-    const ls = School.lessonsOf(c); if (P.n > ls.length) P.n = 1; const key = `${c.id}|${P.week}|${P.n}`, plan = (db().plans || {})[key];
-    let h = head('Lesson plans', 'One plan per lesson per class. The [words] of a plan appear in the students’ So‘zlarim for that week.', `<button class="btn" data-act="ppaste">Paste plan code</button>`);
+    const ls = School.lessonsOf(c); if (P.n > ls.length) P.n = 1; const found = School.planOf(c.id, P.week, P.n), plan = found && found.plan;
+    let h = head('Lesson plans', 'One plan per lesson, shared by all your classes (a class can have its own instead). The [words] of a plan appear in the students’ So‘zlarim for that week.', `<button class="btn" data-act="ppaste">Paste plan code</button>`);
     h += `<div class="card" style="margin-bottom:16px"><div class="row sp"><div class="chips">${myClasses().map(x => chip(x.id === c.id, 'pcls', `data-id="${x.id}"`, esc(x.name))).join('')}</div>${wkNav('pweek', P.week)}</div>
-      <div class="chips" style="margin-top:12px">${ls.map(L => chip(L.n === P.n, 'pn', `data-n="${L.n}"`, `${(db().plans || {})[`${c.id}|${P.week}|${L.n}`] ? '✓ ' : ''}Lesson ${L.n} · ${L.day} ${L.start}`)).join('')}</div></div>`;
+      <div class="chips" style="margin-top:12px">${ls.map(L => chip(L.n === P.n, 'pn', `data-n="${L.n}"`, `${School.planOf(c.id, P.week, L.n) ? '✓ ' : ''}Lesson ${L.n} · ${L.day} ${L.start}`)).join('')}</div></div>`;
     if (P.paste != null && P.pasting) {
       const res = Code.parsePlans(P.paste, ls.length);
       h += `<div class="card" style="margin-bottom:16px"><h3>Paste plan code for ${esc(c.name)} · ${weekLabel(P.week)}</h3><textarea class="input code" rows="12" data-inp="ppaste" style="margin-top:10px" placeholder="LESSON: 3&#10;TITLE: …&#10;GOAL: …&#10;[steps]&#10;…&#10;[words]&#10;every day = har kuni">${esc(P.paste)}</textarea>
-        ${P.paste.trim() ? (res.errors.length ? res.errors.map(e => `<div class="err"><b>error</b>${esc(e)}</div>`).join('') : `<div class="okline">✓ ${res.plans.length} plan${res.plans.length > 1 ? 's' : ''}: ${res.plans.map(p => 'lesson ' + p.n + (db().plans[`${c.id}|${P.week}|${p.n}`] ? ' (replaces the old plan)' : '')).join(', ')}</div>`) : ''}
+        ${P.paste.trim() ? (res.errors.length ? res.errors.map(e => `<div class="err"><b>error</b>${esc(e)}</div>`).join('') : `<div class="okline">✓ ${res.plans.length} plan${res.plans.length > 1 ? 's' : ''}: ${res.plans.map(p => 'lesson ' + p.n + (School.planOf(c.id, P.week, p.n) ? ' (replaces the old plan)' : '')).join(', ')}</div>`) : ''}
         <div class="row" style="margin-top:10px"><button class="btn" data-act="psave-paste" ${res.errors.length || !res.plans.length ? 'disabled' : ''}>Save plans</button><button class="btn ghost" data-act="pcancel">Cancel</button></div></div>`;
     }
     if (P.edit) { const p = plan || { title: '', goal: '', steps: [], words: [] };
-      h += `<div class="card"><h3>Lesson ${P.n} · ${esc(c.name)}</h3><div class="grid2" style="margin-top:10px"><label><p class="label">Title</p><input class="input" id="pl-title" value="${esc(p.title)}"></label><label><p class="label">Goal</p><input class="input" id="pl-goal" value="${esc(p.goal)}"></label></div>
+      h += `<div class="card"><h3>Lesson ${P.n} · ${weekLabel(P.week)}</h3>
+        <label class="row" style="margin-top:8px;gap:8px"><input type="checkbox" id="pl-shared" ${!found || found.shared ? 'checked' : ''}> <span>Use this plan for every class (lesson ${P.n})${found && !found.shared ? ` · now only for ${esc(c.name)}` : ''}</span></label><div class="grid2" style="margin-top:10px"><label><p class="label">Title</p><input class="input" id="pl-title" value="${esc(p.title)}"></label><label><p class="label">Goal</p><input class="input" id="pl-goal" value="${esc(p.goal)}"></label></div>
         <div class="grid2" style="margin-top:12px"><label><p class="label">Steps (one per line)</p><textarea class="input" rows="8" id="pl-steps">${esc(p.steps.join('\n'))}</textarea></label><label><p class="label">Words (word = translation)</p><textarea class="input code" rows="8" id="pl-words">${esc(p.words.map(w => w[0] + ' = ' + w[1]).join('\n'))}</textarea></label></div>
         <div class="row" style="margin-top:12px"><button class="btn" data-act="psave">Save</button><button class="btn ghost" data-act="pcancel">Cancel</button>${plan ? '<button class="btn ghost" data-act="pdel">Delete plan</button>' : ''}</div></div>`; }
-    else if (plan) h += `<div class="card"><div class="row sp"><div><p class="label">Lesson ${P.n} · ${esc(c.name)} · ${weekLabel(P.week)}</p><h2>${esc(plan.title)}</h2></div><button class="btn ghost sm" data-act="pedit">Edit</button></div>${plan.goal ? `<p style="font-size:16px"><b>Goal:</b> ${esc(plan.goal)}</p>` : ''}
+    else if (plan) h += `<div class="card"><div class="row sp"><div><p class="label">Lesson ${P.n} · ${weekLabel(P.week)} · ${found.shared ? 'every class' : 'only ' + esc(c.name)}</p><h2>${esc(plan.title)}</h2></div><button class="btn ghost sm" data-act="pedit">Edit</button></div>${plan.goal ? `<p style="font-size:16px"><b>Goal:</b> ${esc(plan.goal)}</p>` : ''}
         ${plan.steps.length ? `<ol style="line-height:1.8">${plan.steps.map(s => `<li>${esc(s)}</li>`).join('')}</ol>` : ''}${plan.words.length ? `<p class="label" style="margin-top:12px">Words</p><div class="row">${plan.words.map(w => `<span class="tag" style="font-size:13px"><b>${esc(w[0])}</b> ${esc(w[1])}</span>`).join('')}</div>` : ''}</div>`;
     else h += `<div class="card" style="text-align:center;padding:30px"><p class="muted">No plan for lesson ${P.n} yet.</p><div class="row" style="justify-content:center"><button class="btn" data-act="pedit">Write a plan</button><button class="btn ghost" data-act="ppaste">Paste plan code</button></div></div>`;
-    // the works of this lesson, for reference
-    const ws = db().works.filter(w => w.week === P.week && +w.lesson === P.n && w.groups.some(g => groupsOf(c).includes(g)));
-    if (ws.length) h += `<p class="small muted" style="margin-top:12px">Also for this lesson: ${ws.map(w => `${w.type} “${esc(School.parsed(w).meta.title)}” (${w.groups.join(', ')})`).join(' · ')}</p>`;
+    // the homework and classwork of this lesson, linked to their results
+    const ws = db().works.filter(w => w.week === P.week && +w.lesson === P.n && (w.groups || []).some(g => groupsOf(c).includes(g))).sort((a, b) => a.type.localeCompare(b.type));
+    h += `<div class="card" style="margin-top:16px"><div class="row sp"><h3 style="margin:0">Work for this lesson · ${esc(c.name)}</h3><button class="btn ghost sm" data-act="ttab" data-k="assign">Assign</button></div>${ws.length
+      ? ws.map(w => `<div class="row sp" style="margin-top:10px"><span><span class="tag" style="background:${PC.results[w.type] || '#555'};color:#fff">${w.type === 'homework' ? 'Homework' : 'Classwork'}</span> <b>${esc(School.parsed(w).meta.title || '')}</b> <span class="small muted">${esc(w.groups.join(', '))}</span></span><button class="btn ghost sm" data-act="plres" data-k="${w.type}">Results</button></div>`).join('')
+      : `<p class="small muted" style="margin-bottom:0">No homework or classwork sent for lesson ${P.n} this week yet.</p>`}</div>`;
     return h;
   }
 
@@ -4093,8 +4144,17 @@ ${w.text}
       <p class="label" style="margin-top:18px">Timetable · ${ls.length} English lessons a week (numbered in order)</p>
       <div class="scrollx"><table><tbody>${DAYS.map(d => { const L2 = (c.sched[d] || []); return `<tr><td style="width:110px"><b>${DAYFULL[d]}</b></td><td>${L2.map((t, i) => `<span class="row" style="display:inline-flex;gap:4px;margin:3px 10px 3px 0;flex-wrap:nowrap"><input class="input" type="time" style="width:110px" data-chg="ltime" data-d="${d}" data-i="${i}" data-w="0" value="${t[0]}">–<input class="input" type="time" style="width:110px" data-chg="ltime" data-d="${d}" data-i="${i}" data-w="1" value="${t[1]}"><button class="btn ghost sm" data-act="ldel" data-d="${d}" data-i="${i}" aria-label="Remove lesson">×</button></span>`).join('')}<button class="btn ghost sm" data-act="ladd" data-d="${d}">+ lesson</button></td></tr>`; }).join('')}</tbody></table></div>
       <p class="small muted">Lesson numbers: ${ls.map(L => `${L.n} = ${L.day} ${L.start}`).join(' · ') || 'none'}. Changing the timetable moves the opening times of work already sent.</p>
-      ${isAdmin() ? `<button class="btn ghost sm" data-act="cdel" ${db().students.some(s => s.cls === c.id) ? 'disabled title="Move or remove its students first"' : ''}>Delete class</button>` : ''}</div>`;
+      ${isAdmin() ? `<button class="btn ghost sm" data-act="cdel" ${db().students.some(s => s.cls === c.id) ? 'disabled title="Move or remove its students first"' : ''}>Delete class</button>` : ''}</div>` + daysOffCard();
     return h;
+  }
+  /* days off for the whole school: no lessons, homework moves to the next real English day */
+  function daysOffCard() {
+    const L = (db().settings.daysOff || []).slice().sort(), today = T.iso();
+    const fmt = iso => { const [y, m, d] = iso.split('-').map(Number); const dt = new Date(y, m - 1, d); return `${['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][dt.getDay()]} ${d} ${ENM[m - 1]} ${y}`; };
+    return `<div class="card" style="margin-top:16px"><h3 style="margin-top:0">Days off</h3>
+      <p class="small muted" style="margin-top:4px">Holidays and cancelled school days, for every class. On a day off there are no lessons: homework from that day opens after the next real English day, and homework due that day is due on the next real English day.</p>
+      <div class="chips" style="margin:10px 0">${L.length ? L.map(x => `<span class="tag" style="font-size:14px;padding:6px 12px;${x < today ? 'opacity:.55' : ''}">${fmt(x)} <button class="btn ghost sm" data-act="doffdel" data-d="${x}" aria-label="Remove day off" style="padding:0 6px;min-height:0">×</button></span>`).join('') : '<span class="small muted">No days off.</span>'}</div>
+      <div class="row"><input class="input" type="date" id="doff" style="max-width:200px" value="${today}"><button class="btn sm" data-act="doffadd">Add day off</button></div></div>`;
   }
   function sStudents() {
     const L = myClasses(), f = V.st.scls; const list = db().students.filter(s => L.some(c => c.id === s.cls) && (!f || s.cls === f)).sort((a, b) => (a.cls + a.name).localeCompare(b.cls + b.name));
@@ -4112,7 +4172,7 @@ ${w.text}
       <tr><td><input class="input" id="nt-name" placeholder="New teacher"></td><td><input class="input" id="nt-login" placeholder="login"></td><td><input class="input" id="nt-pass" placeholder="password"></td><td></td><td><button class="btn sm" data-act="tadd">Add</button></td></tr></tbody></table></div><p class="small muted">Give a teacher a class in “Classes & timetable”. Opening a teacher's account is real: changes are saved.</p>`;
   }
   function sGroups() { return `<div class="card"><p class="small muted" style="margin-top:0">A group is an English level. Work is sent to groups; one group spans many classes.</p><div class="row">${db().groups.map(g => { const used = db().students.some(s => s.group === g); return `<span class="tag" style="font-size:14px;padding:6px 12px">${esc(g)} <button data-act="gdel" data-g="${esc(g)}" ${used ? 'disabled title="Students are in this group"' : ''} aria-label="Remove">×</button></span>`; }).join('')}</div><div class="row" style="margin-top:12px"><input class="input" id="ng" placeholder="e.g. B2" style="max-width:160px"><button class="btn sm" data-act="gadd">Add group</button></div></div>`; }
-  function sAccount() { return `<div class="card" style="max-width:520px"><label><p class="label">Name</p><input class="input" data-chg="mename" value="${esc(U.name)}"></label><label><p class="label" style="margin-top:12px">Login</p><input class="input" data-chg="melogin" value="${esc(U.login)}"></label><label><p class="label" style="margin-top:12px">Password</p><input class="input" data-chg="mepass" value="" placeholder="Type a new password" autocomplete="new-password"></label><p class="small muted">Passwords are stored encrypted, so they are never shown. Type a new one to change it. Students can never change their own login or password; you set them in Students.</p>${App.ctx.as ? '' : '<button class="btn ghost" data-act="logout">Log out</button>'}</div>`; }
+  function sAccount() { return `<div class="card" style="max-width:520px"><label><p class="label">Name</p><input class="input" data-chg="mename" value="${esc(U.name)}"></label><label><p class="label" style="margin-top:12px">Login</p><input class="input" data-chg="melogin" value="${esc(U.login)}"></label>${isAdmin() ? `<label><p class="label" style="margin-top:12px">Password</p><input class="input" data-chg="mepass" value="" placeholder="Type a new password" autocomplete="new-password"></label><p class="small muted">Passwords are stored encrypted, so they are never shown. Type a new one to change it. Students can never change their own login or password; you set them in Students.</p>` : `<p class="small muted" style="margin-top:12px">Your password is set by the admin. Ask the admin if you need a new one. Students can never change their own login or password; you set them in Students.</p>`}${App.ctx.as ? '' : '<button class="btn ghost" data-act="logout">Log out</button>'}</div>`; }
   function sClock() { const on = T.offset !== 0; const d = T.date(); const v = `${T.iso()}T${T.hm()}`;
     return `<div class="card" style="max-width:620px"><p style="margin-top:0">Pretend the site is at another date and time, to try lesson time, homework opening, deadlines and the weekly test. It changes the clock only in this browser, for you; students always see real time.</p><p><b>Site time now:</b> ${enWhen(T.now())}${on ? ' <span class="tag" style="background:#FFE1DC;color:#B3261E">test clock on</span>' : ''}</p>
       <div class="row"><input class="input" type="datetime-local" id="clk" value="${v}" style="max-width:260px"><button class="btn" data-act="clkset">Set</button><button class="btn ghost" data-act="clkreset" ${on ? '' : 'disabled'}>Back to real time</button></div>
@@ -4340,12 +4400,15 @@ const App = (() => {
   H.pcls = d => { TV().p.cls = d.id; TV().p.edit = false; render(); }; H.pweek = d => { TV().p.week = T.addWeeks(TV().p.week, +d.d); TV().p.edit = false; render(); };
   H.pn = d => { TV().p.n = +d.n; TV().p.edit = false; render(); }; H.pedit = () => { TV().p.edit = true; TV().p.pasting = false; render(); };
   H.ppaste = () => { TV().p.pasting = true; TV().p.edit = false; TV().p.paste = TV().p.paste || ''; render(); }; H.pcancel = () => { TV().p.edit = false; TV().p.pasting = false; render(); };
-  const pkey = n => `${TV().p.cls}|${TV().p.week}|${n}`;
+  // a plan is shared by every class unless the teacher keeps it for one class; saving one kind removes the other for this class
+  const pkey = (n, shared) => School.planKey(shared ? '*' : TV().p.cls, TV().p.week, n);
+  const pput = (n, shared, plan) => { db().plans[pkey(n, shared)] = plan; if (shared) delete db().plans[pkey(n, false)]; };
+  H.plres = d => { const P = TV().p; Object.assign(TV().r, { cls: P.cls, week: P.week, mode: d.k, lessons: [P.n] }); TV().tab = 'results'; window.scrollTo(0, 0); render(); };
   H.psave = () => { const words = [], bad = []; ($('#pl-words').value || '').split('\n').map(x => x.trim()).filter(Boolean).forEach(l => { const w = l.split(/\s+=\s+/); if (w.length === 2) words.push([w[0].trim(), N.uzFix(w[1].trim())]); else bad.push(l); });
     if (bad.length) return toast('Write words as: word = translation (' + bad[0].slice(0, 30) + ')'); const title = $('#pl-title').value.trim(); if (!title) return toast('A plan needs a title');
-    db().plans[pkey(TV().p.n)] = { title, goal: $('#pl-goal').value.trim(), steps: $('#pl-steps').value.split('\n').map(x => x.trim()).filter(Boolean), words }; save(); TV().p.edit = false; toast('Plan saved'); render(); };
-  H.pdel = () => { delete db().plans[pkey(TV().p.n)]; save(); TV().p.edit = false; render(); };
-  H['psave-paste'] = () => { const c = db().classes.find(x => x.id === TV().p.cls); const res = Code.parsePlans(TV().p.paste, School.lessonsOf(c).length); if (res.errors.length) return; res.plans.forEach(p => db().plans[pkey(p.n)] = { title: p.title, goal: p.goal, steps: p.steps, words: p.words }); save(); TV().p.pasting = false; TV().p.paste = ''; TV().p.n = res.plans[0].n; toast(`${res.plans.length} plan(s) saved`); render(); };
+    pput(TV().p.n, $('#pl-shared').checked, { title, goal: $('#pl-goal').value.trim(), steps: $('#pl-steps').value.split('\n').map(x => x.trim()).filter(Boolean), words }); save(); TV().p.edit = false; toast('Plan saved'); render(); };
+  H.pdel = () => { const f = School.planOf(TV().p.cls, TV().p.week, TV().p.n); if (f) delete db().plans[f.key]; save(); TV().p.edit = false; render(); };
+  H['psave-paste'] = () => { const c = db().classes.find(x => x.id === TV().p.cls); const res = Code.parsePlans(TV().p.paste, School.lessonsOf(c).length); if (res.errors.length) return; res.plans.forEach(p => pput(p.n, true, { title: p.title, goal: p.goal, steps: p.steps, words: p.words })); save(); TV().p.pasting = false; TV().p.paste = ''; TV().p.n = res.plans[0].n; toast(`${res.plans.length} plan(s) saved`); render(); };
   // writing
   H.wstat = d => { TV().w.status = d.k; render(); }; H.wcls = d => { TV().w.cls = d.id; render(); };
   H.wcopy = () => copy(Tea.aiCopyText(), 'Writings for the AI');
@@ -4445,6 +4508,9 @@ const App = (() => {
     else if (el.dataset.gtext != null || el.dataset.gdlg != null) { e.preventDefault(); H.gcheck(); }
     else if (el.dataset.prg != null) { e.preventDefault(); H.prcheck(); }
   });
+  /* days off: no lessons that day; homework moves to the next real English day */
+  H.doffadd = () => { const v = ($('#doff') || {}).value; if (!v) return toast('Pick a date'); const S = db().settings; const L = new Set(S.daysOff || []); L.add(v); S.daysOff = [...L].sort(); save(); Store._cache = {}; render(); };
+  H.doffdel = d => { const S = db().settings; S.daysOff = (S.daysOff || []).filter(x => x !== d.d); save(); Store._cache = {}; render(); };
   function teacherChange(el, d) {
     const v = el.value, c = () => db().classes.find(x => x.id === Tea.V.st.cls), s = () => School.stu(d.id), t = () => db().teachers.find(x => x.id === d.id), me = Tea.me();
     const uniq = (list, val, self) => !list.some(x => x !== self && x.login.toLowerCase() === val.trim().toLowerCase());
@@ -4455,7 +4521,9 @@ const App = (() => {
       case 'cteacher': c().teacher = v; break;
       case 'ltime': { const L = c().sched[d.d][+d.i]; L[+d.w] = v; if (T.mins(L[1]) <= T.mins(L[0])) toast('The end must be after the start'); c().sched[d.d].sort((a, b) => a[0].localeCompare(b[0])); break; }
       case 'sname': s().name = v.trim() || s().name; break;
-      case 'scls': s().cls = v; break; case 'sgrp': s().group = v; break;
+      // a move mid-week: the old group's opened work stays with the student (School.periods)
+      case 'scls': case 'sgrp': { const x = s(), from = { cls: x.cls, group: x.group }; if (d.chg === 'scls') x.cls = v; else x.group = v;
+        if (from.cls !== x.cls || from.group !== x.group) Store.ev(x.id, 'move', { from, to: { cls: x.cls, group: x.group }, by: me ? me.id : '' }); break; }
       case 'slogin': if (!v.trim() || !uniq(db().students, v, s())) { toast('This login is already used'); break; } s().login = v.trim(); break;
       case 'spass': if (v) s().pass = v; break;
       case 'tname': t().name = v.trim() || t().name; break;
@@ -4463,7 +4531,7 @@ const App = (() => {
       case 'tpass': if (v) t().pass = v; break;
       case 'mename': me.name = v.trim() || me.name; break;
       case 'melogin': if (!v.trim() || !uniq(db().teachers, v, me)) { toast('This login is already used'); break; } me.login = v.trim(); break;
-      case 'mepass': if (v) me.pass = v; break;
+      case 'mepass': if (v && Tea.isAdmin()) me.pass = v; break;   // teachers' passwords are set by the admin
     }
     save(); Store._cache = {}; render();
   }

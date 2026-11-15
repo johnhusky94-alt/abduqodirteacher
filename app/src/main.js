@@ -213,12 +213,15 @@ const App = (() => {
   H.pcls = d => { TV().p.cls = d.id; TV().p.edit = false; render(); }; H.pweek = d => { TV().p.week = T.addWeeks(TV().p.week, +d.d); TV().p.edit = false; render(); };
   H.pn = d => { TV().p.n = +d.n; TV().p.edit = false; render(); }; H.pedit = () => { TV().p.edit = true; TV().p.pasting = false; render(); };
   H.ppaste = () => { TV().p.pasting = true; TV().p.edit = false; TV().p.paste = TV().p.paste || ''; render(); }; H.pcancel = () => { TV().p.edit = false; TV().p.pasting = false; render(); };
-  const pkey = n => `${TV().p.cls}|${TV().p.week}|${n}`;
+  // a plan is shared by every class unless the teacher keeps it for one class; saving one kind removes the other for this class
+  const pkey = (n, shared) => School.planKey(shared ? '*' : TV().p.cls, TV().p.week, n);
+  const pput = (n, shared, plan) => { db().plans[pkey(n, shared)] = plan; if (shared) delete db().plans[pkey(n, false)]; };
+  H.plres = d => { const P = TV().p; Object.assign(TV().r, { cls: P.cls, week: P.week, mode: d.k, lessons: [P.n] }); TV().tab = 'results'; window.scrollTo(0, 0); render(); };
   H.psave = () => { const words = [], bad = []; ($('#pl-words').value || '').split('\n').map(x => x.trim()).filter(Boolean).forEach(l => { const w = l.split(/\s+=\s+/); if (w.length === 2) words.push([w[0].trim(), N.uzFix(w[1].trim())]); else bad.push(l); });
     if (bad.length) return toast('Write words as: word = translation (' + bad[0].slice(0, 30) + ')'); const title = $('#pl-title').value.trim(); if (!title) return toast('A plan needs a title');
-    db().plans[pkey(TV().p.n)] = { title, goal: $('#pl-goal').value.trim(), steps: $('#pl-steps').value.split('\n').map(x => x.trim()).filter(Boolean), words }; save(); TV().p.edit = false; toast('Plan saved'); render(); };
-  H.pdel = () => { delete db().plans[pkey(TV().p.n)]; save(); TV().p.edit = false; render(); };
-  H['psave-paste'] = () => { const c = db().classes.find(x => x.id === TV().p.cls); const res = Code.parsePlans(TV().p.paste, School.lessonsOf(c).length); if (res.errors.length) return; res.plans.forEach(p => db().plans[pkey(p.n)] = { title: p.title, goal: p.goal, steps: p.steps, words: p.words }); save(); TV().p.pasting = false; TV().p.paste = ''; TV().p.n = res.plans[0].n; toast(`${res.plans.length} plan(s) saved`); render(); };
+    pput(TV().p.n, $('#pl-shared').checked, { title, goal: $('#pl-goal').value.trim(), steps: $('#pl-steps').value.split('\n').map(x => x.trim()).filter(Boolean), words }); save(); TV().p.edit = false; toast('Plan saved'); render(); };
+  H.pdel = () => { const f = School.planOf(TV().p.cls, TV().p.week, TV().p.n); if (f) delete db().plans[f.key]; save(); TV().p.edit = false; render(); };
+  H['psave-paste'] = () => { const c = db().classes.find(x => x.id === TV().p.cls); const res = Code.parsePlans(TV().p.paste, School.lessonsOf(c).length); if (res.errors.length) return; res.plans.forEach(p => pput(p.n, true, { title: p.title, goal: p.goal, steps: p.steps, words: p.words })); save(); TV().p.pasting = false; TV().p.paste = ''; TV().p.n = res.plans[0].n; toast(`${res.plans.length} plan(s) saved`); render(); };
   // writing
   H.wstat = d => { TV().w.status = d.k; render(); }; H.wcls = d => { TV().w.cls = d.id; render(); };
   H.wcopy = () => copy(Tea.aiCopyText(), 'Writings for the AI');
@@ -318,6 +321,9 @@ const App = (() => {
     else if (el.dataset.gtext != null || el.dataset.gdlg != null) { e.preventDefault(); H.gcheck(); }
     else if (el.dataset.prg != null) { e.preventDefault(); H.prcheck(); }
   });
+  /* days off: no lessons that day; homework moves to the next real English day */
+  H.doffadd = () => { const v = ($('#doff') || {}).value; if (!v) return toast('Pick a date'); const S = db().settings; const L = new Set(S.daysOff || []); L.add(v); S.daysOff = [...L].sort(); save(); Store._cache = {}; render(); };
+  H.doffdel = d => { const S = db().settings; S.daysOff = (S.daysOff || []).filter(x => x !== d.d); save(); Store._cache = {}; render(); };
   function teacherChange(el, d) {
     const v = el.value, c = () => db().classes.find(x => x.id === Tea.V.st.cls), s = () => School.stu(d.id), t = () => db().teachers.find(x => x.id === d.id), me = Tea.me();
     const uniq = (list, val, self) => !list.some(x => x !== self && x.login.toLowerCase() === val.trim().toLowerCase());
@@ -328,7 +334,9 @@ const App = (() => {
       case 'cteacher': c().teacher = v; break;
       case 'ltime': { const L = c().sched[d.d][+d.i]; L[+d.w] = v; if (T.mins(L[1]) <= T.mins(L[0])) toast('The end must be after the start'); c().sched[d.d].sort((a, b) => a[0].localeCompare(b[0])); break; }
       case 'sname': s().name = v.trim() || s().name; break;
-      case 'scls': s().cls = v; break; case 'sgrp': s().group = v; break;
+      // a move mid-week: the old group's opened work stays with the student (School.periods)
+      case 'scls': case 'sgrp': { const x = s(), from = { cls: x.cls, group: x.group }; if (d.chg === 'scls') x.cls = v; else x.group = v;
+        if (from.cls !== x.cls || from.group !== x.group) Store.ev(x.id, 'move', { from, to: { cls: x.cls, group: x.group }, by: me ? me.id : '' }); break; }
       case 'slogin': if (!v.trim() || !uniq(db().students, v, s())) { toast('This login is already used'); break; } s().login = v.trim(); break;
       case 'spass': if (v) s().pass = v; break;
       case 'tname': t().name = v.trim() || t().name; break;
@@ -336,7 +344,7 @@ const App = (() => {
       case 'tpass': if (v) t().pass = v; break;
       case 'mename': me.name = v.trim() || me.name; break;
       case 'melogin': if (!v.trim() || !uniq(db().teachers, v, me)) { toast('This login is already used'); break; } me.login = v.trim(); break;
-      case 'mepass': if (v) me.pass = v; break;
+      case 'mepass': if (v && Tea.isAdmin()) me.pass = v; break;   // teachers' passwords are set by the admin
     }
     save(); Store._cache = {}; render();
   }
