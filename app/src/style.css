@@ -379,3 +379,13 @@ body.login main{padding:0}
 .edtable input.input{min-width:120px}
 .edtable select.input{min-width:96px;padding-right:28px}
 .edtable td{white-space:nowrap}
+
+/* sorting: long column names ("It has eight legs") get one row per item, and the buttons wrap
+   under the word instead of spilling over the next item */
+.sortgrid{grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr))}
+.sortgrid.wide{grid-template-columns:1fr}
+.srow{flex-wrap:wrap;min-width:0}
+.srow>b{flex:1 1 auto;min-width:0;overflow-wrap:anywhere}
+.srow .cols{flex:0 1 auto;flex-wrap:wrap;justify-content:flex-end;min-width:0}
+.srow .cols button{white-space:normal;text-align:center}
+@media (max-width:600px){.sortgrid.wide .srow .cols{justify-content:flex-start}}

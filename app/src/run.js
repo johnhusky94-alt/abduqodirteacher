@@ -121,7 +121,7 @@ const Run = (() => {
     if (ex.sort || ex.columns) {
       const cols = ex.sort ? ex.sort.map(c => c.col) : ex.columns, words = ex.sort ? shuffleS(ex.sort.flatMap(c => c.words), k) : ex.words;
       const truth = {}; if (ex.sort) ex.sort.forEach(c => c.words.forEach(w => truth[w] = c.col));
-      h += `<div class="sortgrid">${words.map(w => { const v = a.v['s' + w]; return `<div class="srow"><b>${esc(w)}</b><span class="cols">${cols.map(c => {
+      h += `<div class="sortgrid${cols.join('').length > 18 || cols.length > 3 ? ' wide' : ''}">${words.map(w => { const v = a.v['s' + w]; return `<div class="srow"><b>${esc(w)}</b><span class="cols">${cols.map(c => {
         let cl = v === c ? 'sel' : ''; if (chk && ex.sort && !isTest()) { if (truth[w] === c) cl = 'right'; if (v === c && truth[w] !== c) cl = 'sel miss'; }
         return `<button class="${cl}" data-act="sort" data-k="${k}" data-w="${esc(w)}" data-c="${esc(c)}" ${chk || (a.done && !ex.sort) || locked ? 'disabled' : ''}>${esc(c)}</button>`; }).join('')}</span></div>`; }).join('')}</div>`;
     }
