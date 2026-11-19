@@ -145,7 +145,7 @@ const Stu = (() => {
     const wrong = new Set(Object.values(vs.words).filter(w => w.bad > 0).map(w => w.wid));
     const F = { all: () => true, this: (c, w) => w === wk, past: (c, w) => w !== wk, due: c => Vocab.isDue(vs.words[c.id], day), learning: c => { const s = (vs.words[c.id] || {}).stage || 0; return s < 5; }, known: c => (vs.words[c.id] || {}).stage === 5, mistakes: c => wrong.has(c.id) };
     const q = N.key(V.wq), match = c => !q || N.key(c.w).includes(q) || N.key(c.uz || '').includes(q) || N.key(c.en || '').includes(q);
-    const lessonLbl = n => n ? `${n}-dars` : "Boshqa so'zlar";
+    const lessonLbl = n => n ? `${n}-dars` : "Topshiriq so'zlari";
     const head = top("So'zlarim", "Shu hafta o'rganayotgan so'zlaringiz va o'tgan haftalardagi so'zlar. Rang so'zning bosqichini ko'rsatadi.");
     const legend = `<div class="row" style="margin-bottom:12px">${Vocab.STAGES.map(s => `<span class="tag" style="background:${s.c};color:${s.t}">${esc(s.uz)}</span>`).join('')}</div>`;
     const thisHtml = thisW ? thisW.lessons.map(L => `<h3 style="margin:16px 4px 10px">${lessonLbl(L.n)}</h3><div class="wgrid">${L.cards.map(c => wordCard(c, vs)).join('')}</div>`).join('') : '<p class="muted">Bu hafta hali so\'z berilmagan.</p>';
@@ -251,20 +251,22 @@ const Stu = (() => {
 
   /* ---------------- O'yinlar ---------------- */
   /* the lesson whose words the games use: one bar per English lesson of the week, one chosen at a time */
+  /* the bars: the class's lessons, plus "Topshiriq" (lesson 0) when that week's tasks have words */
+  function gameBars(wk) { const c = School.cls(S.cls), ls = c ? School.lessonsOf(c) : []; return Play.lessonCards(S, wk, 0).length ? [{ n: 0, task: true }].concat(ls) : ls; }
   function gameLesson() {
-    const c = School.cls(S.cls), ls = c ? School.lessonsOf(c) : [], now = T.now();
+    const now = T.now();
     if (V.gw == null) {   // first visit: the latest lesson that already has words (this week, else last week)
-      for (const wk of [T.weekStart(now), T.addWeeks(T.weekStart(now), -1)]) { const got = ls.filter(L => Play.lessonCards(S, wk, L.n).length); if (got.length) { const started = got.filter(L => T.at(wk, L.di, L.start) <= now); V.gw = wk; V.gn = (started[started.length - 1] || got[0]).n; break; } }
+      for (const wk of [T.weekStart(now), T.addWeeks(T.weekStart(now), -1)]) { const got = gameBars(wk).filter(L => Play.lessonCards(S, wk, L.n).length); if (got.length) { const started = got.filter(L => L.task || T.at(wk, L.di, L.start) <= now); V.gw = wk; V.gn = (started[started.length - 1] || got[0]).n; break; } }
       if (V.gw == null) { V.gw = T.weekStart(now); V.gn = 1; }
     }
-    return { ls, week: V.gw, n: V.gn, cards: Play.lessonCards(S, V.gw, V.gn) };
+    return { ls: gameBars(V.gw), week: V.gw, n: V.gn, cards: Play.lessonCards(S, V.gw, V.gn) };
   }
   function games() {
     const G = gameLesson(), list = Play.list(S, G.cards, [G.week]), thisWk = T.weekStart();
     const wkName = G.week === thisWk ? 'Shu hafta' : G.week === T.addWeeks(thisWk, -1) ? "O'tgan hafta" : `${T.date(G.week).getDate()}-${UZM[T.date(G.week).getMonth()]} haftasi`;
     const bars = `<div class="card" style="margin-bottom:14px"><div class="row sp" style="margin-bottom:10px"><b>Qaysi darsning so'zlari?</b><span class="row" style="gap:6px"><button class="mini" data-act="gwk" data-d="-1" aria-label="Oldingi hafta">←</button><span class="small">${wkName}</span><button class="mini" data-act="gwk" data-d="1" ${G.week >= thisWk ? 'disabled' : ''} aria-label="Keyingi hafta">→</button></span></div>
-      <div class="lbars">${G.ls.map(L => { const k = Play.lessonCards(S, G.week, L.n).length; return `<button class="lbar ${L.n === G.n ? 'on' : ''}" data-act="gles" data-n="${L.n}" ${k ? '' : 'disabled'}><b>${L.n}-dars</b><small>${UZD[L.day].slice(0, 3)} · ${k ? k + " so'z" : "so'z yo'q"}</small></button>`; }).join('') || '<span class="small muted">Dars jadvali yo\'q</span>'}</div></div>`;
-    return top("So'z o'yinlari", `O'yinlar tanlangan darsning so'zlari bilan o'ynaladi: ${G.n}-dars, ${G.cards.length} ta so'z. To'g'ri javob +1 achko, xato −1.`) + bars
+      <div class="lbars">${G.ls.map(L => { const k = Play.lessonCards(S, G.week, L.n).length; return `<button class="lbar ${L.n === G.n ? 'on' : ''}" data-act="gles" data-n="${L.n}" ${k ? '' : 'disabled'}><b>${L.task ? 'Topshiriq' : L.n + '-dars'}</b><small>${L.task ? '' : UZD[L.day].slice(0, 3) + ' · '}${k ? k + " so'z" : "so'z yo'q"}</small></button>`; }).join('') || '<span class="small muted">Dars jadvali yo\'q</span>'}</div></div>`;
+    return top("So'z o'yinlari", `O'yinlar tanlangan darsning so'zlari bilan o'ynaladi: ${G.n ? G.n + '-dars' : 'topshiriq'}, ${G.cards.length} ta so'z. To'g'ri javob +1 achko, xato −1.`) + bars
       + `<div class="tiles small">${list.map(g => { const TC = { 1: ['#5CE1F0', '#14163D'], 2: ['#FFD23F', '#14163D'], 3: ['#B8F53B', '#14163D'], 4: ['#FF9F1C', '#2B1700'] }[g.tier]; const [c, t] = g.open ? TC : ['rgba(0,0,0,.25)', '#fff'];
         return `<button class="tile" style="background:${c};color:${t}" data-act="${g.open ? 'game' : 'toast'}" data-k="${g.key}" data-rare="${g.rare ? 1 : ''}" data-t="${esc(g.why)}"><span class="t-kind">${g.rare ? '✨ Noyob raund · 1 marta' : g.open ? (g.play === 'solo' ? 'Yakka' : g.play === 'class' ? 'Butun sinf' : "Kompyuter raqiblar bilan") : '🔒 Yopiq'}</span><div><h3>${esc(g.title)}</h3><div class="t-list">${esc(g.uz)}</div></div><span class="t-time">${g.open ? 'Ochiq · ' + g.tier + '-daraja' : esc(g.short)}</span></button>`; }).join('')}</div>
       <p class="small" style="margin-top:14px;opacity:.85">Oltin: har o'yindan 25 tagacha, kuniga 150 tagacha. Bugun: ${School.goldToday(S.id, 'game')} / 150.</p>`;

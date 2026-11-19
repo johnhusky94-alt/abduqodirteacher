@@ -109,7 +109,7 @@ const App = (() => {
   H.sell = d => { const s = S(), t = School.trophies(s).find(x => x.id === d.id); if (!t || t.sold) return; const p = School.TSIZE[t.size].p; Store.ev(s.id, 'sell', { tid: t.id, price: p }); School.addGold(s.id, p, 'sell'); Snd.win(); toast(`Kubok sotildi: +${p} oltin`); render(); };
   H.game = d => { const V = Stu.V; Play.launch(S(), d.k, { rare: !!d.rare, cards: Play.lessonCards(S(), V.gw, V.gn), weeks: [V.gw] }); };
   H.gles = d => { Stu.V.gn = +d.n; render(); };
-  H.gwk = d => { const V = Stu.V, c = School.cls(S().cls); V.gw = T.addWeeks(V.gw, +d.d); const ls = c ? School.lessonsOf(c) : []; const got = ls.filter(L => Play.lessonCards(S(), V.gw, L.n).length); if (!got.some(L => L.n === V.gn)) V.gn = got.length ? got[got.length - 1].n : 1; render(); };
+  H.gwk = d => { const V = Stu.V, c = School.cls(S().cls); V.gw = T.addWeeks(V.gw, +d.d); const ls = (c ? School.lessonsOf(c) : []).concat(Play.lessonCards(S(), V.gw, 0).length ? [{ n: 0 }] : []); const got = ls.filter(L => Play.lessonCards(S(), V.gw, L.n).length); if (!got.some(L => L.n === V.gn)) V.gn = got.length ? got[got.length - 1].n : 1; render(); };
   H.castle = () => Play.openCastle(S());
   // student: opening works
   H.openwork = d => {

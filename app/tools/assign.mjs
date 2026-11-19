@@ -1,5 +1,5 @@
 // Turns special code into the SQL that sends it, exactly like the teacher panel's "Send" button.
-//   node tools/assign.mjs <code-file> --groups "A2,B1" [--week 2026-11-09] [--by t1]
+//   node tools/assign.mjs <code-file> --groups "A2,B1" [--week 2026-11-09] [--by t1] [--at "2026-11-19 22:00"]
 // Checks the code with the site's own parser first; prints a summary (stderr) and the SQL (stdout).
 // Several works in one file are separated by a line "=====" (as in the Assign page).
 import { readFileSync } from 'node:fs'; import { Code, T } from './v2.mjs';
@@ -12,7 +12,10 @@ if (!groups.length) { console.error('--groups is required'); process.exit(2); }
 // the week = Monday 00:00 in Tashkent, the same number the site uses
 const tashMonday = iso => { const d = iso ? new Date(iso + 'T00:00:00+05:00') : new Date(); const loc = new Date(d.getTime() + 5 * 3600e3);
   const dow = (loc.getUTCDay() + 6) % 7; const m = Date.UTC(loc.getUTCFullYear(), loc.getUTCMonth(), loc.getUTCDate() - dow) - 5 * 3600e3; return m; };
-const week = tashMonday(opt('week')), by = opt('by') || 't1', now = Date.now();
+const week = tashMonday(opt('week')), by = opt('by') || 't1';
+// --at "2026-11-19 22:00" (Tashkent time): a test or task opens at that moment instead of now
+const now = opt('at') ? new Date(opt('at').replace(' ', 'T') + ':00+05:00').getTime() : Date.now();
+if (isNaN(now)) { console.error('--at must look like "2026-11-19 22:00" (Tashkent time)'); process.exit(2); }
 // optional --ctx file: JSON {classes:[{name, sched}], students:[{cls, group}]} from the database, to check the lesson exists in each class
 let CTX = null; if (opt('ctx')) CTX = JSON.parse(readFileSync(opt('ctx'), 'utf8'));
 const lessonsIn = c => ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].reduce((n, d) => n + ((c.sched && c.sched[d]) || []).length, 0);

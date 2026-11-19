@@ -135,7 +135,7 @@ const School = (() => {
     let b = null; (db().writings || []).forEach(x => { if (x.sid === sid && x.key === key && x.task && x.task.work === wid && x.fb && x.fb.score != null && (!b || x.ts > b.ts)) b = x; });
     return b;
   }
-  const HAS_VOCAB_ENGINE = (P, s) => P.type === 'homework' && ['vocabulary', 'warmup', 'review'].includes(s.kind);
+  const HAS_VOCAB_ENGINE = (P, s) => (P.type === 'homework' || P.type === 'task') && ['vocabulary', 'warmup', 'review'].includes(s.kind);
   function best(sid, wid) {
     const fins = Store.events(sid).filter(e => e.kind === 'fin' && e.work === wid);
     let b = null; fins.forEach(f => { const sc = attemptScore(sid, wid, f.att); if (sc && sc.pct != null && (b == null || sc.pct > b)) b = sc.pct; });
@@ -186,7 +186,8 @@ const School = (() => {
   /* ---------------- words: So'zlarim and games ---------------- */
   /* where the words come from: the [words] of each lesson plan and the word lines in that week's homework and classwork for the student's group */
   function wordWeeks(s) {
-    return Store.memo('ww:' + s.id, () => {
+    const now = T.now();
+    return Store.memo('ww:' + s.id + ':' + Math.floor(now / 6e5), () => {
       const c = cls(s.cls); if (!c) return [];
       const weeks = {};
       const put = (week, n, card, src) => { const W = weeks[week] || (weeks[week] = {}); const L = W[n] || (W[n] = {}); const prev = L[card.id]; if (!prev || richness(card) > richness(prev)) L[card.id] = Object.assign({}, card, { src }); };
@@ -196,6 +197,10 @@ const School = (() => {
         if (w.type === 'classwork' && c.taught === s.group) { /* taught group still learns the lesson's words */ }
         const P = parsed(w); P.words.forEach(cd => put(w.week, +w.lesson || 0, cd, w.type));
       });
+      // a task's words belong to the week it opens in, as lesson 0 ("Topshiriq so'zlari"); hidden until it opens
+      db().works.filter(w => (w.groups || []).includes(s.group) && w.type === 'task' && w.sentAt && w.sentAt <= now).forEach(w => {
+        const P = parsed(w); P.words.forEach(cd => put(T.weekStart(w.sentAt), 0, cd, 'task'));
+      });
       return Object.keys(weeks).map(Number).sort((a, b) => b - a).map(wk => ({ week: wk, lessons: Object.keys(weeks[wk]).map(Number).sort((a, b) => a - b).map(n => ({ n, cards: Object.values(weeks[wk][n]) })) }));
     });
   }
@@ -204,7 +209,7 @@ const School = (() => {
   function vstate(s) { return Vocab.state(s.id, Object.fromEntries(allCards(s).map(c => [c.id, c]))); }
   function allBlocks(s, weeks) {
     const b = { groups: [], scales: [], sorts: [], stories: [], parts: { parts: {}, words: [] } }, confuse = [];
-    db().works.filter(w => (w.groups || []).includes(s.group) && (!weeks || weeks.includes(w.week))).forEach(w => { const P = parsed(w); ['groups', 'scales', 'sorts', 'stories'].forEach(k => b[k].push(...P.blocks[k])); Object.assign(b.parts.parts, P.blocks.parts.parts); b.parts.words.push(...P.blocks.parts.words); confuse.push(...P.confuse); });
+    db().works.filter(w => (w.groups || []).includes(s.group) && (!weeks || weeks.includes(w.week || (w.type === 'task' && w.sentAt ? T.weekStart(w.sentAt) : null)))).forEach(w => { const P = parsed(w); ['groups', 'scales', 'sorts', 'stories'].forEach(k => b[k].push(...P.blocks[k])); Object.assign(b.parts.parts, P.blocks.parts.parts); b.parts.words.push(...P.blocks.parts.words); confuse.push(...P.confuse); });
     return { blocks: b, confuse };
   }
 

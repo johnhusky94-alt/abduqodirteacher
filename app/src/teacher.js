@@ -215,7 +215,7 @@ SECTIONS
 Homework parts, each at most once, in any order (the site shows them in this order):
 [warmup] [grammar] [reading] [vocabulary] [writing] [practice] [review]
 Classwork sections (no timer; students do them one after another in the lesson): [vocabulary] [reading] [grammar] [listening] [speaking] [writing] [lifeskills] [review] [exam]
-Task: only [reading] (with TEXT:) and [writing].
+Task: the same parts as homework, each once ([warmup] [grammar] [reading] [vocabulary] [writing] [practice] [review] + [words]); a [reading] needs a TEXT:. Its words go to the students' word games under "Topshiriq".
 [words] (any type except tests): the lesson's word cards for So'zlarim and the word games.
 A line after [section] can be its title: [reading] A day in Tashkent
 

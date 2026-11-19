@@ -225,13 +225,14 @@ const Code = (() => {
       work.forEach(s => { if (!CW_KINDS.includes(s.kind)) E(s.line, `[${s.kind}] can't be a classwork section.`); });   // minutes after a section name ([reading 15]) are allowed but no longer used: classwork has no timer
     }
     if (t === 'task') {
-      work.forEach(s => { if (!['reading', 'writing'].includes(s.kind)) E(s.line, `A task can only have [reading] and [writing] sections, not [${s.kind}]`); });
+      const seen = {};   // since 19 Nov 2026 a task may have the same parts as homework (words, vocab games, grammar), each once
+      work.forEach(s => { if (!HW_ORDER.includes(s.kind)) E(s.line, `Task parts are ${HW_ORDER.map(k => '[' + k + ']').join(' ')}. [${s.kind}] is not one of them.`); if (seen[s.kind]) E(s.line, `[${s.kind}] appears twice. Each task part comes once.`); seen[s.kind] = 1; });
       work.filter(s => s.kind === 'reading').forEach(s => { if (!s.ex.some(e => e.texts.length)) E(s.line, '[reading] in a task needs a TEXT:'); });
     }
     if (t === 'weekly' || t === 'test') work.forEach(s => { if (s.ex.some(e => e.write || e.items.some(i => i.type === 'open'))) W(s.line, 'Writing in a test is sent to the Writing page and is not part of the test score.'); });
     R.sections.forEach(p => {
       const nums = {};
-      if (p.kind !== 'words' && !p.ex.length && !p.gpack && !p.cards.length && !(t === 'homework' && ['warmup', 'review'].includes(p.kind))) E(p.line, `[${p.kind}] has nothing in it.`);
+      if (p.kind !== 'words' && !p.ex.length && !p.gpack && !p.cards.length && !((t === 'homework' || t === 'task') && ['warmup', 'review'].includes(p.kind))) E(p.line, `[${p.kind}] has nothing in it.`);
       if (p.gpack && t === 'weekly') E(p.line, 'The weekly test is one attempt, so it cannot use the adaptive grammar engine. Write ? and _ items instead.');
       if (p.cards.length && ['test', 'weekly'].includes(t) && p.kind !== 'words') E(p.line, 'Tests cannot use "word = translation" lines. Write the questions with ? or _.');
       p.ex.forEach(ex => {
